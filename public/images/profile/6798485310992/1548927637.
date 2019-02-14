@@ -1,0 +1,18 @@
+
+
+1)  Replaying video of Animation shows unsorted text,it sorts automatically after 0.2 seconds to 0.3 seconds.
+
+2) Text position change  when user increase size of text/ Text also reset position.
+
+3) Clicking on Animation In/Animation out      shows Flucation on buttons. In this , select the last SLIDE UP button and tap 3-5 times on linktext (Animation In/Animation out).
+
+4)  Shadow Thickness on text removes when user edit text. This happens when user adds any text and minimize the Keyboard.
+
+5)  Video plays with no auddio for 0.2 seconds, behind the on screen "Record transparent pop-up" .
+
+6) "Fade in" , "Fade out" ..... User is able to select only one option at  a time.
+
+
+QA-Suggestions:-
+
+1) QA Suggestion :- Once when video starts saving there should be a button to cancel the Save video.

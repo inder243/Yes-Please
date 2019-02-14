@@ -1,0 +1,331 @@
+.next #next_submit {
+    background-color: #ed0c6e;
+    color: #fff;
+    text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
+    -moz-transform: matrix( 0.99988037418953,0,0,1,0,0);
+    -webkit-transform: matrix( 0.99988037418953,0,0,1,0,0);
+    -ms-transform: matrix( 0.99988037418953,0,0,1,0,0);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    width: 100px;
+		display: inline-block;
+		text-align: center;
+		border-radius: 3px;
+        cursor: pointer;
+  padding: 5px 0 5px 0;
+  transition: .5s all;
+  border: none;
+}
+.next #next_submit:hover {
+
+    text-decoration: none;
+    background-color: #d41e6d;
+
+}
+
+.option_accept{
+    text-align: center;
+    padding-top: 10px;
+}
+#no_categories {
+    padding: 0 7px 0 8px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+/**Charn*/
+.cross_category {
+    position: absolute;
+    right: 11px;
+    top: 9px;
+}
+
+.cross_category img{
+    width:14px;
+    cursor:pointer;
+}
+.subcategories .cross_category img{
+    width:10px;
+}
+
+.cross_category_reg {
+    position: absolute;
+    right: 11px;
+    top: 9px;
+}
+
+.cross_category_reg img{
+    width:14px;
+    cursor:pointer;
+}
+.subcategories .cross_category_reg img{
+    width:10px;
+}
+
+.category_list .added_category_ul li a{
+    cursor: auto;
+}
+.added_category_list_heading .added_category_list{
+  border: none;
+}
+.category_list {
+
+    min-height: 400px;
+}
+.addcategory {
+    color: #98999c !important;
+}
+#msg b {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    display: inline-block;
+}
+.registrationform .upload_file_section .drag_file{
+    border:1px dashed #ed0c6e ;
+    overflow-x: auto;
+    border-radius: 5px;
+}
+.registrationform .upload_file_section .drag_file a {
+    padding: 15px 8px 15px 8px;
+    border: 0px;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: auto;
+}
+.registrationform .upload_file_section .drag_file a:hover{
+    text-decoration: none;
+}
+.disp_none {
+
+    display: none;
+
+}
+.total_message {
+
+    background-color: #ffcb08;
+    font-size: 13px;
+    padding: 1px 8px 1px 8px;
+    border-radius: 10px;
+    color: #000;
+
+}
+.login_fields input {
+
+    font-size: 14px;
+}
+.upload_file_section .dz-preview .dz-details{
+    display: none;
+}
+.upload_file_section .dz-preview .dz-success-mark{
+    display: none;
+}
+.upload_file_section .dz-preview .dz-error-mark{
+    display: none;
+}
+.upload_file_section .dz-preview .dz-error-mark svg
+{
+    margin: auto;
+    display: block;
+    background: #ed0c6e;
+    border-radius: 15px;
+    width: 23px;
+    height: 23px;
+    cursor: pointer;
+}
+
+.upload_file_section .dz-image img{
+    width: 60px;
+    height: 60px;
+}
+.registrationform .total_weekdays .select_arrow{
+    z-index: 9;
+}
+
+/*.registrationform .formcheck input{
+    height: auto;
+    width: auto;
+    opacity: 1;
+    margin-right: 10px;
+}*/
+
+.second_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login_btn input {
+    height: auto;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    width:100%;
+}
+
+.login_btn input:focus {
+    border: none;
+}
+.bu_error {
+    color: red;
+    text-align: center;
+}
+.fill_fields{
+    font-size:12px;
+    color: red;
+    text-align: right;
+}
+/****28-jan-19****/
+.category_list_heading ul li {
+    padding: 0 10px 10px;
+}
+
+.info {
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+.dz-default.dz-message {
+    display: none;
+}
+
+
+.registrationform .add_photo_video input{
+    height: 36px;
+}
+.registration_main .registrationform #autocomplete{
+    position: static;
+}
+.div-center{
+    margin:0px auto;
+    display: block;
+}
+
+@media (max-width: 767px) {
+  .category_list {
+      min-height: 240px;
+  }
+  .added_category ul{
+        max-height: 240px;
+  }
+  #msg {
+    display: block;
+    padding-top: 5px;
+}
+}
+
+.verfication_pts ul img {
+    width: 20px;
+    position: relative;
+    top: -2px;
+}
+
+#verify-submit {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    width:100%;
+}
+
+.save_agree #profile_submit {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    width:100%;
+}
+
+
+.dz-preview {
+    position: relative;
+}
+.dz-image {
+    margin-right: 5px;
+}
+.dz-remove {
+    position: absolute;
+    background-color: red !important;
+    top: 2px;
+    color: #fff !important;
+    padding: 4px !important;
+    width: 15px !important;
+    height: 15px !important;
+    line-height: 6px;
+    right: 2px;
+    cursor: pointer !important;
+    border-radius: 50% !important;
+    font-size:10px !important;
+}
+.alert-success1 {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-weight: bold;
+    color: green;
+    padding: 40px 0;
+    font-size: 20px;
+}
+.btn-primary{
+    background-color: #ed0c6e !important;
+    color: #fff !important;
+    width: 110px;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 0 5px 0;
+    border:none !important;
+}
+.preview img {
+    image-orientation: from-image !important;
+}
+.email_bu {
+    height: 40px;
+    font-size: 16px;
+}
+
+.pre_loader {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: rgba(255,255,255,.2);
+    z-index: 99999;
+}
+.pre_loader_inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+/*span#msg {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}*/
+.cross-button {
+
+    position: absolute;
+    right: -3px;
+    top: -7px;
+    background-color: red;
+    color: #fff;
+    font-size: 19px;
+    border-radius: 50%;
+    height: 23px;
+    width: 23px;
+    line-height: 18px;
+
+}
+.footer_notification_for_mobile {
+
+    position: relative;
+
+}

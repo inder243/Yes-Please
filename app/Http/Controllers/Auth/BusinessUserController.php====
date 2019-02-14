@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+use Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\YpBusinessUsers;
+
+class BusinessUserController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:business_user');
+    }
+    /**
+     * show dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $business_user_id = Auth::user()->business_userid;
+        $completed_steps = Auth::user()->completed_steps;
+        $redirect_to_step = $completed_steps+1;
+
+        $arr = array('1'=>'one','2'=>'two','3'=>'three','4'=>'four','5'=>'five','6'=>'six','7'=>'seven');
+
+        if($completed_steps < 7){
+            Auth::guard('business_user')->logout();
+            return redirect('/business_user/register_'.$arr[$redirect_to_step].'/'.$business_user_id);
+        }else{
+            return view('/business/business_dashboard');
+        }
+    }
+}

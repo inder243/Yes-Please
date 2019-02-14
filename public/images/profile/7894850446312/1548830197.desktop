@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Safari
+Exec=env WINEPREFIX="/home/iapp/.wine" wine C:\\\\Program\\ Files\\ \\(x86\\)\\\\Safari\\\\Safari.exe 
+Type=Application
+StartupNotify=true
+Path=/home/iapp/.wine/dosdevices/c:/Program Files (x86)/Safari/
+Icon=F117_SafariIco.0

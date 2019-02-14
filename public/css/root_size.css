@@ -1,0 +1,33 @@
+html
+{
+  font-size:16px;
+}
+
+@media (max-width:767px)
+{
+  .product_detail {
+    width: 380px;
+  }
+  html
+  {
+    font-size:12px;
+  }
+
+}
+
+@media (max-width:575px)
+{
+  .product_detail {
+    width: 370px;
+  }
+}
+@media (max-width:400px)
+{
+  .product_detail {
+    width: 304px;
+  }
+  html
+  {
+    font-size:10px;
+  }
+}
