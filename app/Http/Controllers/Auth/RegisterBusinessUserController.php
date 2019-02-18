@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessSubCategories;
-use App\Models\YpBusinessUserCategories;
+use App\Models\YpBusinessUsercategories;
 use App\Models\YpBusinessHashtags;
 use App\Models\YpBusinessUserHashtags;
 use App\Models\Yphashtag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mail;
 
 class RegisterBusinessUserController extends Controller
@@ -246,13 +247,50 @@ class RegisterBusinessUserController extends Controller
     /*****step three*****/
     public function showBusinessRegisterForm_three($id){
         //die('here');
-        $userCategoryModel = new YpBusinessUserCategories();
+        $userCategoryModel = new YpBusinessUsercategories();
         $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
         $all_categories =  YpBusinessCategories::with('sub_category')->where('category_status',1)->whereHas('sub_category', function($q) {$q->where('sub_category_status',1);})->get();  
-        $business_categories =  $userCategoryModel->get_user_categories($id);            
+        $business_categories =  $this->get_user_categories($id);            
         //print'<pre>vfg';print_r($business_categories); echo '</pre>';
         return view('auth.register_business_user_three')->with(array('id'=>$id,'get_register_val'=>$get_register_val,'categories'=>$all_categories,'business_categories'=>$business_categories));
     }
+
+    /*******get all categories*******/
+    public function get_user_categories($user_id)
+    { 
+        $b_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->get()->toArray();
+        $b_u_id = $b_id[0]['id'];
+        $business_category_ids = DB::table('yp_business_user_categories AS y_b_u_c')->where('y_b_u_c.business_userid',$b_u_id)
+                ->leftjoin('yp_business_categories AS y_b_c', 'y_b_u_c.category_id', '=', 'y_b_c.id')
+                ->distinct()
+                ->select('y_b_u_c.business_userid','y_b_u_c.category_id','y_b_c.category_name','y_b_c.category_id as cat_id')
+                ->get()->toArray(); 
+
+        //echo '<pre>';print_r($business_category_ids); echo '</pre>'; die;
+        $i = 0;
+        if(!empty($business_category_ids)){
+            foreach($business_category_ids as $value){
+                $category_id = $value->category_id;
+                $business_userid = $value->business_userid;
+                $parent_category_name = $value->category_name;
+                $cat_id = $value->cat_id;
+                $result[$i]['id'] = $category_id;
+                $result[$i]['cat_id'] = $cat_id;
+                $result[$i]['name'] = $parent_category_name;
+                $result[$i]['values'] = DB::table('yp_business_user_categories AS y_b_u_c')->where(['y_b_u_c.category_id'=>$category_id,'y_b_u_c.business_userid'=>$business_userid])
+                ->join('yp_business_sub_categories AS y_b_s_c', 'y_b_u_c.sub_category_id', '=', 'y_b_s_c.id')          
+                ->select('y_b_u_c.sub_category_id','y_b_s_c.sub_category_name','y_b_s_c.sub_category_id as sub_cat_id')
+                ->get()->toArray();         
+                $i++;
+            }
+
+        }else{
+            $result = '';
+        }
+       // echo '<pre>';print_r($result); echo '</pre>';
+        return $result;
+    }/******get user categories fn ends here*****/
+
     public function create_three($id){
         $YpBusinessUser = YpBusinessUsers::where('business_userid', '=',  $id)->first();
         $YpBusinessUser->completed_steps = 3;
@@ -497,7 +535,7 @@ class RegisterBusinessUserController extends Controller
         $sub_cat_id = $input['sub_cat_id'];
         $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();
 
-        YpBusinessUserCategories::create([
+        YpBusinessUsercategories::create([
                 'business_userid' => $user_incre_id['id'],
                 'category_id' => $category_increamentid['id'],
                 'sub_category_id' => $subcategory_increamentid['id'],
@@ -515,7 +553,7 @@ class RegisterBusinessUserController extends Controller
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
         $sub_cat_id = $input['sub_cat_id'];  
         $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();          
-        YpBusinessUserCategories::where(['business_userid' => $user_incre_id['id'], 'sub_category_id' => $subcategory_increamentid['id']])->delete();
+        YpBusinessUsercategories::where(['business_userid' => $user_incre_id['id'], 'sub_category_id' => $subcategory_increamentid['id']])->delete();
         //echo '<pre>';print_r($input); die;
     }
 

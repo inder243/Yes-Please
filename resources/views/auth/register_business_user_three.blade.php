@@ -62,14 +62,14 @@
                                 @foreach($business_categories as $parent_category)
                                     <ul class="added_category_ul">
                                       <li>
-                                        <a href="javascript:;" id="{{$parent_category['id']}}" data-cat="parent" class="categories">{{$parent_category['name']}}</a>
+                                        <a href="javascript:;" id="{{$parent_category['cat_id']}}" data-cat="parent" class="categories">{{$parent_category['name']}}</a>
                                         <span class="cross_category_reg">
                                           <img src="{{ asset('img/category_cancel.png')}}" class="img-fluid">
                                         </span>
                                         <ul class="subcategories">
                                           @foreach($parent_category['values'] as $sub_category)
                                           <li>
-                                            <a href="javascript:;" id="{{$sub_category->sub_category_id}}" data-cat="sub">{{$sub_category->sub_category_name}}</a>
+                                            <a href="javascript:;" id="{{$sub_category->sub_cat_id}}" data-cat="sub">{{$sub_category->sub_category_name}}</a>
                                             <span class="cross_category_reg">
                                             <img src="{{ asset('img/category_cancel.png')}}" class="img-fluid">
                                             </span>

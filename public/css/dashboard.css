@@ -1188,12 +1188,10 @@ input:invalid {
 	font-size: 12px;
 	border-radius: 5px;
 	padding: 17px 24px 17px 24px;
-	border: 1px dashed #ed0c6e;
+	border: 2px dotted #ed0c6e;
 	width: 100%;
 }
-.drag_file a:hover{
-	text-decoration: none;
-}
+
 .file_to_upload {
 	width: 45%;
 	display: inline-block;
@@ -1587,7 +1585,7 @@ input:invalid {
 	margin-bottom: 10px;
 }
 
-.category_list > ul {
+.category_list ul {
 	margin: 0;
 	max-height: 345px;
 	overflow: auto;
@@ -1630,7 +1628,7 @@ input:invalid {
 	width: 100%;
 }
 
-.added_category > ul {
+.added_category ul {
 	margin: 0;
 	max-height: 400px;
 	overflow: auto;
@@ -1897,7 +1895,7 @@ input:invalid {
 	height: 20px;
 	border: none;
 	background-color: transparent;
-	left: -2px;
+	left: -1px;
 	top: -2px;
 	border-radius: 3px !important;
 }
@@ -2091,16 +2089,6 @@ input:invalid {
 			.dashboard_box a {
 				height: 205px;
 			}
-			.upload_file_section span {
-			    display: none;
-			}
-			.drag_file {
-			    display: none;
-			}
-			.file_to_upload {
-			    width: 100%;
-			    display: inline-block;
-			}
 		}
 		@media (max-width: 991px) {
 			.footer_notification {
@@ -2116,16 +2104,6 @@ input:invalid {
 			}
 			.user_profile p {
 				display: none;
-			}
-			.upload_file_section span {
-			    display: none;
-			}
-			.drag_file {
-			    display: none;
-			}
-			.file_to_upload {
-			    width: 100%;
-			    display: inline-block;
 			}
 		}
 		@media (max-width: 767px) {

@@ -123,6 +123,11 @@ Route::prefix('business_user')->group(function() {
     Route::post('/categorysearch/{id}', 'business_user\BusinessUserController@category_search');
     Route::post('/removeprofileimg', 'business_user\BusinessUserController@removeProfileImages')->name('business_user.remove');
 
+    /**********Quotes and Questions*********/
+    Route::get('/quotes_questions',
+   'business_user\BusinessQuotesController@showQuotesQuestions')->name('business_user.quotes');
+    Route::post('/quotes', 'business_user\BusinessQuotesController@quotesSubmit')->name('business_user.quotes.submit');
+
   });
 
 Route::prefix('general_user')->group(function() {

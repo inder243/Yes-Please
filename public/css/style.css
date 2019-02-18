@@ -1793,6 +1793,7 @@ text-decoration: none;
 }
 .login_section {
     display: inline-block;
+		width: 100%;
 }
 .googlelogin{
 	margin-top: 20px;

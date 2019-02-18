@@ -101,9 +101,9 @@ function categoriesselect(data){
     var sub_cat_name = '';
     var sub_cat_id = '';
 	if(category_type == 'sub'){
-		var parent_id = $(data).parents('li').find('.categories').attr('id');
+		var parent_id = $(data).parents('.subcategories').parent().find('.categories').attr('id');
 		var category_name = $(data).html();
-		var parent_cat_name = $(data).parents('li').find('.categories').html();
+		var parent_cat_name = $(data).parents('.subcategories').parent().find('.categories').html();
 		if(checkIfCategoryExists_reg(parent_id)){
 			var exists = false;
 			$('.added_category ul li .categories').each(function() {
