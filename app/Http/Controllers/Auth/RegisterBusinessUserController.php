@@ -78,7 +78,11 @@ class RegisterBusinessUserController extends Controller
     public function showBusinessRegisterForm($id = null){
 
         if($id != null){
-            $get_register_val = YpBusinessUsers::where('business_userid',$id)->get()->toArray();
+            try{
+                $get_register_val = YpBusinessUsers::where('business_userid',$id)->get()->toArray();
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
             return view('auth.register_business_user')->with(array('id'=>$id,'get_register_val'=>$get_register_val));
         }else{
             return view('auth.register_business_user')->with(array('id'=>''));
@@ -201,7 +205,11 @@ class RegisterBusinessUserController extends Controller
 
     /*****step two*****/
     public function showBusinessRegisterForm_two($id){
-        $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
+        try{
+            $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
         return view('auth.register_business_user_two')->with(array('id'=>$id,'get_register_val'=>$get_register_val));
     }
     public function create_two($id){

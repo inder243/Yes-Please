@@ -179,16 +179,32 @@ class BusinessUserController extends Controller
         }
     }
 
-    
-
-    /*********
-    Fn to remove/delete drag images
-    ***********/
-    public function removeImages(){
+    /*************************
+    Fn to remove/delete drag images for verify users page
+    ****************************/
+    public function removeImagesVerify(){
         $id = Auth::user()->business_userid;
         if(isset($_POST['id'])){
             $filename = $_POST['id'];
             $image_path = public_path().'/images/verify_certificate/'.$id.'/'.$filename;  // Value is not URL but directory file path
+            if(File::exists($image_path)) {
+                File::delete($image_path);
+                echo "yes";die;
+            }else{
+                echo "no";die;
+            }
+        }/****end of isset****/
+    } /****fn remove image ends here***/
+
+
+    /*************************
+    Fn to remove/delete drag images for profile setting page
+    ****************************/
+    public function removeImagesProfile(){
+        $id = Auth::user()->business_userid;
+        if(isset($_POST['id'])){
+            $filename = $_POST['id'];
+            $image_path = public_path().'/images/profile/'.$id.'/'.$filename;  // Value is not URL but directory file path
             if(File::exists($image_path)) {
                 File::delete($image_path);
                 echo "yes";die;

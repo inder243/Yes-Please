@@ -20,7 +20,7 @@ class YpBusinessUsers extends Authenticatable
 
     public function verify_user()
     {
-    	//b_id = verify_id
+    	//b_id = verify_idFacades
     	//id = current
         return $this->hasMany('App\Models\YpVerificationBusinessUsers','id','b_id');
     }
@@ -37,7 +37,19 @@ class YpBusinessUsers extends Authenticatable
 
     public function bu_cat()
     {
-        return $this->hasMany('App\Models\YpBusinessUsercategories','business_userid','id');
+        return $this->belongsTo('App\Models\YpBusinessUsercategories','business_userid','id');
     }
 
+    public function business_quotes(){
+        return $this->hasMany('App\Models\YpBusinessUsersQuotes','business_userid','id');
+    }
+
+    public function quotes(){
+        return $this->hasMany('App\Models\YpBusinessUsersQuotes','business_userid','business_id');
+    }
+
+    public function get_review(){
+        return $this->hasMany('App\Models\YpUserReviews','id','business_id');
+    }
+    
 }

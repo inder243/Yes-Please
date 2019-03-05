@@ -79,6 +79,7 @@
                                           <th scope="col">#</th>
                                           <th scope="col">Name</th>
                                           <th scope="col">Action</th>
+                                          <th scope="col">Category Form</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -91,6 +92,10 @@
                                         <td>
                                             <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="{{ $cat->id }}" data-name= "{{ $cat->category_name }}"></a>
                                             <a href='javascript:void(0);'  data-id="{{ $cat->id }}" class="fa fa-times delete_category"></a>
+                                        </td>
+                                        <td>
+                                            
+                                            <a href="{{url('/admin/create_new_form')}}/{{ $cat->id }}">create form</a>
                                         </td>
                                     </tr>
                                     <?php $count++; ?>

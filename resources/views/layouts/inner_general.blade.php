@@ -14,7 +14,8 @@
     <link href="{{ URL::asset('css/gerneral_user_style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/developer.css') }}" type="text/css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/css/swiper.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ URL::asset('css/swiper.css') }}" type="text/css">
+    
 </head>
 
 <body>
@@ -87,18 +88,17 @@
                   <div class="user_profile">
                      <a href="javascript:;">
                         
-                        
                         @if (Auth::guard('general_user')->check())
                         <?php 
-                        $gen_user_id = Auth::user()->user_id;
-                        $img_url = Auth::user()->image_url;
+                        $gen_user_id = Auth::guard('general_user')->user()->user_id;
+                        $img_url = Auth::guard('general_user')->user()->image_url;
                         ?>
                         @if($img_url)
                         <img src="{{url('/images/users/'.$gen_user_id.'/'.$img_url)}}">
                         @else
                         <img src="{{ asset('img/user_placeholder.png') }}">
                         @endif
-                        <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                        <p>{{ Auth::guard('general_user')->user()->first_name }} {{ Auth::guard('general_user')->user()->last_name }}</p>
                         @else
                         <img src="{{ asset('img/user_placeholder.png') }}">
                         <p>Firstname Lastname</p>
@@ -111,6 +111,7 @@
       </section>
 
       <input type="hidden" id="home_url" value="{{ URL::asset('') }}">
+      <div id="site_url" style="display:none">{{ url('/') }}</div>
 
     <div class="content">
     @yield('content')
@@ -180,6 +181,206 @@
         </div>
     </section>
 
+    <!-- ask quote Modal -->
+          <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header question_header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body question_body">
+                  <div class="quote_recieve">
+                  <h1>How many quotes you want to receive?</h1>
+                  <div class="total_quote">
+                     <ul>
+                        <li>
+                           <div class="formcheck">
+                              <label>
+                                 <input type="radio" class="radio-inline" name="radios" value="1">
+                                 <span class="outside"><span class="inside"></span></span>
+                                 <p>1</p>
+                              </label>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="formcheck">
+                              <label>
+                                 <input type="radio" class="radio-inline" name="radios" value="2">
+                                 <span class="outside"><span class="inside"></span></span>
+                                 <p>2</p>
+                              </label>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="formcheck">
+                              <label>
+                                 <input type="radio" class="radio-inline" name="radios" value="3">
+                                 <span class="outside"><span class="inside"></span></span>
+                                 <p>3</p>
+                              </label>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="formcheck">
+                              <label>
+                                 <input type="radio" class="radio-inline" name="radios" value="4">
+                                 <span class="outside"><span class="inside"></span></span>
+                                 <p>4</p>
+                              </label>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="formcheck">
+                              <label>
+                                 <input type="radio" class="radio-inline" name="radios" value="5">
+                                 <span class="outside"><span class="inside"></span></span>
+                                 <p>5</p>
+                              </label>
+                           </div>
+                        </li>
+                     </ul>
+                     <div class="t_detail">
+                        <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                     </div>
+                     <div class="q_nex_btns">
+                        <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div>
+                        <div class="ele_next"><a href="javascript:;" class="radio_next quotes_radio_next" data-toggle="modal" data-target="#work_description">Next &gt;</a></div>
+                     </div>
+                  </div>
+               </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- ask quote Modal end-->
+      <?php
+      if(!empty($b_id)){
+        $action_url = url('/general_user/quotesend/'.$b_id);
+      }else{
+        $action_url = url('/general_user/quotesend');
+      }
+
+      ?>
+      <form method="POST" class="dropzone" id="dropzone_form" data-page="askquote" action="{{ $action_url }}" enctype="multipart/form-data">
+      @csrf
+      <!-------- work description Modal ------->
+      <div class="modal fade" id="work_description" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header quote_header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body quote_body">
+                <!---------work description popup starts--------->
+                  <div class="describe_work">
+                        <h1>Describe your work</h1>
+                        <p>(0/2000 letters minimum 100)</p>
+                        <div class="describe_work_sec">
+                           <div class="des_area">
+                              <textarea cols="30" class="work_description_modal" name="work_description_text" id="description" placeholder="Input description" onkeyup="remove_errmsg(this)"></textarea>
+                              <span class="fill_fields" role="alert"></span>
+                           </div>
+                           <div class="t_detail">
+                              <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                           </div>
+                           <div class="describe_work_btn mb-5">
+                              <!-- <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div> -->
+                              <div class="ele_next"><a href="javascript:;" class="desc_work_modal" >Next &gt;</a></div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-------------work description popup ends-------------->
+                     <!--------popup for image video------->
+                     <div class="img_vid_popup" style="display:none;">
+                     <div class="registrationform">
+                    <div class="description_optional row">
+                      
+                    </div>
+                    <div class="D_main">
+                     <h1>Add photos, videos or documents that can help the business understand your needs.</h1>
+                     
+
+                     <div class="drag_option_main">
+                        <div class="select_upload">
+                           <div class="upload_file_section">
+                              <div class="drag_file" id="drag_div">
+                                 <div class="fallback">
+                                  <input name="file" class="disp_none" type="file" multiple style="width:1px;border:0px" /></div>
+                                <a href="javascript:;">Drag and drop files here to upload</a>
+                              </div>
+                              <span>OR</span>
+                              <div class="file_to_upload">
+                              <div class="upload-btn-wrapper">
+                                <button class="btn">Select files to upload</button>
+                                <input type="file" name="myfile[]" multiple class="select_verify_img" accept="image/x-png,image/gif,image/jpeg"/>
+
+                                  <span id="msg"></span>
+                              </div>
+                            </div>
+                           </div>
+                        </div>
+                     </div>
+                   
+                  </div>
+                </div>
+                <div class="P_N_btn">
+                     <a href="javascript:;" class="btn_for_previous prev_pic_vid">< Previous</a>
+                     <a href="javascript:;" class="btn_for_skip skip_pic_vid">Next</a>
+                  </div>
+                </div>
+                <!-----------upload image video popup ends----------->
+                <!----------popup for mobile phone------------>
+                <div class="not_all_business mobile_phone_pop" style="display:none;">
+                        <h1>Not all businesses reply to quote requests
+                           without phone. Enter your phone number
+                           to get more offers.
+                        </h1>
+                        <div class="ph_detail">
+                           <div class="form-group ">
+                              <label for="inputEmail4">Phone number</label>
+                              <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="" onkeyup="remove_errmsg(this)">
+                              <span class="fill_fields" role="alert"></span>
+                           </div>
+                           <div class="all_business_ph">
+                              <div class="ele_pre"><input type="submit" value="Validate" class="mobile_validate_submit"></div>
+                              <div class="ele_next"><input type="submit" class="mobile_dont_want mobile_validate_submit" value="Don’t want"></div>
+                           </div>
+                           <div class="t_detail mb-4">
+                              <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                           </div>
+                        </div>
+                     </div>
+                     <!---------Mobile phone popup ends----------->
+
+                     <!------Thanku popup------->
+                      <div class="not_all_business final_ques_thanks static_ques" style="display:none;">
+                        <h1>Your quote request was sent</h1>
+                        <div class="ph_detail">
+                           <div class="requ_quote_sent">
+                              <h1>Your request was sent to relevant business. Whenever business wil reply to your quote request you’ll receive a notification.</h1>
+                              <h1>You can go to quotes page to view your quotes.</h1>
+                           </div>
+                           <div class="all_business_ph">
+                              <div class="ele_pre" ><a href="{{url('general_user/quote_questions')}}">See quotes</a></div>
+                              <div class="ele_next" onclick="closestaticmodal();"><a href="javascript:;">Close</a></div>
+                           </div>
+                        </div>
+                      </div>
+                     <!------Thanku popup------->
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-------- work description Modal end ----->
+    </form>
+
+
     <!-------- Login Modal for general user------->
     <div class="modal fade" id="general_login" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         
@@ -246,10 +447,15 @@
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="http://idangero.us/swiper/dist/js/swiper.min.js" type="text/javascript"></script>
+    <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
 
    <!--  <script type="text/javascript" src="{{ URL::asset('js/wow.min.js') }}"></script> -->
+   <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/general_user.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/general_quotes.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/formbuilder.js') }}"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ" 
+          type="text/javascript"></script>
     <script>
           var swiper = new Swiper('.swiper2', {
             slidesPerView: 10,
@@ -338,21 +544,25 @@
     <script>
     function readURL(input) {
 
-if (input.files && input.files[0]) {
-  var reader = new FileReader();
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-  reader.onload = function(e) {
-    $('#blah').attr('src', e.target.result);
-  }
+        reader.onload = function(e) {
+          $('#blah').attr('src', e.target.result);
+        }
 
-  reader.readAsDataURL(input.files[0]);
-}
-}
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
-$("#imgInp").change(function() {
-readURL(this);
-});
+  $("#imgInp").change(function() {
+    readURL(this);
+  });
     </script>
+
+
+
+
 </body>
 
 </html>

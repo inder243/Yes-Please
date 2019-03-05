@@ -218,9 +218,15 @@ input:invalid {
 	margin-right: 23px;
 }
 
+.second_header_logo {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+}
 .second_header_logo img {
 	width: 150px;
-	margin-right: 50px;
+
 }
 
 .yes_please_footer {
@@ -1188,10 +1194,12 @@ input:invalid {
 	font-size: 12px;
 	border-radius: 5px;
 	padding: 17px 24px 17px 24px;
-	border: 2px dotted #ed0c6e;
+	border: 1px dashed #ed0c6e;
 	width: 100%;
 }
-
+.drag_file a:hover{
+	text-decoration: none;
+}
 .file_to_upload {
 	width: 45%;
 	display: inline-block;
@@ -1585,7 +1593,7 @@ input:invalid {
 	margin-bottom: 10px;
 }
 
-.category_list ul {
+.category_list > ul {
 	margin: 0;
 	max-height: 345px;
 	overflow: auto;
@@ -1628,7 +1636,7 @@ input:invalid {
 	width: 100%;
 }
 
-.added_category ul {
+.added_category > ul {
 	margin: 0;
 	max-height: 400px;
 	overflow: auto;
@@ -1895,11 +1903,10 @@ input:invalid {
 	height: 20px;
 	border: none;
 	background-color: transparent;
-	left: -1px;
+	left: -2px;
 	top: -2px;
 	border-radius: 3px !important;
 }
-
 .week-section {
 	display: flex;
 	justify-content: space-between;
@@ -2054,6 +2061,105 @@ input:invalid {
 
 /*********************************** verification page end *********************************/
 
+/*********************************** review page start *********************************/
+.quote_req_main_finsih h1 {
+    text-align: center;
+    font-size: 27px;
+}
+.quote_req_main_finsih p {
+    text-align: center;
+    padding-top: 10px;
+}
+.quote_border {
+    border-color: transparent;
+}
+.quote_req_main_finsih p {
+    text-align: center;
+    padding-top: 10px;
+}
+.user_quote_second_section p span {
+    color: #000;
+}
+.write_sec {
+    width: 100%;
+    display: inline-block;
+    padding-top: 10px;
+}
+.write_sec textarea {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #e1dede;
+    min-height: 200px;
+    padding: 10px;
+}
+.rate_business {
+    text-align: center;
+}
+.rate_business h1 {
+    font-size: 16px;
+}
+.rate_business ul {
+    padding-top: 10px;
+}
+.rate_business ul li {
+    list-style: none;
+    display: inline-block;
+    text-align: center;
+}
+.rate_business ul li img {
+    width: 22px;
+}
+.review_later {
+    margin-top: 15px;
+    display: inline-block;
+}
+.review_later1 {
+	background-color: #ffcb08;
+	color: #333;
+	font-size: 14px;
+	width: 125px;
+	display: inline-block;
+	padding: 5px 0 5px 0;
+	border-radius: 3px;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+.submit_reviewr {
+	background-color: #ed0c6e;
+	color: #fff;
+	width: 125px;
+	display: inline-block;
+	padding: 5px 0 5px 0;
+	border-radius: 3px;
+	font-size: 14px;
+	margin-left: 20px;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+.review_later1:hover {
+    text-decoration: none;
+    color: #000;
+}
+.submit_reviewr:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.write_reviews p span img {
+    width: 15px;
+}
+.write_reviews p {
+    text-align: left;
+}
+.write_reviews p span img {
+    width: 15px;
+    margin-left: 6px;
+}
+.finish_re {
+    margin-bottom: 90px;
+}
+
+/*********************************** review page end *********************************/
+
 
 /*********************************** Media query start *********************************/
 
@@ -2105,8 +2211,33 @@ input:invalid {
 			.user_profile p {
 				display: none;
 			}
+			.upload_file_section span {
+    display: none;
+}
+.drag_file {
+    display: none;
+}
+.file_to_upload {
+    width: 100%;
+    display: inline-block;
+}
 		}
 		@media (max-width: 767px) {
+			.quote_req_main_finsih p {
+    text-align: center;
+    padding: 10px;
+		}
+		.submit_reviewr {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 15px;
+    }
+			.review_later {
+			    width: 100%;
+			}
+			.review_later1 {
+			    width: 100%;
+			}
 			.ph_video {
 				padding: 10px;
 			}

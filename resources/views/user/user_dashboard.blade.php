@@ -3,10 +3,10 @@
 @section('content')
 
 <section class="register_step_1">
-      <div class="breadcrumb register_breadcrumb category_breadcrumb">
-        <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>Category <span>(3,070)</span></span></div>
-        <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
-      </div>
+  <div class="breadcrumb register_breadcrumb category_breadcrumb">
+    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>Category <span>(3,070)</span></span></div>
+    <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
+  </div>
       <div class="container-fluid">
         <div class="category_sec_main">
           <div class="row">
@@ -588,7 +588,7 @@
                   </div>
                   <div class="filters_btn">
                     <div class="ask_for_q">
-                      <a href="javascript:;">Ask for quote</a>
+                      <a href="javascript:;" data-toggle="modal" data-target="#ask_quote">Ask for quote</a>
                     </div>
                     <div class="ask_for_q">
                       <a href="javascript:;">Set appointment</a>
@@ -604,30 +604,33 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
-                        <ul>
-                           <li class="border_color">
+                        <ul class="all_bus_by_cat">
+
+                          @if(isset($all_business) && !empty($all_business))
+                            @foreach($all_business as $key=>$allbus)
+                              <li class="">
                               <div class="business_sec">
                                  <div class="b-detail">
                                     <span class="business_img"><img src="{{ asset('img/img_placeholder.png') }}"/></span>
                                     <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
+                                       <a href="{{ url('general_user/public_profile/'.$allbus['business_userid']) }}"><h1>{{$allbus['get_business_user']['business_name']}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
+                                       <p>{{$allbus['get_category']['category_name']}}</p>
                                     </div>
                                  </div>
                                  <div class="select_this">
                                     <div class="formcheck forcheckbox langcheck">
                                        <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
+                                          <input type="checkbox" class="radio-inline check_bus" id="hmm_{{$key}}" name="radios" value="" data-title="{{$allbus['business_userid']}}">
                                           <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
                                           <p></p>
                                        </label>
                                     </div>
                                  </div>
                               </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
+                              <p class="des">{{ $allbus['get_business_user']['full_address']}}</p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
+                                    <a href="javascript:;" class="distance">Distance <span>{{ $allbus['get_business_details']['distance_kms']}}km</span></a>
                                     <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
                                     <a href="javascript:;" class="review">Reviews <span>70</span></a>
                                  </div>
@@ -636,200 +639,10 @@
                                     <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
                                  </div>
                               </div>
-                           </li>
-                           <li class="border_color">
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/adidas.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="" data-original-title="+1 (23)4567890"><img/src="{{ asset('img/call.png') }}"/>
-                                    </a>
-                                 </div>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/starbucks_corporation.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img src="{{ asset('img/call.png') }}"/></a>
-                                 </div>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/adidas_2.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
-                                 </div>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/adidas_2.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
-                                 </div>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/adidas_2.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
-                                 </div>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="business_sec">
-                                 <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/adidas_2.png') }}"/></span>
-                                    <div class="sec_t">
-                                       <h1>Business name <span><img src="{{ asset('img/verified.png') }}"/></span></h1>
-                                       <p>Category</p>
-                                    </div>
-                                 </div>
-                                 <div class="select_this">
-                                    <div class="formcheck forcheckbox langcheck">
-                                       <label>
-                                          <input type="checkbox" class="radio-inline" name="radios" value="">
-                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
-                                          <p></p>
-                                       </label>
-                                    </div>
-                                 </div>
-                              </div>
-                              <p class="des">Ben Saruq St 8, Tel Aviv-Yafo, Israel</p>
-                              <div class="distance_rating">
-                                 <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>2,1km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
-                                 </div>
-                                 <div class="call_chat">
-                                    <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
-                                 </div>
-                              </div>
-                           </li>
+                           </li>    
+                            @endforeach
+                          @endif
+                          
                         </ul>
                         <div class="col-12">
                            <div class="load_more"><a href="JavaScript:;">Load more</a></div>
@@ -1061,4 +874,264 @@
             </div>
       </div>
     </section>
+    <!------------------------  Category  Modal -------------->
+      <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header quote_header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+              <form class="dynmic_quoteform">
+
+                 <input type="hidden" class="hiddencatId" value="{{$categoryId}}">
+                 <div class="modal-body quote_body">
+                    
+                      <div class="ask_for_quote_section">
+                      
+                        @if(isset($data) && !empty($data))
+                         @if($data['type']=='textbox')
+
+                          <div class="not_all_business form-ques dynamicQues_{{$data['id']}}" data-id="{{$data['id']}}" data-type="{{$data['type']}}" data-filter="{{$data['filter']}}">
+                            <h1 class="questitle">{{$data['title']}}</h1>
+                            <div class="ph_detail">
+                              <div class="form-group ">
+                              <label for="inputEmail{{$data['id']}}">{{$data['title']}}</label>
+                              <input class="form-control" id="inputEmail{{$data['id']}}" type="text">
+                            </div>
+
+                             @if(isset($data['description']) && !empty($data['description']))
+                               <div class="t_detail">
+                                  <p><img src="{{asset('img/info.png') }}"/> {{$data['description']}}  </p>
+                               </div>
+                              @endif
+                            
+                             <div class="next_btn" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div>
+                              </div>
+                            </div>
+                          @elseif($data['type']=='checkbox')
+                            <div class="what_design form-ques dynamicQues_{{$data['id']}}" data-id="{{$data['id']}}" data-type="{{$data['type']}}" data-filter="{{$data['filter']}}">
+                              <h1 class="questitle">{{$data['title']}}</h1>
+                              <div class="d_cat">
+                                @if(isset($data['options']) && !empty($data['options']))
+                                 <ul>
+                                  @foreach(json_decode($data['options']) as $option)
+                                    <li>
+                                       <div class="formcheck forcheckbox langcheck">
+                                          <label>
+                                             <input type="checkbox" class="radio-inline" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
+                                             <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
+                                             <p>{{$option->option_name}}</p>
+                                          </label>
+                                       </div>
+                                    </li>
+                                    @endforeach
+                                 </ul>
+                                 @endif
+                                 @if(isset($data['description']) && !empty($data['description']))
+                                 <div class="t_detail">
+                                    <p><img src="{{ asset('img/info.png') }}"/> {{$data['description']}}  </p>
+                                 </div>
+                                 @endif
+                                 
+                                 <div class="next_btn" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div>
+                              </div>
+                            </div>
+                             @elseif($data['type']=='dropdown')
+                             <div class="quote_recieve form-quesdynamicQues_{{$data['id']}}" data-id="{{$data['id']}}" data-type="{{$data['type']}}" data-filter="{{$data['filter']}}">
+                              <h1 class="questitle">{{$data['title']}}</h1>
+
+                            @if(isset($data['options']) && !empty($data['options']))
+                            
+                               <div class="total_quote"><div class="form-group custom_errow"><label>{{$data['title']}}</label>
+                                <select class="form-control">
+                                @foreach(json_decode($data['options']) as $option)
+                                    <option value='.$option->option_value.'>{{$option->option_name}}</option>
+                                @endforeach
+                                </select>
+                                <span class="select_arrow1"><img img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span></div>
+                            @endif
+                           </ul></div>
+                            @if(isset($data['description']) && !empty($data['description']))
+                            <div class="t_detail">
+                              <p><img src="{{ asset('img/info.png') }}"/> {{$data['description']}}  </p>
+                            </div>
+                             @endif
+                            <div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>
+                           @elseif($data['type']=='radio')
+                            <div class="quote_recieve form-ques dynamicQues_{{$data['id']}}"  data-id="{{$data['id']}}" data-type="{{$data['type']}}" data-filter="{{$data['filter']}}">
+                              <h1>{{$data['title']}}</h1>
+                              @if(isset($data['options']) && !empty($data['options']))
+                              <div class="total_quote">
+                                <ul>
+                                  @foreach(json_decode($data['options']) as $option)
+                                  
+                                    <li>
+                                         <div class="formcheck forcheckbox langcheck">
+                                            <label>
+                                               <input type="radio" class="radio-inline" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
+                                               <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
+                                               <p>{{$option->option_name}}</p>
+                                            </label>
+                                         </div>
+                                      </li>
+                                    @endforeach
+                                  </ul>
+                                </div>  
+                                @endif
+                              @if(isset($data['description']) && !empty($data['description']))
+                                <div class="t_detail">
+                                  <p><img src="{{ asset('img/info.png') }}"/> {{$data['description']}}  </p>
+                                </div>
+                              @endif
+                             <div class="next_btn" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div>
+                          </div>
+                        </div>
+                          @endif
+                        @endif
+                        <div class="quote_recieve static_ques_1 static_ques" style="display:none">
+                          <h1>How many quotes you want to receive?</h1>
+                          <div class="total_quote">
+                             <ul>
+                                <li>
+                                   <div class="formcheck">
+                                      <label>
+                                         <input class="radio-inline" name="radios" value="1" type="radio">
+                                         <span class="outside"><span class="inside"></span></span>
+                                         <p>1</p>
+                                      </label>
+                                   </div>
+                                </li>
+                                <li>
+                                   <div class="formcheck">
+                                      <label>
+                                         <input class="radio-inline" name="radios" value="2" type="radio">
+                                         <span class="outside"><span class="inside"></span></span>
+                                         <p>2</p>
+                                      </label>
+                                   </div>
+                                </li>
+                                <li>
+                                   <div class="formcheck">
+                                      <label>
+                                         <input class="radio-inline" name="radios" value="3" type="radio">
+                                         <span class="outside"><span class="inside"></span></span>
+                                         <p>3</p>
+                                      </label>
+                                   </div>
+                                </li>
+                                <li>
+                                   <div class="formcheck">
+                                      <label>
+                                         <input class="radio-inline" name="radios" value="4" type="radio">
+                                         <span class="outside"><span class="inside"></span></span>
+                                         <p>4</p>
+                                      </label>
+                                   </div>
+                                </li>
+                                <li>
+                                   <div class="formcheck">
+                                      <label>
+                                         <input class="radio-inline" name="radios" value="5" type="radio">
+                                         <span class="outside"><span class="inside"></span></span>
+                                         <p>5</p>
+                                      </label>
+                                   </div>
+                                </li>
+                             </ul>
+                             <div class="t_detail">
+                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                             </div>
+                             <div class="q_nex_btns">
+                                <div class="ele_pre"  data_nxt_id="" onclick="getStaticQuestion(this);"><a href="javascript:;" >&lt; Previous</a></div>
+                                <div class="ele_next" id="dynamicquote_chk_login" data_nxt_id="static_ques_2" onclick="getStaticQuestionNext(this);"><a href="javascript:;">Next &gt;</a></div>
+                             </div>
+                          </div>
+                        </div>
+                        <div class="describe_work static_ques_2 static_ques" style="display:none">
+                          <h1>Describe your work</h1>
+                          <p>(0/2000 letters minimum 100)</p>
+                          <div class="describe_work_sec">
+                             <div class="des_area">
+                                <textarea cols="30" class="work_description_modal" name="work_description_text" id="dynamic_description" placeholder="Input description" onkeyup="remove_errmsg(this)"></textarea>
+                                <span class="fill_fields" role="alert"></span>
+                             </div>
+                             <div class="t_detail">
+                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                             </div>
+                             <div class="describe_work_btn">
+                                <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
+                                <div class="ele_next" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                             </div>
+                          </div>
+                        </div>
+                        <div class="registrationform static_ques_3 static_ques" style="display:none">
+                          <div class="description_optional row">
+                            
+                          </div>
+                          <div class="D_main">
+                            <h1>Add photos, videos or documents that can help the business understand your needs.</h1>
+                            <div class="drag_option_main">
+                              <div class="select_upload">
+                                <div class="upload_file_section">
+                                  <div class="drag_file dz-clickable" id="drag_div">
+                                 
+                                    <a href="javascript:;">Drag and drop files here to upload</a>
+                                  </div>
+                                  <span>OR</span>
+                                  <div class="file_to_upload">
+                                    <div class="upload-btn-wrapper">
+                                      <button class="btn">Select files to upload</button>
+                                        <input name="myfile[]" multiple="" class="select_verify_img" accept="image/x-png,image/gif,image/jpeg" type="file">
+                                    <span id="msg"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="describe_work_btn">
+                                <div class="ele_pre" data_nxt_id="static_ques_2" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
+                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Next &gt;</a></div>
+                             </div>
+                          </div>
+                        </div>
+                        <div class="not_all_business static_ques_4 static_ques" style="display:none">
+                          <h1>Not all businesses reply to quote requests
+                             without phone. Enter your phone number
+                             to get more offers.
+                          </h1>
+                          <div class="ph_detail">
+                             <div class="form-group ">
+                                <label for="inputEmail4">Phone number</label>
+                                <input onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="dynamic_mobile_phone" value="" onkeyup="remove_errmsg(this)" type="number">
+                                <span class="fill_fields" role="alert"></span>
+                             </div>
+                             <div class="all_business_ph">
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                             </div>
+                             <div class="t_detail">
+                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                             </div>
+                          </div>
+                        </div>
+                        <div class="not_all_business final_ques_thanks static_ques" style="display:none;">
+                        <h1>Your quote request was sent</h1>
+                        <div class="ph_detail">
+                           <div class="requ_quote_sent">
+                              <h1>Your request was sent to relevant business. Whenever business wil reply to your quote request you’ll receive a notification.</h1>
+                              <h1>You can go to quotes page to view your quotes.</h1>
+                           </div>
+                           <div class="all_business_ph">
+                              <div class="ele_pre" ><a href="{{url('general_user/quote_questions')}}">See quotes</a></div>
+                              <div class="ele_next" onclick="closdynamicemodal();"><a href="javascript:;">Close</a></div>
+                           </div>
+                        </div>
+                      </div>
+                 </div>
+               </form>
+            </div>
+         </div>
+      </div>
 @endsection

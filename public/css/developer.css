@@ -329,3 +329,40 @@ input[type=number]::-webkit-outer-spin-button {
     position: relative;
 
 }
+.error_border {
+    border: 1px solid red !important;
+}
+
+.search_btn input, .submit_reviewr input, .send_button_this input{
+    background-color: #ed0c6e;
+    color:#ffffff;
+    border:none;
+    display:inline-block;
+    cursor: pointer;
+}
+
+.search_btn input:hover,.submit_reviewr input:hover, .send_button_this input:hover {
+    background-color: #d80c65;
+    text-decoration: none;
+}
+.total_pics_img img{
+    height:150px;
+    width:150px;
+}
+
+
+/*************By Gursewak 25-02-2019*******************/
+.total_quote ul li {
+display: inline-block;
+list-style: none;
+width: auto;
+padding: 0 8px 0 0px;
+margin-bottom: 10px;
+}
+
+.total_quote ul {
+padding-bottom: 35px;
+display: flex;
+justify-content: flex-start;
+flex-wrap: wrap;
+}

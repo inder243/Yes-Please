@@ -10,6 +10,8 @@ use App\Models\Yphashtag;
 use App\Models\YpGeneralUsers;
 use App\Models\YpBusinessUsers;
 use App\Models\YpVerificationBusinessUsers;
+use App\Models\YpQuesJumps;
+use App\Models\YpFormQuestions;
 use DB;
 use Session;
 
@@ -369,6 +371,128 @@ class AdminController extends Controller
                 YpVerificationBusinessUsers::where('id', $_POST['id'])->update(['admin_verified_status' => '0']); 
                 return response()->json(['success'=>'1','message'=>'Verification of Business User Disapproved !']);
             }
+        }
+    }
+
+    //create new form for category
+    public function createNewForm(Request $request)
+    {
+        return view('category_form')->with(array('id'=>$request->id));
+    }
+
+    public function saveDynamicForm(Request $request)
+    {
+        try
+        {
+            $formid= 'f_'.time();
+
+            if(isset($request->formdata) && !empty($request->formdata) && $request->catId!='')
+            {
+                YpFormQuestions::where('id', 'desc')->get();
+
+               //check if form already exist for given category
+                $YpFormQuestionsExist = YpFormQuestions::where(array('cat_id'=>$request->catId))->get();
+                if(!empty($YpFormQuestionsExist))
+                {
+                    //check if form already exist for given category
+                    $YpFormQuestionsRemove = YpFormQuestions::where('cat_id', $request->catId)->delete();
+                }
+                foreach($request->formdata as $data)
+                {
+                    
+                    $is_required=0;
+                    $is_filter=0;
+                    if($data['type']=='textbox')
+                    {
+                        $YpFormQuestions = new YpFormQuestions;
+                        $YpFormQuestions->formid = $formid;
+                        $YpFormQuestions->cat_id = $request->catId;
+                        $YpFormQuestions->qid = $data['id'];
+                        $YpFormQuestions->filter = 0;
+                       
+                       if($data['is_required']===true || $data['is_required']==="true")
+                        {
+                            $is_required = 1;
+                        }
+
+                        $YpFormQuestions->required = $is_required;
+                        $YpFormQuestions->options = NULL;
+                        $YpFormQuestions->title = $data['title'];
+                        $YpFormQuestions->type = $data['type'];
+                        $YpFormQuestions->placeholder = $data['placeholder']?$data['placeholder']:NULL;
+                        $YpFormQuestions->description = $data['description']?$data['description']:NULL;
+                        $YpFormQuestions->min = $data['min']?'':NULL;
+                        $YpFormQuestions->max =$data['max']?'':NULL;
+                        $YpFormQuestions->save();
+                    }
+                    else
+                    {
+                        $YpFormQuestions = new YpFormQuestions;
+                        $YpFormQuestions->formid = $formid;
+                        $YpFormQuestions->cat_id = $request->catId;
+                        $YpFormQuestions->qid = $data['id'];
+
+                        if($data['is_filter']===true || $data['is_filter']==="true")
+                        {
+                            
+                            $is_filter=1;
+                        }
+                         
+
+                       if($data['is_required']===true || $data['is_required']==="true")
+                        {
+                           
+                            $is_required = 1;
+                        }
+                        
+                        
+
+                        $YpFormQuestions->required = $is_required;
+                        $YpFormQuestions->filter = $is_filter;
+                        $YpFormQuestions->options = json_encode($data['options']);
+                        $YpFormQuestions->title =$data['title'];
+                        $YpFormQuestions->type =$data['type'];
+                        $YpFormQuestions->placeholder = NULL;
+                        $YpFormQuestions->description = NULL;
+                        $YpFormQuestions->min = NULL;
+                        $YpFormQuestions->max = NULL;
+                        $YpFormQuestions->save();
+
+                        $questionId = $YpFormQuestions->id; //get last question id
+                        if(isset($data['conditions']) && !empty($data['conditions']))//get conditions
+                        {
+                            foreach($data['conditions'] as $condition)//loop through each condition
+                            {
+                                $operator = $condition['operator'];
+                                $value = $condition['condvalue'];
+                                $jumpto = $condition['queslist'];
+
+                                //save jumps in ques_jumps table
+                                $YpQuesJumps = new YpQuesJumps;
+                                $YpQuesJumps->q_id = $questionId;
+                                $YpQuesJumps->operator = $operator;
+                                $YpQuesJumps->value = $value;
+                                $YpQuesJumps->jump_to = $jumpto;
+                                $YpQuesJumps->save();
+                            }
+                            
+                        }
+                    }
+                    
+                    
+                }
+                return response()->json(['success'=>'1','message'=>'Data Saved Successfully.']);
+            }
+            else
+            {
+                return response()->json(['success'=>'0','message'=>'Params Missing.']);
+            }
+
+            return response()->json(['success'=>'1','message'=>'done']);
+        }
+        catch(Exception $e)
+        {
+
         }
     }
 

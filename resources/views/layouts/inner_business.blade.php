@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/root_size.css') }}" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="{{ URL::asset('css/swiper.css') }}" type="text/css">
    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
  -->
 </head>
@@ -205,7 +206,44 @@
     <script type="text/javascript" src="{{ URL::asset('js/wow.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business_user.js') }}"></script>
-    
+    <script type="text/javascript" src="{{ URL::asset('js/business_quotes.js') }}"></script>
+    <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
+
+     <script>
+         var swiper = new Swiper('.swiper-container', {
+           
+            slidesPerView: 4,
+            spaceBetween: 30,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            navigation: {
+             nextEl: '.swiper-button-next',
+             prevEl: '.swiper-button-prev',
+           }
+
+        });
+      </script>
+
+      <script>
+          var swiper = new Swiper('.swiper2', {
+            slidesPerView: 10,
+            spaceBetween: 6,
+            slidesPerGroup:10,
+
+            pagination: {
+              el: '.swiper21',
+              clickable: true,
+              renderBullet: function (index, className) {
+                return '<span class="' + className + '">' + (index + 1) + '</span>';
+              },
+            }
+          });
+
+
+        </script>
+
     <script>
         $(document).ready(function(){
 
