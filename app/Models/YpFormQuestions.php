@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class YpFormQuestions extends Model
 {
-	public $timestamps = false;
     protected $table = 'yp_form_questions';
     protected $fillable = [
        'formid','cat_id','qid','type','required','options','title','placeholder','description','min','max'
@@ -15,5 +14,8 @@ class YpFormQuestions extends Model
        // 'remember_token',
     ];
 
-    
+    public function jumps()
+    {
+        return $this->hasMany('App\Models\YpQuesJumps');
+    }
 }

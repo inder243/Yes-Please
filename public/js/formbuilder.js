@@ -120,6 +120,7 @@
 
 	//save quote data
 	$('.submit_dynamic_from').click(function(event){
+		
 		var site_url = $('#site_url').text();
 		event.preventDefault();	
       	var fields = [];

@@ -9,21 +9,21 @@
 		}  
 		else if (type == 4) //if type is 3 then add radio group
 		{
-			$('.dynamic_form').append('<div class="for_radio field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="radio"><h5 class="mb-3">Radio Select</h5><div class="form-group"><label>What will be title of Radiobox Field?</label><input type="textbox" class="form-control title radiobox_name" name="radiobox_name"></div><div class="form-group"><label>What will be options of radiobox?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="radio_name[]" class="form-control radio_name" placeholder="Label" type="text"></div><div class="col-4"><input name="radio_value[]" class="form-control radio_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="radio_name" data-value="radio_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input" type="checkbox" value="" id="defaultCheckradio'+Qid+'"><label class="form-check-label" for="defaultCheckradio'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckradioreq'+Qid+'"><label class="form-check-label" for="defaultCheckradioreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
+			$('.dynamic_form').append('<div class="for_radio field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="radio"><h5 class="mb-3">Radio Select</h5><div class="form-group"><label>What will be title of Radiobox Field?</label><input type="textbox" class="form-control title radiobox_name" name="radiobox_name"></div><div class="form-group"><label>What will be options of radiobox?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="radio_name[]" class="form-control radio_name" placeholder="Label" type="text"></div><div class="col-4"><input name="radio_value[]" class="form-control radio_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="radio_name" data-value="radio_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input is_required" type="checkbox" value="" id="defaultCheckradio'+Qid+'"><label class="form-check-label" for="defaultCheckradio'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckradioreq'+Qid+'"><label class="form-check-label" for="defaultCheckradioreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
 		}  
 		else if (type == 7) //if type is 2 then add chekbox
 		{
 
-			$('.dynamic_form').append('<div class="for_checkbox field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="checkbox"><h5 class="mb-3">Checkbox</h5><div class="form-group"><label>What will be title of Checkbox Field?</label><input type="textbox" class="form-control title checkbox_name" name="checkbox_name"></div><div class="form-group"><label>What will be options of checkbox?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="option_name[]" class="form-control option_name" placeholder="Label" type="text"></div><div class="col-4"><input name="option_value[]" class="form-control option_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="option_name" data-value="option_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input" type="checkbox" value="" id="defaultCheckchk'+Qid+'"><label class="form-check-label" for="defaultCheckchk'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container" style="display:none"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckchkreq'+Qid+'"><label class="form-check-label" for="defaultCheckchkreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
+			$('.dynamic_form').append('<div class="for_checkbox field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="checkbox"><h5 class="mb-3">Checkbox</h5><div class="form-group"><label>What will be title of Checkbox Field?</label><input type="textbox" class="form-control title checkbox_name" name="checkbox_name"></div><div class="form-group"><label>What will be options of checkbox?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="option_name[]" class="form-control option_name" placeholder="Label" type="text"></div><div class="col-4"><input name="option_value[]" class="form-control option_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="option_name" data-value="option_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input is_required" type="checkbox" value="" id="defaultCheckchk'+Qid+'"><label class="form-check-label" for="defaultCheckchk'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container" style="display:none"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckchkreq'+Qid+'"><label class="form-check-label" for="defaultCheckchkreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
 
 		} 
 		else if (type == 8) //if type is 4 then add dropdown
 		{
 
-			$('.dynamic_form').append('<div class="for_dropdown field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="dropdown"><h5 class="mb-3">Dropdown</h5><div class="form-group"><label>What will be title of dropdown?</label><input type="textbox" class="form-control title dropdown_name" name="dropdown_name"></div><div class="form-group"><label>What will be options of dropdown?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="dropdown_name[]" class="form-control dropdown_name" placeholder="Label" type="text"></div><div class="col-4"><input name="dropdown_value[]" class="form-control dropdown_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="dropdown_name" data-value="dropdown_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input" type="checkbox" value="" id="defaultCheckdrp'+Qid+'"><label class="form-check-label" for="defaultCheckdrp'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container" style="display:none"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckdrpreq'+Qid+'"><label class="form-check-label" for="defaultCheckdrpreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
+			$('.dynamic_form').append('<div class="for_dropdown field_group text-row ui-sortable-handle" id="' + Qid +'" data-type="dropdown"><h5 class="mb-3">Dropdown</h5><div class="form-group"><label>What will be title of dropdown?</label><input type="textbox" class="form-control title dropdown_name" name="dropdown_name"></div><div class="form-group"><label>What will be options of dropdown?</label><div class="multi-field-wrapper"><div class="multi-fields"><div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="dropdown_name[]" class="form-control dropdown_name" placeholder="Label" type="text"></div><div class="col-4"><input name="dropdown_value[]" class="form-control dropdown_value" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="dropdown_name" data-value="dropdown_value">Add Option</button></div></div></div></div></div></div></div><div class="form-group"><div class="form-check"><input class="form-check-input is_required" type="checkbox" value="" id="defaultCheckdrp'+Qid+'"><label class="form-check-label" for="defaultCheckdrp'+Qid+'">Is This Field Required</label></div><div class="form-check"><input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_'+Qid+'" type="checkbox"><label class="form-check-label" for="defaultCheckradiofilterq_'+Qid+'">Is Filter</label></div><div class="form-check logic_jump_container" style="display:none"><input class="form-check-input is_cond" onclick="addLogicJumpContainer(this);" type="checkbox" name="condition" value="" id="defaultCheckdrpreq'+Qid+'"><label class="form-check-label" for="defaultCheckdrpreq'+Qid+'">Add Logic Jump</label></div></div><button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button></div>');
 
 		} 
-		
+		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 	}
 
 	//function to add more options in checkbox group,radio group or in dropdown
@@ -32,7 +32,7 @@
 		var label = $(el).attr("data-label"); //get label of option
 		var value = $(el).attr("data-value"); //get value of option
 
-		$(el).closest('.multi-fields').append('<div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="' + label + '[]" class="form-control '+label+'" placeholder="Label" type="text"></div><div class="col-4"><input name="' + value + '[]" class="form-control '+value+'" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field"  data-label="' + label + '" data-value="' + value + '" onclick="removeOptions(this);">Remove Option</button></div></div></div></div>');
+		$(el).parents().eq(5).append('<div class="multi-field"><div class="form-group"><div class="row"><div class="col-4"><input name="' + label + '[]" class="form-control '+label+'" placeholder="Label" type="text"></div><div class="col-4"><input name="' + value + '[]" class="form-control '+value+'" placeholder="Value" type="text"></div><div class="col-4"><button type="button" class="btn btn-success add-field"  data-label="' + label + '" data-value="' + value + '" onclick="removeOptions(this);">Remove Option</button></div></div></div></div>');
 		
 
 	}
@@ -96,6 +96,7 @@
 		//if goto option is selected then show all questions
 		if (showQuesOrNot == "1" || showQuesOrNot == 1) {
 			var html = '';
+			html += '<option value="0">Make a selection</option>';
 			$('.dynamic_form .field_group').each(function() {
 				var qid = $(this).attr('id');
 				var title = $(this).find('.title').val();
@@ -135,6 +136,8 @@
 			var typeOfField = $(this).attr('data-type');
 			var Qid = $(this).attr('id');
 			var is_cond = $(this).find('.is_cond').is(':checked');
+			//check if question is required
+			var is_req = $(this).find('.is_required').is(':checked');
 			
 
 			//get data for textbox/textarea/number/range
@@ -168,8 +171,7 @@
 				}
 
 
-				//check if question is required
-				var is_req = $(this).find('.is_req').is(':checked');
+				
 				//create array of filled values
 				field['id'] = Qid;
 				field['type'] = typeOfField;
@@ -195,7 +197,7 @@
 					$(this).find('.title').removeAttr('style');
 				}
 				//check if question is required
-				var is_req = $(this).find('.is_req').is(':checked');
+				
 				//create array of filled values
 				field['id'] = Qid;
 				field['type'] = 'checkbox';
@@ -242,6 +244,15 @@
 					cond['operator'] = $(this).find('.operator').val();
 					cond['condvalue'] = $(this).find('.condvalue').val();
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
+					cond['queslist'] = $(this).find('.queslist').val();
+
+					if (cond['queslist'] == '0' || cond['queslist'] == 0) {
+						validate = false;
+						$(this).find('.queslist').css('border', '1px solid #c00');
+					} else {
+						$(this).find('.queslist').removeAttr('style');
+					}
+
 
 					if (cond['operator'] == '0' || cond['operator'] == 0) {
 						validate = false;
@@ -293,7 +304,7 @@
 					$(this).find('.title').removeAttr('style');
 				}
 				//check if question is required
-				var is_req = $(this).find('.is_req').is(':checked');
+				
 				field['id'] = Qid;
 				field['type'] = 'radio';
 				field['title'] = title;
@@ -337,6 +348,14 @@
 					cond['operator'] = $(this).find('.operator').val();
 					cond['condvalue'] = $(this).find('.condvalue').val();
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
+					cond['queslist'] = $(this).find('.queslist').val();
+
+					if (cond['queslist'] == '0' || cond['queslist'] == 0) {
+						validate = false;
+						$(this).find('.queslist').css('border', '1px solid #c00');
+					} else {
+						$(this).find('.queslist').removeAttr('style');
+					}
 
 					if (cond['operator'] == '0' || cond['operator'] == 0) {
 						validate = false;
@@ -385,8 +404,7 @@
 				} else {
 					$(this).find('.title').removeAttr('style');
 				}
-				var is_req = $(this).find('.is_req').is(':checked');
-
+				
 				field['id'] = Qid;
 				field['type'] = 'dropdown';
 				field['title'] = title;
@@ -431,6 +449,14 @@
 					cond['operator'] = $(this).find('.operator').val();
 					cond['condvalue'] = $(this).find('.condvalue').val();
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
+					cond['queslist'] = $(this).find('.queslist').val();
+
+					if (cond['queslist'] == '0' || cond['queslist'] == 0) {
+						validate = false;
+						$(this).find('.queslist').css('border', '1px solid #c00');
+					} else {
+						$(this).find('.queslist').removeAttr('style');
+					}
 
 					if (cond['operator'] == '0' || cond['operator'] == 0) {
 						validate = false;

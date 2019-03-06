@@ -377,7 +377,31 @@ class AdminController extends Controller
     //create new form for category
     public function createNewForm(Request $request)
     {
-        return view('category_form')->with(array('id'=>$request->id));
+        $data = array();
+        $catId = $request->id;
+        try
+        {
+
+           $formData = YpFormQuestions::where('cat_id',$catId)->get();
+         
+           
+           foreach($formData as $formQues)
+           {
+                $jumps=array();
+                $jumpdata = YpQuesJumps::where('q_id',$formQues['id'])->get();
+                $jumps[]= $jumpdata;
+                $formQues['jumps'] = $jumps;
+           }
+           
+           $data = $formData;
+
+            return view('category_form')->with(array('id'=>$catId,'data'=>$data));
+        }
+        catch(Exception $e)
+        {
+            return view('category_form')->with(array('id'=>$catId,'message'=>$e->getMessage(),'data'=>$data));
+        }
+        
     }
 
     public function saveDynamicForm(Request $request)
