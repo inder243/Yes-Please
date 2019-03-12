@@ -1,0 +1,39 @@
+body {
+	margin: 0;
+ 	font-size: .9375rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #12263f;
+	text-align: left;
+	background-color: #f9fbfd;
+}
+
+.card {
+ 	width: 100%;
+ 	padding:1.5rem;
+	overflow-y: auto;
+	background-color: #fff;
+	border: 1px solid #edf2f9;
+	box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03);
+	border-radius: .5rem;
+}
+
+.field_group {
+	border-bottom: 1px solid #e3ebf6;
+	margin-bottom: 2rem;
+	padding-bottom: 2rem;
+}
+
+.field_group:last-child
+{
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+.logic_jump {
+	position: relative;
+}
+.action_button {
+	position: absolute;
+	right: 0;
+}

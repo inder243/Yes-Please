@@ -1,6 +1,10 @@
 @extends('layouts.ypapp')
 
 @section('content')
+<?php $home_url = URL::to('/'); 
+//echo '<pre>';print_r($categories);die;
+?>
+<input type="hidden" id="home_url" value="<?=$home_url;?>" />
     <section class="banner">
         <div class="container">
             <div class="row">
@@ -57,34 +61,50 @@
     </section>
     <section class="yep_section">
         <div class="yep_section_bg">
-                        <div class="product_detail">
-                            <div class="mian_logo wow zoomInDown" data-wow-duration="1.5s"><img src="{{ asset('img/yep_color.png') }}" /></div>
-                            <div class="finance wow flipInX" data-wow-duration="1.5s">
-                                <a href="javascript:;" /><span class="fiance_icon"><img src="{{ asset('img/finance.png') }}" class="img-fluid finance_img"/><img src="{{ asset('img/finance_active.png') }}" class="img-fluid finance_active"/> </span><span class="catagory_name">Finance</span></a>
-                            </div>
-                            <div class="energy">
-                                <a href="javascript:;" /><span class="energy_icon"><img src="{{ asset('img/energy.png') }}" class="img-fluid energy_img"/><img src="{{ asset('img/energy_active.png') }}" class="img-fluid energy_active"/> </span><span class="energy_name">Energy</span></a>
-                            </div>
-                            <div class="travel wow zoomIn" data-wow-duration="1s">
-                                <a href="javascript:;" /><span class="travel_icon"><img src="{{ asset('img/travel.png') }}" class="img-fluid travel_img"/><img src="{{ asset('img/travel_active.png') }}" class="img-fluid travel_active"/> </span><span class="travel_name">Travel</span></a>
-                            </div>
-                            <div class="telco">
-                                <a href="javascript:;" /><span class="telco_icon"><img src="{{ asset('img/telco.png') }}" class="img-fluid telco_img"/><img src="{{ asset('img/telco_active.png') }}" class="img-fluid telco_active"/> </span><span class="telco_name">Telco</span></a>
-                            </div>
-                            <div class="more wow flipInX" data-wow-duration="1.5s">
-                                <a href="javascript:;" /><span class="more_icon"><img src="{{ asset('img/more.png') }}" class="img-fluid more_img"/><img src="{{ asset('img/more_active.png') }}" class="img-fluid more_active"/> </span><span class="more_name">More</span></a>
-                            </div>
-                            <div class="eNews">
-                                <a href="javascript:;" /><span class="eNews_icon"><img src="{{ asset('img/enews.png') }}" class="img-fluid eNews_img"/><img src="{{ asset('img/enews_active.png') }}" class="img-fluid eNews_active"/> </span><span class="eNews_name">eNews</span></a>
-                            </div>
-                            <div class="entertainment wow zoomIn" data-wow-duration="1s">
-                                <a href="javascript:;" /><span class="entertainment_icon"><img src="{{ asset('img/entertainment.png') }}" class="img-fluid entertainment_img"/><img src="{{ asset('img/entertainment_active.png') }}" class="img-fluid entertainment_active"/> </span><span class="entertainment_name">Entertain-<br>ment</span></a>
-                            </div>
-                            <div class="category">
-                                <a href="javascript:;" /><span class="category_icon"><img src="{{ asset('img/category.png') }}" class="img-fluid category_img"/><img src="{{ asset('img/category_active.png') }}" class="img-fluid category_active"/> </span><span class="category_name">Category</span></a>
-                            </div>
-                        </div>
-                    </div>
+            <div class="product_detail" data-skip="7">
+                <div class="mian_logo wow zoomInDown" data-wow-duration="1.5s"><img src="{{ asset('img/yep_color.png') }}" /></div>
+                @if(isset($categories[0]))
+                <div class="finance wow flipInX" data-wow-duration="1.5s">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[0]['super_cat_id']}}" /><span class="fiance_icon"><img src="{{ asset('img/finance.png') }}" class="img-fluid finance_img"/><img src="{{ asset('img/finance_active.png') }}" class="img-fluid finance_active"/> </span><span class="catagory_name">{{$categories[0]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(isset($categories[1]))
+                <div class="energy">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[1]['super_cat_id']}}" /><span class="energy_icon"><img src="{{ asset('img/energy.png') }}" class="img-fluid energy_img"/><img src="{{ asset('img/energy_active.png') }}" class="img-fluid energy_active"/> </span><span class="energy_name">{{$categories[1]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(isset($categories[2]))
+                <div class="travel wow zoomIn" data-wow-duration="1s">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[2]['super_cat_id']}}" /><span class="travel_icon"><img src="{{ asset('img/travel.png') }}" class="img-fluid travel_img"/><img src="{{ asset('img/travel_active.png') }}" class="img-fluid travel_active"/> </span><span class="travel_name">{{$categories[2]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(isset($categories[3]))
+                <div class="telco">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[3]['super_cat_id']}}" /><span class="telco_icon"><img src="{{ asset('img/telco.png') }}" class="img-fluid telco_img"/><img src="{{ asset('img/telco_active.png') }}" class="img-fluid telco_active"/> </span><span class="telco_name">{{$categories[3]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(count($categories) >= 7)
+                <div class="more wow flipInX" data-wow-duration="1.5s">
+                    <a href="javascript:;" /><span class="more_icon"><img src="{{ asset('img/more.png') }}" class="img-fluid more_img"/><img src="{{ asset('img/more_active.png') }}" class="img-fluid more_active"/> </span><span class="more_name">More</span></a>
+                </div>
+                @endif
+                @if(isset($categories[4]))
+                <div class="eNews">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[4]['super_cat_id']}}" /><span class="eNews_icon"><img src="{{ asset('img/enews.png') }}" class="img-fluid eNews_img"/><img src="{{ asset('img/enews_active.png') }}" class="img-fluid eNews_active"/> </span><span class="eNews_name">{{$categories[4]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(isset($categories[5]))
+                <div class="entertainment wow zoomIn" data-wow-duration="1s">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[5]['super_cat_id']}}" /><span class="entertainment_icon"><img src="{{ asset('img/entertainment.png') }}" class="img-fluid entertainment_img"/><img src="{{ asset('img/entertainment_active.png') }}" class="img-fluid entertainment_active"/> </span><span class="entertainment_name">{{$categories[5]['cat_name']}}</span></a>
+                </div>
+                @endif
+                @if(isset($categories[6]))
+                <div class="category">
+                    <a href="<?=$home_url;?>/category-classifcation/{{$categories[6]['super_cat_id']}}" /><span class="category_icon"><img src="{{ asset('img/category.png') }}" class="img-fluid category_img"/><img src="{{ asset('img/category_active.png') }}" class="img-fluid category_active"/> </span><span class="cat_name">{{$categories[6]['cat_name']}}</span></a>
+                </div>
+                @endif
+            </div>
+        </div>
                 
     </section>
 

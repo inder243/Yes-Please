@@ -32,14 +32,14 @@
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="{{ asset('img/menu-red.png') }}" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
-                         <li>
-                            <a href="#"><img src="{{ asset('img/home.png') }}" />Home</a>
+                        <li>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
+                            <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                            <a href="{{ url('/general_user/quote_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                         </li>
                         <li>
                             <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -62,9 +62,19 @@
                     </ul>
                 </div>
             </nav>
-            <div class="header_links">
-                <a href="{{ route('general_user.register') }}" class="register">Register</a>
-                <a href="javascript:;" class="login" data-toggle="modal" data-target="#general_login">Sign in</a>
+           <div class="header_links">
+                <!-- <a href="javascript:;" class="register" data-toggle="modal" data-target="#login_business">Business</a>
+                <a href="javascript:;" class="login" data-toggle="modal" data-target="#general_login">Users</a> -->
+
+                @if (Auth::guard('general_user')->check())
+                
+                @elseif(Auth::guard('business_user')->check())
+                
+                @else
+                <a href="{{ route('general_user.register') }}" class="regidter_tab">Register</a>
+                <a href="javascript:;" class="signin_tab" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false">Sign in</a>
+                @endif
+                
             </div>
         </div>
     </header>
@@ -181,7 +191,7 @@
                             </div>
                             <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
-                            <div class="register_page"><a href="{{ route('general_user.register') }}">Register</a></div>
+                            <div class="register_page"><a href="{{ route('general_user.register') }}" target="_blank">Register</a></div>
                         </form>
                       </div>
                     </div>

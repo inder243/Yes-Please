@@ -36,7 +36,13 @@
                         <ul>
 
                           @foreach($categories as $key=>$value)
-                          <li><a href="javascript:;" id="{{$value['category_id']}}" onclick="categoriesselect(this)" data-cat="parent" class="categories">{{$value['category_name']}}</a>
+
+                          <li><a href="javascript:;" inc_id="{{$value['id']}}" id="{{$value['category_id']}}" data-cat="sub" onclick="categoriesselect(this)">{{$value['category_name']}}</a><span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span></li>
+
+                          @endforeach
+
+                          <!-- @foreach($categories as $key=>$value)
+                          <li><a href="javascript:;" id="{{$value['category_id']}}" data-id="{{$value['id']}}" onclick="categoriesselect(this)" data-cat="parent" class="categories">{{$value['category_name']}}</a>
                           @if(!empty($value['sub_category']))  
                             <ul class="subcategories">
                               @foreach($value['sub_category'] as $key1=>$value1)
@@ -47,7 +53,7 @@
                           <span class="checked_category_active"><img src="{{ asset('img/category_check.png') }}"/></span>
                           @endif
                           </li>
-                          @endforeach
+                          @endforeach -->
                           
                         </ul>
                       </div>
@@ -59,17 +65,17 @@
                         <div class="added_category category_list add_cat_list">
                           
                             @if(!empty($business_categories))
+                                <ul class="added_category_ul">
                                 @foreach($business_categories as $parent_category)
-                                    <ul class="added_category_ul">
                                       <li>
-                                        <a href="javascript:;" id="{{$parent_category['id']}}" data-cat="parent" class="categories">{{$parent_category['name']}}</a>
+                                        <a href="javascript:;" id="{{$parent_category['cat_id']}}" data-cat="parent" class="categories">{{$parent_category['name']}}</a>
                                         <span class="cross_category_reg">
                                           <img src="{{ asset('img/category_cancel.png')}}" class="img-fluid">
                                         </span>
                                         <ul class="subcategories">
                                           @foreach($parent_category['values'] as $sub_category)
                                           <li>
-                                            <a href="javascript:;" id="{{$sub_category->sub_category_id}}" data-cat="sub">{{$sub_category->sub_category_name}}</a>
+                                            <a href="javascript:;" id="{{$sub_category->sub_cat_id}}" data-cat="sub">{{$sub_category->sub_category_name}}</a>
                                             <span class="cross_category_reg">
                                             <img src="{{ asset('img/category_cancel.png')}}" class="img-fluid">
                                             </span>
@@ -77,8 +83,8 @@
                                           @endforeach
                                         </ul>
                                       </li>
-                                    </ul>
                                 @endforeach
+                                </ul>
                           @else
                           <p id="no_categories">No Categories Added</p>
                           <ul class="added_category_ul">
@@ -104,6 +110,43 @@
         </div>
     </div>
 </section>
+
+<!-------- Login Modal for business user------->
+    <div class="modal fade" id="question_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content question_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body question_body">
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+<!-------- Login Modal end ----->
+
+
+ <div id="openPopUpForQuestion" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        
+            <div class="modal-content">
+              <div class="modal-header quote_header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 
+              </div>
+              <div class="modal-body">
+                  
+              </div>
+              
+            </div>
+        
+      </div>
+    </div>
 
 @endsection
 

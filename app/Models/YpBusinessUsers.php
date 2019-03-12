@@ -11,7 +11,7 @@ class YpBusinessUsers extends Authenticatable
     protected $guard = 'business_user';
 
     protected $fillable = [
-        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','remember_token','completed_steps'
+        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','image_name','remember_token','completed_steps'
     ];
 
     protected $hidden = [
@@ -20,7 +20,7 @@ class YpBusinessUsers extends Authenticatable
 
     public function verify_user()
     {
-    	//b_id = verify_id
+    	//b_id = verify_idFacades
     	//id = current
         return $this->hasMany('App\Models\YpVerificationBusinessUsers','id','b_id');
     }
@@ -37,7 +37,29 @@ class YpBusinessUsers extends Authenticatable
 
     public function bu_cat()
     {
-        return $this->hasMany('App\Models\YpBusinessUsercategories','business_userid','id');
+        return $this->belongsTo('App\Models\YpBusinessUsercategories','business_userid','id');
     }
 
+    public function business_quotes(){
+        return $this->hasMany('App\Models\YpBusinessUsersQuotes','business_userid','id');
+    }
+
+    public function quotes(){
+        return $this->hasMany('App\Models\YpBusinessUsersQuotes','business_userid','business_id');
+    }
+
+    public function get_review(){
+        return $this->hasMany('App\Models\YpUserReviews','id','business_id');
+    }
+
+    public function get_reviewss(){
+        return $this->hasMany('App\Models\YpUserReviews','business_id','id');
+    }
+
+    public function avgRating(){
+        return $this->get_reviewss()
+          ->selectRaw('avg(rating) as avg_rating,count(review) as tot_review, business_id')
+          ->groupBy('business_id')->where('user_type','general');
+    }
+    
 }

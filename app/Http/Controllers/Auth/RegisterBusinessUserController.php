@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessSubCategories;
-use App\Models\YpBusinessUserCategories;
+use App\Models\YpBusinessUsercategories;
 use App\Models\YpBusinessHashtags;
 use App\Models\YpBusinessUserHashtags;
 use App\Models\Yphashtag;
+use App\Models\YpFormQuestions;
+use App\Models\YpBusinessSelectedServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mail;
 
 class RegisterBusinessUserController extends Controller
@@ -77,7 +80,11 @@ class RegisterBusinessUserController extends Controller
     public function showBusinessRegisterForm($id = null){
 
         if($id != null){
-            $get_register_val = YpBusinessUsers::where('business_userid',$id)->get()->toArray();
+            try{
+                $get_register_val = YpBusinessUsers::where('business_userid',$id)->get()->toArray();
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
             return view('auth.register_business_user')->with(array('id'=>$id,'get_register_val'=>$get_register_val));
         }else{
             return view('auth.register_business_user')->with(array('id'=>''));
@@ -170,8 +177,8 @@ class RegisterBusinessUserController extends Controller
             });            
         }
 
-        return redirect()->intended('business_user/register_two/'.$id);
-        
+       // return redirect()->intended('business_user/register_two/'.$id);
+        return redirect('business_user/register_two/'.$id);        
     }
 
     function get_geocode($address){
@@ -200,7 +207,11 @@ class RegisterBusinessUserController extends Controller
 
     /*****step two*****/
     public function showBusinessRegisterForm_two($id){
-        $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
+        try{
+            $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
         return view('auth.register_business_user_two')->with(array('id'=>$id,'get_register_val'=>$get_register_val));
     }
     public function create_two($id){
@@ -239,25 +250,77 @@ class RegisterBusinessUserController extends Controller
 
         YpBusinessUsers::where('business_userid',$business_userid)->update(['completed_steps'=>'2']);
 
-        return redirect()->intended('business_user/register_three/'.$business_userid);
+       // return redirect()->intended('business_user/register_three/'.$business_userid);
+        return redirect('business_user/register_three/'.$business_userid);
         
     }
 
     /*****step three*****/
     public function showBusinessRegisterForm_three($id){
         //die('here');
-        $userCategoryModel = new YpBusinessUserCategories();
+        $userCategoryModel = new YpBusinessUsercategories();
         $get_register_val = YpBusinessDetails::where('business_userid',$id)->get()->toArray();
-        $all_categories =  YpBusinessCategories::with('sub_category')->where('category_status',1)->whereHas('sub_category', function($q) {$q->where('sub_category_status',1);})->get();  
-        $business_categories =  $userCategoryModel->get_user_categories($id);            
+
+
+        $all_categories =  YpBusinessCategories::get();  
+
+
+        $business_categories =  $this->get_user_categories($id);   
+      
+
+        // $all_categories =  YpBusinessCategories::with('sub_category')->where('category_status',1)->whereHas('sub_category', function($q) {$q->where('sub_category_status',1);})->get();  
+        // $business_categories =  $this->get_user_categories($id);   
+
+
+
         //print'<pre>vfg';print_r($business_categories); echo '</pre>';
         return view('auth.register_business_user_three')->with(array('id'=>$id,'get_register_val'=>$get_register_val,'categories'=>$all_categories,'business_categories'=>$business_categories));
     }
+
+    /*******get all categories*******/
+    public function get_user_categories($user_id)
+    { 
+        $b_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->get()->toArray();
+        $b_u_id = $b_id[0]['id'];
+        $business_category_ids = DB::table('yp_business_user_categories AS y_b_u_c')->where('y_b_u_c.business_userid',$b_u_id)
+                ->leftjoin('yp_business_categories AS y_b_c', 'y_b_u_c.category_id', '=', 'y_b_c.id')
+                ->distinct()
+                ->select('y_b_u_c.business_userid','y_b_u_c.category_id','y_b_c.category_name','y_b_c.category_id as cat_id')
+                ->get()->toArray(); 
+
+        //echo '<pre>';print_r($business_category_ids); echo '</pre>'; die;
+        $i = 0;
+        if(!empty($business_category_ids)){
+            foreach($business_category_ids as $value){
+
+                $category_id = $value->category_id;
+                $business_userid = $value->business_userid;
+                $parent_category_name = $value->category_name;
+                $cat_id = $value->cat_id;
+                $result[$i]['id'] = $category_id;
+                $result[$i]['cat_id'] = $cat_id;
+                $result[$i]['name'] = $parent_category_name;
+                $result[$i]['values'] = DB::table('yp_business_user_categories AS y_b_u_c')->where(['y_b_u_c.category_id'=>$category_id,'y_b_u_c.business_userid'=>$business_userid])
+                ->join('yp_business_sub_categories AS y_b_s_c', 'y_b_u_c.sub_category_id', '=', 'y_b_s_c.id')          
+                ->select('y_b_u_c.sub_category_id','y_b_s_c.sub_category_name','y_b_s_c.sub_category_id as sub_cat_id')
+                ->get()->toArray();         
+                $i++;
+            }
+
+        }else{
+            $result = '';
+        }
+       // echo '<pre>';print_r($result); echo '</pre>';
+        return $result;
+    }/******get user categories fn ends here*****/
+
     public function create_three($id){
+
         $YpBusinessUser = YpBusinessUsers::where('business_userid', '=',  $id)->first();
         $YpBusinessUser->completed_steps = 3;
         $YpBusinessUser->save();
-        return redirect()->intended('business_user/register_four/'.$id);
+       // return redirect()->intended('business_user/register_four/'.$id);
+        return redirect('business_user/register_four/'.$id);
     }
 
     /*****step four*****/
@@ -284,7 +347,8 @@ class RegisterBusinessUserController extends Controller
             $YpBusinessUser->completed_steps = 4;
             $YpBusinessUser->save();
         }
-        return redirect()->intended('business_user/register_five/'.$id);
+       // return redirect()->intended('business_user/register_five/'.$id);
+        return redirect('business_user/register_five/'.$id);
     }
 
     /*****step four*****/
@@ -376,7 +440,8 @@ class RegisterBusinessUserController extends Controller
             $YpBusinessUser->completed_steps = 5;
             $YpBusinessUser->save();
         }
-        return redirect()->intended('business_user/register_six/'.$id);
+        //return redirect()->intended('business_user/register_six/'.$id);
+        return redirect('business_user/register_six/'.$id);
     }
 
     /*****step six*****/
@@ -428,7 +493,8 @@ class RegisterBusinessUserController extends Controller
         $YpBusinessUser = YpBusinessUsers::where('business_userid', '=',  $id)->first();
         $YpBusinessUser->completed_steps = 6;
         $YpBusinessUser->save();
-        return redirect()->intended('business_user/register_seven/'.$id);
+        //return redirect()->intended('business_user/register_seven/'.$id);
+        return redirect('business_user/register_seven/'.$id);
     }
     /*****step seven*****/
     public function showBusinessRegisterForm_seven($id){
@@ -477,9 +543,11 @@ class RegisterBusinessUserController extends Controller
         $makepassword = $first_three.$last_three.'@123';
         //echo '<pre>';print_r($userDetail); die;
         if (Auth::guard('business_user')->attempt(['email' => $userDetail[0]['email'], 'password' => $makepassword])) {
-                return redirect()->intended('business_user/business_dashboard');
+               // return redirect()->intended('business_user/business_dashboard');
+                return redirect('business_user/business_dashboard');
             }else{
-                return redirect()->intended('business_user/register_seven/'.$id);
+               // return redirect()->intended('business_user/register_seven/'.$id);
+                return redirect('business_user/register_seven/'.$id);
         }
 
         //return redirect()->intended('business_user');
@@ -494,14 +562,17 @@ class RegisterBusinessUserController extends Controller
         $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
         $category_id = $input['category_id'];
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
-        $sub_cat_id = $input['sub_cat_id'];
-        $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();
-
-        YpBusinessUserCategories::create([
+        //$user_incre_id['id'] = 6;
+        $check = YpBusinessUsercategories::select('id')->where(['business_userid' => $user_incre_id['id'], 'category_id' => $category_increamentid['id']])->get()->toArray();
+        //print_r($check);die;
+        // $sub_cat_id = $input['sub_cat_id'];
+        // $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();
+        if(empty($check)){
+        YpBusinessUsercategories::create([
                 'business_userid' => $user_incre_id['id'],
                 'category_id' => $category_increamentid['id'],
-                'sub_category_id' => $subcategory_increamentid['id'],
             ]);
+        }
     }
 
     /****************************
@@ -513,9 +584,8 @@ class RegisterBusinessUserController extends Controller
         $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
         $category_id = $input['category_id'];
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
-        $sub_cat_id = $input['sub_cat_id'];  
-        $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();          
-        YpBusinessUserCategories::where(['business_userid' => $user_incre_id['id'], 'sub_category_id' => $subcategory_increamentid['id']])->delete();
+                  
+        YpBusinessUsercategories::where(['business_userid' => $user_incre_id['id'], 'category_id' => $category_increamentid['id']])->delete();
         //echo '<pre>';print_r($input); die;
     }
 
@@ -534,15 +604,149 @@ class RegisterBusinessUserController extends Controller
         }
     }
 
+    public function getFormsData($id,Request $request)
+    {
+        $user_id = $request->user_id;
+        $category_id = $request->category_id;
+
+        $inc_cat_id = $request->inc_cat_id;
+
+        $getJumpQuestion = YpFormQuestions::where('cat_id',$inc_cat_id)->where('filter',1)->first();
+
+        if(!$getJumpQuestion)
+        {
+             echo json_encode(array('success'=>0));
+             exit;
+        }
+
+        $html='';
+
+        if(!empty($getJumpQuestion) && $getJumpQuestion->filter==1)
+        {
+
+
+            $infoImg= url('/').'/img/info.png';
+            $arrowImg= url('/').'/img/custom_arrow.png';
+
+            $quesId = $getJumpQuestion->qid;
+              
+            //check if question is of textbox type
+             
+            if($getJumpQuestion['type']=='radio')//check if question is of radio type
+            {
+                $options = json_decode($getJumpQuestion['options']); //get options and decode
+
+                $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1>';
+               
+                if(isset($options) && !empty($options))
+                {
+                    $html.='<div class="total_quote"><ul class="total_quote1">';
+                    foreach($options as $option)
+                    {
+                        $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+
+
+                    }
+                }
+               $html.='</ul></div>';
+                  
+               if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                {
+
+                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                }
+                  $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                
+                
+            }
+            elseif($getJumpQuestion['type']=='dropdown')//check if question is of dropdown type
+            {
+                
+                $options = json_decode($getJumpQuestion['options']); //get options and decode
+
+                $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1>';
+                if(isset($options) && !empty($options))
+                {
+                    $html.='<div class="total_quote"><div class="form-group custom_errow"><select class="form-control">';
+                    foreach($options as $option)
+                    {
+                        $html.= '<option value='.$option->option_value.'>'.$option->option_name.'</option>';
+                    }
+                    $html.='</select><span class="select_arrow1 select_arrow2"><img img src="'.$arrowImg.'" class="img-fluid"></span></div>';
+
+                    
+                }
+               $html.='</ul></div>';
+               if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                {
+
+                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                }
+                
+                $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+               
+            }
+            elseif($getJumpQuestion['type']=='checkbox')//check if question is of checkbox type
+            {
+                $html.='<div class="what_design form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1><div class="d_cat d_cat1">';
+                $options = json_decode($getJumpQuestion['options']);
+                if(isset($options) && !empty($options))
+                {
+                    $html.='<ul>';
+                    foreach($options as $option)
+                    {
+                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+                    }
+
+                }
+               $html.='</ul>';
+              
+                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                {
+
+                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                }
+                
+                 $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                 
+            }
+
+            echo json_encode(array('success'=>1,'html'=>$html));
+
+        }
+        else
+        {
+            echo json_encode(array('success'=>0));
+        }
+
+        die;
+
+    }
+
     public function category_search($id){
+
+        // $input_text = $_POST['input_text'];
+        // if($input_text == ''){
+        //     $all_categories = YpBusinessCategories::with('sub_category')->get();
+        // }else{
+        // $all_categories = YpBusinessCategories::with('sub_category')->where('category_name', 'like', '%'.$input_text.'%')->get();
+        // }
+        // //print_r($all_categories);die;
+        // return view('auth.category_search')->with(array('id'=>$id,'categories'=>$all_categories));
+
         $input_text = $_POST['input_text'];
         if($input_text == ''){
-            $all_categories = YpBusinessCategories::with('sub_category')->get();
+            $all_categories = YpBusinessCategories::get();
         }else{
-        $all_categories = YpBusinessCategories::with('sub_category')->where('category_name', 'like', '%'.$input_text.'%')->get();
+        $all_categories = YpBusinessCategories::where('category_name', 'like', '%'.$input_text.'%')->get();
         }
         //print_r($all_categories);die;
         return view('auth.category_search')->with(array('id'=>$id,'categories'=>$all_categories));
+
+
+
     }
 
     
@@ -641,7 +845,27 @@ class RegisterBusinessUserController extends Controller
             }
         }/****end of isset****/
     } /****fn remove image ends here***/
+    
 
+    /*********
+    Add business user selected services
+    ***********/
+    function addSelectedService(){
+      if(!empty($_POST)){
+        $user_id = $_POST['user_id'];
+        $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
+        $category_id = $_POST['category_id'];
+        $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
+        $selected_arr = $_POST['selected'];
+        foreach($selected_arr AS $selected){
+          YpBusinessSelectedServices::create([
+              'business_id' => $user_incre_id['id'],
+              'cat_id' => $category_increamentid['id'],
+              'service_text' => $selected
+          ]);
+        }
+      }
+    }
     
 
     public function test(){

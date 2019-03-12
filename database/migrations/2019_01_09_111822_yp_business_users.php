@@ -25,6 +25,7 @@ class YpBusinessUsers extends Migration
             $table->string('full_address')->nullable();
             $table->string('logitude')->nullable();
             $table->string('latitude')->nullable();
+            $table->text('image_name')->nullable();
             $table->string('remember_token')->nullable();
             $table->string('completed_steps')->nullable();
             $table->tinyInteger('admin_approve')->default(0);

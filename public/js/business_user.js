@@ -17,10 +17,11 @@ $(document).ready(function(){
 		window.location.href = homeurl+"business_user/verify";
 	});
 
-	/*********code for datepicker in porofile setting page*********/
+	/*********code for datepicker in profile setting page*********/
 	$('.datetimepicker').datetimepicker({
 		format: 'HH:mm'
 	});
+
 
 	$('.select_verify_img').change(function(e){
 		var images = e.target.files;
@@ -48,8 +49,8 @@ $(document).ready(function(){
 			$('.registrationform .outside_checkbox').css('border','2px solid #ff0900');
 			$('.registrationform .fill_fields').html('Please mark a checkbox');
 			return false;
-		}
-*/
+		}*/
+		
 		if (!$('#agree').is(':checked')) {
 			$('#agree').siblings('.outside_checkbox').attr('style','border:2px solid red'); 
 			$('.bu_error_terms').html('Please agree with terms');
@@ -381,7 +382,7 @@ var myDropzone = new Dropzone("div#drag_div", {
 	    
 	    $.ajax({
 	        type: 'POST',
-	        url: home_url+"/business_user/removeimg",
+	        url: home_url+"/business_user/removeimg_"+page_name,
 	        data: "id="+name,
 	        dataType: 'html'
 	    });
@@ -457,6 +458,10 @@ function to select/remove categories on profile-setting
 /******function to show selected categories and sub categories in next box******/
 function categories_select(data){
 	var pageURL = window.location.href;
+
+	alert(pageURL);
+
+	return false;
 	var user_id = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 	var home_url = $('#home_url').val();
 	var category_id = $(data).attr('id');

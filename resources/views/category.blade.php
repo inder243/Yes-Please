@@ -45,6 +45,20 @@
                                 
                                     {{csrf_field()}}
                                     <div class="row form-group">
+                                        <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Super Category</label></div>
+                                        <div class="col-12 col-md-9"> 
+                                            <select name="superCategory" required>
+                                                        <option value="">Select Parent Category</option>
+                                                     @foreach($Supercategory as $sCat)
+                                                         <option value="{{ $sCat->super_cat_id }}">{{ $sCat->cat_name }}</option>
+                                                      @endforeach
+                                            </select>
+                                            <a href="javascript:;" onclick="openPopUpSuperCategory(this);return false">Add Parent category</a>
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="250" value="{{ old('category') }}" required>
                                             @if (Session::has('success_message'))
@@ -79,6 +93,7 @@
                                           <th scope="col">#</th>
                                           <th scope="col">Name</th>
                                           <th scope="col">Action</th>
+                                          <th scope="col">Category Form</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -91,6 +106,10 @@
                                         <td>
                                             <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="{{ $cat->id }}" data-name= "{{ $cat->category_name }}"></a>
                                             <a href='javascript:void(0);'  data-id="{{ $cat->id }}" class="fa fa-times delete_category"></a>
+                                        </td>
+                                        <td>
+                                            
+                                            <a href="{{url('/admin/create_new_form')}}/{{ $cat->id }}">create form</a>
                                         </td>
                                     </tr>
                                     <?php $count++; ?>
@@ -138,7 +157,34 @@
                 </div>
             </div>
         </div>
+        <div id="openPopUpSuperCategory" class="modal fade" role="dialog">
+      <div class="modal-dialog">
 
+        <!-- Modal content-->
+        
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Parent category.</h4>
+              </div>
+              <div class="modal-body">
+                <form action="{{url('/admin/add_Super_category')}}" method="post" class="form-horizontal">
+                    <div class="row form-group">
+                         {{csrf_field()}}
+                        <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Name</label></div>
+                        <div class="col-12 col-md-9"><input type="text" required name="superCategory"></div>
+                    </div>
+                    <input type="submit" class="btn btn-info" value="Submit">
+                </form>
+              </div>
+              <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+      </div>
+    </div>
 
         @endsection  
       

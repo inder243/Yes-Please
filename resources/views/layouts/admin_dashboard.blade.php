@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Yes Please!</title>
     <meta name="description" content="Yes Please!">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -119,6 +120,7 @@
             </div>
             
         </header>
+        <div id="site_url" style="display:none">{{ url('/') }}</div>
         <!-- /#header -->
 
         @yield('content')
@@ -167,6 +169,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="{{url('/admin_data/assets/js/form.js')}}"></script>
+    <link href="{{url('/admin_data/assets/css/form.css')}}" rel="stylesheet" />
     <!--Local Stuff-->
     <script>
         jQuery(document).ready(function($) {

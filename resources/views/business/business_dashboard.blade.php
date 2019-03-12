@@ -12,13 +12,13 @@
         <div class="row">
           <div class="col-md-3 col-6 padding_rt">
             <div class="dashboard_box">
-              <a href="javascript:;" class="quote_requestbg">
+              <a href="{{ url('/business_user/quotes_questions') }}" class="quote_requestbg">
                 <div class="box_heading">
                   <h2>Quotes requests</h2>
                   <h1>Quotes requests</h1>
                 </div>
                 <div class="total_number">
-                  <h1>1</h1>
+                  <h1>@if(!empty($quoteCount)){{$quoteCount}} @else -- @endif</h1>
                 </div>
                 <div class="Qlink"><p>Quote</p></div>
                 <div class="quote_req_img"><img src="{{ asset('img/quote_req.png') }}"/></div>
@@ -33,7 +33,7 @@
                   <h1>Questions waiting</h1>
                 </div>
                 <div class="total_number">
-                  <h1>3</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>Reply</p></div>
                 <div class="quote_req_img"><img src="{{ asset('img/question_waiting.png') }}"/></div>
@@ -49,7 +49,7 @@
                   <h1>Budget left</h1>
                 </div>
                 <div class="total_number">
-                  <h1>$95</h1>
+                  <h1>$--</h1>
                 </div>
                 <div class="Qlink"><p>Manage</p></div>
                 <div class="quote_req_img"><img src="{{ asset('img/budget_left.png') }}"/></div>
@@ -64,7 +64,7 @@
                   <h1>Interactions today</h1>
                 </div>
                 <div class="total_number">
-                  <h1>28</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>View</p></div>
                 <div class="quote_req_img"><img src="{{ asset('img/interaction.png') }}"/></div>
@@ -81,7 +81,7 @@
                   <h1>Members</h1>
                 </div>
                 <div class="total_number">
-                  <h1>963</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>Manage</p></div>
                 <div class="quote_req_img sec_row_img"><img src="{{ asset('img/member.png') }}"/></div>
@@ -96,7 +96,7 @@
                   <h1>Events</h1>
                 </div>
                 <div class="total_number">
-                  <h1>52</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>Schedule</p></div>
                 <div class="quote_req_img sec_row_img"><img src="{{ asset('img/events.png') }}"/></div>
@@ -112,7 +112,7 @@
                   <h1>New messages</h1>
                 </div>
                 <div class="total_number">
-                  <h1>4</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>View</p></div>
                 <div class="quote_req_img sec_row_img"><img src="{{ asset('img/new_message.png') }}"/></div>
@@ -127,7 +127,7 @@
                   <h1>Your business is not verified</h1>
                 </div>
                 <div class="total_number">
-                  <h1>i</h1>
+                  <h1>--</h1>
                 </div>
                 <div class="Qlink"><p>Click to verify</p></div>
                 <div class="quote_req_img sec_row_img"><img src="{{ asset('img/your_businees.png') }}"/></div>
@@ -138,7 +138,7 @@
         <div class="row">
           <div class="col-12">
             <div class="dashboard_buttons">
-              <div class="profile_setting"><a href="javascript:;">Profile and Settings</a></div>
+              <div class="profile_setting"><a href="{{ route('business_user.profile_setting') }}">Profile and Settings</a></div>
               <div class="Pricelist"><a href="javascript:;">Pricelist</a></div>
               <div class="Products"><a href="javascript:;">Products</a></div>
             </div>

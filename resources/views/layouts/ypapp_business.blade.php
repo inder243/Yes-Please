@@ -66,7 +66,7 @@
             </nav>
             <div class="header_links">
                 <a href="{{ route('business_user.register') }}" class="register">Register</a>
-                <a href="javascript:;" class="login" data-toggle="modal" data-target="#login_business">Sign in</a>
+                <a href="javascript:;" class="login" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false">Sign in</a>
             </div>
         </div>
     </header>

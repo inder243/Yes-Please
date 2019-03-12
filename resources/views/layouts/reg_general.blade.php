@@ -193,7 +193,7 @@
                             </div>
                             <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
-                            <div class="register_page"><a href="{{ route('general_user.register') }}">Register</a></div>
+                            <div class="register_page"><a href="{{ route('general_user.register') }}" target="_blank">Register</a></div>
                         </form>
                       </div>
                     </div>
@@ -295,20 +295,20 @@
     <script>
     function readURL(input) {
 
-if (input.files && input.files[0]) {
-  var reader = new FileReader();
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
 
-  reader.onload = function(e) {
-    $('#blah').attr('src', e.target.result);
-  }
+      reader.onload = function(e) {
+        $('#blah').attr('src', e.target.result);
+      }
 
-  reader.readAsDataURL(input.files[0]);
-}
-}
+      reader.readAsDataURL(input.files[0]);
+    }
+    }
 
-$("#imgInp").change(function() {
-readURL(this);
-});
+    $("#imgInp").change(function() {
+      readURL(this);
+    });
     </script>
 </body>
 

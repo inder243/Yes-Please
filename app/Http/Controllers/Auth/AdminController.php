@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\YpBusinessCategories;
+use App\Models\YpBusinessSuperCategories;
 use App\Models\YpBusinessSubCategories;
 use App\Models\Yphashtag;
 use App\Models\YpGeneralUsers;
 use App\Models\YpBusinessUsers;
 use App\Models\YpVerificationBusinessUsers;
+use App\Models\YpQuesJumps;
+use App\Models\YpFormQuestions;
 use DB;
 use Session;
 
@@ -38,18 +41,45 @@ class AdminController extends Controller
     {
         // $category = DB::table('yp_business_categories')->where('category_status','1')->orderBy('id', 'desc')->get();
 
+        $Supercategory = YpBusinessSuperCategories::where('category_status','1')->orderBy('id', 'desc')->get();
+       
         $category = YpBusinessCategories::where('category_status','1')->orderBy('id', 'desc')->get();
-        return view('category')->with('category',$category);
+
+        return view('category')->with('Supercategory',$Supercategory)->with('category',$category);
     }
 
 
-
-    public function add_category()
+    public function add_Super_Category(Request $request)
     {
+        $superCategoryName = $request->input('superCategory');
+        // $general_categoryid = str_shuffle(rand(1,1000).strtotime("now"));
+        $general_categoryid = time();
+        //die($general_categoryid);
+
+        $category = YpBusinessSuperCategories::where('cat_name', trim($superCategoryName))->first();
+        if($category)
+        {
+            Session::flash('error_message', 'Parent Category already exists');
+            return back()->withInput();
+        }   
+        $business_category = new YpBusinessSuperCategories;
+        $business_category->super_cat_id = $general_categoryid;
+        $business_category->cat_name = $superCategoryName;
+        $business_category->save();
+
+        Session::flash('success_message', 'Parent Category added successfully.');
+        return redirect()->route('admin.category');
+    }
+
+    public function add_category(Request $request)
+    {
+
+        $superCategory = $request->input('superCategory');
+
 
         // $category = DB::table('yp_business_categories')->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
 
-        $category = YpBusinessCategories::where('category_name', trim($_POST['category']))->where('category_status','1')->first();
+        $category = YpBusinessCategories::where('super_cat_id', $superCategory)->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
         if($category)
         {
             Session::flash('error_message', 'Category already exists');
@@ -60,6 +90,7 @@ class AdminController extends Controller
 
         $business_category = new YpBusinessCategories;
         $business_category->category_id = $general_categoryid;
+        $business_category->super_cat_id = $superCategory;
         $business_category->category_name = trim($_POST['category']);
         $business_category->save();
 
@@ -369,6 +400,152 @@ class AdminController extends Controller
                 YpVerificationBusinessUsers::where('id', $_POST['id'])->update(['admin_verified_status' => '0']); 
                 return response()->json(['success'=>'1','message'=>'Verification of Business User Disapproved !']);
             }
+        }
+    }
+
+    //create new form for category
+    public function createNewForm(Request $request)
+    {
+        $data = array();
+        $catId = $request->id;
+        try
+        {
+
+           $formData = YpFormQuestions::where('cat_id',$catId)->get();
+         
+           
+           foreach($formData as $formQues)
+           {
+                $jumps=array();
+                $jumpdata = YpQuesJumps::where('q_id',$formQues['id'])->get();
+                $jumps[]= $jumpdata;
+                $formQues['jumps'] = $jumps;
+           }
+           
+           $data = $formData;
+
+            return view('category_form')->with(array('id'=>$catId,'data'=>$data));
+        }
+        catch(Exception $e)
+        {
+            return view('category_form')->with(array('id'=>$catId,'message'=>$e->getMessage(),'data'=>$data));
+        }
+        
+    }
+
+    public function saveDynamicForm(Request $request)
+    {
+        try
+        {
+            $formid= 'f_'.time();
+
+            if(isset($request->formdata) && !empty($request->formdata) && $request->catId!='')
+            {
+                YpFormQuestions::where('id', 'desc')->get();
+
+               //check if form already exist for given category
+                $YpFormQuestionsExist = YpFormQuestions::where(array('cat_id'=>$request->catId))->get();
+                if(!empty($YpFormQuestionsExist))
+                {
+                    //check if form already exist for given category
+                    $YpFormQuestionsRemove = YpFormQuestions::where('cat_id', $request->catId)->delete();
+                }
+                foreach($request->formdata as $data)
+                {
+                    
+                    $is_required=0;
+                    $is_filter=0;
+                    if($data['type']=='textbox' || $data['type']=='textarea' || $data['type']=='datepicker'|| $data['type']=='timepicker' || $data['type']=='number'|| $data['type']=='range')
+                    {
+                        $YpFormQuestions = new YpFormQuestions;
+                        $YpFormQuestions->formid = $formid;
+                        $YpFormQuestions->cat_id = $request->catId;
+                        $YpFormQuestions->qid = $data['id'];
+                        $YpFormQuestions->filter = 0;
+                       
+                       if($data['is_required']===true || $data['is_required']==="true")
+                        {
+                            $is_required = 1;
+                        }
+
+                        $YpFormQuestions->required = $is_required;
+                        $YpFormQuestions->options = NULL;
+                        $YpFormQuestions->title = $data['title'];
+                        $YpFormQuestions->type = $data['type'];
+                        $YpFormQuestions->placeholder = $data['placeholder']?$data['placeholder']:NULL;
+                        $YpFormQuestions->description = $data['description']?$data['description']:NULL;
+                        $YpFormQuestions->min = $data['min']?'':NULL;
+                        $YpFormQuestions->max =$data['max']?'':NULL;
+                        $YpFormQuestions->save();
+                    }
+                    else
+                    {
+                        $YpFormQuestions = new YpFormQuestions;
+                        $YpFormQuestions->formid = $formid;
+                        $YpFormQuestions->cat_id = $request->catId;
+                        $YpFormQuestions->qid = $data['id'];
+
+                        if($data['is_filter']===true || $data['is_filter']==="true")
+                        {
+                            
+                            $is_filter=1;
+                        }
+                         
+
+                       if($data['is_required']===true || $data['is_required']==="true")
+                        {
+                           
+                            $is_required = 1;
+                        }
+                        
+                        
+
+                        $YpFormQuestions->required = $is_required;
+                        $YpFormQuestions->filter = $is_filter;
+                        $YpFormQuestions->options = json_encode($data['options']);
+                        $YpFormQuestions->title =$data['title'];
+                        $YpFormQuestions->type =$data['type'];
+                        $YpFormQuestions->placeholder = NULL;
+                        $YpFormQuestions->description = NULL;
+                        $YpFormQuestions->min = NULL;
+                        $YpFormQuestions->max = NULL;
+                        $YpFormQuestions->save();
+
+                        $questionId = $YpFormQuestions->id; //get last question id
+                        if(isset($data['conditions']) && !empty($data['conditions']))//get conditions
+                        {
+                            foreach($data['conditions'] as $condition)//loop through each condition
+                            {
+                                $operator = $condition['operator'];
+                                $value = $condition['condvalue'];
+                                $jumpto = $condition['queslist'];
+
+                                //save jumps in ques_jumps table
+                                $YpQuesJumps = new YpQuesJumps;
+                                $YpQuesJumps->q_id = $questionId;
+                                $YpQuesJumps->operator = $operator;
+                                $YpQuesJumps->value = $value;
+                                $YpQuesJumps->jump_to = $jumpto;
+                                $YpQuesJumps->save();
+                            }
+                            
+                        }
+                    }
+                    
+                    
+                }
+                return response()->json(['success'=>'1','message'=>'Data Saved Successfully.']);
+            }
+            else
+            {
+                return response()->json(['success'=>'0','message'=>'Params Missing.']);
+            }
+
+            return response()->json(['success'=>'1','message'=>'done']);
+        }
+        catch(Exception $e)
+        {
+
         }
     }
 

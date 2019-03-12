@@ -3,9 +3,12 @@
 @section('content')
 
 <section class="register_step_1">
+  <?php if(!empty($status)){ ?>
+  <input type="hidden" class="publicprofile_status" value="<?php echo $status;?>">
+<?php } ?>
          <div class="breadcrumb register_breadcrumb category_breadcrumb">
             <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<a href="javascript">Category</a>/<span>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</span></div>
-            <div class="share_fb"><a href="javascript:;"/><img src="img/icon_F.png"/>Share</a></div>
+            <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
          </div>
       </section>
       <div class="container-fluid">
@@ -13,7 +16,21 @@
           <div class="row">
             <div class="col-md-6 col-12">
               <div class="u_profile_detail">
-                <div class="user_i"><img src="{{ asset('img/user-img.png') }}"/></div>
+                <div class="user_i">
+                  @if(!empty($user_details))
+                  @if(!empty($user_details['image_name']))
+                  @php
+                  $bus_user_id = $user_details['business_userid'];
+                  $img_url = $user_details['image_name'];
+                  @endphp
+                  <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
+                  @else
+                  <img src="{{ asset('img/user-img.png') }}"/>
+                  @endif
+                  @else
+                  <img src="{{ asset('img/user-img.png') }}"/>
+                  @endif
+                </div>
                 <div class="u_detail">
                   <div class="u_detail_h">
                     <h1>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</h1>
@@ -30,7 +47,7 @@
                 <span class="u_rating">
                   <a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a>
                   <div class="rating_btns">
-                    <a href="javascript:;">Ask for quote</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
                     <a href="javascript:;">Ask question</a>
                     <a href="javascript:;">Schedule appointment</a>
                   </div>
@@ -43,13 +60,53 @@
           <div class="user_map_sec">
             <div class="r-star">
               <ul>
-                <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
-                <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
-                <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                @if(isset($round_rating))
+                  @if($round_rating == '5')
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                  @elseif($round_rating == '4')
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                  @elseif($round_rating == '3')
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                  @elseif($round_rating == '2')
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                  @elseif($round_rating == '1')
+                    <li><a href="javascript:;"><img src="{{ asset('img/active_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                  @else
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                    <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li> 
+                  @endif 
+                @else
                 <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
                 <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                <li><a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a></li>
+                @endif
               </ul>
-              <p>306 reviews</p>
+              <p>@if(isset($total_review)) {{$total_review}} @endif reviews</p>
             </div>
             <div class="work_area">
               <div class="row">
@@ -97,7 +154,7 @@
                         <?php if(isset($userSchedule->sunday_from)){ 
                           $value = $userSchedule->sunday_from;}else{$value = '';}
                         if(isset($userSchedule->sunday_to)){ 
-                            $value_to = $userSchedule->sunday_to;}else{$value = '';}
+                            $value_to = $userSchedule->sunday_to;}else{$value_to = '';}
                         ?>
                         <div class="weekdaytime">{{$value}} - {{$value_to}}</div>
                       </div>

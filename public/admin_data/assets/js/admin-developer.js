@@ -81,3 +81,8 @@ function approveBusinessUser(data){
         }
     });
 }
+
+function openPopUpSuperCategory(data)
+{
+  $('#openPopUpSuperCategory').modal('show');
+}

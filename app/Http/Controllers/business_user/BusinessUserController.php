@@ -7,13 +7,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Models\YpBusinessUsers;
 use App\Models\YpVerificationBusinessUsers;
-use App\Models\YpBusinessUserCategories;
+use App\Models\YpBusinessUsercategories;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessSubCategories;
 use App\Models\YpBusinessHashtags;
 use App\Models\Yphashtag;
 use App\Models\YpBusinessDetails;
 use App\Models\YpBusinessUserHashtags;
+use App\Models\YpBusinessUsersQuotes;
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -36,17 +37,22 @@ class BusinessUserController extends Controller
      */
     public function index()
     {
-        $business_user_id = Auth::user()->business_userid;
-        $completed_steps = Auth::user()->completed_steps;
-        $redirect_to_step = $completed_steps+1;
+        $b_id               = Auth::user()->id;
+        $business_user_id   = Auth::user()->business_userid;
+        $completed_steps    = Auth::user()->completed_steps;
+        $redirect_to_step   = $completed_steps+1;
 
         $arr = array('1'=>'one','2'=>'two','3'=>'three','4'=>'four','5'=>'five','6'=>'six','7'=>'seven');
 
+        /*****quotes count get****/
+        $quotes = YpBusinessUsersQuotes::where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get();
+        $quoteCount = $quotes->count();
+        
         if($completed_steps < 7){
             Auth::guard('business_user')->logout();
             return redirect('/business_user/register_'.$arr[$redirect_to_step].'/'.$business_user_id);
         }else{
-            return view('/business/business_dashboard');
+            return view('/business/business_dashboard')->with('quoteCount',$quoteCount);
         }
     }
 
@@ -137,7 +143,8 @@ class BusinessUserController extends Controller
         Session::flash('alert-class', 'alert-success1'); 
         Session::flash('alert-type', 'business_verify'); 
 
-        return redirect()->intended('business_user/verify');
+       // return redirect()->intended('business_user/verify');
+        return redirect('business_user/verify');
  
     }
 
@@ -179,16 +186,32 @@ class BusinessUserController extends Controller
         }
     }
 
-    
-
-    /*********
-    Fn to remove/delete drag images
-    ***********/
-    public function removeImages(){
+    /*************************
+    Fn to remove/delete drag images for verify users page
+    ****************************/
+    public function removeImagesVerify(){
         $id = Auth::user()->business_userid;
         if(isset($_POST['id'])){
             $filename = $_POST['id'];
             $image_path = public_path().'/images/verify_certificate/'.$id.'/'.$filename;  // Value is not URL but directory file path
+            if(File::exists($image_path)) {
+                File::delete($image_path);
+                echo "yes";die;
+            }else{
+                echo "no";die;
+            }
+        }/****end of isset****/
+    } /****fn remove image ends here***/
+
+
+    /*************************
+    Fn to remove/delete drag images for profile setting page
+    ****************************/
+    public function removeImagesProfile(){
+        $id = Auth::user()->business_userid;
+        if(isset($_POST['id'])){
+            $filename = $_POST['id'];
+            $image_path = public_path().'/images/profile/'.$id.'/'.$filename;  // Value is not URL but directory file path
             if(File::exists($image_path)) {
                 File::delete($image_path);
                 echo "yes";die;
@@ -206,7 +229,7 @@ class BusinessUserController extends Controller
 
         $user_details = YpBusinessUsers::with(['bu_details','hash_tags','hash_tags.bus_hashtags','bu_cat','bu_cat.buser_cat','bu_cat.buser_sub_cat'])->where('business_userid',$business_userid)->first()->toArray();
         
-        //$userCategoryModel = new YpBusinessUserCategories();
+        //$userCategoryModel = new YpBusinessUsercategories();
         
         $all_categories = YpBusinessCategories::with('sub_category')->where('category_status',1)->whereHas('sub_category', function($q) {$q->where('sub_category_status',1);})->get(); 
         $business_categories = $this->get_user_allcategories($business_userid); 
@@ -222,6 +245,9 @@ class BusinessUserController extends Controller
     ***************/
     public function profileSettingSubmit(Request $request){
 
+        // echo "<pre>all data";print_r($_POST);
+        // echo "<pre> image";print_r($_FILES);
+        // die;
         $id = Auth::user()->business_userid;
 
         if(!empty($_POST['full_address'])){
@@ -281,6 +307,21 @@ class BusinessUserController extends Controller
             }else{
                 $YpBusinessUser->logitude = '';
             }
+
+
+            $YpBusinessUser->save();
+
+            /****upload profile image****/
+            if($request->hasFile('file')) {
+                $file = $request->file('file');
+                $extension = $file->getClientOriginalExtension(); // getting image extension
+                $filename = time().'.'.$extension;  
+                $file->move(public_path().'/images/business_profile/'.$id.'/', $filename);
+            }else{
+                $filename = '';
+            }
+
+            $YpBusinessUser->image_name = $filename;
             $YpBusinessUser->save();
 
             /******check for business details table data******/
@@ -437,28 +478,7 @@ class BusinessUserController extends Controller
                     }
                 }
             }       
-           /* if(!empty($YpUserHashtags)){
-                foreach($getHashtags AS $hashtag){
-                    $getTagId = $hashtag['id'];
-                    if(in_array($getTagId, $_POST['hashtag'])){
-                        YpBusinessUserHashtags::create([
-                            'business_userid' => $business_id,
-                            'tag_id' => $getTagId
-                        ]);
-                    }else{
-                        echo $getTagId;
-                        YpBusinessUserHashtags::where(['business_userid' => $business_id, 'tag_id' => $getTagId])->delete();
-                    }
-                }
-             }else{
-                foreach($_POST['hashtag'] AS $hashtag){
-                    $getTagId = $hashtag;
-                    YpBusinessUserHashtags::create([
-                        'business_userid' => $business_id,
-                        'tag_id' => $getTagId
-                    ]);
-                }
-             }*/
+           
             /********hash tagsends*******/
 
 
@@ -502,7 +522,7 @@ class BusinessUserController extends Controller
     { 
 
         $id = Auth::user()->id;
-        // $cat_data = YpBusinessUserCategories::with(['buser_cat','buser_sub_cat'])->where('business_userid',$id)->get()->toArray();
+        // $cat_data = YpBusinessUsercategories::with(['buser_cat','buser_sub_cat'])->where('business_userid',$id)->get()->toArray();
         // if(!empty($cat_data)){
         //     $result = $cat_data;
         // }else{
@@ -514,7 +534,7 @@ class BusinessUserController extends Controller
         $business_category_ids = DB::table('yp_business_user_categories AS y_b_u_c')->where('y_b_u_c.business_userid',$id)
                 ->leftjoin('yp_business_categories AS y_b_c', 'y_b_u_c.category_id', '=', 'y_b_c.id')
                 ->distinct()
-                ->select('y_b_u_c.category_id','y_b_c.category_name','y_b_c.category_id as cat_id')
+                ->select('y_b_u_c.business_userid','y_b_u_c.category_id','y_b_c.category_name','y_b_c.category_id as cat_id')
                 ->get()->toArray(); 
 
         
@@ -522,12 +542,13 @@ class BusinessUserController extends Controller
         if(!empty($business_category_ids)){
             foreach($business_category_ids as $value){
                 $category_id = $value->category_id;
+                $business_userid = $value->business_userid;
                 $parent_category_name = $value->category_name;
                 $cat_id = $value->cat_id;
                 $result[$i]['id'] = $category_id;
                 $result[$i]['cat_id'] = $cat_id;
                 $result[$i]['name'] = $parent_category_name;
-                $result[$i]['values'] = DB::table('yp_business_user_categories AS y_b_u_c')->where('y_b_u_c.category_id',$category_id)
+                $result[$i]['values'] = DB::table('yp_business_user_categories AS y_b_u_c')->where(['y_b_u_c.category_id'=>$category_id,'y_b_u_c.business_userid'=>$business_userid])
                 ->join('yp_business_sub_categories AS y_b_s_c', 'y_b_u_c.sub_category_id', '=', 'y_b_s_c.id')          
                 ->select('y_b_u_c.sub_category_id','y_b_s_c.sub_category_name','y_b_s_c.sub_category_id as sub_cat_id')
                 ->get()->toArray();         
@@ -552,7 +573,7 @@ class BusinessUserController extends Controller
         $sub_cat_id = $input['sub_cat_id'];
         $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();
 
-        YpBusinessUserCategories::create([
+        YpBusinessUsercategories::create([
                 'business_userid' => $user_id,
                 'category_id' => $category_increamentid['id'],
                 'sub_category_id' => $subcategory_increamentid['id'],
@@ -571,7 +592,7 @@ class BusinessUserController extends Controller
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
         $sub_cat_id = $input['sub_cat_id'];  
         $subcategory_increamentid = YpBusinessSubCategories::select('id')->where('sub_category_id',$sub_cat_id)->first()->toArray();          
-        YpBusinessUserCategories::where(['business_userid' => $user_id, 'sub_category_id' => $subcategory_increamentid['id']])->delete();
+        YpBusinessUsercategories::where(['business_userid' => $user_id, 'sub_category_id' => $subcategory_increamentid['id']])->delete();
         //echo '<pre>';print_r($input); die;
     }
 

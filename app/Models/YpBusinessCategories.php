@@ -27,4 +27,8 @@ class YpBusinessCategories extends Model
         return $this->belongsTo('App\Models\YpBusinessUsercategories','id','category_id');
     }
 
+    public function bus_user_cat(){
+        return $this->belongsTo('App\Models\YpBusinessUserCategories','category_id','id');
+    }
+
 }

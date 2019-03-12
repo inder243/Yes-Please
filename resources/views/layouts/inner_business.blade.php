@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/root_size.css') }}" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="{{ URL::asset('css/swiper.css') }}" type="text/css">
    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
  -->
 </head>
@@ -38,7 +39,7 @@
                 <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
             </li>
             <li>
-                <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                <a href="{{ url('/business_user/quotes_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
             </li>
             <li>
                 <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -53,7 +54,7 @@
                 <a href="#"><img src="{{ asset('img/share.png') }}" />Share</a>
             </li>
             <li>
-                <a href="#"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
+                <a href="{{ route('business_user.profile_setting') }}"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
             </li>
             <li>
                 <a href="{{ route('business_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
@@ -78,18 +79,28 @@
                 <div class="username_list">
                     <div class="notification_sec">
                         <a href="javascript:;"><img src="{{ asset('img/notifications.png') }}"/>
-                        <span>3</span>
+                        <!-- <span>3</span> -->
                         </a>
                     </div>
                     <div class="messsage_sec">
                         <a href="javascript:;"><img src="{{ asset('img/messages_list.png') }}"/>
-                        <span>7</span>
+                        <!-- <span>7</span> -->
                         </a>
                     </div>
                     <div class="user_profile">
                         <a href="javascript:;">
-                            <img src="{{ asset('img/user_placeholder.png') }}"/>
                             @if (Auth::guard('business_user')->check())
+                            @php
+                            $bus_user_id = Auth::guard('business_user')->user()->business_userid;
+                            $img_url = Auth::guard('business_user')->user()->image_name;
+                            @endphp
+
+                            @if($img_url)
+                            <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}">
+                            @else
+                            <img src="{{ asset('img/user_placeholder.png') }}"/>
+                            @endif
+
                             <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                             @else
                             <p>Firstname Lastname</p>
@@ -194,6 +205,56 @@
         </div>
     </div>
 
+    <!------Modal to display popup to add template title----->
+    <div id="showtemplatetitle" class="modal fade" role="dialog">
+        
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please enter title for a template
+                    <input type="text" name="temp_title" class="temp_title" maxlength="25" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary templattitle_submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!------Modal to display all templates here----->
+    <div id="showalltemplates" class="modal fade" role="dialog">
+        
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <table style="width:100%" id="all_quote_templates">
+                     <!--  <tr>
+                        <th>S.no</th>
+                        <th>Template Title</th>
+                        <th>Template Text</th>
+                        <th>Action</th>
+                      </tr>
+                      @if(isset($quote_templates))
+                        @foreach($quote_templates as $key=>$template)
+                        <tr id="{{$template['id']}}">
+                        <td>{{$key+1}}</td>
+                        <td>{{$template['template_title']}}</td>
+                        <td class="td_temp_text">{{$template['template_text']}}</td>
+                        <td><a href="" onclick="use_template(this);return false;">Use</a> | <a href="javascript:void(0)" data-temp_id="{{$template['id']}}" onclick="delete_template(this);return false;">Delete</a></td>
+                        </tr>
+                        @endforeach
+                    @endif   -->
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -205,7 +266,44 @@
     <script type="text/javascript" src="{{ URL::asset('js/wow.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business_user.js') }}"></script>
-    
+    <script type="text/javascript" src="{{ URL::asset('js/business_quotes.js') }}"></script>
+    <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
+
+     <script>
+         var swiper = new Swiper('.swiper-container', {
+           
+            slidesPerView: 4,
+            spaceBetween: 30,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            navigation: {
+             nextEl: '.swiper-button-next',
+             prevEl: '.swiper-button-prev',
+           }
+
+        });
+      </script>
+
+     <!--  <script>
+            var swiper = new Swiper('.swiper2', {
+                slidesPerView: 10,
+                spaceBetween: 6,
+                slidesPerGroup:10,
+
+                pagination: {
+                  el: '.swiper21',
+                  clickable: true,
+                  renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (index + 1) + '</span>';
+                  },
+                }
+            });
+
+
+        </script> -->
+
     <script>
         $(document).ready(function(){
 
@@ -253,6 +351,21 @@
             $(".header_menu_toggle").css({
                 "opacity": "1"
             });
+        }
+
+        function readURLprofile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(50)
+                        .height(50);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
     <script>

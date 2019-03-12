@@ -11,9 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+Route::get('/', 'FrontController@index')->name('home');
+Route::get('/category-classifcation/{id}', 'FrontController@getCategories')->name('home');
+Route::post('more-catogries', 'FrontController@moreCatogries')->name('more-cateogries');
+Route::post('more-super-catogries', 'FrontController@moreSuperCatogries')->name('more-cateogries');
 
 Auth::routes();
 
@@ -51,6 +52,15 @@ Route::prefix('admin')->group(function() {
    /*********admin verify business users*********/
    Route::get('/verify_bu', 'Auth\AdminController@showVerifyBu')->name('admin.verigybu');
    Route::post('/change_status', 'Auth\AdminController@changeStatus')->name('admin.changestatus');
+  # Route::post('/create_new_form', 'Auth\AdminController@createNewForm');
+   Route::get('/create_new_form/{id}', 'Auth\AdminController@createNewForm')->name('admin.create_new_form');
+   Route::post('/save_dynamic_form', 'Auth\AdminController@saveDynamicForm');
+
+
+   /* code did by Parvinder */
+
+   Route::post('/add_Super_category', 'Auth\AdminController@add_Super_category')->name('admin.add_Super_category');
+
   });
 
 Route::prefix('business_user')->group(function() {
@@ -69,6 +79,12 @@ Route::prefix('business_user')->group(function() {
    /****step three***/
    Route::get('/register_three/{id}', 'Auth\RegisterBusinessUserController@showBusinessRegisterForm_three')->name('business_user.register_three');
    Route::post('/register_three/{id}', 'Auth\RegisterBusinessUserController@create_three')->name('business_user.register_three.submit');
+
+
+   Route::post('/getFormsData/{id}', 'Auth\RegisterBusinessUserController@getFormsData')->name('business_user.getFormsData'); /* get forms data on register screen using category id*/
+   
+
+
    
   /****step four***/
    Route::get('/register_four/{id}', 'Auth\RegisterBusinessUserController@showBusinessRegisterForm_four');
@@ -112,7 +128,8 @@ Route::prefix('business_user')->group(function() {
     Route::post('/verify', 'business_user\BusinessUserController@verifyUser')->name('business_user.verify.submit');
     Route::post('/uploadmultiple_verifyuser', 'business_user\BusinessUserController@uploadUserMultipleFiles')->name('business_user.verify.submit');
     Route::post('/uploadmultiple_profilesetting', 'business_user\BusinessUserController@uploadUserMultipleFilesProfile')->name('business_user.verify.submit');
-    Route::post('/removeimg', 'business_user\BusinessUserController@removeImages')->name('business_user.remove');
+    Route::post('/removeimg_verifyuser', 'business_user\BusinessUserController@removeImagesVerify')->name('business_user.remove_verify');
+    Route::post('/removeimg_profilesetting', 'business_user\BusinessUserController@removeImagesProfile')->name('business_user.remove_profile');
 
     /*****profile setting page***/
     Route::get('/profile_setting',
@@ -123,6 +140,21 @@ Route::prefix('business_user')->group(function() {
     Route::post('/categorysearch/{id}', 'business_user\BusinessUserController@category_search');
     Route::post('/removeprofileimg', 'business_user\BusinessUserController@removeProfileImages')->name('business_user.remove');
 
+    /**********Quotes and Questions*********/
+    Route::get('/quotes_questions/{status?}/{keyword?}',
+   'business_user\BusinessQuotesController@showQuotesQuestions')->name('business_user.quotes');
+    Route::get('/quotes_request/{quote_id}',
+   'business_user\BusinessQuotesController@showQuotesRequest')->name('business_user.quotes_request');
+    Route::post('/quotes_request_submit', 'business_user\BusinessQuotesController@quotesRequestSubmit')->name('business_user.quotes_request.submit');
+    Route::post('/uploadmultiple_quoterequest', 'business_user\BusinessQuotesController@uploadUserMultipleFilesQuotes')->name('business_user.quote_request.submit');
+    Route::post('/removeimg_quoterequest', 'business_user\BusinessQuotesController@removeImagesQuote')->name('business_user.remove_quotes');
+    Route::get('/quoted_accepted/{quote_id}/{quote_status}', 'business_user\BusinessQuotesController@showQuoteAccepted')->name('business_user.quote_accepted');
+    Route::get('/user_quotereviews/{quote_id}', 'business_user\BusinessQuotesController@showUserQuoteReview')->name('business_user.quote_review');
+    Route::post('/user_quotereviews', 'business_user\BusinessQuotesController@submitUserQuoteReview')->name('business_user.quote_review_submit');
+    Route::post('/get_all_templates', 'business_user\BusinessQuotesController@getAllQuoteTemplates')->name('business_user.get_all_templates');
+    Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
+    Route::post('/quote_template_delete', 'business_user\BusinessQuotesController@deleteQuoteTemplates')->name('business_user.deletequote_template');
+    Route::post('/add_selected_service', 'Auth\RegisterBusinessUserController@addSelectedService')->name('business_user.add_selected_service');
   });
 
 Route::prefix('general_user')->group(function() {
@@ -131,14 +163,15 @@ Route::prefix('general_user')->group(function() {
    Route::post('/login', 'Auth\GeneralUserLoginController@login')->name('general_user.login.submit');
    Route::get('logout/', 'Auth\GeneralUserLoginController@logout')->name('general_user.logout');
    Route::get('/user/{id?}', 'Auth\GeneralUserLoginController@beforeLogin')->name('general_user.beforelogin');
+   Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
+    Route::get('/dashboard/catid/{catid}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
+   // Route::post('/dashboard/catid/{catid}', 'general_user\GeneralUserController@categoryBusiness')->name('user.dashboardabc');
+    Route::get('/register', 'Auth\RegisterGeneralUserController@showUserRegisterForm')->name('general_user.register');
+    Route::post('/register', 'Auth\RegisterGeneralUserController@create')->name('general_user.register.submit');
+    Route::post('/check_user_email_exists', 'Auth\RegisterGeneralUserController@check_user_email_exists');
+    Route::post('/forgot_password_submit', 'Auth\RegisterGeneralUserController@forgotPasswordSubmit');
    
-   Route::get('/dashboard', 'general_user\GeneralUserController@index')->name('user.dashboard');
-   Route::get('/register', 'Auth\RegisterGeneralUserController@showUserRegisterForm')->name('general_user.register');
-   Route::post('/register', 'Auth\RegisterGeneralUserController@create')->name('general_user.register.submit');
-   Route::post('/check_user_email_exists', 'Auth\RegisterGeneralUserController@check_user_email_exists');
-   Route::post('/forgot_password_submit', 'Auth\RegisterGeneralUserController@forgotPasswordSubmit');
-   
-   Route::get('/recover_password/{id}/{token}', 'Auth\RegisterGeneralUserController@recoverPassword');
+    Route::get('/recover_password/{id}/{token}', 'Auth\RegisterGeneralUserController@recoverPassword');
 
     Route::post('/recover_password/{id}/{token}', 'Auth\RegisterGeneralUserController@recoverPassword');
     /*****to get business users on category page******/
@@ -150,9 +183,35 @@ Route::prefix('general_user')->group(function() {
     Route::get('/redirectfb', 'Auth\GeneralUserLoginController@redirectfb');
     Route::get('/callbackfb', 'Auth\GeneralUserLoginController@callbackfb');
 
+    /**********quotes and questions**********/
+    Route::get('/quote_questions/{status?}/{keyword?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
+    Route::get('/quotesrply/{quote_id}', 'general_user\GeneralQuotesController@quoteReplies');
+    Route::get('/quoteaccepted/{quote_id}', 'general_user\GeneralQuotesController@quoteAccepted');
+    Route::get('/quotesrequest/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showQuoteRequest');
+    Route::post('/quote_accept', 'general_user\GeneralQuotesController@quoteRequestAccept');
+    Route::post('/quote_ignore', 'general_user\GeneralQuotesController@quoteRequestIgnore');
+    Route::get('/user_quotereviews/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showUserQuotesReview')->name('general_user.quote_review');
+    Route::post('/user_quotereviews', 'general_user\GeneralQuotesController@submitUserQuotesReview')->name('general_user.quote_review_submit');
+    Route::post('/quotesend/{b_id?}', 'general_user\GeneralUserController@sendQuotes')->name('general_user.askquote_remove');
+    Route::post('/check_login', 'Auth\GetNextQuestionController@checkLogin')->name('general_user.login_check');
+    /******dropzone links*****/
+    Route::post('/uploadmultiple_askquote', 'general_user\GeneralUserController@uploadUserMultipleFilesQuotes')->name('general_user.askquote.submit');
+    Route::post('/removeimg_askquote', 'general_user\GeneralUserController@removeImagesQuotes')->name('general_user.askquote_remove');
+
     /********public profile page*******/
-    Route::get('/public_profile/{id}',
-   'general_user\GeneralUserController@showPublicProfile')->name('business_user.public_profile');
+    /*Route::get('/public_profile/{id}/{status?}',
+   'general_user\GeneralUserController@showPublicProfile')->name('business_user.public_profile');*/
+
+    /******public profile page with/without login******/
+    Route::get('/public_profile/{id}/{status?}',
+   'Auth\GeneralUserLoginController@showPublicProfile')->name('business_user.public_profile');
+
+    //get question for dynamic form builder
+    Route::post('/getdata', 'Auth\GetNextQuestionController@getdata');
+    //get answers for dynamic form builder
+    Route::post('/savedynamicdata', 'general_user\GetNextQuestionController@saveDynamicData');
+    Route::post('/savequotedata', 'Auth\GetNextQuestionController@saveQuoteData');
+    
   });
 
 //Auth::routes();

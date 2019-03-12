@@ -357,7 +357,7 @@ padding: 19px 30px 19px 30px;
 
 .second_header_logo img {
 	width: 150px;
-	margin-right: 50px;
+
 }
 
 .product_detail {
@@ -1712,7 +1712,7 @@ text-decoration: none;
     font-size: 30px;
 }
 .error {
-    border: 1px solid red;
+    border: 1px solid red !important;
 }
 .fill_fields {
     text-align: right;
@@ -1793,6 +1793,7 @@ text-decoration: none;
 }
 .login_section {
     display: inline-block;
+		width: 100%;
 }
 .googlelogin{
 	margin-top: 20px;

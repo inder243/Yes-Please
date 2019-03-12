@@ -110,6 +110,20 @@
             <div class="connect_facebook"><a href="javascript:;">Connect facebook profile</a></div>
           </div>
         </div>
+
+        <div class="upload_profile_pic">
+
+
+          <input type="file" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURLprofile(this);" >
+          @if(!empty($user_details))
+          @if(!empty($user_details['image_name']))
+          <img id="blah" src="{{url('/images/business_profile/'.$user_details['business_userid'].'/'.$user_details['image_name'])}}" alt="your image" style="height:50px;width:50px;"/>
+          @else
+          <img id="blah" src="{{ asset('img/user_placeholder.png') }}" alt="your image" />
+          @endif
+          @endif
+          
+        </div>
     </div>
   </div>
 

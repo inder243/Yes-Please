@@ -38,7 +38,7 @@
                         </li>
                         <li>
                           @if (Auth::guard('general_user')->check())
-                          <a href="{{ url('/general_user/dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
+                          <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                           @elseif(Auth::guard('business_user')->check())
                           <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                           @else
@@ -200,7 +200,7 @@
                             </div>
                             <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
-                            <div class="register_page"><a href="{{ route('general_user.register') }}">Register</a></div>
+                            <div class="register_page"><a href="{{ route('general_user.register') }}" target="_blank">Register</a></div>
                         </form>
                       </div>
                     </div>

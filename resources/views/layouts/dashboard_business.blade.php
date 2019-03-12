@@ -39,7 +39,7 @@
                     <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                 </li>
                 <li>
-                    <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                    <a href="{{ url('/business_user/quotes_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                 </li>
                 <li>
                     <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -79,22 +79,32 @@
                   <div class="username_list">
                     <div class="notification_sec">
                       <a href="javascript:;"><img src="{{ asset('img/notifications.png') }}"/>
-                      <span>3</span>
+                      <!-- <span>3</span> -->
                     </a>
                     </div>
                     <div class="messsage_sec">
                       <a href="javascript:;"><img src="{{ asset('img/messages_list.png') }}"/>
-                      <span>7</span>
+                      <!-- <span>7</span> -->
                     </a>
                     </div>
                     <div class="user_profile">
                       <a href="javascript:;">
-                      <img src="{{ asset('img/user_placeholder.png') }}"/>
-                      @if (Auth::guard('business_user')->check())
-                      <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
-                      @else
-                      <p>Firstname Lastname</p>
-                      @endif
+                        @if (Auth::guard('business_user')->check())
+                        @php
+                        $bus_user_id = Auth::guard('business_user')->user()->business_userid;
+                        $img_url = Auth::guard('business_user')->user()->image_name;
+                        @endphp
+
+                        @if($img_url)
+                        <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}">
+                        @else
+                        <img src="{{ asset('img/user_placeholder.png') }}"/>
+                        @endif
+
+                        <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                        @else
+                        <p>Firstname Lastname</p>
+                        @endif
                     </a>
                     </div>
                   </div>
