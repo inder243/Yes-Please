@@ -1,46 +1,93 @@
 $(document).ready(function(){
+	var home_url = $('#home_url').val();
+
+	//scrol down on category classification page
+	var url = window.location.href;
+	var str = 'category-classifcation';
+	if(url.indexOf(str) != -1){	
+		$('.down_errow,.bounce a').trigger('click');
+	}
+	/********* for mor eoptions on category page*******/
+	// $('.more-option').on("click",function(e) {
+	// 	e.preventDefault();
+	// 	$('.more_options_data').css('display','block');
+	// });
+
+	
+
+	$('.more-option').on("click",function(e) {
+	 	e.preventDefault();
+	    $('.more_options_data').toggle();
+	});
+	/****more option ends here*****/
+
+	/******fn to display more items on load more*****/
+	var list = $(".all_bus_by_cat li");
+	var numToShow = 5;
+	var button = $(".load_more");
+	var numInList = list.length;
+
+	list.hide();
+	if (numInList > numToShow) {
+		button.show();
+	}else{
+		button.hide();
+	}
+
+	list.slice(0, numToShow).show();
 
 
-    var locations = [
-      ['Bondi Beach', -33.890542, 151.274856, 4],
-      ['Coogee Beach', -33.923036, 151.259052, 5],
-      ['Cronulla Beach', -34.028249, 151.157507, 3],
-      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-      ['Maroubra Beach', -33.950198, 151.259302, 1]
-    ];
+	button.click(function(){
+		var showing = list.filter(':visible').length;
+		list.slice(showing - 1, showing + numToShow).fadeIn();
+		var nowShowing = list.filter(':visible').length;
+		if (nowShowing >= numInList) {
+			button.hide();
+		}
+	});
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: new google.maps.LatLng(-33.92, 151.25),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
-  
+	/******fn to display more items on load more ends*****/
 
 	if(window.location.href.indexOf("dashboard/catid") > -1) {
 
+		// if ("geolocation" in navigator){
+		// 	navigator.geolocation.getCurrentPosition(showPosition, function(e)
+		//     {  alert(e); //alerts error:1; message:Only Secure origins are allowed(see:  )
+		//        console.error(e);
+		//     })
+		// }else{
+		// 	console.log("Browser doesn't support geolocation!");
+		// }
+		// return false;
       if (navigator.geolocation) {
 	    navigator.geolocation.getCurrentPosition(showPosition);
 	  } else { 
 	    console.log('naa');
 	  }
+
+	  /*****code to bind map with multiple long lat*****/
+		var mymap = new GMaps({
+	      	el: '#mapDiv',
+	      	lat: 30.733350,
+  			lng: 76.779040,
+	      	zoom:12
+	    });
+
+  		$('.all_bus_by_cat li').each(function(i){
+		   var longitude = $(this).find('.hidden_longitude').val();
+		   var latitude = $(this).find('.hidden_latitude').val();
+		   var address = $(this).find('.hidden_address').val();
+		   mymap.addMarker({
+              lat: latitude,
+              lng: longitude,
+              title: address,
+              // click: function(e) {
+              //   alert('This is '+address+'.');
+              // }
+            });
+		});
+		/*****code to bind map with multiple long lat*****/
+
     }
 
 
@@ -115,6 +162,7 @@ $(document).ready(function(){
 
 	/******General user login******/
 	$('#sign_in_general').submit(function(e){
+
 		e.preventDefault();
 
 		$.ajaxSetup({
@@ -124,13 +172,21 @@ $(document).ready(function(){
 		});
 		
       	var attr_status = $('#sign_in_general').attr('data-checkstatus');
+      	
 
-      	if(attr_status && attr_status != 'undefined'){
+      	if(attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotes_login')
+      	{
       		var attr_status = 'quotes';
-      	}else{
+      	}
+      	else if( attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotessingle')
+      	{
+      		var attr_status = 'quotessingle';
+      	}
+      	else{
       		var attr_status = 'simple';
       	}
       	
+
 
 		var url_general = $('.action_general').val();
 		var website_url = $('.website_url').val();
@@ -167,6 +223,7 @@ $(document).ready(function(){
            	url:url_general,
            	data:{password:password, email:email,attr_status:attr_status},
            	success:function(data){
+           		
               	if(data.success == '1'){
               		window.location = website_url+data.url;
 
@@ -183,11 +240,22 @@ $(document).ready(function(){
               		$('#general_login').modal('hide');
               		$('#ask_quote').modal('show');
               	}
+              	if(data.success == '3'){
+
+              		$('#general_login').modal('hide');
+              		$('#work_description').modal('show');
+                  	$('.describe_work').css('display','none');
+                  	$('.img_vid_popup').css('display','block');
+              	}
            	}
 
         });
 
 	});/******general sign in ends******/
+
+
+	
+
 
 	$('.forgot_pass').click(function(){
 		$('#general_login').modal('hide');
@@ -285,6 +353,169 @@ $(document).ready(function(){
 		});/***ajax ends here***/
 	});/****change fn ends here****/
 
+//Loading more categories
+$(document).on('click', '.yep_section_bg .product_detail .more', function(){
+	var skip = $(this).parent('.product_detail').attr('data-skip');
+	$.ajaxSetup({
+	    headers: {
+	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    }
+	});
+
+	/*****ajax starts*****/
+	$.ajax({
+		url: home_url+'/more-super-catogries',
+		method:'POST',
+		data:{'skip':skip},
+		context:this,
+		success:function(response){
+			var json = JSON.parse(response);
+			console.log(json);
+			if(typeof(json[0]) != 'undefined'){
+				$(this).parents('.product_detail').find('.finance').show();
+				$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+			}else{
+				$(this).parents('.product_detail').find('.finance').hide();
+			}
+			if(typeof(json[1]) != 'undefined'){
+				$(this).parents('.product_detail').find('.energy').show();
+				$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+			}else{
+				$(this).parents('.product_detail').find('.energy').hide();
+			}
+			if(typeof(json[2]) != 'undefined'){
+				$(this).parents('.product_detail').find('.travel').show();
+				$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+			}else{
+				$(this).parents('.product_detail').find('.travel').hide();
+			}
+			if(typeof(json[3]) != 'undefined'){
+				$(this).parents('.product_detail').find('.telco').show();
+				$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+			}else{
+				$(this).parents('.product_detail').find('.telco').hide();
+			}
+			if(typeof(json[4]) != 'undefined'){
+				$(this).parents('.product_detail').find('.eNews').show();
+				$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+			}else{
+				$(this).parents('.product_detail').find('.eNews').hide();
+			}
+			if(typeof(json[5]) != 'undefined'){
+				$(this).parents('.product_detail').find('.entertainment').show();
+				$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+			}else{
+				$(this).parents('.product_detail').find('.entertainment').hide();
+			}
+			if(typeof(json[6]) != 'undefined'){
+				$(this).parents('.product_detail').find('.category').show();
+				$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
+				$(this).parents('.product_detail').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+			}else{
+				$(this).parents('.product_detail').find('.category').hide();
+			}
+			$(this).parent('.product_detail').attr('data-skip',parseInt(skip)+7);
+			if(parseInt(json.next) == 0){
+				$(this).parents('.product_detail').find('.more').find('.more_name').html('Back');
+				$(this).parent('.product_detail').attr('data-skip',0);
+				//$(this).parents('.product_detail').find('.more').addClass('back');
+			}else{
+				$(this).parents('.product_detail').find('.more').find('.more_name').html('More');
+			}
+			//alert(typeof(response));
+			//$(this).parents('.product_detail').html(response);
+		}
+	});
+
+});
+
+	$(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
+		var super_id = url.split("/").pop();
+		var skip = $(this).parent('.product_detail').attr('data-skip');
+		$.ajaxSetup({
+		    headers: {
+		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    }
+		});
+
+		/*****ajax starts*****/
+		$.ajax({
+			url: home_url+'/more-catogries',
+			method:'POST',
+			data:{'skip':skip,'super_id':super_id},
+			context:this,
+			success:function(response){
+				var json = JSON.parse(response);
+				console.log(json);
+				if(typeof(json[0]) != 'undefined'){
+					$(this).parents('.product_detail').find('.finance').show();
+					$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
+					$(this).parents('.product_detail').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+				}else{
+					$(this).parents('.product_detail').find('.finance').hide();
+				}
+				if(typeof(json[1]) != 'undefined'){
+					$(this).parents('.product_detail').find('.energy').show();
+					$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
+					$(this).parents('.product_detail').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+				}else{
+					$(this).parents('.product_detail').find('.energy').hide();
+				}
+				if(typeof(json[2]) != 'undefined'){
+					$(this).parents('.product_detail').find('.travel').show();
+					$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
+					$(this).parents('.product_detail').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+				}else{
+					$(this).parents('.product_detail').find('.travel').hide();
+				}
+				if(typeof(json[3]) != 'undefined'){
+					$(this).parents('.product_detail').find('.telco').show();
+					$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
+					$(this).parents('.product_detail').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+				}else{
+					$(this).parents('.product_detail').find('.telco').hide();
+				}
+				if(typeof(json[4]) != 'undefined'){
+					$(this).parents('.product_detail').find('.eNews').show();
+					$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
+					$(this).parents('.product_detail').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+				}else{
+					$(this).parents('.product_detail').find('.eNews').hide();
+				}
+				if(typeof(json[5]) != 'undefined'){
+					$(this).parents('.product_detail').find('.entertainment').show();
+					$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
+					$(this).parents('.product_detail').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+				}else{
+					$(this).parents('.product_detail').find('.entertainment').hide();
+				}
+				if(typeof(json[6]) != 'undefined'){
+					$(this).parents('.product_detail').find('.category').show();
+					$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
+					$(this).parents('.product_detail').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+				}else{
+					$(this).parents('.product_detail').find('.category').hide();
+				}
+				$(this).parent('.product_detail').attr('data-skip',parseInt(skip)+7);
+				if(parseInt(json.next) == 0){
+					$(this).parents('.product_detail').find('.cat_more').find('.more_name').html('Back');
+					$(this).parent('.product_detail').attr('data-skip',0);
+					//$(this).parents('.product_detail').find('.more').addClass('back');
+				}else{
+					$(this).parents('.product_detail').find('.cat_more').find('.more_name').html('More');
+				}
+				//alert(typeof(response));
+				//$(this).parents('.product_detail').html(response);
+			}
+		});
+
+	});
 
 });/*****document ready*****/
 
@@ -333,7 +564,7 @@ function validateEmail(email) {
 
 /*******fn for cat page to display business according to long lat******/
 function showPosition(position) {
-
+	
 	var current_loc_latitude = position.coords.latitude;
 	var current_loc_longitude = position.coords.longitude;
 
@@ -356,6 +587,10 @@ function showPosition(position) {
 		dataType:'html',
 		success:function(response){
 			$('.content').html(response);
+
+			// if(response.success == '2'){
+			// 	alert('hmm');
+			// }
 
 			/******on select of business users ->change color and give limit******/
 			var listItems = $(".all_bus_by_cat li");
@@ -383,6 +618,60 @@ function showPosition(position) {
 			});/*****business list code ends here****/
 
 
+			/*****code to bind map with multiple long lat*****/
+			var mymap = new GMaps({
+		      el: '#mapDiv',
+		      lat: current_loc_latitude,
+		      lng: current_loc_longitude,
+		      zoom:12
+		    });
+
+      		$('.all_bus_by_cat li').each(function(i){
+			   var longitude = $(this).find('.hidden_longitude').val();
+			   var latitude = $(this).find('.hidden_latitude').val();
+			   var address = $(this).find('.hidden_address').val();
+			   mymap.addMarker({
+                  lat: latitude,
+                  lng: longitude,
+                  title: address,
+                  // click: function(e) {
+                  //   alert('This is '+address+'.');
+                  // }
+                });
+			});
+			/*****code to bind map with multiple long lat*****/
+
+			/*****more option code*****/
+			$('.more-option').on("click",function(e) {
+			 	e.preventDefault();
+			    $('.more_options_data').toggle();
+			});
+			/*****more option code******/
+
+			/******fn to display more items on load more*****/
+			var list = $(".all_bus_by_cat li");
+			var numToShow = 5;
+			var button = $(".load_more");
+			var numInList = list.length;
+			list.hide();
+			if (numInList > numToShow) {
+				button.show();
+			}else{
+				button.hide();
+			}
+			list.slice(0, numToShow).show();
+
+			button.click(function(){
+				var showing = list.filter(':visible').length;
+				list.slice(showing - 1, showing + numToShow).fadeIn();
+				var nowShowing = list.filter(':visible').length;
+				if (nowShowing >= numInList) {
+					button.hide();
+				}
+			});
+
+			/******fn to display more items on load more ends*****/
+	
 		}
 	});/***ajax ends here***/
 
@@ -472,3 +761,8 @@ function closestaticmodal(){
 	var new_url = current_url.slice(0, current_url.lastIndexOf('/'));
 	window.location.href = new_url;
 }
+
+function show_error(){
+	alert('errorrr');
+}
+

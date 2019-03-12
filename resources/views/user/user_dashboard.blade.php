@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>Category <span>(3,070)</span></span></div>
+    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif<span></span></span></div>
     <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
   </div>
       <div class="container-fluid">
@@ -12,7 +12,7 @@
           <div class="row">
               <div class="col-12">
                 <div class="category_heading">
-                  <h1>Category</h1>
+                  <h1>@if(!empty($catName)) {{$catName}} @endif</h1>
                 </div>
               </div>
           </div>
@@ -23,7 +23,7 @@
                     <div class="row filter_this">
                     <div class="form-group col-md-3 col-12">
                       <label for="inputPassword4">Location</label>
-                      <input type="text" class="form-control" id="inputPassword4" required="">
+                      <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required="">
                       <span class="input_icons"><img src="{{ asset('img/location.png') }}"/></span>
                     </div>
                     <div class="form-group custom_errow col-md-3 col-12">
@@ -43,7 +43,7 @@
                       <span class="input_icons"><img src="{{ asset('img/input_search.png') }}"/></span>
                     </div>
                   </div>
-                  <div class="language_section row">
+                  <!-- <div class="language_section row">
                     <div class="col-md-6 col-lg-3 col-12">
                       <div class="L_heading">
                         <h1>Languages</h1>
@@ -311,8 +311,10 @@
                       <span class="more_down_arrow"><img src="{{ asset('img/custom_arrow.png') }}"/></span>
                       </a>
                     </div>
-                  </div>
-                  <div class="language_section row for_more_option" style="display:none;">
+                  </div> -->
+
+                  <div class="more_options_data" style="display:none;">
+                  <div class="language_section row for_more_option">
                     <div class="col-md-6 col-lg-4 col-12">
                       <div class="L_heading">
                         <h1>Another filter 1</h1>
@@ -573,6 +575,7 @@
                         </div>
                     </div>
                   </div>
+                  </div>
                   <div class="col-12">
                     <div class="another_filter" style="display:none;">
                       <div class="filtername">
@@ -588,7 +591,7 @@
                   </div>
                   <div class="filters_btn">
                     <div class="ask_for_q">
-                      <a href="javascript:;" data-toggle="modal" data-target="#ask_quote">Ask for quote</a>
+                      <a href="javascript:;" data-toggle="modal" data-target="#ask_quote" data-backdrop="static" data-keyboard="false">Ask for quote</a>
                     </div>
                     <div class="ask_for_q">
                       <a href="javascript:;">Set appointment</a>
@@ -608,7 +611,10 @@
 
                           @if(isset($all_business) && !empty($all_business))
                             @foreach($all_business as $key=>$allbus)
-                              <li class="">
+                              <li class="all_business_bycat_li">
+                                <input type="hidden" class="hidden_longitude" value="{{ $allbus['get_business_user']['logitude']}}">
+                                <input type="hidden" class="hidden_latitude" value="{{ $allbus['get_business_user']['latitude']}}">
+                                <input type="hidden" class="hidden_address" value="{{ $allbus['get_business_user']['full_address']}}">
                               <div class="business_sec">
                                  <div class="b-detail">
                                     <span class="business_img"><img src="{{ asset('img/img_placeholder.png') }}"/></span>
@@ -630,13 +636,30 @@
                               <p class="des">{{ $allbus['get_business_user']['full_address']}}</p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                    <a href="javascript:;" class="distance">Distance <span>{{ $allbus['get_business_details']['distance_kms']}}km</span></a>
-                                    <a href="javascript:;" class="rating">Rating <span>9/10</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>70</span></a>
+                                  @php $new_num = number_format($allbus['get_business_details']['distance_kms'], 2, '.', ''); @endphp
+                                    <a href="javascript:;" class="distance">Distance <span>{{ $new_num}}km</span></a>
+
+                                    @if(!empty($allbus['get_business_user']['avg_rating']))
+
+                                    @php
+                                      $rating_num = number_format($allbus['get_business_user']['avg_rating'][0]['avg_rating'], 2, '.', '');
+
+                                      $review_num = $allbus['get_business_user']['avg_rating'][0]['tot_review'];
+                                    @endphp
+
+                                    @else
+
+                                    @php $rating_num = 0; $review_num = 0; @endphp
+
+                                    @endif
+
+                                    <a href="javascript:;" class="rating">Rating <span>{{$rating_num}}/5</span></a>
+                                    <a href="javascript:;" class="review">Reviews <span>{{$review_num}}</span></a>
                                  </div>
                                  <div class="call_chat">
                                     <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call"><img/src="{{ asset('img/call.png') }}"/></a>
+                                    <a href="tel:{{$allbus['get_business_user']['phone_number']}}" class="call" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $allbus['get_business_user']['phone_number']}}"><img/src="{{ asset('img/call.png') }}"/>
+                                    </a>
                                  </div>
                               </div>
                            </li>    
@@ -651,8 +674,8 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <div class="category_second_bar_sec">
-                        <div class="google_map_sec">
-                           <img src="{{ asset('img/map.png') }}"/>
+                        <div class="google_map_sec" id="mapDiv">
+                           
                         </div>
                         <div class="article_sec">
                            <h1>Articles</h1>
@@ -883,7 +906,7 @@
                   <span aria-hidden="true">&times;</span>
                   </button>
                </div>
-              <form class="dynmic_quoteform">
+               <form class="dynmic_quoteform">
 
                  <input type="hidden" class="hiddencatId" value="{{$categoryId}}">
                  <div class="modal-body quote_body">
@@ -1041,7 +1064,7 @@
                                 </li>
                              </ul>
                              <div class="t_detail">
-                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                                <p><img src="{{ asset('img/info.png') }}">Choose how many quotes you want to receive.</p>
                              </div>
                              <div class="q_nex_btns">
                                 <div class="ele_pre"  data_nxt_id="" onclick="getStaticQuestion(this);"><a href="javascript:;" >&lt; Previous</a></div>
@@ -1058,7 +1081,7 @@
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="t_detail">
-                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                                <p><img src="{{ asset('img/info.png') }}">Please add your work description.</p>
                              </div>
                              <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
@@ -1112,7 +1135,7 @@
                                 <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
-                                <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                                <p><img src="{{ asset('img/info.png') }}">Add your phone number.</p>
                              </div>
                           </div>
                         </div>
@@ -1134,4 +1157,5 @@
             </div>
          </div>
       </div>
+      
 @endsection

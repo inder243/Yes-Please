@@ -16,10 +16,22 @@
                                         <h5 class="mb-4">Select Type of Field</h5>
                                         <div class="button_group">
                                             <button class="btn btn-block btn-light mb-3" onclick="addNewField(1)" type="button">Text Box</button>
+
+                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(2)" type="button">Text Area</button>
+
+                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(6)" type="button">Number</button>
+
+
+                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(3)" type="button">Datepicker</button>
+
+
+                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(4)" type="button">Timepicker</button>
+
+                                             <button class="btn btn-block btn-light mb-3" onclick="addNewField(5)" type="button">Radio Select</button>
                                             
-                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(4)" type="button">Radio Select</button>
                                             
                                             <button class="btn btn-block btn-light  mb-3" onclick="addNewField(7)" type="button">Checkbox</button>
+                                            
                                             <button class="btn btn-block btn-light  mb-3" onclick="addNewField(8)" type="button">Dropdown select</button>
 
                                             @if(isset($data) && !empty($data) && count($data)>0)
@@ -217,6 +229,80 @@
                                                     </div>
                                                     <div class="form-group">
                                                         
+                                                        <div class="form-check">
+                                                            <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
+                                                            <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
+                                                </div>
+                                                @elseif($quesData['type']=='datepicker')
+                                                    <div class="for_datepicker field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="datepicker">
+                                                        <h5 class="mb-3">Datepicker</h5>
+                                                        <div class="form-group">
+                                                            <label>Title</label>
+                                                            <input class="form-control textbox_name title" name="textbox_name" type="textbox" value="{{$quesData['title']}}">
+                                                        </div>
+                                                    <div class="form-group">
+                                                        <label>Description (Optional)</label>
+                                                        <input class="form-control textbox_desc description" name="textbox_desc" type="textbox" @if(isset($quesData['description']) && !empty($quesData['description'])) value="{{$quesData['description']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        
+                                                        <div class="form-check">
+                                                            <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
+                                                            <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
+                                                </div>
+                                                @elseif($quesData['type']=='timepicker')
+                                                    <div class="for_timepicker field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="timepicker">
+                                                        <h5 class="mb-3">Timepicker</h5>
+                                                        <div class="form-group">
+                                                            <label>Title</label>
+                                                            <input class="form-control textbox_name title" name="textbox_name" type="textbox" value="{{$quesData['title']}}">
+                                                        </div>
+                                                    <div class="form-group">
+                                                        <label>Description (Optional)</label>
+                                                        <input class="form-control textbox_desc description" name="textbox_desc" type="textbox" @if(isset($quesData['description']) && !empty($quesData['description'])) value="{{$quesData['description']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        
+                                                        <div class="form-check">
+                                                            <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
+                                                            <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
+                                                </div>
+                                                @elseif($quesData['type']=='textarea')
+                                                    <div class="for_textarea field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="textbox">
+                                                        <h5 class="mb-3">Text Area</h5>
+                                                        <div class="form-group">
+                                                            <label>Title</label>
+                                                            <input class="form-control textbox_name title" name="textbox_name" type="textbox" value="{{$quesData['title']}}">
+                                                        </div>
+                                                    <div class="form-group">
+                                                        <label>Description (Optional)</label>
+                                                        <input class="form-control textbox_desc description" name="textbox_desc" type="textbox" @if(isset($quesData['description']) && !empty($quesData['description'])) value="{{$quesData['description']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Placeholder (Optional)</label>
+                                                        <input class="form-control textbox_plc placeholder" name="textbox_plc" type="textbox" @if(isset($quesData['placeholder']) && !empty($quesData['placeholder'])) value="{{$quesData['placeholder']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Minimum Length (Optional)</label>
+                                                        <input class="form-control textbox_min minlen" name="textbox_min" type="textbox" @if(isset($quesData['min']) && !empty($quesData['min'])) value="{{$quesData['min']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Max Length (Optional)</label>
+                                                        <input class="form-control textbox_max maxlen" name="textbox_max" type="textbox" @if(isset($quesData['max']) && !empty($quesData['max'])) value="{{$quesData['max']}}" @endif>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <div class="form-check">
                                                             <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
                                                             <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required

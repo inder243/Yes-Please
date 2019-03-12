@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/developer.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/swiper.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ URL::asset('css/glyphicon-datetimepicker.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ URL::asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+         rel = "stylesheet">
+    
     
 </head>
 
@@ -34,10 +39,10 @@
                             <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
                         <li>
-                            <a href="{{ url('/general_user/dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
+                            <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                            <a href="{{ url('/general_user/quote_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                         </li>
                         <li>
                             <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -242,11 +247,11 @@
                         </li>
                      </ul>
                      <div class="t_detail">
-                        <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                        <p><img src="{{ asset('img/info.png') }}">Choose how many quotes you want to receive.</p>
                      </div>
                      <div class="q_nex_btns">
                         <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div>
-                        <div class="ele_next"><a href="javascript:;" class="radio_next quotes_radio_next" data-toggle="modal" data-target="#work_description">Next &gt;</a></div>
+                        <div class="ele_next"><a href="javascript:;" class="radio_next quotes_radio_next" data-toggle="modal" data-target="#work_description"  data-backdrop="static" data-keyboard="false">Next &gt;</a></div>
                      </div>
                   </div>
                </div>
@@ -287,7 +292,7 @@
                               <span class="fill_fields" role="alert"></span>
                            </div>
                            <div class="t_detail">
-                              <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                              <p><img src="{{ asset('img/info.png') }}">Add your work descrition.</p>
                            </div>
                            <div class="describe_work_btn mb-5">
                               <!-- <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div> -->
@@ -352,7 +357,7 @@
                               <div class="ele_next"><input type="submit" class="mobile_dont_want mobile_validate_submit" value="Don’t want"></div>
                            </div>
                            <div class="t_detail mb-4">
-                              <p><img src="{{ asset('img/info.png') }}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquam vulputate tellus eget luctus.</p>
+                              <p><img src="{{ asset('img/info.png') }}">Add phone number.</p>
                            </div>
                         </div>
                      </div>
@@ -426,7 +431,7 @@
                             </div>
                             <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
-                            <div class="register_page"><a href="{{ route('general_user.register') }}">Register</a></div>
+                            <div class="register_page"><a href="{{ route('general_user.register') }}" target="_blank">Register</a></div>
                         </form>
                       </div>
                     </div>
@@ -454,9 +459,22 @@
     <script type="text/javascript" src="{{ URL::asset('js/general_user.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/general_quotes.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/formbuilder.js') }}"></script>
-    <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ" 
-          type="text/javascript"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ" 
+          type="text/javascript"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ"></script>
     <script>
+      $(document).ready(function(){
+         
+          $('.tpicker').datetimepicker({
+            format: 'HH:mm'
+          });
+         $('.dpicker').datepicker();
+           
+        });
           var swiper = new Swiper('.swiper2', {
             slidesPerView: 10,
             spaceBetween: 6,
@@ -557,6 +575,10 @@
 
   $("#imgInp").change(function() {
     readURL(this);
+  });
+
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
   });
     </script>
 

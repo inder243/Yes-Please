@@ -103,6 +103,34 @@ class GetNextQuestionController extends Controller
                                 $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
                                     
                             }
+                           /* else if($getJumpQuestion['type']=='datepicker')
+                            {
+                                $html.='<div class="not_all_business form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'>
+                                    <h1 class="questitle">'.$getJumpQuestion['title'].'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$getJumpQuestion['id'].'">'.$getJumpQuestion['title'].'</label><input class="form-control dpicker datetimepicker" id="inputEmail'.$getJumpQuestion['id'].'" type="text"></div>';
+
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                                    
+                            }
+                            else if($getJumpQuestion['type']=='timepicker')
+                            {
+                                $html.='<div class="not_all_business form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'>
+                                    <h1 class="questitle">'.$getJumpQuestion['title'].'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$getJumpQuestion['id'].'">'.$getJumpQuestion['title'].'</label><input class="form-control tpicker datetimepicker" id="inputEmail'.$getJumpQuestion['id'].'" type="text"></div>';
+
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                                    
+                            }*/
                             elseif($getJumpQuestion['type']=='textarea')
                             {
 
@@ -241,6 +269,33 @@ class GetNextQuestionController extends Controller
                         $html.='<div class="describe_work_btn"><div class="ele_pre" onclick="getPrevQuesButton('.$quesId.');"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
                        
                     }
+                    /*else if($type=='datepicker')
+                    {
+                        
+                        $html.='<div class="not_all_business form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'>
+                            <h1 class="questitle">'.$title.'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$id.'">'.$title.'</label><input class="form-control dpicker datetimepicker" id="inputEmail'.$id.'" type="text"></div>';
+
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }
+                    else if($type=='timepicker')
+                    {
+                        $html.='<div class="not_all_business form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'>
+                            <h1 class="questitle">'.$title.'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$id.'">'.$title.'</label><input class="form-control tpicker datetimepicker" id="inputEmail'.$id.'" type="text"></div>';
+
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }*/
                     elseif($type=='radio')//check if question is of radio type
                     {
                         $options = json_decode($options); //get options and decode
@@ -351,6 +406,23 @@ class GetNextQuestionController extends Controller
     {
         try
         {
+          // echo "<pre>dggggggg";
+          // print_r($_FILES['files']);
+           //echo "<pre>2111111111111";
+           //print_r($request->files);
+            /****check selected files from button****/
+           $Allimages = array();
+           if (!empty($_FILES['files'])) {
+                foreach($request->files as $images)
+                {
+                     $Allimages = $images;
+                }
+           }
+
+                
+          
+            $answers = json_decode($_POST['answers']);
+            
             if($request->phone!='' && $request->desc!='' && $request->quotecount!='')
             {
 
@@ -359,21 +431,21 @@ class GetNextQuestionController extends Controller
                 $g_id = Auth::guard('general_user')->user()->id;
 
                 $filteredData = array();
-                foreach($request->answers as $ans)
+                foreach($answers as $ans)
                 {
-                    if($ans['filter']==1 || $ans['filter']=='1')
+                    if($ans->filter==1 || $ans->filter=='1')
                     {
-                       if ($ans['type']=='checkbox' || $ans['type']=='radio' || $ans['type']=='dropdown')
+                       if ($ans->type=='checkbox' || $ans->type=='radio' || $ans->type=='dropdown')
                        {
-                            $options = $ans['options'];
+                            $options = $ans->options;
                             
                             foreach($options as $option)
                             {
-                                $filteredData[]= $option['label'];
+                                $filteredData[]= $option->label;
                             }
                        }
                        else{
-                            $filteredData[] = $ans['value'];
+                            $filteredData[] =$ans->value;
                        } 
                         
                     }
@@ -385,7 +457,7 @@ class GetNextQuestionController extends Controller
                     $dataToFilterQuotes = "'".implode("','", $filteredData)."'";
                 }
 
-                $allAnswers = json_encode($request->answers);
+                $allAnswers = json_encode($answers);
 
                 $quote_id = str_shuffle(rand(1,1000).strtotime("now"));
                 //save quote data 
@@ -398,6 +470,45 @@ class GetNextQuestionController extends Controller
                 $YpGeneralUsersQuotes->phone_number = $request->phone;
                 $YpGeneralUsersQuotes->quote_count = $request->quotecount;
                 $YpGeneralUsersQuotes->save();
+
+                if (!empty($_FILES['files'])) {
+                    foreach($Allimages as $fils){
+                        $file = $fils; 
+                                 
+                        $extension = $file->getClientOriginalExtension(); // getting image extension  
+                                
+                        $filename = rand(10,100).time().'.'.$extension;
+                        
+                        if($file->move(public_path().'/images/general_quotes/'.$g_id.'/', $filename)){                
+                           
+                            $pic_vid_arr['pic'][] = $filename;
+                            
+                            $pic_vid_json = json_encode($pic_vid_arr);
+                            $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
+                            $YpGeneralUsersQuotes->save();
+                        }
+                    }
+                    
+                }
+                
+                /****check selected files from button****/
+                if ($request->hasFile('myfile')) {
+                    foreach($request->file('myfile') as $files){
+                        $file = $files;             
+                        $extension = $file->getClientOriginalExtension(); // getting image extension            
+                        $filename = rand(10,100).time().'.'.$extension;
+                        
+                        if($file->move(public_path().'/images/general_quotes/'.$general_userid.'/', $filename)){                
+                           
+                            $pic_vid_arr['pic'][] = $filename;
+                            
+                            $pic_vid_json = json_encode($pic_vid_arr);
+                            $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
+                            $YpGeneralUsersQuotes->save();
+                        }
+                    }
+                    
+                }
 
                 //save business user ids and general user id.
 

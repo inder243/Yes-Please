@@ -10,6 +10,10 @@ use App\Models\YpFormQuestions;
 use App\Models\YpBusinessUserCategories;
 use App\Models\YpUserReviews;
 use App\Models\YpGeneralUsersQuotes;
+use App\Models\YpBusinessUsersQuotes;
+use App\Models\YpBusinessCategories;
+use App\Models\YpBusinessSuperCategories;
+use Mail;
 use File;
 Use Redirect;
 
@@ -36,14 +40,15 @@ class GeneralUserController extends Controller
     public function dashboard()
     {
         $general_user_id   = Auth::user()->user_id;
-        
-        return view('/dashboard');
+        //$categories = YpBusinessCategories::all()->take(7)->toArray();
+        $super_categories = YpBusinessSuperCategories::all()->take(7)->toArray();
+        return view('/dashboard')->with(array('categories'=>$super_categories));
 
     }/**dahsboard fn ends**/
 
     public function index(Request $request)
     {
-echo "here";die;
+         echo "here";die;
         if($request->ajax()){
 
             if(isset($_GET)){
@@ -108,54 +113,10 @@ echo "here";die;
         //  WHERE kms <= distance
         echo "<pre>";print_r($results);die;        
         
-
+  
     }/****getlist fn ends here****/
 
-    /******
-    fn to show public profile page
-    ******/
-    public function showPublicProfile($b_id){
-
-        $get_business_userid = YpBusinessUsers::select('business_userid')->where('id',$b_id)->first();
-
-        if($get_business_userid){
-            $business_userid = $get_business_userid->business_userid;
-
-            try{
-                $user_details = YpBusinessUsers::with(['bu_details','hash_tags','hash_tags.bus_hashtags','bu_cat','bu_cat.buser_cat','bu_cat.buser_sub_cat'])->where('business_userid',$business_userid)->first()->toArray();
-            }catch(\Exception $e){
-                return $e->getMessage();
-            }
-
-        }
-
-        try{
-            $get_reviews = YpUserReviews::where('business_id',$b_id)->get()->toArray();
-        }catch(\Exception $e){
-            return $e->getMessage();
-        }
-        
-        if(!empty($get_reviews)){
-            $sum = 0;
-            $index = 0;
-            foreach($get_reviews as $key=>$review){
-                $sum+= $review['rating'];
-                $index++;
-            }/***end foreach***/
-            
-            /*****get the average rating of user*****/
-            $avg_rating = $sum/$index;
-            $round_rating = round($avg_rating);
-        }else{
-            $round_rating = 0;
-            $index = 0;
-        }
-        
-        //$userCategoryModel = new YpBusinessUserCategories();
-        
-        return view('user.public_profile')->with(array('user_details'=>$user_details,'round_rating'=>$round_rating,'total_review'=>$index));
-        
-    }/***show profile page ends here***/
+    
 
     /*******
     function to upload multiple files for profile setting
@@ -197,7 +158,7 @@ echo "here";die;
     /**********
     *****fn to send quotes
     ***********/
-    public function sendQuotes(Request $request){
+    public function sendQuotes(Request $request,$b_id = null){
 
         $general_userid = Auth::user()->user_id;
         $g_id = Auth::user()->id;
@@ -257,21 +218,42 @@ echo "here";die;
                     $YpGeneralUsersQuotes->save();
                 }
             }/*****drag and drop ends*****/
-            return Redirect::back();
+
+            $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
+            $YpBusinessUsersQuotes->business_id = $b_id;
+            $YpBusinessUsersQuotes->general_id = $g_id;
+            $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
+            $YpBusinessUsersQuotes->status = 1;
+            $YpBusinessUsersQuotes->save();
+
+
+            $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id =".$b_id));
+
+            if(!empty($getEmails) && !empty($getEmails[0])){
+
+                if(!empty($getEmails[0]->emails)){
+
+                    $emails = explode(',',$getEmails[0]->emails);
+
+                    $send_email_from = $_ENV['send_email_from'];
+                    $data ='';
+
+                    Mail::send('emails.send_quote_email', ['data'=>$data], function ($message) use ($emails,$send_email_from) {
+
+                        $message->from($send_email_from, 'Yes Please'); 
+
+                        $message->to($emails)->subject('Yes Please Quote Request');
+
+                    });
+                }
+            }
+
+           // return Redirect::back();
+            return redirect()->intended('general_user/public_profile/'.$b_id.'/status');
         }
 
     }/***send quote ends here***/
 
-    /***
-    ** fn to check user login or not
-    ***/
-    public function checkLogin(Request $request){
-        if(\Auth::check()){
-            return response()->json(['success'=>1,'message'=>'login'],200);
-        }else{
-            return response()->json(['success'=>0,'message'=>'logout'],200);
-        }
-    }/***fn ends here***/
 
     public function getdata(Request $request)
     {

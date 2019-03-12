@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\YpBusinessCategories;
+use App\Models\YpBusinessSuperCategories;
 use App\Models\YpBusinessSubCategories;
 use App\Models\Yphashtag;
 use App\Models\YpGeneralUsers;
@@ -40,18 +41,43 @@ class AdminController extends Controller
     {
         // $category = DB::table('yp_business_categories')->where('category_status','1')->orderBy('id', 'desc')->get();
 
+        $Supercategory = YpBusinessSuperCategories::where('category_status','1')->orderBy('id', 'desc')->get();
+       
         $category = YpBusinessCategories::where('category_status','1')->orderBy('id', 'desc')->get();
-        return view('category')->with('category',$category);
+
+        return view('category')->with('Supercategory',$Supercategory)->with('category',$category);
     }
 
 
-
-    public function add_category()
+    public function add_Super_Category(Request $request)
     {
+        $superCategoryName = $request->input('superCategory');
+        $general_categoryid = str_shuffle(rand(1,1000).strtotime("now"));
+
+        $category = YpBusinessSuperCategories::where('cat_name', trim($superCategoryName))->first();
+        if($category)
+        {
+            Session::flash('error_message', 'Parent Category already exists');
+            return back()->withInput();
+        }   
+        $business_category = new YpBusinessSuperCategories;
+        $business_category->super_cat_id = $general_categoryid;
+        $business_category->cat_name = $superCategoryName;
+        $business_category->save();
+
+        Session::flash('success_message', 'Parent Category added successfully.');
+        return redirect()->route('admin.category');
+    }
+
+    public function add_category(Request $request)
+    {
+
+        $superCategory = $request->input('superCategory');
+
 
         // $category = DB::table('yp_business_categories')->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
 
-        $category = YpBusinessCategories::where('category_name', trim($_POST['category']))->where('category_status','1')->first();
+        $category = YpBusinessCategories::where('super_cat_id', $superCategory)->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
         if($category)
         {
             Session::flash('error_message', 'Category already exists');
@@ -62,6 +88,7 @@ class AdminController extends Controller
 
         $business_category = new YpBusinessCategories;
         $business_category->category_id = $general_categoryid;
+        $business_category->super_cat_id = $superCategory;
         $business_category->category_name = trim($_POST['category']);
         $business_category->save();
 
@@ -426,7 +453,7 @@ class AdminController extends Controller
                     
                     $is_required=0;
                     $is_filter=0;
-                    if($data['type']=='textbox')
+                    if($data['type']=='textbox' || $data['type']=='textarea' || $data['type']=='datepicker'|| $data['type']=='timepicker' || $data['type']=='number'|| $data['type']=='range')
                     {
                         $YpFormQuestions = new YpFormQuestions;
                         $YpFormQuestions->formid = $formid;

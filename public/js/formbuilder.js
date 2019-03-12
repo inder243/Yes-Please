@@ -1,6 +1,10 @@
 //event will be called each time next button is clicked
 	function getNextQuesButton()
 	{
+		/*$('.tpicker').datetimepicker({
+			format: 'HH:mm'
+		});
+		$('.dpicker').datepicker();*/
 		var site_url = $('#site_url').text();
 		
 		var lastdiv = $('.dynmic_quoteform .form-ques:visible');//get last question
@@ -10,7 +14,7 @@
 		var qid = $(lastdiv).attr('data-id');//get id of question
 		var qtype = $(lastdiv).attr('data-type');//get type of question
 		var value = '';
-		if(qtype=="textbox")//get value of textbox
+		if(qtype=="textbox" || qtype=="datepicker" || qtype=="timepicker")//get value of textbox/datepicker/timepicker
 		{
 			var value = $(lastdiv).find(':input').val();
 		}
@@ -70,12 +74,21 @@
 						  	$('.form-ques').hide();
 							$('.dynamicQues_'+response.nextid).show();
 							$('.submit_dynamic_from').parent().show();
+							/*$('.tpicker').datetimepicker({
+								format: 'HH:mm'
+							});
+							$('.dpicker').datepicker();*/
 						}
 						else
 						{
 							$('.form-ques').hide();
 							$('.dynmic_quoteform .modal-body .ask_for_quote_section').append(response.data);
 							$('.submit_dynamic_from').parent().show();
+
+							/*$('.tpicker').datetimepicker({
+								format: 'HH:mm'
+							});
+							$('.dpicker').datepicker();*/
 						}
 					}
 					else
@@ -86,6 +99,10 @@
 						$('.dynmic_quoteform .static_ques_1').show();
 						$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id',Ques);
 						$('.submit_dynamic_from').parent().show();
+						/*$('.tpicker').datetimepicker({
+								format: 'HH:mm'
+							});
+							$('.dpicker').datepicker();*/
 					}
 					
 					
@@ -249,6 +266,7 @@
 	function validate_quote_dynamicandstatic(){
 		
     	var site_url = $('#site_url').text();
+    	data = new FormData();
 		
       	var fields = [];
       	$('.dynmic_quoteform .form-ques').each(function(){
@@ -352,6 +370,7 @@
 				fields.push(field);
 				break;
         	} 
+
       	});
 
       	var listItems = $(".all_bus_by_cat li");
@@ -393,6 +412,38 @@
       		alert('Please provide quotes count');
       		return false;
       	}
+      	
+
+			
+			error='';
+			
+			var files = $('#dynamic_vid_img')[0].files;
+			for(var count = 0; count<files.length; count++)
+			{
+				var name = files[count].name;
+				var extension = name.split('.').pop().toLowerCase();
+
+				if(jQuery.inArray(extension, ['gif','png','jpg','jpeg']) == -1)
+				{
+					error += "Invalid " + count + " Image File"
+				}
+				else
+				{
+					data.append("files[]", files[count]);
+				}
+			}
+
+			answers = JSON.stringify(fields);
+			
+	        //data.append('images',fileList);
+	        data.append('answers',answers);
+			data.append('phone',phone);
+			data.append('desc',desc);
+			data.append('quotecount',quotecount);
+			data.append('multipleBusiness',multipleBusiness);
+			//alert('dfgkmfkjg');
+			//console.log(data);
+			
 
       	if(fields.length >0 && phone!='' && desc!='' && quotecount!='')
       	{
@@ -406,7 +457,11 @@
 			$.ajax({
 	          url: site_url+"/general_user/savequotedata",        
 	          type:'POST',
-	          data: {answers:fields,phone:phone,desc:desc,quotecount:quotecount,multipleBusiness:multipleBusiness},	
+	         //data: {answers:fields,phone:phone,desc:desc,quotecount:quotecount,multipleBusiness:multipleBusiness},	
+	         data:data,
+			contentType: false,
+			cache: false,
+			processData:false,
 	          success:function(response){  
 	           
 				if(response.success==1)
@@ -497,6 +552,7 @@
 	            url:home_url+'general_user/check_login',
 	            data:{chk_login:'1'},
 	            success:function(data){
+	            	
 	              if(data.success == '1'){
 	              	
 	              	var toShowQues = $(ele).attr('data_nxt_id');
@@ -510,9 +566,14 @@
 	                alert(data.message);
 	              }
 	              if(data.success == '0'){
+	              	
 	              	$('#ask_quote').modal('hide');
-	              	$('#general_login').find('#sign_in_general').attr('data-checkstatus','quotes_login');
-	                $('#general_login').modal('show');
+	              	$('#general_login1').modal('show');
+	              	$('#ask_quote').modal('hide');
+	              	$('#ask_quote').modal('hide');
+	              	$('#ask_quote').modal('hide');
+	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
+	                
 	              }
 	            }
 
@@ -532,17 +593,104 @@
     function closdynamicemodal()
     {
     	$('#ask_quote').modal('hide');
-   		$('.dynmic_quoteform').trigger("reset");
+   		//$('.dynmic_quoteform').trigger("reset");
     	location.reload();
     }
 
-  
+  function testsubmit(ele)
+  {
+  	//ele.preventDefault();
 
-    $(document).on('hide.bs.modal','#ask_quote', function () {
-        location.reload();
-        
- 			//Do stuff here
+		$.ajaxSetup({
+		    headers: {
+		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    }
 		});
-    
+		
+      	var attr_status = $('#sign_in_general1').attr('data-checkstatus');
+      	
 
+      	if(attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotes_login')
+      	{
+      		var attr_status = 'quotes';
+      	}
+      	else if( attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotessingle')
+      	{
+      		var attr_status = 'quotessingle';
+      	}
+      	else{
+      		var attr_status = 'simple';
+      	}
+      	
+
+
+		var url_general = $('.action_general').val();
+		var website_url = $('.website_url').val();
+
+		var email = $('.email_gen').val();
+		$('.gen_error').css('display','none');
+		$('.gen_error').text('');
+		if(email == ''){
+			$('.email_gen_error').css('display','block');
+			$('.email_gen_error').text('Please add email address');
+			return false;
+		}
+		var password = $('.password_gen').val();
+		if(password == ''){
+			$('.password_gen_error').css('display','block');
+			$('.password_gen_error').text('Please add password');
+			return false;
+		}else{
+			$('.password_gen_error').css('display','none');
+			$('.password_gen_error').text('');
+		}
+		
+
+		$.ajax({
+           	type:'POST',
+           	url:url_general,
+           	data:{password:password, email:email,attr_status:attr_status},
+           	success:function(data){
+
+              	if(data.success == '1'){
+              		window.location = website_url+data.url;
+
+              		$('html, body').animate({
+				        scrollTop: $(".yep_section_bg").offset().top
+				    }, 2000);
+              	}
+              	if(data.success == '0'){
+              		$('.gen_error').css('display','block');
+              		$('.gen_error').text(data.message);
+              	}
+
+              	if(data.success == '2'){
+              		$('#general_login1').modal('hide');
+              		$('#ask_quote').modal('show');
+              		
+              	}
+              	if(data.success == '3'){
+
+              		$('#general_login1').modal('hide');
+              		$('#work_description').modal('show');
+                  	$('.describe_work').css('display','none');
+                  	$('.img_vid_popup').css('display','block');
+              	}
+           	}
+
+        });
+  	return false;
+  }
+/*
+    $(document).on('hide.bs.modal','#ask_quote', function () {
+
+    	
+	});
+
+	  $(document).on('show.bs.modal','#ask_quote', function () {
+
+    	
+	});*/
+    
+   
     
