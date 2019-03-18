@@ -135,6 +135,28 @@ class GeneralQuotesController extends Controller
     }
 
     /***
+    *show quote completed page
+    ***/
+    public function quoteCompleted($quote_id){
+        $g_id = Auth::user()->id;
+
+        try{
+            $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
+            $get_user_data = YpBusinessUsersQuotesReply::with(['get_bus_user','get_reviews'=> function($q) use($g_id,$quote_id) {
+                $q->where(['general_id'=>$g_id,'quote_id'=>$quote_id]); 
+            },'quotes'=> function($q) use($g_id,$quote_id) {
+                $q->where(['status'=> '6','general_id'=>$g_id,'quote_id'=>$quote_id]); 
+            }])->where(['quote_id'=>$quote_id])->get()->toArray();
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+        
+        //return view('user.quotes_questions.quotes_reply')
+        return view('user/quotes_questions/quotes_completed')->with(['all_data'=>$get_user_data,'allquotes'=>$allquotes]);
+    }
+
+
+    /***
     *show quote request page
     ***/
     public function showQuoteRequest($quote_id,$business_id ){
@@ -142,6 +164,8 @@ class GeneralQuotesController extends Controller
         try{
 
             $get_user_data = YpBusinessUsersQuotesReply::with(['get_bus_user','get_reviewss'=> function($q) use($g_id,$quote_id) {
+                $q->where(['general_id'=>$g_id,'quote_id'=>$quote_id]); 
+            },'quotes'=> function($q) use($g_id,$quote_id) {
                 $q->where(['general_id'=>$g_id,'quote_id'=>$quote_id]); 
             }])->where(['quote_id'=>$quote_id,'business_id'=>$business_id])->first()->toArray();
 
@@ -165,6 +189,42 @@ class GeneralQuotesController extends Controller
       // echo "<pre>";print_r($get_user_data);die;
         //return view('user/quotes_questions/quotes_request')->with('get_user_data',$get_user_data);
         return view('user/quotes_questions/quotes_request')->with(['get_user_data'=>$get_user_data,'quoteSts'=>$quoteSts,'allquotes'=>$allquotes]);
+
+    }/***show quote request ends***/
+
+    /***
+    *show quote request page
+    ***/
+    public function showQuoteRequestCompleted($quote_id,$business_id ){
+        $g_id = Auth::user()->id;
+        try{
+
+            $get_user_data = YpBusinessUsersQuotesReply::with(['get_bus_user','get_reviewss'=> function($q) use($g_id,$quote_id) {
+                $q->where(['general_id'=>$g_id,'quote_id'=>$quote_id]); 
+            },'quotes'=> function($q) use($g_id,$quote_id) {
+                $q->where(['general_id'=>$g_id,'quote_id'=>$quote_id]); 
+            }])->where(['quote_id'=>$quote_id,'business_id'=>$business_id])->first()->toArray();
+
+            $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
+
+            $getquoteSts = YpBusinessUsersQuotes::where(['quote_id'=>$quote_id,'status'=>6])->first();
+
+            if(!empty($getquoteSts))
+            {
+                $quoteSts = 6;
+            }
+            else
+            {
+                $quoteSts = 0;
+            }
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+        
+      // echo "<pre>";print_r($get_user_data);die;
+        //return view('user/quotes_questions/quotes_request')->with('get_user_data',$get_user_data);
+        return view('user/quotes_questions/quotes_reqcompleted')->with(['get_user_data'=>$get_user_data,'quoteSts'=>$quoteSts,'allquotes'=>$allquotes]);
 
     }/***show quote request ends***/
 

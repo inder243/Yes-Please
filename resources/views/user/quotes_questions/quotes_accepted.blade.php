@@ -4,10 +4,10 @@
 
  <section class="register_step_1">
         <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-          <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+          <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
           <div class="for_accepted_quote">
             <div class="finish_quote">
-                @if(!empty($all_data[0]['get_reviews']))
+                <!-- @if(!empty($all_data[0]['get_reviews']))
                   @if(array_search('general', array_column($all_data[0]['get_reviews'], 'user_type')) > -1)
                   <a href="{{ url('/general_user/quote_questions') }}" data-quoteid="{{$all_data[0]['quote_id']}}" class="finish_job_quotes">This job has been finished</a>
                   @else
@@ -15,7 +15,7 @@
                   @endif
                 @else
                 <a href="{{ url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id']) }}" data-quoteid="{{$all_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
-                @endif
+                @endif -->
               
             </div>
             <div class="cancel_quote"><a href="{{ url('general_user/quote_questions') }}">Cancel</a></div>
@@ -146,7 +146,7 @@
                             @foreach($uploads['pic'] as $img)
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_{{$img_name[0]}}">
+                              <div class="uploaded_img" data-image="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;">
                                  <img src="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}"/>
                               </div>
                            </div>
@@ -164,7 +164,7 @@
             </div>
             <div class="some_btns_for_mobile">
               <div class="cancel_quote cancel_for_mobile"><a href="javascript:;">Cancel</a></div>
-              <div class="finish_quote finish_for_mobile"><a href="javascript:;">Finish</a></div>
+             <!--  <div class="finish_quote finish_for_mobile"><a href="javascript:;">Finish</a></div> -->
             </div>
             <div class="list_quotes">
             <h1>Quotes</h1>

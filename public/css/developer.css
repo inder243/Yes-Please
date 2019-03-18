@@ -22,6 +22,9 @@
     background-color: #d41e6d;
 
 }
+#exampleSelect1 {
+    height: 38px;
+}
 
 .option_accept{
     text-align: center;
@@ -207,9 +210,30 @@ input[type=number]::-webkit-outer-spin-button {
     margin:0px auto;
     display: block;
 }
+.back_to_super {
+    display: none;
+    text-align: center;
+    width: 100%;
+}
+.text-error{
+    color: #fe0303;
+}
+.profile_section_main .upload-btn-wrapper{
+    padding-top: 15px;
+}
+.profile_section_main .upload-btn-wrapper #blah{
+    margin-top: 12px;
+}
+.profile_section_main .upload-btn-wrapper .btn{
+    padding: 1px 0 5px 0;
+}
+.profile_section_main .upload-btn-wrapper input[type="file"]{
+    top:13px;
+}
+
 
 @media (max-width: 767px) {
-  
+
   .category_list {
       min-height: 240px;
   }
@@ -349,6 +373,7 @@ input[type=number]::-webkit-outer-spin-button {
 .total_pics_img img{
     height:150px;
     width:150px;
+    object-fit: cover;
 }
 
 
@@ -365,7 +390,7 @@ margin-bottom: 10px;
 }
 
 .total_quote ul {
-padding-bottom: 35px;
+padding-bottom: 0px;
 display: flex;
 justify-content: flex-start;
 flex-wrap: wrap;
@@ -537,4 +562,33 @@ input[type=number] {
 }
 .total_quote1{
     padding-bottom: 0 !important;
+}
+.forgot_pass_bus a {
+
+    text-align: right;
+    float: right;
+    color: #000;
+        font-size: 13px;
+
+}
+.border-complete h1 {
+    text-align: center;
+}
+.border-complete {
+    text-align: center;
+}
+.border-complete {
+    display: inline-block !important;
+    width: 100%;
+    border: 2px solid #336699 !important;
+    box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+}
+.border-complete > h1 {
+    font-family: 'GOTHICB0';
+    font-size: 18px;
+    color: #336699;
+    text-align: left;
+    padding-bottom: 12px;
+
 }

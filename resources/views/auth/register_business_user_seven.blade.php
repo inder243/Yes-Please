@@ -19,7 +19,7 @@
               <li><span class="activespan">7</span></li>
             </ul>
           </div>
-          <form method="POST" action="" id="register_schedule" action="{{ url('/business_user/register_seven/'.$id) }}">
+          <form method="POST" id="register_schedule" action="{{ url('/business_user/register_seven/'.$id) }}">
           @csrf
           <div class="registration_filed">
                     <h1>Schedule</h1>

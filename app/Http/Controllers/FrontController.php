@@ -27,8 +27,15 @@ class FrontController extends Controller
     {
         //$categories = YpBusinessCategories::all()->take(7)->toArray();
         $super_categories = YpBusinessSuperCategories::all()->take(7)->toArray();
-        //echo '<pre>';print_r($categories); echo '</pre>';
-        return view('dashboard')->with(array('categories'=>$super_categories));
+        foreach($super_categories AS $super_cat){
+          $super_cat_id = $super_cat['super_cat_id'];
+          $YpBusinessCategories = YpBusinessCategories::where('super_cat_id',$super_cat_id)->get()->toArray();
+          if(!empty($YpBusinessCategories)){
+            $final[] = $super_cat;
+          }
+          //echo '<pre>';print_r($YpBusinessCategories); echo '</pre>';
+        }
+        return view('dashboard')->with(array('categories'=>$final));
     }
 
     public function moreSuperCatogries(){
@@ -55,7 +62,7 @@ class FrontController extends Controller
         $skip = $_POST['skip'];
         $super_id = $_POST['super_id'];
         $categories = YpBusinessCategories::skip($skip)->take(7)->where('super_cat_id',$super_id)->get()->toArray();
-        $next_categories = YpBusinessCategories::skip($skip+7)->take(7)->get()->toArray();
+        $next_categories = YpBusinessCategories::skip($skip+7)->take(7)->where('super_cat_id',$super_id)->get()->toArray();
         $next = count($next_categories);
         $categories['next'] = $next;
         return json_encode($categories);

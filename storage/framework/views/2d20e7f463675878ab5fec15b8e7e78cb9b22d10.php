@@ -32,27 +32,31 @@
                           <input type="text" placeholder="Search..." class="category_search"/>
                         </div>
                         <ul>
+                          <?php 
+                            // echo '<pre>'; print_r($categories); echo '</pre>';die;
+                            // echo '<pre>'; print_r($business_categories); echo '</pre>';die;
+                            if(!empty($business_categories)){
+                              foreach($business_categories AS $cat){
+                                $bids[] = $cat['id'];
+                              }
+                            }else{
+                              $bids = array();
+                            }
+                          ?>
 
                           <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                          <li><a href="javascript:;" inc_id="<?php echo e($value['id']); ?>" id="<?php echo e($value['category_id']); ?>" data-cat="sub" onclick="categoriesselect(this)"><?php echo e($value['category_name']); ?></a><span class="checked_category"><img src="<?php echo e(asset('img/category_check.png')); ?>"/></span></li>
+                          <li><a href="javascript:;" inc_id="<?php echo e($value['id']); ?>" id="<?php echo e($value['category_id']); ?>" data-cat="sub" onclick="categoriesselect(this)"><?php echo e($value['category_name']); ?></a>
+
+                          <?php if(in_array($value['id'],$bids)): ?>
+                              <span class="checked_category" style="display: block;"><img src="<?php echo e(asset('img/category_check.png')); ?>"/></span>
+                          <?php else: ?>
+                            <span class="checked_category"><img src="<?php echo e(asset('img/category_check.png')); ?>"/></span>
+                          </li>
+                          <?php endif; ?>
 
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                          <!-- <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <li><a href="javascript:;" id="<?php echo e($value['category_id']); ?>" data-id="<?php echo e($value['id']); ?>" onclick="categoriesselect(this)" data-cat="parent" class="categories"><?php echo e($value['category_name']); ?></a>
-                          <?php if(!empty($value['sub_category'])): ?>  
-                            <ul class="subcategories">
-                              <?php $__currentLoopData = $value['sub_category']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key1=>$value1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <li><a href="javascript:;" id="<?php echo e($value1['sub_category_id']); ?>" data-cat="sub" onclick="categoriesselect(this)"><?php echo e($value1['sub_category_name']); ?></a><span class="checked_category"><img src="<?php echo e(asset('img/category_check.png')); ?>"/></span></li>
-                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </ul>
-                          <?php else: ?>
-                          <span class="checked_category_active"><img src="<?php echo e(asset('img/category_check.png')); ?>"/></span>
-                          <?php endif; ?>
-                          </li>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> -->
-                          
                         </ul>
                       </div>
                     </div>

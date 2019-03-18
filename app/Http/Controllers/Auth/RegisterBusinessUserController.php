@@ -266,7 +266,6 @@ class RegisterBusinessUserController extends Controller
 
 
         $business_categories =  $this->get_user_categories($id);   
-      
 
         // $all_categories =  YpBusinessCategories::with('sub_category')->where('category_status',1)->whereHas('sub_category', function($q) {$q->where('sub_category_status',1);})->get();  
         // $business_categories =  $this->get_user_categories($id);   
@@ -281,6 +280,7 @@ class RegisterBusinessUserController extends Controller
     public function get_user_categories($user_id)
     { 
         $b_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->get()->toArray();
+        if(!empty($b_id)){
         $b_u_id = $b_id[0]['id'];
         $business_category_ids = DB::table('yp_business_user_categories AS y_b_u_c')->where('y_b_u_c.business_userid',$b_u_id)
                 ->leftjoin('yp_business_categories AS y_b_c', 'y_b_u_c.category_id', '=', 'y_b_c.id')
@@ -290,6 +290,9 @@ class RegisterBusinessUserController extends Controller
 
         //echo '<pre>';print_r($business_category_ids); echo '</pre>'; die;
         $i = 0;
+        }else{
+            $business_category_ids = array();
+        }
         if(!empty($business_category_ids)){
             foreach($business_category_ids as $value){
 
@@ -308,7 +311,7 @@ class RegisterBusinessUserController extends Controller
             }
 
         }else{
-            $result = '';
+            $result = array();
         }
        // echo '<pre>';print_r($result); echo '</pre>';
         return $result;
@@ -368,7 +371,7 @@ class RegisterBusinessUserController extends Controller
             foreach($request->file('myfile') as $files){
                 $file = $files;             
                 $extension = $file->getClientOriginalExtension(); // getting image extension            
-                $filename = time().'.'.$extension;
+                $filename = rand(10,100).time().'.'.$extension;
                 
                 if($file->move(public_path().'/images/profile/'.$id.'/', $filename)){                
                     //echo '<pre>';print_r($pic_vid); echo '</pre>';die;
@@ -503,8 +506,8 @@ class RegisterBusinessUserController extends Controller
         //echo '<pre>'; print_r($userSchedule); echo '</pre>';
         return view('auth.register_business_user_seven')->with(array('id'=>$id,'userSchedule'=>$userSchedule));
     } 
-    public function create_seven($id){   
-        //echo '<pre>'; print_r($_POST); echo '</pre>';      
+    public function create_seven($id){
+        //echo '<pre>'; print_r($_POST); echo '</pre>';die;
         if(isset($_POST) && !empty($_POST)){
             if(isset($_POST['available'])){
                 $arr = array('available'=>'available');
@@ -857,12 +860,33 @@ class RegisterBusinessUserController extends Controller
         $category_id = $_POST['category_id'];
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
         $selected_arr = $_POST['selected'];
-        foreach($selected_arr AS $selected){
-          YpBusinessSelectedServices::create([
-              'business_id' => $user_incre_id['id'],
-              'cat_id' => $category_increamentid['id'],
-              'service_text' => $selected
-          ]);
+        $type = $_POST['data_type'];
+        if($type == 'checkbox'){
+          foreach($selected_arr AS $selected){
+            $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
+            if(count($check) == 0){
+              YpBusinessSelectedServices::create([
+                  'business_id' => $user_incre_id['id'],
+                  'cat_id' => $category_increamentid['id'],
+                  'service_text' => $selected
+              ]);
+            }
+          }
+
+        }else if($type == 'radio'){
+          foreach($selected_arr AS $selected){
+            $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id']])->get()->toArray();
+            if(count($check) > 0){
+              $update = array('service_text' => $selected);
+              YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id']])->update($update);
+            }else{
+              YpBusinessSelectedServices::create([
+                  'business_id' => $user_incre_id['id'],
+                  'cat_id' => $category_increamentid['id'],
+                  'service_text' => $selected
+              ]);
+            }
+          }
         }
       }
     }

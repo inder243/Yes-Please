@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
       </section>
       <section>
          <div class="container">
@@ -35,6 +35,7 @@
                                           <option value="3" @if($quote_status == 3) selected @endif>Quoted</option>
                                           <option value="4" @if($quote_status == 4) selected @endif>Accepted</option>
                                           <option value="5" @if($quote_status == 5) selected @endif>Rejected/Ignored</option>
+                                          <option value="6" @if($quote_status == 6) selected @endif>Completed</option>
                                        </select>
                                        <span class="select_arrow"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
                                     </div>
@@ -63,6 +64,8 @@
                               <a href="{{ url('/business_user/quoted_accepted/'.$quote_id.'/3') }}" class="new_quote q_quoted">
                               @elseif($quote['status'] == 4)
                               <a href="{{ url('/business_user/quoted_accepted/'.$quote_id.'/4') }}" class="new_quote q_accepted">
+                              @elseif($quote['status'] == 6)
+                              <a href="{{ url('/business_user/quoted_accepted/'.$quote_id.'/6') }}" class="new_quote">
                               @else
                               <a href="" class="new_quote">
                               @endif
@@ -90,8 +93,10 @@
                                        <div class="new_lable q_quoted_table">QUOTED</div>
                                        @elseif($quote['status'] == 4)
                                        <div class="new_lable q_accepted_table">ACCEPTED</div>
-                                       @else
+                                       @elseif($quote['status'] == 5)
                                        <div class="new_lable">REJECTED</div>
+                                       @else
+                                       <div class="new_lable">Completed</div>
                                        @endif
                                        <div class="created_date">{{$date}}</div>
                                     </div>

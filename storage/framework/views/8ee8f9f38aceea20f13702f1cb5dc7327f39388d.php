@@ -2,7 +2,7 @@
 
   <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
          <div class="cancel_quote"><a href="<?php echo e(url('general_user/quote_questions')); ?>">Cancel</a></div>
          </div>
       </section>
@@ -133,7 +133,7 @@
                             <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_<?php echo e($img_name[0]); ?>">
+                              <div class="uploaded_img" data-image="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;">
                                  <img src="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>"/>
                               </div>
                            </div>

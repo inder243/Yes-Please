@@ -1,22 +1,23 @@
 <?php $__env->startSection('content'); ?>
 
-
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote request</span></div>
+           <div> <a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote request</span></div>
 
            <div class="for_accepted_quote">
             <div class="finish_quote">
 
-               <?php if(!empty($get_user_data['get_reviewss'])): ?>
+              <?php if(!empty($get_user_data['quotes']) && $get_user_data['quotes']['status']== 4): ?>
+                <?php if(!empty($get_user_data['get_reviewss'])): ?>
                   <?php if(array_search('general', array_column($get_user_data['get_reviewss'], 'user_type')) > -1): ?>
-                  <a href="<?php echo e(url('/general_user/quote_questions')); ?>" data-quoteid="<?php echo e($get_user_data['quote_id']); ?>" class="finish_job_quotes">This job has been finished</a>
+                  <a href="<?php echo e(url('/general_user/quote_questions')); ?>" data-quoteid="<?php echo e($get_user_data['quote_id']); ?>" class="finish_job_quotes">Job Completed</a>
                   <?php else: ?>
                   <a href="<?php echo e(url('/general_user/user_quotereviews/'.$get_user_data['quote_id'].'/'.$get_user_data['business_id'])); ?>" data-quoteid="<?php echo e($get_user_data['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
                   <?php endif; ?>
                 <?php else: ?>
                 <a href="<?php echo e(url('/general_user/user_quotereviews/'.$get_user_data['quote_id'].'/'.$get_user_data['business_id'])); ?>" data-quoteid="<?php echo e($get_user_data['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
                 <?php endif; ?>
+              <?php endif; ?>
             </div>
             <div class="cancel_quote">
 
@@ -32,7 +33,7 @@
                <div class="user_profile_sec">
                   <?php $image = Auth::user()->image_url;
                       $general_id = Auth::user()->user_id;
-                ?>
+                  ?>
                 <?php if($image): ?>
                 <div class="user_img"><img src="<?php echo e(url('/images/users/'.$general_id.'/'.$image)); ?>"/></div>
                 <?php else: ?>
@@ -64,50 +65,50 @@
                     $total_rating = round($get_total_rating);
                     ?>
                     <?php if(isset($total_rating)): ?>
-                  <?php if($total_rating == '5'): ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                  <?php elseif($total_rating == '4'): ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                  <?php elseif($total_rating == '3'): ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                  <?php elseif($total_rating == '2'): ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                  <?php elseif($total_rating == '1'): ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                    <?php if($total_rating == '5'): ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                    <?php elseif($total_rating == '4'): ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                    <?php elseif($total_rating == '3'): ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                    <?php elseif($total_rating == '2'): ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                    <?php elseif($total_rating == '1'): ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                    <?php else: ?>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                      <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li> 
+                    <?php endif; ?> 
                   <?php else: ?>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                    <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li> 
-                  <?php endif; ?> 
-                <?php else: ?>
-                <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
-                <?php endif; ?>
+                  <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                  <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                  <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                  <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                  <li><a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a></li>
+                  <?php endif; ?>
                      </ul>
                      <p class="total_review"><?php echo e($get_total_reviews); ?> reviews</p>
                   </div>
@@ -159,7 +160,7 @@
                             <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_<?php echo e($img_name[0]); ?>">
+                              <div class="uploaded_img" data-image="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;">
                                  <img src="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>"/>
                               </div>
                            </div>
@@ -233,7 +234,7 @@
                         <?php if(!empty($uploads)): ?>
                           <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <?php $img_name = explode( '.', $img );?>
-                          <div class="swiper-slide total_pics_img" id="img_<?php echo e($img_name[0]); ?>"><img src="<?php echo e(url('/images/quotes_request/'.$get_user_data['get_bus_user']['business_userid'].'/'.$img)); ?>"/></div>
+                          <div class="swiper-slide total_pics_img" data-image="<?php echo e(url('/images/quotes_request/'.$get_user_data['get_bus_user']['business_userid'].'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;"><img src="<?php echo e(url('/images/quotes_request/'.$get_user_data['get_bus_user']['business_userid'].'/'.$img)); ?>"/></div>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                           
                         <?php endif; ?>

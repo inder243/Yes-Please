@@ -33,30 +33,106 @@
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="{{ asset('img/menu-red.png') }}" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
+
+                      @if (Auth::guard('general_user')->check())
+                        <li>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/general_user/quote_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/messages.png') }}" />Messages <span class="total_message">12</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/ratings.png') }}" />Ratings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/share.png') }}" />Share</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
+                        </li>
+                        <li>
+                          <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                        </li>
+                        @elseif(Auth::guard('business_user')->check())
+
+                        <li>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/business_user/quotes_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/messages.png') }}" />Messages <span class="total_message">12</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/ratings.png') }}" />Ratings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/share.png') }}" />Share</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('business_user.profile_setting') }}"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('business_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                        </li>
+
+                        @else
                         <li>
                           <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
                         <li>
+                          <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/question.png') }}" />I'm a User</a>
+                        </li>
+                        <li>
+                          <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/profile.png') }}" />I'm a Business! </a>
+                        </li>
+                        <li>
+                          <a href="#"><img src="{{ asset('img/profile.png') }}" />  About Yes, please</a>
+                        </li>
+
+                        <li>
+                          <a href="#"><img src="{{ asset('img/messages.png') }}" />Contact </a>
+                        </li>
+                        
+                        @endif
+                        
+                        <!-- <li>
                           @if (Auth::guard('general_user')->check())
                           <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                           @elseif(Auth::guard('business_user')->check())
                           <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                           @else
-                          <a href="#"><img src="img/home.png" />Home</a>
+                          <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                           @endif                           
                           </li>
                           <li>
-                            <a href="{{ route('general_user.beforelogin') }}"><img src="img/question.png" />I'm a User</a>
+                            <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/question.png') }}" />I'm a User</a>
                           </li>
                           <li>
-                            <a href="{{ route('business_user.beforelogin') }}"><img src="img/profile.png" />I'm a Business! </a>
+                            <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/profile.png') }}" />I'm a Business! </a>
                           </li>
                           <li>
-                            <a href="#"><img src="img/profile.png" />  About Yes, please</a>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />  About Yes, please</a>
                           </li>
 
                           <li>
-                            <a href="#"><img src="img/messages.png" />Contact </a>
+                            <a href="#"><img src="{{ asset('img/messages.png') }}" />Contact </a>
                           </li>
                           <li>
                           @if (Auth::guard('general_user')->check())
@@ -65,7 +141,7 @@
                           <a href="{{ route('business_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
                           @else
                           
-                          @endif
+                          @endif -->
                             
                         </li>
                     </ul>
@@ -80,8 +156,8 @@
                 @elseif(Auth::guard('business_user')->check())
                 
                 @else
-                <a href="{{ route('business_user.beforelogin') }}" class="register">Business</a>
-                <a href="{{ route('general_user.beforelogin') }}" class="login">Users</a>
+                <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false" class="register">Business</a>
+                <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false" class="login">Users</a>
                 @endif
                 
             </div>
@@ -248,7 +324,7 @@
                               <input type="password" class="form-control password_bu" name="password" placeholder="Password">
                               <span class="fill_fields password_business_error" role="alert" style="display:none;">
                             </div>
-                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
                             <div class="register_page"><a href="{{ route('business_user.register') }}">Register</a></div>
                         </form>
@@ -261,6 +337,112 @@
         </div>
     </div>
 <!-------- Login Modal end ----->
+<!-- Forgot Password Popup --> 
+    <div class="modal fade" id="business_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        {{ csrf_field() }}
+                        
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Forgot Password Popup business user--> 
+    <div class="modal fade" id="user_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        {{ csrf_field() }}                       
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none; width:100%;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Forgot Password Popup for general user --> 
+    <div class="modal fade" id="user_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        {{ csrf_field() }}                       
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none; width:100%;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

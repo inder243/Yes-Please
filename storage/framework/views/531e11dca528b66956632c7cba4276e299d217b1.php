@@ -52,6 +52,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                    <?php if(!empty($verify_bu) && count($verify_bu)>0): ?>
                                     <?php $count=1; ?>
                                     <?php $__currentLoopData = $verify_bu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php 
@@ -82,6 +83,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

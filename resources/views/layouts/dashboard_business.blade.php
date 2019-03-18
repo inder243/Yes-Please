@@ -177,7 +177,7 @@
                               <input type="password" class="form-control password_bu" name="password" placeholder="Password">
                               <span class="fill_fields password_business_error" role="alert" style="display:none;">
                             </div>
-                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
                             <div class="register_page"><a href="{{ route('business_user.register') }}">Register</a></div>
                         </form>

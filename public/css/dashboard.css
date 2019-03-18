@@ -278,7 +278,7 @@ input:invalid {
 .register_breadcrumb {
 	background-color: transparent;
 	margin: 0 0 0 0;
-	padding: 30px;
+	padding: 15px 30px;
 }
 
 .dashboard_section {
@@ -674,7 +674,9 @@ input:invalid {
 	font-size: 18px;
 	border-bottom: 2px transparent;
 }
-
+.quote_question .active {
+    background-color: transparent !important;
+}
 .quote_question ul li a:hover {
 	border-top: none;
 	border-top-color: currentcolor;
@@ -775,7 +777,9 @@ input:invalid {
 	padding: 20px 20px 20px 20px;
 	text-align: right;
 }
-
+.search_btn a {
+    padding: 7px 0;
+}
 .search_btn a {
 	background-color: #ed0c6e;
 	color: #fff;
@@ -800,8 +804,8 @@ input:invalid {
 
 .quote_section {
 	background-color: rgb(255, 255, 255);
-	box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
-	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+	/* box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12); */
 	margin-bottom: 15px;
 	border-radius: 10px;
 	position: relative;
@@ -2231,6 +2235,11 @@ input:invalid {
 }
 		}
 		@media (max-width: 767px) {
+			input {
+
+    font-size: 16px !important;
+
+}
 			.quote_req_main_finsih p {
     text-align: center;
     padding: 10px;

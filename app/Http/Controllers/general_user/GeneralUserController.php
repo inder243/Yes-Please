@@ -37,12 +37,19 @@ class GeneralUserController extends Controller
     /****
     **fn to dashboard
     ****/
+
     public function dashboard()
     {
-        $general_user_id   = Auth::user()->user_id;
-        //$categories = YpBusinessCategories::all()->take(7)->toArray();
-        $super_categories = YpBusinessSuperCategories::all()->take(7)->toArray();
-        return view('/dashboard')->with(array('categories'=>$super_categories));
+      $super_categories = YpBusinessSuperCategories::all()->take(7)->toArray();
+      foreach($super_categories AS $super_cat){
+        $super_cat_id = $super_cat['super_cat_id'];
+        $YpBusinessCategories = YpBusinessCategories::where('super_cat_id',$super_cat_id)->get()->toArray();
+        if(!empty($YpBusinessCategories)){
+          $final[] = $super_cat;
+        }
+        //echo '<pre>';print_r($YpBusinessCategories); echo '</pre>';
+      }
+      return view('dashboard')->with(array('categories'=>$final));
 
     }/**dahsboard fn ends**/
 

@@ -111,7 +111,7 @@ class RegisterGeneralUserController extends Controller
             'city' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:yp_general_users'],
             'phone_number' => ['numeric', 'digits_between:9,15'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:6','confirmed'],
             'checkbox' =>'required|in:1',
         ];
 

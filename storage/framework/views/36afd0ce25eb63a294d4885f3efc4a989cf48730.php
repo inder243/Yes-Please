@@ -2,7 +2,7 @@
 <?php //echo "<pre>";print_r($quote_data);die;?>
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Category </a>/<span class="q_breadcrumb">Review</span></div>
+           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="JavaScript:;"> Category </a>/<span class="q_breadcrumb">Review</span></div>
 
          </div>
       </section>

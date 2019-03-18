@@ -2,7 +2,15 @@
 
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span><?php if(!empty($catName)): ?> <?php echo e($catName); ?> <?php endif; ?><span></span></span></div>
+    <?php 
+    if(Auth::guard('business_user')->check()){
+      $url = URL::to('/').'/business_user/business_dashboard';      
+    }
+    else{
+      $url = URL::to('/');
+    }
+    ?>
+    <div class="breadcrumb_header"><a href="<?=$url;?>">Home</a>/<span><?php if(!empty($catName)): ?> <?php echo e($catName); ?> <?php endif; ?><span></span></span></div>
     <div class="share_fb"><a href="javascript:;"/><img src="<?php echo e(asset('img/icon_F.png')); ?>"/>Share</a></div>
   </div>
       <div class="container-fluid">
@@ -21,13 +29,13 @@
                     <div class="row filter_this">
                     <div class="form-group col-md-3 col-12">
                       <label for="inputPassword4">Location</label>
-                      <!-- <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required=""> -->
-                      <input type="text" class="form-control" id="inputPassword4" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required="">
+                      <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required="">
+                      <!-- <input type="text" class="form-control" id="inputPassword4" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required=""> -->
                       <span class="input_icons"><img src="<?php echo e(asset('img/location.png')); ?>"/></span>
                     </div>
                     <div class="form-group custom_errow col-md-3 col-12">
                       <label for="inputPassword4">Radius (km)</label>
-                      <select class="form-control general_radius" id="exampleSelect1">
+                      <select class="form-control" id="dashboard_radious_general">
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
@@ -602,7 +610,9 @@
                 </div>
               </div>
 
-              <div class="category_second_sec">
+              <div class="category_second_sec user_dashbord_cat">
+                <input type="hidden" class="hidden_default_longitude" value="<?php if(isset($longitude)): ?><?php echo e($longitude); ?><?php endif; ?>">
+                <input type="hidden" class="hidden_default_latitude" value="<?php if(isset($latitude)): ?><?php echo e($latitude); ?><?php endif; ?>">
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
@@ -614,6 +624,7 @@
                                 <input type="hidden" class="hidden_longitude" value="<?php echo e($allbus['get_business_user']['logitude']); ?>">
                                 <input type="hidden" class="hidden_latitude" value="<?php echo e($allbus['get_business_user']['latitude']); ?>">
                                 <input type="hidden" class="hidden_address" value="<?php echo e($allbus['get_business_user']['full_address']); ?>">
+                                <input type="hidden" class="hidden_buname" value="<?php echo e($allbus['get_business_user']['business_name']); ?>">
                               <div class="business_sec">
                                  <div class="b-detail">
                                     <span class="business_img">
@@ -645,13 +656,13 @@
                               <p class="des"><?php echo e($allbus['get_business_user']['full_address']); ?></p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                  <?php $new_num = number_format($allbus['get_business_details']['distance_kms'], 2, '.', ''); ?>
+                                  <?php $new_num = number_format($allbus['get_business_details']['distance_kms'], 1, '.', ''); ?>
                                     <a href="javascript:;" class="distance">Distance <span><?php echo e($new_num); ?>km</span></a>
 
                                     <?php if(!empty($allbus['get_business_user']['avg_rating'])): ?>
 
                                     <?php
-                                      $rating_num = number_format($allbus['get_business_user']['avg_rating'][0]['avg_rating'], 2, '.', '');
+                                      $rating_num = number_format($allbus['get_business_user']['avg_rating'][0]['avg_rating'], 1, '.', '');
 
                                       $review_num = $allbus['get_business_user']['avg_rating'][0]['tot_review'];
                                     ?>
@@ -667,12 +678,14 @@
                                  </div>
                                  <div class="call_chat">
                                     <a href="javascript:;" class="text"><img/src="<?php echo e(asset('img/text.png')); ?>"/></a>
-                                    <a href="tel:<?php echo e($allbus['get_business_user']['phone_number']); ?>" class="call" data-toggle="tooltip" data-placement="top" title="" data-original-title="<?php echo e($allbus['get_business_user']['phone_number']); ?>"><img/src="<?php echo e(asset('img/call.png')); ?>"/>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="<?php echo e($allbus['get_business_user']['phone_number']); ?>" data-original-title="<?php echo e($allbus['get_business_user']['phone_number']); ?>"><img/src="<?php echo e(asset('img/call.png')); ?>"/>
                                     </a>
                                  </div>
                               </div>
                            </li>    
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          <?php else: ?>
+                          No Data Found!
                           <?php endif; ?>
                           
                         </ul>
@@ -1080,6 +1093,8 @@
                           </div>
                         </div>
                           <?php endif; ?>
+                        <?php else: ?>
+                        <div class="next_btn buttonForOnlyStaticQues" onclick="getOnlyStaticQuestions();"><a href="javascript:;">Please Proceed</a></div>
                         <?php endif; ?>
                         <div class="quote_recieve static_ques_1 static_ques" style="display:none">
                           <h1>How many quotes you want to receive?</h1>
@@ -1153,7 +1168,7 @@
                              </div>
                              <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                                <div class="ele_next" id="static_ques_descriptionn" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1166,16 +1181,16 @@
                             <div class="drag_option_main">
                               <div class="select_upload">
                                 <div class="upload_file_section">
-                                  <div class="drag_file dz-clickable" id="drag_div">
+                                  <!-- <div class="drag_file dz-clickable" id="drag_div">
                                  
                                     <a href="javascript:;">Drag and drop files here to upload</a>
                                   </div>
-                                  <span>OR</span>
-                                  <div class="file_to_upload">
+                                  <span>OR</span> -->
+                                  <div class="file_to_upload gen_quote_img">
                                     <div class="upload-btn-wrapper">
                                       <button class="btn">Select files to upload</button>
-                                        <input name="myfile[]" multiple="" class="select_verify_img" accept="image/x-png,image/gif,image/jpeg" type="file">
-                                    <span id="msg"></span>
+                                        <input name="myfile[]" multiple="" class="select_gen_quote_img" accept="image/x-png,image/gif,image/jpeg" type="file">
+                                    <span id="msg" class="genrl_quote_imgs"></span>
                                     </div>
                                   </div>
                                 </div>
@@ -1183,7 +1198,7 @@
                             </div>
                             <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_2" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Next &gt;</a></div>
+                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Skip &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1225,7 +1240,11 @@
             </div>
          </div>
       </div>
-      
+<script type="text/javascript">
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.inner_general', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -149,7 +149,7 @@
                             <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_<?php echo e($img_name[0]); ?>">
+                              <div class="uploaded_img" data-image="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImage(this);return false;">
                                  <img src="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>"/>
                               </div>
                            </div>
@@ -190,10 +190,7 @@
                         <label for="inputPassword4">Price type</label>
                         <select class="form-control" id="exampleSelect1" name="quote_price_type">
                            <option value="1">Fix price</option>
-                           <option value="2">2</option>
-                           <option value="3">3</option>
-                           <option value="4">4</option>
-                           <option value="5">5</option>
+                           <option value="2">Hourly</option>
                         </select>
                         <span class="select_arrow"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
                      </div>
@@ -238,9 +235,9 @@
                         <div class="file_to_upload">
                            <div class="upload-btn-wrapper">
                               <button class="btn">Select files to upload</button>
-                              <input type="file" name="myfile[]" multiple class="select_verify_img" accept="image/x-png,image/gif,image/jpeg"/>
+                              <input type="file" name="myfile[]" multiple class="select_quote_rply_img" accept="image/x-png,image/gif,image/jpeg"/>
 
-                				<span id="msg"></span>
+                				      <span id="msg" class="BusQuoteRply"></span>
                            </div>
                            <div class="choose_from_pre">
                               <a href="javascript:;">Choose from previous</a>

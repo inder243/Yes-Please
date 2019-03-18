@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
       </section>
       <section>
          <div class="container">
@@ -33,6 +33,7 @@
                                           <option value="3" <?php if($quote_status == 3): ?> selected <?php endif; ?>>Quoted</option>
                                           <option value="4" <?php if($quote_status == 4): ?> selected <?php endif; ?>>Accepted</option>
                                           <option value="5" <?php if($quote_status == 5): ?> selected <?php endif; ?>>Rejected/Ignored</option>
+                                          <option value="6" <?php if($quote_status == 6): ?> selected <?php endif; ?>>Completed</option>
                                        </select>
                                        <span class="select_arrow"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
                                     </div>
@@ -61,6 +62,8 @@
                               <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/3')); ?>" class="new_quote q_quoted">
                               <?php elseif($quote['status'] == 4): ?>
                               <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/4')); ?>" class="new_quote q_accepted">
+                              <?php elseif($quote['status'] == 6): ?>
+                              <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/6')); ?>" class="new_quote">
                               <?php else: ?>
                               <a href="" class="new_quote">
                               <?php endif; ?>
@@ -88,8 +91,10 @@
                                        <div class="new_lable q_quoted_table">QUOTED</div>
                                        <?php elseif($quote['status'] == 4): ?>
                                        <div class="new_lable q_accepted_table">ACCEPTED</div>
-                                       <?php else: ?>
+                                       <?php elseif($quote['status'] == 5): ?>
                                        <div class="new_lable">REJECTED</div>
+                                       <?php else: ?>
+                                       <div class="new_lable">Completed</div>
                                        <?php endif; ?>
                                        <div class="created_date"><?php echo e($date); ?></div>
                                     </div>

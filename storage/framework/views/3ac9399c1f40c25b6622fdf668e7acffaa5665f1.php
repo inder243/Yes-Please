@@ -114,6 +114,7 @@
 
 
 <input type="hidden" id="home_url" value="<?php echo e(URL::asset('')); ?>">
+<input type="hidden" id="business_user_id" value="<?php echo e(Auth::guard('business_user')->user()->business_userid); ?>">
     <div class="content">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
@@ -171,7 +172,7 @@
                               <input type="password" class="form-control password_bu" name="password" placeholder="Password">
                               <span class="fill_fields password_business_error" role="alert" style="display:none;">
                             </div>
-                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
                             <div class="register_page"><a href="<?php echo e(route('business_user.register')); ?>">Register</a></div>
                         </form>
@@ -255,6 +256,24 @@
             </div>
         </div>
     </div>
+
+    <!---modal to open big image --->
+    <div class="modal fade" id="showBigImageModalBusiness" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                         
+                     </div>
+                    
+                    <div class="modal-body">
+                     <img style="width:100%" src=""/>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>  
+    <!---modal to open big image endshere --->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

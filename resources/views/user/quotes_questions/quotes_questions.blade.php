@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/general_user/general_dashboard') }}">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
       </section>
       <section>
          <div class="container-fluid">
@@ -37,6 +37,7 @@
                                       <!-- <option value="2" @if($quote_status == 2) selected @endif>Read</option>
                                       <option value="3" @if($quote_status == 3) selected @endif>Quoted</option> -->
                                       <option value="4" @if($quote_status == 4) selected @endif>Accepted</option>
+                                      <option value="6" @if($quote_status == 6) selected @endif>Completed</option>
                                       <!-- <option value="5" @if($quote_status == 5) selected @endif>Rejected/Ignored</option> -->
                                     </select>
                                     <span class="select_arrow"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
@@ -57,12 +58,16 @@
 
                            @php $acceptedSts = ''; @endphp
                             @php $newSts = ''; @endphp
+                            @php $compltSts = ''; @endphp
                             @foreach($quote as $sQuote)
                               @if($sQuote['status']==4)
                                 @php $acceptedSts = 1; @endphp
                               @endif
                               @if($sQuote['status']==1)
                                 @php $newSts = 1; @endphp
+                              @endif
+                              @if($sQuote['status']==6)
+                                @php $compltSts = 1; @endphp
                               @endif
                             @endforeach
 
@@ -77,6 +82,8 @@
                               <a href="{{ url('/general_user/quoteaccepted/'.$quote_id) }}" class="new_quote q_accepted">
                               @elseif(isset($newSts) && $newSts==1)
                               <a href="{{ url('/general_user/quotesrply/'.$quote_id) }}" class="new_quote">
+                              @elseif(isset($compltSts) && $compltSts==1)
+                              <a href="{{ url('/general_user/quotecompleted/'.$quote_id) }}" class="new_quote">
                               @else
                               <a href="{{ url('/general_user/quotesrply/'.$quote_id) }}" class="new_quote">
                               @endif
@@ -117,6 +124,8 @@
                                       <div class="new_lable q_accepted_table">ACCEPTED</div>
                                       @elseif(isset($newSts) && $newSts==1)
                                       <div class="new_lable">NEW</div>
+                                      @elseif(isset($compltSts) && $compltSts==1)
+                                      <div class="new_lable">Completed</div>
                                       @endif 
                                        <div class="created_date">{{$date}}</div>
                                     </div>

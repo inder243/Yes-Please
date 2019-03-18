@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<a href="JavaScript:;"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
       </section>
         <section>
           <div class="quote_req_main">
@@ -10,10 +10,20 @@
               <h1>Quote accepted by user</h1>
               <?php elseif($quote_data[0]['status'] == '3'): ?>
               <h1>Quote quoted by user</h1>
+              <?php elseif($quote_data[0]['status'] == '6'): ?>
+              <h1>Quote Completed</h1>
               <?php endif; ?>
             <?php endif; ?>
-              
-            <div class="improvement_section_new accepted-quote">
+            
+            <?php if(isset($quote_data[0]['status'])): ?>
+              <?php if($quote_data[0]['status'] == '4'): ?>
+              <div class="improvement_section_new accepted-quote">
+              <?php elseif($quote_data[0]['status'] == '3'): ?>
+              <div class="improvement_section_new new_quote q_quoted">
+              <?php elseif($quote_data[0]['status'] == '6'): ?>
+              <div class="improvement_section_new new_quote">
+              <?php endif; ?>
+            <?php endif; ?>  
               <div class="user_profile_sec">
                 <?php if(isset($quote_data)): ?>
                   <?php $image = $quote_data[0]['get_gen_user']['image_url'];
@@ -117,6 +127,8 @@
                     <div class="new_lable q_accepted_table">ACCEPTED</div>
                     <?php elseif($quote_data[0]['status'] == '3'): ?>
                     <div class="new_lable q_quoted_table">QUOTED</div>
+                    <?php elseif($quote_data[0]['status'] == '6'): ?>
+                    <div class="new_lable">COMPLETED</div>
                     <?php endif; ?>
                   <?php endif; ?>
                     <?php $datetime = $allquotes['created_at'];
@@ -149,7 +161,7 @@
                             <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_<?php echo e($img_name[0]); ?>">
+                              <div class="uploaded_img" data-image="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImage(this);return false;">
                                  <img src="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>"/>
                               </div>
                            </div>
@@ -184,7 +196,7 @@
                         <?php if(!empty($uploads)): ?>
                           <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <?php $img_name = explode( '.', $img );?>
-                          <div class="swiper-slide total_pics_img" id="img_<?php echo e($img_name[0]); ?>"><img src="<?php echo e(url('/images/quotes_request/'.$business_userid.'/'.$img)); ?>"/></div>
+                          <div class="swiper-slide total_pics_img" data-image="<?php echo e(url('/images/quotes_request/'.$business_userid.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImage(this);return false;"><img src="<?php echo e(url('/images/quotes_request/'.$business_userid.'/'.$img)); ?>"/></div>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                           
                         <?php endif; ?>
@@ -204,14 +216,15 @@
             
                 
               <?php if(!empty($quote_data[0]['get_review'])): ?>
-                <?php if(array_search('business', array_column($quote_data[0]['get_review'], 'user_type')) > -1): ?>
-                  <a href="<?php echo e(url('/business_user/quotes_questions')); ?>" data-quoteid="<?php echo e($quote_data[0]['quote_id']); ?>" class="finish_job_quotes">This job has been finished</a>
-                <?php else: ?>
-                  <a href="<?php echo e(url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id'])); ?>" data-quoteid="<?php echo e($quote_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+                <?php if(array_search('general', array_column($quote_data[0]['get_review'], 'user_type')) > -1): ?>
+                  <?php if(array_search('business', array_column($quote_data[0]['get_review'], 'user_type')) > -1): ?>
+                    <a href="<?php echo e(url('/business_user/quotes_questions')); ?>" data-quoteid="<?php echo e($quote_data[0]['quote_id']); ?>" class="finish_job_quotes">Job Completed</a>
+                  <?php else: ?>
+                    <a href="<?php echo e(url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id'])); ?>" data-quoteid="<?php echo e($quote_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+                  <?php endif; ?>
                 <?php endif; ?>
               
-              <?php else: ?>
-              <a href="<?php echo e(url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id'])); ?>" data-quoteid="<?php echo e($quote_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+              
               <?php endif; ?>
               
             </div>

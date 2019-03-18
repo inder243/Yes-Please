@@ -96,7 +96,7 @@ $(document).ready(function(){
     var id= $(this).attr('data-id');
     var sending_url=$("#hidden_url").val();
  
-    if (confirm("Are you sure to deactivate this category and it's sub categories?")) {
+    if (confirm("Are you sure to delete this category?")) {
         $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -348,3 +348,15 @@ function openImage(data)
     
      $('#showUserImageGallery').modal('show');
 }
+
+
+//validate add parent category
+$('.parent_cat_button').click(function(e){
+    e.preventDefault();
+   if($.trim($('.parent_cat_name').val()==''))
+   {
+      $('#openPopUpSuperCategory .modal-body').prepend('<span class="help-block" style="color:red" id="help-block">Please fill the fields</span>');
+        return false;
+   }
+
+});

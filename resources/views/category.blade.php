@@ -60,7 +60,7 @@
 
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="250" value="{{ old('category') }}" required>
+                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="{{ old('category') }}" required>
                                             @if (Session::has('success_message'))
                                             <span class="help-block succ-admin forhide">{{ Session::get('success_message') }}</span>
                                             @endif
@@ -97,6 +97,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                     @if(!empty($category) && count($category)>0)
                                     <?php $count=1; ?>
                                     @foreach($category as $cat)
 
@@ -114,6 +115,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -143,7 +153,7 @@
                         
                           <div class="row form-group">
                                 <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="250"  required>
+                                <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="30"  required>
                                     <span class="help-block" id="help-block"></span>
                                 </div>
                             </div>
@@ -172,9 +182,9 @@
                     <div class="row form-group">
                          {{csrf_field()}}
                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Name</label></div>
-                        <div class="col-12 col-md-9"><input type="text" required name="superCategory"></div>
+                        <div class="col-12 col-md-9"><input type="text" class="parent_cat_name" required name="superCategory" maxlength="30"></div>
                     </div>
-                    <input type="submit" class="btn btn-info" value="Submit">
+                    <input type="submit" class="btn btn-info parent_cat_button" value="Submit" >
                 </form>
               </div>
               <div class="modal-footer">

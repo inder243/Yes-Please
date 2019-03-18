@@ -65,7 +65,14 @@ input:-webkit-autofill {
 *:hover {
 	outline: 0 none;
 }
-
+select:focus {
+    color: transparent !important;
+    text-shadow: 0px 0px #313438 !important;
+}
+option {
+  color: #313438 !important; /* prevent <option>s from becoming transparent as well */
+	text-shadow: none !important;
+}
 a:focus {
 	outline: none;
 }
@@ -658,7 +665,13 @@ header {
 	display: none;
 	margin: 0 auto;
 }
-
+.cat_text {
+    width: 80px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .cat_more a {
 	background-color: rgb(255, 255, 255);
 	box-shadow: 0px 1px 10.62px 7.38px rgba(0, 0, 0, 0.06);
@@ -1035,7 +1048,15 @@ header {
 	width: 10px;
 }
 
-
+.js-cookie-consent-agree.cookie-consent__agree {
+    background-color: #ed0c6e;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    display: inline-block;
+    padding: 3px 7px 3px 7px;
+    border-radius: 3px;
+}
 /*********************************** General_user_footer *********************************/
 
 .general_user_logo {
@@ -1197,11 +1218,14 @@ header {
 	width: 125px;
 	display: inline-block;
 	border-radius: 5px;
-	padding: 10px 0 10px 0;
+	padding:0;
 	text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
 	-webkit-text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
 	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
 	-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+.login_btn a {
+    padding: 8px 0 8px 0;
 }
 
 .login_btn a:hover {
@@ -1280,7 +1304,10 @@ header {
 .register_breadcrumb {
 	background-color: transparent;
 	margin: 0 0 0 0;
-	padding: 30px;
+	padding: 15px 30px;
+}
+.quote_question .active {
+    background-color: transparent !important;
 }
 
 .registration_main {
@@ -1477,7 +1504,7 @@ header {
 	border: none;
 	background-color: transparent;
 	left: -2px;
-	top: -1px;
+	top: -2px;
 	border-radius: 3px !important;
 }
 
@@ -1625,6 +1652,9 @@ header {
 
 
 /*********************************** category page start *********************************/
+#autocomplete {
+    padding-right: 35px;
+}
 .ignore_p_section .col-lg-6.col-12:only-child {
     margin-left: 25%;
 }
@@ -2697,9 +2727,12 @@ header {
 }
 
 .D_main {
-	padding: 30px;
+	padding: 0px 30px;
 }
 
+.gen_quote_img {
+    width: 100%;
+}
 .D_main h1 {
 	font-size: 18px;
 	text-align: center;
@@ -3087,9 +3120,19 @@ color: #1b2137;
 	width: 120px;
 	display: inline-block;
 	text-align: center;
-	padding: 7px 0 7px 0;
+	padding: 0;
 	border-radius: 5px;
 	transition: .5s all;
+}
+.search_btn input{
+    background-color: #ed0c6e;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 0;
+		border-radius: 3px;
 }
 
 .search_btn a:hover {
@@ -3099,8 +3142,8 @@ color: #1b2137;
 
 .quote_section {
 	background-color: rgb(255, 255, 255);
-	box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
-	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+	/* box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12); */
 	margin-bottom: 15px;
 	border-radius: 10px;
 	position: relative;
@@ -3152,6 +3195,7 @@ color: #1b2137;
 .Q_description p {
 	font-size: 14px;
 	color: #333333 !important;
+	word-break: break-all;
 }
 
 .new_lable {
@@ -3795,12 +3839,20 @@ margin-bottom: 25px;
     color: #fff;
 		width: 125px;
     display: inline-block;
-    padding: 5px 0 5px 0;
+    padding: 0px;
     border-radius: 3px;
     font-size: 14px;
 		margin-left: 20px;
 		box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
 		-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+.submit_reviewr input {
+    padding: 5px 0;
+    width: 100%;
+    border-radius: 3px;
+}
+#dynamic_mobile_phone:focus {
+    box-shadow: none;
 }
 .review_later {
     margin-top: 15px;
@@ -4356,6 +4408,24 @@ margin-bottom: 10px;
 }
 
 @media (max-width: 767px) {
+	.cat_text {
+    width: 45px;
+
+}
+		.second_header_logo{
+			display:none;
+		}
+	input {
+
+    font-size: 16px !important;
+
+}
+	#drag_div {
+    display: none;
+}
+.upload_file_section span{
+	display:none !important;
+}
 	.ignore_p_section .col-lg-6.col-12:only-child {
     margin-left: 0%;
 }
@@ -5004,6 +5074,7 @@ margin-bottom: 10px;
 }
 }
 @media (max-width: 575px) {
+
 	.D_main {
 		padding: 10px;
 	}

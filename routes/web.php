@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', 'FrontController@index')->name('home');
-Route::get('/category-classifcation/{id}', 'FrontController@getCategories')->name('home');
+Route::get('/', 'FrontController@index')->name('front');
+Route::get('/category-classifcation/{id}', 'FrontController@getCategories')->name('cat-home');
 Route::post('more-catogries', 'FrontController@moreCatogries')->name('more-cateogries');
 Route::post('more-super-catogries', 'FrontController@moreSuperCatogries')->name('more-cateogries');
 
@@ -139,6 +139,14 @@ Route::prefix('business_user')->group(function() {
     Route::post('/remove_businessuser_category', 'business_user\BusinessUserController@removeBusinessUserCategory');
     Route::post('/categorysearch/{id}', 'business_user\BusinessUserController@category_search');
     Route::post('/removeprofileimg', 'business_user\BusinessUserController@removeProfileImages')->name('business_user.remove');
+    //add categories
+    Route::post('/add_business_user_category_auth', 'business_user\BusinessUserController@addBusinessUserCategory');
+    //Remove categories
+    Route::post('/remove_business_user_category_auth', 'business_user\BusinessUserController@removeBusinessUserCategory');
+    /* get forms data on register screen using category id*/
+    Route::post('/get_forms_data_auth/{id}', 'business_user\BusinessUserController@getFormsData')->name('business_user.getFormsData');
+    //Adding services from categories
+    Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
     /**********Quotes and Questions*********/
     Route::get('/quotes_questions/{status?}/{keyword?}',
@@ -164,7 +172,7 @@ Route::prefix('general_user')->group(function() {
    Route::get('logout/', 'Auth\GeneralUserLoginController@logout')->name('general_user.logout');
    Route::get('/user/{id?}', 'Auth\GeneralUserLoginController@beforeLogin')->name('general_user.beforelogin');
    Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
-    Route::get('/dashboard/catid/{catid}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
+    Route::get('/dashboard/catid/{catid}/{location?}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
    // Route::post('/dashboard/catid/{catid}', 'general_user\GeneralUserController@categoryBusiness')->name('user.dashboardabc');
     Route::get('/register', 'Auth\RegisterGeneralUserController@showUserRegisterForm')->name('general_user.register');
     Route::post('/register', 'Auth\RegisterGeneralUserController@create')->name('general_user.register.submit');
@@ -187,7 +195,9 @@ Route::prefix('general_user')->group(function() {
     Route::get('/quote_questions/{status?}/{keyword?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
     Route::get('/quotesrply/{quote_id}', 'general_user\GeneralQuotesController@quoteReplies');
     Route::get('/quoteaccepted/{quote_id}', 'general_user\GeneralQuotesController@quoteAccepted');
+    Route::get('/quotecompleted/{quote_id}', 'general_user\GeneralQuotesController@quoteCompleted');
     Route::get('/quotesrequest/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showQuoteRequest');
+    Route::get('/quotesreqcompleted/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showQuoteRequestCompleted');
     Route::post('/quote_accept', 'general_user\GeneralQuotesController@quoteRequestAccept');
     Route::post('/quote_ignore', 'general_user\GeneralQuotesController@quoteRequestIgnore');
     Route::get('/user_quotereviews/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showUserQuotesReview')->name('general_user.quote_review');

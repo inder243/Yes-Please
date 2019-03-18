@@ -95,6 +95,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                    <?php if(!empty($subcategory) && count($subcategory)>0): ?>
                                     <?php $count=1; ?>
                                     <?php $__currentLoopData = $subcategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
@@ -109,6 +110,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

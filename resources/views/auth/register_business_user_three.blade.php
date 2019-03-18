@@ -34,27 +34,31 @@
                           <input type="text" placeholder="Search..." class="category_search"/>
                         </div>
                         <ul>
+                          <?php 
+                            // echo '<pre>'; print_r($categories); echo '</pre>';die;
+                            // echo '<pre>'; print_r($business_categories); echo '</pre>';die;
+                            if(!empty($business_categories)){
+                              foreach($business_categories AS $cat){
+                                $bids[] = $cat['id'];
+                              }
+                            }else{
+                              $bids = array();
+                            }
+                          ?>
 
                           @foreach($categories as $key=>$value)
 
-                          <li><a href="javascript:;" inc_id="{{$value['id']}}" id="{{$value['category_id']}}" data-cat="sub" onclick="categoriesselect(this)">{{$value['category_name']}}</a><span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span></li>
+                          <li><a href="javascript:;" inc_id="{{$value['id']}}" id="{{$value['category_id']}}" data-cat="sub" onclick="categoriesselect(this)">{{$value['category_name']}}</a>
+
+                          @if(in_array($value['id'],$bids))
+                              <span class="checked_category" style="display: block;"><img src="{{ asset('img/category_check.png') }}"/></span>
+                          @else
+                            <span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span>
+                          </li>
+                          @endif
 
                           @endforeach
 
-                          <!-- @foreach($categories as $key=>$value)
-                          <li><a href="javascript:;" id="{{$value['category_id']}}" data-id="{{$value['id']}}" onclick="categoriesselect(this)" data-cat="parent" class="categories">{{$value['category_name']}}</a>
-                          @if(!empty($value['sub_category']))  
-                            <ul class="subcategories">
-                              @foreach($value['sub_category'] as $key1=>$value1)
-                              <li><a href="javascript:;" id="{{$value1['sub_category_id']}}" data-cat="sub" onclick="categoriesselect(this)">{{$value1['sub_category_name']}}</a><span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span></li>
-                              @endforeach
-                            </ul>
-                          @else
-                          <span class="checked_category_active"><img src="{{ asset('img/category_check.png') }}"/></span>
-                          @endif
-                          </li>
-                          @endforeach -->
-                          
                         </ul>
                       </div>
                     </div>

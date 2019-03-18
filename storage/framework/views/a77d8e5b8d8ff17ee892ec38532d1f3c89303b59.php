@@ -81,9 +81,9 @@
                     <li <?php if($segment=="category")  { ?> class="active" <?php } ?>>
                         <a href="<?php echo e(url('/admin/category')); ?>"><i class="menu-icon fa fa-laptop"></i>Category</a>
                     </li>
-                    <li <?php if($segment=="sub_category")  { ?> class="active" <?php } ?>>
+                    <!-- <li <?php if($segment=="sub_category")  { ?> class="active" <?php } ?>>
                         <a href="<?php echo e(url('/admin/sub_category')); ?>"><i class="menu-icon fa fa-laptop"></i>Sub category</a>
-                    </li>
+                    </li> -->
                     <li <?php if($segment=="hashtag")  { ?> class="active" <?php } ?>>
                         <a href="<?php echo e(url('/admin/hashtag')); ?>"><i class="menu-icon fa fa-laptop"></i>Hashtag</a>
                     </li>
@@ -170,6 +170,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
     <script src="<?php echo e(url('/admin_data/assets/js/form.js')); ?>"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="<?php echo e(url('/admin_data/assets/css/form.css')); ?>" rel="stylesheet" />
     <!--Local Stuff-->
     <script>

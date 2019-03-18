@@ -1,5 +1,16 @@
 $(document).ready(function(){
 
+  $('.select_gen_quote_img').change(function(e){
+    e.preventDefault();
+    alert('hm');
+    var images = e.target.files;
+    $('.genrl_quote_imgs').text('');
+    $.each( images, function( key, value ) {
+        $('.genrl_quote_imgs').append(value.name+', ');
+    });
+
+  });
+
 	/*****code for search in quote page******/
 	$('#search_quotes').submit(function(e){
 		e.preventDefault();
@@ -296,6 +307,8 @@ function remove_errmsg(data){
       $(data).removeClass('error_border');
     }
   }else if(current_id == "dynamic_description"){
+    $('#ask_quote').find('.static_ques_2 p').text('');
+    $('#ask_quote').find('.static_ques_2 p').text('('+(value_field).length+'/2000 letters minimum 100)');
     if(value_field == ""){
       $(data).next('.fill_fields').css('display','block');
       $(data).addClass('error_border');
@@ -359,3 +372,13 @@ function remove_errmsg(data){
   }
 
 }
+
+
+/****fn to open big images on quote pages***/
+function openBigImageUser(data){
+    $('#showBigImageModalUser').find('.modal-body').find('img').attr('src','');
+    $('#showBigImageModalUser').find('.modal-body').find('img').attr('src',$(data).attr('data-image'));
+    
+    $('#showBigImageModalUser').modal('show');
+}
+/****fn ends to open big images on quote pages***/

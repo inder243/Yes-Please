@@ -2,10 +2,10 @@
 
  <section class="register_step_1">
         <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-          <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+          <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
           <div class="for_accepted_quote">
             <div class="finish_quote">
-                <?php if(!empty($all_data[0]['get_reviews'])): ?>
+                <!-- <?php if(!empty($all_data[0]['get_reviews'])): ?>
                   <?php if(array_search('general', array_column($all_data[0]['get_reviews'], 'user_type')) > -1): ?>
                   <a href="<?php echo e(url('/general_user/quote_questions')); ?>" data-quoteid="<?php echo e($all_data[0]['quote_id']); ?>" class="finish_job_quotes">This job has been finished</a>
                   <?php else: ?>
@@ -13,7 +13,7 @@
                   <?php endif; ?>
                 <?php else: ?>
                 <a href="<?php echo e(url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id'])); ?>" data-quoteid="<?php echo e($all_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
-                <?php endif; ?>
+                <?php endif; ?> -->
               
             </div>
             <div class="cancel_quote"><a href="<?php echo e(url('general_user/quote_questions')); ?>">Cancel</a></div>
@@ -144,7 +144,7 @@
                             <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_<?php echo e($img_name[0]); ?>">
+                              <div class="uploaded_img" data-image="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;">
                                  <img src="<?php echo e(url('/images/general_quotes/'.$general_id.'/'.$img)); ?>"/>
                               </div>
                            </div>
@@ -162,7 +162,7 @@
             </div>
             <div class="some_btns_for_mobile">
               <div class="cancel_quote cancel_for_mobile"><a href="javascript:;">Cancel</a></div>
-              <div class="finish_quote finish_for_mobile"><a href="javascript:;">Finish</a></div>
+             <!--  <div class="finish_quote finish_for_mobile"><a href="javascript:;">Finish</a></div> -->
             </div>
             <div class="list_quotes">
             <h1>Quotes</h1>

@@ -319,6 +319,17 @@ class BusinessQuotesController extends Controller
         $quoteReview->user_type      = $_POST['review_type'];
         $quoteReview->save();
 
+        /*****code to update status of the quote after review****/
+        $QuoteStatus = YpBusinessUsersQuotes::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id']])->first();
+
+        if(!empty($QuoteStatus)){
+            $QuoteStatus = $QuoteStatus;
+
+            $QuoteStatus->status   = 6;
+            $QuoteStatus->save();
+        }
+        
+
        // return redirect()->intended('business_user/quotes_questions');
         return redirect('business_user/quotes_questions');
 

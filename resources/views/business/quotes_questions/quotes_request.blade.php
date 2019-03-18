@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -151,7 +151,7 @@
                             @foreach($uploads['pic'] as $img)
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_{{$img_name[0]}}">
+                              <div class="uploaded_img" data-image="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;">
                                  <img src="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}"/>
                               </div>
                            </div>
@@ -191,10 +191,7 @@
                         <label for="inputPassword4">Price type</label>
                         <select class="form-control" id="exampleSelect1" name="quote_price_type">
                            <option value="1">Fix price</option>
-                           <option value="2">2</option>
-                           <option value="3">3</option>
-                           <option value="4">4</option>
-                           <option value="5">5</option>
+                           <option value="2">Hourly</option>
                         </select>
                         <span class="select_arrow"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
                      </div>
@@ -238,9 +235,9 @@
                         <div class="file_to_upload">
                            <div class="upload-btn-wrapper">
                               <button class="btn">Select files to upload</button>
-                              <input type="file" name="myfile[]" multiple class="select_verify_img" accept="image/x-png,image/gif,image/jpeg"/>
+                              <input type="file" name="myfile[]" multiple class="select_quote_rply_img" accept="image/x-png,image/gif,image/jpeg"/>
 
-                				<span id="msg"></span>
+                				      <span id="msg" class="BusQuoteRply"></span>
                            </div>
                            <div class="choose_from_pre">
                               <a href="javascript:;">Choose from previous</a>

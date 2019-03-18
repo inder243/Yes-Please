@@ -17,7 +17,7 @@
               <li><span class="activespan">7</span></li>
             </ul>
           </div>
-          <form method="POST" action="" id="register_schedule" action="<?php echo e(url('/business_user/register_seven/'.$id)); ?>">
+          <form method="POST" id="register_schedule" action="<?php echo e(url('/business_user/register_seven/'.$id)); ?>">
           <?php echo csrf_field(); ?>
           <div class="registration_filed">
                     <h1>Schedule</h1>

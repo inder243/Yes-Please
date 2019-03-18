@@ -1,3 +1,12 @@
+//this function will work if there are no dynamic questions added
+function getOnlyStaticQuestions()
+{
+	$('.buttonForOnlyStaticQues').hide();
+	$('.dynmic_quoteform .static_ques_1').show();
+	$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id','buttonForOnlyStaticQues');
+}
+
+
 //event will be called each time next button is clicked
 	function getNextQuesButton(){
 
@@ -372,6 +381,7 @@
 
 				var alloptions = [];
 				var field = {};
+				field['title'] = title;
 				field['q_id'] = q_id;
 				field['options'] = {};
 				field['filter'] = filter;
@@ -397,6 +407,7 @@
 				//required = 'true';
 				var field = {};
 				field['q_id'] = q_id;
+				field['title'] = title;
 				field['filter'] = filter;
 				field['value'] = $.trim($(this).find(":selected").val());
 				field['label'] = $.trim($(this).find(":selected").text());
@@ -478,7 +489,7 @@
 			//console.log(data);
 		
 
-      	if(fields.length >0 && phone!='' && desc!='' && quotecount!='')
+      	if( phone!='' && desc!='' && quotecount!='')
       	{
       		jQuery('.pre_loader').css('display','block');
       		$.ajaxSetup({
@@ -505,11 +516,22 @@
 			    	$('.dynmic_quoteform .static_ques').hide();
 			    	$('.dynmic_quoteform .final_ques_thanks').show();
 				}
+				else if(response.success==2)
+				{
+					jQuery('.pre_loader').css('display','none');
+					$('.dynmic_quoteform .form-ques').hide();
+			    	$('.dynmic_quoteform .static_ques').hide();
+			    	$('.dynmic_quoteform .final_ques_thanks').find('h1').text(response.message);
+			    	$('.dynmic_quoteform .final_ques_thanks').show();
+			    	$('.dynmic_quoteform .final_ques_thanks').find('.ph_detail').css('display','none');
+			    	
+				}
 				else
 				{
 					jQuery('.pre_loader').css('display','none');
 					alert(response.message);
 				}
+
 	          }
 	        })
       	}
@@ -520,12 +542,23 @@
     function getStaticQuestion(ele)
     {
     	
-    	var toShowQues = $(ele).attr('data_nxt_id');
+		var toShowQues = $(ele).attr('data_nxt_id');
+
+		if(toShowQues=="buttonForOnlyStaticQues")
+		{
+			$('.dynmic_quoteform .form-ques').hide();
+			$('.dynmic_quoteform .static_ques').hide();
+			$('.dynmic_quoteform .buttonForOnlyStaticQues').show();
+		}
+		else
+		{
+			$('.dynmic_quoteform .form-ques').hide();
+			$('.dynmic_quoteform .static_ques').hide();
+			$('.dynmic_quoteform .'+toShowQues).show();
     	
-    	//$('.dynmic_quoteform .static_ques_1').show();
-    	$('.dynmic_quoteform .form-ques').hide();
-    	$('.dynmic_quoteform .static_ques').hide();
-    	$('.dynmic_quoteform .'+toShowQues).show();
+		}
+		
+		
     	
     	
     }
@@ -536,6 +569,7 @@
     	var current_btn_id = $(ele).attr('id');
 
     	var data_nxt_id = $(ele).attr('data_nxt_id');
+
     	quotesSelected ='';
 
     	if(data_nxt_id == 'static_ques_2'){
@@ -557,13 +591,16 @@
     	}
 
     	if(data_nxt_id == 'static_ques_3'){
+    		
     		/****check data****/
 			var text_desc1 = $('.describe_work').find('.work_description_modal').val();
 			if(text_desc1 == ''){
+				
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Please add description');
 				return false;
 			}else if((text_desc1).length < 100 || (text_desc1).length > 2000){
+				
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
 				return false;

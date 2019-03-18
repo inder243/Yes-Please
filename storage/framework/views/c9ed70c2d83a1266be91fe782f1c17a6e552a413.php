@@ -47,7 +47,7 @@
 
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Hashtag</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="hashtag" placeholder="Enter hashtag..." class="form-control" maxlength="250" value="<?php echo e(old('hashtag')); ?>" required>
+                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="hashtag" placeholder="Enter hashtag..." class="form-control" maxlength="30" value="<?php echo e(old('hashtag')); ?>" required>
                                             <?php if(Session::has('success_message')): ?>
                                             <span class="help-block succ-admin forhide"><?php echo e(Session::get('success_message')); ?></span>
                                             <?php endif; ?>
@@ -83,6 +83,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                     <?php if(!empty($hashtag) && count($hashtag)>0): ?>
                                     <?php $count=1; ?>
                                     <?php $__currentLoopData = $hashtag; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hash): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
@@ -96,6 +97,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

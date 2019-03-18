@@ -228,3 +228,12 @@ function delete_template(data){
     });/*****ajax ends here*****/
 }
 /******fn ends to delete template******/
+
+/****fn to open big images on quote pages***/
+function openBigImage(data){
+    $('#showBigImageModalBusiness').find('.modal-body').find('img').attr('src','');
+    $('#showBigImageModalBusiness').find('.modal-body').find('img').attr('src',$(data).attr('data-image'));
+    
+    $('#showBigImageModalBusiness').modal('show');
+}
+/****fn ends to open big images on quote pages***/

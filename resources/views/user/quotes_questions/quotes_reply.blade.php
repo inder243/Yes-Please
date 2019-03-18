@@ -4,7 +4,7 @@
 
   <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="JavaScript:;">Home</a>/<a href="JavaScript:;"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+           <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
          <div class="cancel_quote"><a href="{{ url('general_user/quote_questions') }}">Cancel</a></div>
          </div>
       </section>
@@ -135,7 +135,7 @@
                             @foreach($uploads['pic'] as $img)
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_{{$img_name[0]}}">
+                              <div class="uploaded_img" data-image="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;">
                                  <img src="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}"/>
                               </div>
                            </div>

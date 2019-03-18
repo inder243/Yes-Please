@@ -19,13 +19,13 @@
 
                                             <button class="btn btn-block btn-light mb-3" onclick="addNewField(2)" type="button">Text Area</button>
 
-                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(6)" type="button">Number</button>
+                                            <!-- <button class="btn btn-block btn-light mb-3" onclick="addNewField(6)" type="button">Number</button>
 
 
                                             <button class="btn btn-block btn-light mb-3" onclick="addNewField(3)" type="button">Datepicker</button>
 
 
-                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(4)" type="button">Timepicker</button>
+                                            <button class="btn btn-block btn-light mb-3" onclick="addNewField(4)" type="button">Timepicker</button> -->
 
                                              <button class="btn btn-block btn-light mb-3" onclick="addNewField(5)" type="button">Radio Select</button>
                                             

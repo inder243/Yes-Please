@@ -1,7 +1,15 @@
 
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
+    <?php 
+      if(Auth::guard('business_user')->check()){
+        $url = URL::to('/').'/business_user/business_dashboard';      
+      }
+      else{
+        $url = URL::to('/');
+      }
+    ?>
+    <div class="breadcrumb_header"><a href="<?=$url;?>">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
     <div class="share_fb">
       <a href="javascript:;">
       <img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
@@ -22,13 +30,13 @@
                     <div class="row filter_this">
                     <div class="form-group col-md-3 col-12">
                       <label for="inputPassword4">Location</label>
-                      <!-- <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="@if(!empty($address)) {{$address}} @endif" required=""> -->
-                      <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required="">
+                      <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="@if(!empty($address)) {{$address}} @endif" required="">
+                      <!-- <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required=""> -->
                       <span class="input_icons"><img src="{{ asset('img/location.png') }}"/></span>
                     </div>
                     <div class="form-group custom_errow col-md-3 col-12">
                       <label for="inputPassword4">Radius (km)</label>
-                      <select class="form-control general_radius" id="exampleSelect1">
+                      <select class="form-control" id="dashboard_radious_general">
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
@@ -603,7 +611,9 @@
                 </div>
               </div>
 
-              <div class="category_second_sec">
+              <div class="category_second_sec user_dashbord_cat">
+                <input type="hidden" class="hidden_default_longitude" value="@if(isset($longitude)){{ $longitude}}@endif">
+                <input type="hidden" class="hidden_default_latitude" value="@if(isset($latitude)){{ $latitude}}@endif">
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
@@ -615,6 +625,7 @@
                                 <input type="hidden" class="hidden_longitude" value="{{ $allbus->logitude}}">
                                 <input type="hidden" class="hidden_latitude" value="{{ $allbus->latitude}}">
                                 <input type="hidden" class="hidden_address" value="{{ $allbus->full_address}}">
+                                <input type="hidden" class="hidden_buname" value="{{ $allbus->business_name}}">
                               <div class="business_sec">
                                  <div class="b-detail">
                                     <span class="business_img">
@@ -648,14 +659,14 @@
                               <p class="des">{{ $allbus->full_address}}</p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                  @php $new_num = number_format($allbus->distance, 2, '.', ''); @endphp
+                                  @php $new_num = number_format($allbus->distance, 1, '.', ''); @endphp
                                     <a href="javascript:;" class="distance">Distance <span>{{ $new_num}}km</span></a>
 
 
                                     @if(!empty($allbus->tot_rating))
 
                                     @php
-                                      $rating_num = number_format($allbus->tot_rating, 2, '.', '');
+                                      $rating_num = number_format($allbus->tot_rating, 1, '.', '');
 
                                     @endphp
 
@@ -670,12 +681,15 @@
                                  </div>
                                  <div class="call_chat">
                                     <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="tel:{{$allbus->phone_number}}" class="call" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $allbus->phone_number}}"><img/src="{{ asset('img/call.png') }}"/>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="{{ $allbus->phone_number}}" data-original-title="{{ $allbus->phone_number}}"><img/src="{{ asset('img/call.png') }}"/>
                                     </a>
                                  </div>
                               </div>
                            </li>    
                             @endforeach
+
+                          @else
+                          No Data Found!
                           @endif
                           
                         </ul>
@@ -1079,6 +1093,8 @@
                           </div>
                         </div>
                           @endif
+                        @else
+                        <div class="next_btn buttonForOnlyStaticQues" onclick="getOnlyStaticQuestions();"><a href="javascript:;">Please Proceed</a></div>
                         @endif
                         <div class="quote_recieve static_ques_1 static_ques" style="display:none">
                           <h1>How many quotes you want to receive?</h1>
@@ -1152,7 +1168,7 @@
                              </div>
                              <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                                <div class="ele_next" id="static_ques_descriptionn" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1165,16 +1181,16 @@
                             <div class="drag_option_main">
                               <div class="select_upload">
                                 <div class="upload_file_section">
-                                  <div class="drag_file dz-clickable" id="drag_div">
+                                  <!-- <div class="drag_file dz-clickable" id="drag_div">
                                  
                                     <a href="javascript:;">Drag and drop files here to upload</a>
                                   </div>
-                                  <span>OR</span>
-                                  <div class="file_to_upload">
+                                  <span>OR</span> -->
+                                  <div class="file_to_upload gen_quote_img">
                                     <div class="upload-btn-wrapper">
                                       <button class="btn">Select files to upload</button>
-                                        <input name="myfile[]" id="dynamic_vid_img" multiple="" class="select_verify_img" accept="image/x-png,image/gif,image/jpeg" type="file">
-                                    <span id="msg"></span>
+                                        <input name="myfile[]" id="dynamic_vid_img" multiple="" class="select_gen_quote_img" accept="image/x-png,image/gif,image/jpeg" type="file">
+                                    <span id="msg" class="genrl_quote_imgs"></span>
                                     </div>
                                   </div>
                                 </div>
@@ -1182,7 +1198,7 @@
                             </div>
                             <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_2" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Next &gt;</a></div>
+                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Skip &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1230,3 +1246,8 @@
       
 
 
+<script type="text/javascript">
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>

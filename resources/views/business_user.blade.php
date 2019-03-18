@@ -53,6 +53,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                     @if(!empty($business_user) && count($business_user)>0)
                                     <?php $count=1; ?>
                                     @foreach($business_user as $user)
 
@@ -67,6 +68,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

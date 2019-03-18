@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<a href="JavaScript:;"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
       </section>
         <section>
           <div class="quote_req_main">
@@ -12,10 +12,20 @@
               <h1>Quote accepted by user</h1>
               @elseif($quote_data[0]['status'] == '3')
               <h1>Quote quoted by user</h1>
+              @elseif($quote_data[0]['status'] == '6')
+              <h1>Quote Completed</h1>
               @endif
             @endif
-              
-            <div class="improvement_section_new accepted-quote">
+            
+            @if(isset($quote_data[0]['status']))
+              @if($quote_data[0]['status'] == '4')
+              <div class="improvement_section_new accepted-quote">
+              @elseif($quote_data[0]['status'] == '3')
+              <div class="improvement_section_new new_quote q_quoted">
+              @elseif($quote_data[0]['status'] == '6')
+              <div class="improvement_section_new new_quote">
+              @endif
+            @endif  
               <div class="user_profile_sec">
                 @if(isset($quote_data))
                   <?php $image = $quote_data[0]['get_gen_user']['image_url'];
@@ -119,6 +129,8 @@
                     <div class="new_lable q_accepted_table">ACCEPTED</div>
                     @elseif($quote_data[0]['status'] == '3')
                     <div class="new_lable q_quoted_table">QUOTED</div>
+                    @elseif($quote_data[0]['status'] == '6')
+                    <div class="new_lable">COMPLETED</div>
                     @endif
                   @endif
                     <?php $datetime = $allquotes['created_at'];
@@ -151,7 +163,7 @@
                             @foreach($uploads['pic'] as $img)
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" id="img_{{$img_name[0]}}">
+                              <div class="uploaded_img" data-image="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;">
                                  <img src="{{url('/images/general_quotes/'.$general_id.'/'.$img)}}"/>
                               </div>
                            </div>
@@ -186,7 +198,7 @@
                         @if(!empty($uploads))
                           @foreach($uploads['pic'] as $img)
                           <?php $img_name = explode( '.', $img );?>
-                          <div class="swiper-slide total_pics_img" id="img_{{$img_name[0]}}"><img src="{{url('/images/quotes_request/'.$business_userid.'/'.$img)}}"/></div>
+                          <div class="swiper-slide total_pics_img" data-image="{{url('/images/quotes_request/'.$business_userid.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;"><img src="{{url('/images/quotes_request/'.$business_userid.'/'.$img)}}"/></div>
                           @endforeach
                           
                         @endif
@@ -206,14 +218,15 @@
             
                 
               @if(!empty($quote_data[0]['get_review']))
-                @if(array_search('business', array_column($quote_data[0]['get_review'], 'user_type')) > -1)
-                  <a href="{{ url('/business_user/quotes_questions') }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">This job has been finished</a>
-                @else
-                  <a href="{{ url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+                @if(array_search('general', array_column($quote_data[0]['get_review'], 'user_type')) > -1)
+                  @if(array_search('business', array_column($quote_data[0]['get_review'], 'user_type')) > -1)
+                    <a href="{{ url('/business_user/quotes_questions') }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Job Completed</a>
+                  @else
+                    <a href="{{ url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+                  @endif
                 @endif
               
-              @else
-              <a href="{{ url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+              
               @endif
               
             </div>

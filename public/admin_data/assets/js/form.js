@@ -604,7 +604,11 @@
 		}
 
 
-
-
-
 	});
+
+
+$( function() {
+	$('.dynamic_form').sortable({
+		connectWith: ".sortable"
+	}).disableSelection();
+} );

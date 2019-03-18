@@ -35,6 +35,8 @@
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="<?php echo e(asset('img/menu-red.png')); ?>" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
+
+                      <?php if(Auth::guard('general_user')->check()): ?>
                         <li>
                             <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
                         </li>
@@ -60,8 +62,29 @@
                             <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
+                          <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
                         </li>
+                        <?php else: ?>
+                        <li>
+                          <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="<?php echo e(asset('img/question.png')); ?>" />I'm a User</a>
+                          </li>
+                          <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="<?php echo e(asset('img/profile.png')); ?>" />I'm a Business! </a>
+                          </li>
+                          <li>
+                            <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />  About Yes, please</a>
+                          </li>
+
+                          <li>
+                            <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Contact </a>
+                          </li>
+                        <li>
+                          <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
+                        </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
 
@@ -191,6 +214,130 @@
           <div class="general_user_fb_icon"><a href="javascript:;"><img src="<?php echo e(asset('img/general_user_footer_facebook.png')); ?>"/></a></div>
         </div>
     </section>
+
+    <!-------- Login Modal for business user------->
+ <div class="modal fade" id="login_business" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Sign in</h1>
+                    <div class="login_section">
+                      <div class="login_with_social">
+                        <a href="javascript:;" class="fblogin"><img src="<?php echo e(asset('img/icon_F.png')); ?>" class="img-fluid"/> Login with <b>Facebook</b></a>
+                        <a href="javascript:;" class="googlelogin"><img src="<?php echo e(asset('img/google_plus.png')); ?>" class="img-fluid"/> Login with <b>Google+</b></a>
+                      </div>
+                      <div class="login_fields">
+                         <form id="sign_in_business" method="POST" action="">
+                            <?php echo e(csrf_field()); ?>
+
+                            <span class="fill_fields bu_error" role="alert" style="display:none;">
+                              </span> 
+                            <input type="hidden" class="action_business" value="<?php echo e(route('business_user.login.submit')); ?>">
+                              <input type="hidden" class="website_url_b" value="<?php echo e(url('')); ?>">
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control email_bu" name="email" placeholder="Email Address" value="<?php echo e(old('email')); ?>" required autofocus>
+                              <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                              </span>
+                            </div>
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control password_bu" name="password" placeholder="Password">
+                              <span class="fill_fields password_business_error" role="alert" style="display:none;">
+                            </div>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
+                            <div class="login_btn"><a><input type="submit" value="Login"></a></div>
+                            <div class="register_page"><a href="<?php echo e(route('business_user.register')); ?>">Register</a></div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<!-------- Login Modal end ----->
+
+<!-- Forgot Password Popup --> 
+    <div class="modal fade" id="business_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        <?php echo e(csrf_field()); ?>
+
+                        
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Forgot Password Popup business user--> 
+    <div class="modal fade" id="user_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        <?php echo e(csrf_field()); ?>                       
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none; width:100%;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ask quote Modal -->
           <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -450,226 +597,342 @@
     </div>
     <!-------- Login Modal end ----->
 
+    <!---modal to open big image --->
+    <div class="modal fade" id="showBigImageModalUser" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                         
+                     </div>
+                    
+                    <div class="modal-body">
+                     <img style="width:100%" src=""/>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>  
+    <!---modal to open big image endshere --->
+
 
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="<?php echo e(URL::asset('js/swiper.js')); ?>" type="text/javascript"></script>
 
    <!--  <script type="text/javascript" src="<?php echo e(URL::asset('js/wow.min.js')); ?>"></script> -->
     <script type="text/javascript" src="<?php echo e(URL::asset('js/dropzone.min.js')); ?>"></script>
+    <?php if(Auth::guard('general_user')->check()): ?>
+
+    <?php else: ?>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business_user.js')); ?>"></script>
+    <?php endif; ?>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/general_user.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/general_quotes.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/formbuilder.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ" 
-          type="text/javascript"></script> -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ"></script>
-
+    
     <!-----autocomplete address----->
-    <!-- <script>
-  // This example displays an address form, using the autocomplete feature
-  // of the Google Places API to help users fill in the information.
+    <script>
+    var placeSearch, autocomplete;
+    var componentForm = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      administrative_area_level_1: 'short_name',
+      country: 'long_name',
+      postal_code: 'short_name'
+    };
 
-  // This example requires the Places library. Include the libraries=places
-  // parameter when you first load the API. For example:
-  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+    function initAutocomplete_dash() {
+      // Create the autocomplete object, restricting the search to geographical
+      // location types.
+      autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
 
-  var placeSearch, autocomplete;
-  var componentForm = {
-    street_number: 'short_name',
-    route: 'long_name',
-    locality: 'long_name',
-    administrative_area_level_1: 'short_name',
-    country: 'long_name',
-    postal_code: 'short_name'
-  };
+      
 
-  function initAutocomplete_dash() {
-    // Create the autocomplete object, restricting the search to geographical
-    // location types.
-    autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
+      // When the user selects an address from the dropdown, populate the address
+      // fields in the form.
+      autocomplete.addListener('place_changed', fillInAddress_hash);
 
-    // When the user selects an address from the dropdown, populate the address
-    // fields in the form.
-    autocomplete.addListener('place_changed', fillInAddress_hash);
+    }
 
-  }
+    function fillInAddress_hash() {
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+      var address = place.formatted_address;
+     
+      //if(address == 'undefined'){
+      /*if(address == "" && typeof address == typeof undefined){
+        alert('no');
+        return false;
+      }*/
+      console.log(place.formatted_address);
+      console.log(place);
 
-  function fillInAddress_hash() {
-    // Get the place details from the autocomplete object.
-    var place = autocomplete.getPlace();
-    var address = place.formatted_address;
-    console.log(place.formatted_address);
-    console.log(place);
+      $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
 
-    $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+      var current_url = window.location.href;
+      var cat_id = current_url.substring(current_url.lastIndexOf('/') + 1);
 
-    var current_url = window.location.href;
-    var cat_id = current_url.substring(current_url.lastIndexOf('/') + 1);
+      var home_url = $('#home_url').val();
 
-    var home_url = $('#home_url').val();
+      /*****ajax starts*****/
+      $.ajax({
+        url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
+        type: 'GET',
+        data:{address:address},
+        dataType:'html',
+        success:function(response){
+        
+          $('.content').html(response);
 
-    /*****ajax starts*****/
-    $.ajax({
-      url: home_url+'general_user/dashboard/catid/'+cat_id+'/location',
-      type: 'GET',
-      data:{address:address},
-      dataType:'html',
-      success:function(response){
-        window.location.href = window.location.href + "/location";
-        alert('alert');return false;
-        $('.content').html(response);
 
-        // if(response.success == '2'){
-        //  alert('hmm');
-        // }
+          var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+          var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+          // if(response.success == '2'){
+          //  alert('hmm');
+          // }
+          
+          /******on select of business users ->change color and give limit******/
+          var listItems = $(".all_bus_by_cat li");
 
-        /******on select of business users ->change color and give limit******/
-        var listItems = $(".all_bus_by_cat li");
+          listItems.each(function(idx, li) {
+              var product = $(li);
 
-        listItems.each(function(idx, li) {
-            var product = $(li);
+              $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                
+                  if($(this).is(':checked')){
+                      $(li).addClass('border_color');
+                  } else{
+                      $(li).removeClass('border_color');
+                  }
 
-            $(li).find('.select_this').find('#hmm_'+idx).click(function() {
-              
-                if($(this).is(':checked')){
-                    $(li).addClass('border_color');
-                } else{
-                    $(li).removeClass('border_color');
+                  var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                if(countCheckedCheckboxes > 5){
+                  alert('You can not select more than 5 business !');
+                  $(li).removeClass('border_color');
+                  return false;
                 }
+              });
 
-                var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
-              if(countCheckedCheckboxes > 5){
-                alert('You can not select more than 5 business !');
-                $(li).removeClass('border_color');
-                return false;
-              }
+              // and the rest of your code
+          });/*****business list code ends here****/
+
+
+          /*****code to bind map with multiple long lat*****/
+          var mymap = new GMaps({
+              el: '#mapDiv',
+              lat: lati,
+              lng: longi,
+              zoom:12
             });
 
-            // and the rest of your code
-        });/*****business list code ends here****/
-
-
-        /*****code to bind map with multiple long lat*****/
-        var mymap = new GMaps({
-            el: '#mapDiv',
-            lat: current_loc_latitude,
-            lng: current_loc_longitude,
-            zoom:12
-          });
-
             $('.all_bus_by_cat li').each(function(i){
-           var longitude = $(this).find('.hidden_longitude').val();
-           var latitude = $(this).find('.hidden_latitude').val();
-           var address = $(this).find('.hidden_address').val();
-           mymap.addMarker({
-                    lat: latitude,
-                    lng: longitude,
-                    title: address,
-                    // click: function(e) {
-                    //   alert('This is '+address+'.');
-                    // }
-                  });
-        });
-        /*****code to bind map with multiple long lat*****/
+             var longitude = $(this).find('.hidden_longitude').val();
+             var latitude = $(this).find('.hidden_latitude').val();
+             var address = $(this).find('.hidden_address').val();
+             var business_name = $(this).find('.hidden_buname').val();
+             mymap.addMarker({
+                      lat: latitude,
+                      lng: longitude,
+                      title: address,
+                      click: function(e) {
+                        alert('Address : '+address+'.\n Business Name : '+ business_name);
+                      }
+                    });
+          });
+          /*****code to bind map with multiple long lat*****/
 
-        /*****more option code*****/
-        $('.more-option').on("click",function(e) {
-          e.preventDefault();
-            $('.more_options_data').toggle();
-        });
-        /*****more option code******/
+          /*****more option code*****/
+          $('.more-option').on("click",function(e) {
+            e.preventDefault();
+              $('.more_options_data').toggle();
+          });
+          /*****more option code******/
 
-        /******fn to display more items on load more*****/
-        var list = $(".all_bus_by_cat li");
-        var numToShow = 5;
-        var button = $(".load_more");
-        var numInList = list.length;
-        list.hide();
-        if (numInList > numToShow) {
-          button.show();
-        }else{
-          button.hide();
-        }
-        list.slice(0, numToShow).show();
-
-        button.click(function(){
-          var showing = list.filter(':visible').length;
-          list.slice(showing - 1, showing + numToShow).fadeIn();
-          var nowShowing = list.filter(':visible').length;
-          if (nowShowing >= numInList) {
+          /******fn to display more items on load more*****/
+          var list = $(".all_bus_by_cat li");
+          var numToShow = 5;
+          var button = $(".load_more");
+          var numInList = list.length;
+          list.hide();
+          if (numInList > numToShow) {
+            button.show();
+          }else{
             button.hide();
           }
-        });
+          list.slice(0, numToShow).show();
 
-        /******fn to display more items on load more ends*****/
-    
-      }
-    });/***ajax ends here***/
+          button.click(function(){
+            var showing = list.filter(':visible').length;
+            list.slice(showing - 1, showing + numToShow).fadeIn();
+            var nowShowing = list.filter(':visible').length;
+            if (nowShowing >= numInList) {
+              button.hide();
+            }
+          });
 
-    
-    // for (var component in componentForm) {
-    //   document.getElementById(component).value = '';
-    //   document.getElementById(component).disabled = false;
-    // }
-    
-    
+          /******fn to display more items on load more ends*****/
 
-    // // Get each component of the address from the place details
-    // // and fill the corresponding field on the form.
-    // for (var i = 0; i < place.address_components.length; i++) {
-    //   var addressType = place.address_components[i].types[0];
-    //   if (componentForm[addressType]) {
-    //     var val = place.address_components[i][componentForm[addressType]];
-    //     document.getElementById(addressType).value = val;
-    //   }
-    // }
+          /****code to filetr data with radiou***/
+          $(document).on('change','#dashboard_radious_general',function(){
+              var selected_radious = $(this).val();
+              /*****ajax starts*****/
+                $.ajax({
+                  url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
+                  type: 'GET',
+                  data:{address:address,selected_radious:selected_radious},
+                  dataType:'html',
+                  success:function(response){
+                  
+                    $('.content').html(response);
 
-    /*****ajax to load pageand send selected location*****/
 
-  }
+                    var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+                    var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+                    // if(response.success == '2'){
+                    //  alert('hmm');
+                    // }
+                    
+                    /******on select of business users ->change color and give limit******/
+                    var listItems = $(".all_bus_by_cat li");
 
-  // Bias the autocomplete object to the user's geographical location,
-  // as supplied by the browser's 'navigator.geolocation' object.
-  function geolocate_dash() {
-     var initialCall = true;
-       if(initialCall){
-        initAutocomplete_dash();
-        initialCall = false;
-        
-      }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var geolocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var circle = new google.maps.Circle({
-          center: geolocation,
-          radius: position.coords.accuracy
-        });
-        autocomplete.setBounds(circle.getBounds());
-      });
+                    listItems.each(function(idx, li) {
+                        var product = $(li);
+
+                        $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                          
+                            if($(this).is(':checked')){
+                                $(li).addClass('border_color');
+                            } else{
+                                $(li).removeClass('border_color');
+                            }
+
+                            var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                          if(countCheckedCheckboxes > 5){
+                            alert('You can not select more than 5 business !');
+                            $(li).removeClass('border_color');
+                            return false;
+                          }
+                        });
+
+                        // and the rest of your code
+                    });/*****business list code ends here****/
+
+
+                    /*****code to bind map with multiple long lat*****/
+                    var mymap = new GMaps({
+                        el: '#mapDiv',
+                        lat: lati,
+                        lng: longi,
+                        zoom:12
+                      });
+
+                      $('.all_bus_by_cat li').each(function(i){
+                       var longitude = $(this).find('.hidden_longitude').val();
+                       var latitude = $(this).find('.hidden_latitude').val();
+                       var address = $(this).find('.hidden_address').val();
+                       var business_name = $(this).find('.hidden_buname').val();
+            
+                       mymap.addMarker({
+                                lat: latitude,
+                                lng: longitude,
+                                title: address,
+                                click: function(e) {
+                                  alert('Address : '+address+'.\n Business Name : '+ business_name);
+                                }
+                              });
+                    });
+                    /*****code to bind map with multiple long lat*****/
+
+                    /*****more option code*****/
+                    $('.more-option').on("click",function(e) {
+                      e.preventDefault();
+                        $('.more_options_data').toggle();
+                    });
+                    /*****more option code******/
+
+                    /******fn to display more items on load more*****/
+                    var list = $(".all_bus_by_cat li");
+                    var numToShow = 5;
+                    var button = $(".load_more");
+                    var numInList = list.length;
+                    list.hide();
+                    if (numInList > numToShow) {
+                      button.show();
+                    }else{
+                      button.hide();
+                    }
+                    list.slice(0, numToShow).show();
+
+                    button.click(function(){
+                      var showing = list.filter(':visible').length;
+                      list.slice(showing - 1, showing + numToShow).fadeIn();
+                      var nowShowing = list.filter(':visible').length;
+                      if (nowShowing >= numInList) {
+                        button.hide();
+                      }
+                    });
+
+                    /****code to filetr data with radiou***/
+                   /* $(document).on('change','#dashboard_radious_general',function(){
+                        var selected_radious = $(this).val();
+                    });*/
+                    /****end radious code here*****/
+                
+                  }
+                });/***ajax ends here***/
+
+          });
+          /****end radious code here*****/
+      
+        }
+      });/***ajax ends here***/
+
+
     }
-  }
+
+    function geolocate_dash() {
+//alert($('.autocomplete_dash').val());
+      
+       var initialCall = true;
+         if(initialCall){
+          initAutocomplete_dash();
+          initialCall = false;
+          
+        }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var geolocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          var circle = new google.maps.Circle({
+            center: geolocation,
+            radius: position.coords.accuracy
+          });
+          autocomplete.setBounds(circle.getBounds());
+        });
+      }
+    }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ&libraries=places&callback=initAutocomplete_dash"></script> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ&libraries=places&callback=initAutocomplete_dash"></script>
     <!-----autocomplete address ends----->
 
     <script>
-         var swiper = new Swiper('.swiper-container', {
+         /*var swiper = new Swiper('.swiper-container', {
            
             slidesPerView: 4,
             spaceBetween: 30,
@@ -680,10 +943,87 @@
             navigation: {
              nextEl: '.swiper-button-next',
              prevEl: '.swiper-button-prev',
-           }
+           },
 
-        });
+           breakpoints: {
+                1199: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 5,
+                    spaceBetween: 45,
+                },
+                767: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+                420: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                320: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                }
+            }
+
+
+        });*/
       </script>
+
+      <script>
+         var swiper = new Swiper('.swiper-container', {
+           slidesPerView: 5,
+           spaceBetween: 6,
+           slidesPerGroup:5,
+           loop: true,
+           loopFillGroupWithBlank: true,
+           nextButton: '.swiper-button-next',
+           prevButton: '.swiper-button-prev',
+           pagination: {
+             el: '.swiper-pagination',
+             clickable: true,
+           },
+           navigation: {
+             nextEl: '.swiper-button-next',
+             prevEl: '.swiper-button-prev',
+           },
+           breakpoints: {
+               1199: {
+                   slidesPerView: 5,
+                   spaceBetween: 20,
+               },
+               992: {
+                   slidesPerView: 5,
+                   spaceBetween: 45,
+               },
+               767: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+
+               640: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+               420: {
+                   slidesPerView: 3,
+                   spaceBetween: 20,
+               },
+               320: {
+                   slidesPerView: 2,
+                   spaceBetween: 30,
+               }
+           }
+         });
+      </script>
+
     <script>
       $(document).ready(function(){
          
@@ -693,11 +1033,19 @@
          $('.dpicker').datepicker();
            
         });
-          /*var swiper = new Swiper('.swiper2', {
-            slidesPerView: 10,
-            spaceBetween: 6,
-            slidesPerGroup:10,
 
+          var isLoop = true;
+          if($('.swiper-slide').length < 8) {
+              isLoop = false;
+          }
+
+
+          var swiper = new Swiper('.swiper2', {
+            slidesPerView: 8,
+            spaceBetween: 10,
+            slidesPerGroup:8,
+            loop: isLoop,
+           //loopFillGroupWithBlank: true,
             pagination: {
               el: '.swiper21',
               clickable: true,
@@ -732,7 +1080,7 @@
                     spaceBetween: 30,
                 }
             }
-          });*/
+          });
 
 
         </script>

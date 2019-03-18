@@ -1,13 +1,13 @@
 @extends('layouts.inner_general')
 
 @section('content')
-
+<?php //echo "<pre>";print_r($user_details);die;?>
 <section class="register_step_1">
   <?php if(!empty($status)){ ?>
   <input type="hidden" class="publicprofile_status" value="<?php echo $status;?>">
 <?php } ?>
          <div class="breadcrumb register_breadcrumb category_breadcrumb">
-            <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<a href="javascript">Category</a>/<span>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</span></div>
+            <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</span></div>
             <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
          </div>
       </section>
@@ -18,15 +18,15 @@
               <div class="u_profile_detail">
                 <div class="user_i">
                   @if(!empty($user_details))
-                  @if(!empty($user_details['image_name']))
-                  @php
-                  $bus_user_id = $user_details['business_userid'];
-                  $img_url = $user_details['image_name'];
-                  @endphp
-                  <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
-                  @else
-                  <img src="{{ asset('img/user-img.png') }}"/>
-                  @endif
+                    @if(!empty($user_details['image_name']))
+                      @php
+                      $bus_user_id = $user_details['business_userid'];
+                      $img_url = $user_details['image_name'];
+                      @endphp
+                    <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
+                    @else
+                    <img src="{{ asset('img/user-img.png') }}"/>
+                    @endif
                   @else
                   <img src="{{ asset('img/user-img.png') }}"/>
                   @endif
@@ -112,7 +112,17 @@
               <div class="row">
                 <div class="col-md-6 col-12">
                   <div class="G-map">
-                    <img src="{{ asset('img/map.png') }}"/>
+                    @if(!empty($user_details))
+
+                    @php 
+                    $longitude = $user_details['logitude'];
+                    $latitude = $user_details['latitude'];
+                    @endphp
+
+                    @endif
+
+                    <iframe width="100%" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q={{$latitude}},{{$longitude}}&amp;key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ"></iframe>
+
                   </div>
                 </div>
                 <div class="col-md-6 col-12">
@@ -265,12 +275,43 @@
         <section>
           <div class="text_slider">
             <div class="breif_detail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porttitor fermentum tellus, at vehicula magna porttitor sit amet. Nulla dapibus nisi nec faucibus porttitor. Morbi id velit vel sapien eleifend tempus ut eget augue. Phasellus pharetra blandit diam, id sollicitudin odio sollicitudin non. Curabitur in venenatis augue, quis maximus sem. Phasellus faucibus eros vitae rutrum pellentesque. Sed neque ex, auctor sed sollicitudin et, sollicitudin eget arcu. Maecenas id lectus vulputate diam lobortis tristique. Nam mattis sed odio nec mollis.</p>
-              <p>Donec lacinia ultrices ante non vulputate. Curabitur nec massa felis. Sed congue, eros et hendrerit convallis, ipsum erat posuere lorem, eget congue tellus tellus ac neque. Integer quis odio lectus. Vivamus ac mattis augue. Aenean facilisis sit amet massa et volutpat. Aliquam sagittis, dui at blandit vestibulum, dui odio aliquam sem, porta laoreet dolor lacus at tortor.</p>
+              <p>@if(!empty($user_details)) 
+                  @if(!empty($user_details['bu_details']))
+                    @if($user_details['bu_details'][0]['business_profile'])
+                    {{$user_details['bu_details'][0]['business_profile']}}
+                    @else
+                    No Description Found!
+                    @endif
+                  @endif 
+                @endif
+              </p>
             </div>
             <div class="slider_cont">
               <div class="swiper-container swiper-wrapper_p swiper2">
                      <div class="swiper-wrapper">
+
+                      @if(!empty($user_details)) 
+                        @if(!empty($user_details['bu_details']))
+                          @php
+                          $uploads = json_decode($user_details['bu_details'][0]['pic_vid'],true);
+                          @endphp
+
+                          @if(!empty($uploads))
+                            @foreach($uploads['pic'] as $img)
+                            <?php $img_name = explode( '.', $img );?>
+                            <div class="swiper-slide">
+                              <div class="swiper-slide total_pics_img" data-image="{{url('/images/profile/'.$user_details['business_userid'].'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;"><img src="{{url('/images/profile/'.$user_details['business_userid'].'/'.$img)}}"/></div>
+                            </div>
+                            @endforeach
+                            
+                          @endif
+
+
+                        @endif
+                      @endif
+
+                       
+<!-- 
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
@@ -284,8 +325,7 @@
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
                        <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
-                       <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
-                       <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div>
+                       <div class="swiper-slide total_pics_img"><img src="{{ asset('img/Untitled-2.png') }}"/></div> -->
 
                      </div>
                      <!-- Add Pagination -->

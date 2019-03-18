@@ -65,10 +65,10 @@ class Handler extends ExceptionHandler
             $login = 'admin.login';
             break;
         case 'business_user':
-            $login = 'business_user.beforelogin';
+            $login = 'front';
             break;
         case 'general_user':
-            $login = 'general_user.beforelogin';
+            $login = 'front';
             break;
         default:
             $login = 'login';

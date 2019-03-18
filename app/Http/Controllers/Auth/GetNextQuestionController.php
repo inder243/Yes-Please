@@ -176,7 +176,7 @@ class GetNextQuestionController extends Controller
                                 $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle">'.$getJumpQuestion['title'].'</h1>';
                                 if(isset($options) && !empty($options))
                                 {
-                                    $html.='<div class="total_quote"><div class="form-group custom_errow"><label>Radius (km)</label><select class="form-control">';
+                                    $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$getJumpQuestion['title'].'</label><select class="form-control">';
                                     foreach($options as $option)
                                     {
                                         $html.= '<option value='.$option->option_value.'>'.$option->option_name.'</option>';
@@ -202,7 +202,7 @@ class GetNextQuestionController extends Controller
                                     $html.='<ul>';
                                     foreach($options as $option)
                                     {
-                                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                                     }
                                 }
@@ -329,7 +329,7 @@ class GetNextQuestionController extends Controller
                             $html.='<ul>';
                             foreach($options as $option)
                             {
-                                $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="checkbox" data-text='.$option->option_name.'><span class="outside"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="checkbox" data-text='.$option->option_name.'><span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                             }
                         }
@@ -350,7 +350,7 @@ class GetNextQuestionController extends Controller
                         $html.='<div class="quote_recieve form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle">'.$title.'</h1>';
                         if(isset($options) && !empty($options))
                         {
-                            $html.='<div class="total_quote"><div class="form-group custom_errow"><label>Radius (km)</label><select class="form-control">';
+                            $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$title.'</label><select class="form-control">';
                             foreach($options as $option)
                             {
                                 
@@ -432,25 +432,29 @@ class GetNextQuestionController extends Controller
                 $g_user_id = Auth::guard('general_user')->user()->user_id;
 
                 $filteredData = array();
-                foreach($answers as $ans)
+                if(!empty($answers))
                 {
-                    if($ans->filter==1 || $ans->filter=='1')
+                    foreach($answers as $ans)
                     {
-                       if ($ans->type=='checkbox' || $ans->type=='radio' || $ans->type=='dropdown')
-                       {
-                            $options = $ans->options;
+                        if($ans->filter==1 || $ans->filter=='1')
+                        {
+                           if ($ans->type=='checkbox' || $ans->type=='radio' || $ans->type=='dropdown')
+                           {
+                                $options = $ans->options;
+                                
+                                foreach($options as $option)
+                                {
+                                    $filteredData[]= $option->label;
+                                }
+                           }
+                           else{
+                                $filteredData[] =$ans->value;
+                           } 
                             
-                            foreach($options as $option)
-                            {
-                                $filteredData[]= $option->label;
-                            }
-                       }
-                       else{
-                            $filteredData[] =$ans->value;
-                       } 
-                        
+                        }
                     }
                 }
+                
                 
                
 
@@ -558,8 +562,7 @@ class GetNextQuestionController extends Controller
                     //send email to 5 random business users
                    $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (SELECT DISTINCT business_id FROM yp_business_selected_services where service_text in (".$dataToFilterQuotes.") ORDER BY RAND() )LIMIT 5"));
                    
-
-                   if(!empty($getEmails) && !empty($getEmails[0]))
+                   if(!empty($getEmails) && !empty($getEmails[0]) && $getEmails[0]->emails!='')
                    {
                         if(!empty($getEmails[0]->emails))
                         {
@@ -577,6 +580,10 @@ class GetNextQuestionController extends Controller
 
                             });
                         }
+                   }
+                   else
+                   {
+                         return response()->json(['success'=>2,'message'=>'Sorry No Business Found For Selected Service.'],200);
                    }
                }
 

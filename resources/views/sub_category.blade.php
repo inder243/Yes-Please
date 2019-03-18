@@ -94,6 +94,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                    @if(!empty($subcategory) && count($subcategory)>0)
                                     <?php $count=1; ?>
                                     @foreach($subcategory as $sub)
 
@@ -108,6 +109,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

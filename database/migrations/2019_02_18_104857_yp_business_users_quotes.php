@@ -21,7 +21,7 @@ class YpBusinessUsersQuotes extends Migration
             $table->foreign('general_id')->references('id')->on('yp_general_users')->onDelete('cascade');
             $table->integer('quote_id')->unsigned()->index();
             $table->foreign('quote_id')->references('id')->on('yp_general_users_quotes')->onDelete('cascade');
-            $table->tinyInteger('status')->default(1)->comment('0=>cancelled, 1=>new, 2=>Read, 3=>Quoted, 4=>Accepted, 5=>Rejected/Ignored');;
+            $table->tinyInteger('status')->default(1)->comment('0=>cancelled, 1=>new, 2=>Read, 3=>Quoted, 4=>Accepted, 5=>Rejected/Ignored,6=>Completed');;
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP')); 
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

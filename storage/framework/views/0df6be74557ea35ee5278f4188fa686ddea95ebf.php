@@ -32,14 +32,17 @@
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="<?php echo e(asset('img/menu-red.png')); ?>" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
+
+                        <?php if(Auth::guard('business_user')->check()): ?>
+
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
+                            <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/dashboard.png')); ?>" />Dashboard</a>
+                            <a href="<?php echo e(url('/business_user/business_dashboard')); ?>"><img src="<?php echo e(asset('img/dashboard.png')); ?>" />Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
+                            <a href="<?php echo e(url('/business_user/quotes_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
@@ -54,11 +57,33 @@
                             <a href="#"><img src="<?php echo e(asset('img/share.png')); ?>" />Share</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
+                            <a href="<?php echo e(route('business_user.profile_setting')); ?>"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
                         </li>
                         <li>
-                            <a href="#" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
+                            <a href="<?php echo e(route('business_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
                         </li>
+
+                        <?php else: ?>
+                        <li>
+                          <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
+                        </li>
+                        <li>
+                          <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="<?php echo e(asset('img/question.png')); ?>" />I'm a User</a>
+                        </li>
+                        <li>
+                          <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="<?php echo e(asset('img/profile.png')); ?>" />I'm a Business! </a>
+                        </li>
+                        <li>
+                          <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />  About Yes, please</a>
+                        </li>
+
+                        <li>
+                          <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Contact </a>
+                        </li>
+                        
+                        <?php endif; ?>
+
+                        
                     </ul>
                 </div>
 
@@ -136,7 +161,7 @@
                               <input type="password" class="form-control password_bu" name="password" placeholder="Password">
                               <span class="fill_fields password_business_error" role="alert" style="display:none;">
                             </div>
-                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
                             <div class="register_page"><a href="<?php echo e(route('business_user.register')); ?>">Register</a></div>
                         </form>
@@ -202,7 +227,9 @@
 
     
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bu_registration.js')); ?>"></script>
+    <?php if(Auth::guard('business_user')->check()): ?>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business_user.js')); ?>"></script>
+    <?php endif; ?>
     <script>
         $(document).ready(function(){
             $('#datetimepicker2').datetimepicker({

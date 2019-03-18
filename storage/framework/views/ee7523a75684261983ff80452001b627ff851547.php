@@ -1,11 +1,11 @@
 <?php $__env->startSection('content'); ?>
-
+<?php //echo "<pre>";print_r($user_details);die;?>
 <section class="register_step_1">
   <?php if(!empty($status)){ ?>
   <input type="hidden" class="publicprofile_status" value="<?php echo $status;?>">
 <?php } ?>
          <div class="breadcrumb register_breadcrumb category_breadcrumb">
-            <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<a href="javascript">Category</a>/<span><?php if(!empty($user_details)): ?><?php echo e($user_details['first_name']); ?> <?php echo e($user_details['last_name']); ?><?php endif; ?></span></div>
+            <div class="breadcrumb_header"><a href="<?php echo e(url('/')); ?>">Home</a>/<span><?php if(!empty($user_details)): ?><?php echo e($user_details['first_name']); ?> <?php echo e($user_details['last_name']); ?><?php endif; ?></span></div>
             <div class="share_fb"><a href="javascript:;"/><img src="<?php echo e(asset('img/icon_F.png')); ?>"/>Share</a></div>
          </div>
       </section>
@@ -16,15 +16,15 @@
               <div class="u_profile_detail">
                 <div class="user_i">
                   <?php if(!empty($user_details)): ?>
-                  <?php if(!empty($user_details['image_name'])): ?>
-                  <?php
-                  $bus_user_id = $user_details['business_userid'];
-                  $img_url = $user_details['image_name'];
-                  ?>
-                  <img src="<?php echo e(url('/images/business_profile/'.$bus_user_id.'/'.$img_url)); ?>"/>
-                  <?php else: ?>
-                  <img src="<?php echo e(asset('img/user-img.png')); ?>"/>
-                  <?php endif; ?>
+                    <?php if(!empty($user_details['image_name'])): ?>
+                      <?php
+                      $bus_user_id = $user_details['business_userid'];
+                      $img_url = $user_details['image_name'];
+                      ?>
+                    <img src="<?php echo e(url('/images/business_profile/'.$bus_user_id.'/'.$img_url)); ?>"/>
+                    <?php else: ?>
+                    <img src="<?php echo e(asset('img/user-img.png')); ?>"/>
+                    <?php endif; ?>
                   <?php else: ?>
                   <img src="<?php echo e(asset('img/user-img.png')); ?>"/>
                   <?php endif; ?>
@@ -110,7 +110,17 @@
               <div class="row">
                 <div class="col-md-6 col-12">
                   <div class="G-map">
-                    <img src="<?php echo e(asset('img/map.png')); ?>"/>
+                    <?php if(!empty($user_details)): ?>
+
+                    <?php 
+                    $longitude = $user_details['logitude'];
+                    $latitude = $user_details['latitude'];
+                    ?>
+
+                    <?php endif; ?>
+
+                    <iframe width="100%" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=<?php echo e($latitude); ?>,<?php echo e($longitude); ?>&amp;key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ"></iframe>
+
                   </div>
                 </div>
                 <div class="col-md-6 col-12">
@@ -263,12 +273,44 @@
         <section>
           <div class="text_slider">
             <div class="breif_detail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porttitor fermentum tellus, at vehicula magna porttitor sit amet. Nulla dapibus nisi nec faucibus porttitor. Morbi id velit vel sapien eleifend tempus ut eget augue. Phasellus pharetra blandit diam, id sollicitudin odio sollicitudin non. Curabitur in venenatis augue, quis maximus sem. Phasellus faucibus eros vitae rutrum pellentesque. Sed neque ex, auctor sed sollicitudin et, sollicitudin eget arcu. Maecenas id lectus vulputate diam lobortis tristique. Nam mattis sed odio nec mollis.</p>
-              <p>Donec lacinia ultrices ante non vulputate. Curabitur nec massa felis. Sed congue, eros et hendrerit convallis, ipsum erat posuere lorem, eget congue tellus tellus ac neque. Integer quis odio lectus. Vivamus ac mattis augue. Aenean facilisis sit amet massa et volutpat. Aliquam sagittis, dui at blandit vestibulum, dui odio aliquam sem, porta laoreet dolor lacus at tortor.</p>
+              <p><?php if(!empty($user_details)): ?> 
+                  <?php if(!empty($user_details['bu_details'])): ?>
+                    <?php if($user_details['bu_details'][0]['business_profile']): ?>
+                    <?php echo e($user_details['bu_details'][0]['business_profile']); ?>
+
+                    <?php else: ?>
+                    No Description Found!
+                    <?php endif; ?>
+                  <?php endif; ?> 
+                <?php endif; ?>
+              </p>
             </div>
             <div class="slider_cont">
               <div class="swiper-container swiper-wrapper_p swiper2">
                      <div class="swiper-wrapper">
+
+                      <?php if(!empty($user_details)): ?> 
+                        <?php if(!empty($user_details['bu_details'])): ?>
+                          <?php
+                          $uploads = json_decode($user_details['bu_details'][0]['pic_vid'],true);
+                          ?>
+
+                          <?php if(!empty($uploads)): ?>
+                            <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $img_name = explode( '.', $img );?>
+                            <div class="swiper-slide">
+                              <div class="swiper-slide total_pics_img" data-image="<?php echo e(url('/images/profile/'.$user_details['business_userid'].'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;"><img src="<?php echo e(url('/images/profile/'.$user_details['business_userid'].'/'.$img)); ?>"/></div>
+                            </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            
+                          <?php endif; ?>
+
+
+                        <?php endif; ?>
+                      <?php endif; ?>
+
+                       
+<!-- 
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
@@ -282,8 +324,7 @@
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
                        <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
-                       <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
-                       <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div>
+                       <div class="swiper-slide total_pics_img"><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></div> -->
 
                      </div>
                      <!-- Add Pagination -->

@@ -4,6 +4,12 @@ $(document).ready(function(){
 		alert('hmmm');
 	});*/
 
+	/**code to filter category dashboard page on radious change**/
+	$('#dashboard_radious_general').change(function(){
+        var selected_radious = $(this).val();       
+    });
+	/**end code to filter category dashboard page on radious change**/
+
 
 	var home_url = $('#home_url').val();
 
@@ -83,13 +89,14 @@ $(document).ready(function(){
 		   var longitude = $(this).find('.hidden_longitude').val();
 		   var latitude = $(this).find('.hidden_latitude').val();
 		   var address = $(this).find('.hidden_address').val();
+		   var business_name = $(this).find('.hidden_buname').val();
 		   mymap.addMarker({
               lat: latitude,
               lng: longitude,
               title: address,
-              // click: function(e) {
-              //   alert('This is '+address+'.');
-              // }
+              click: function(e) {
+                alert('Address : '+address+'.\n Business Name : '+ business_name);
+              }
             });
 		});
 		/*****code to bind map with multiple long lat*****/
@@ -128,10 +135,6 @@ $(document).ready(function(){
 		//$( hidden_error ).insertBefore( ".login_with_social" );
 	}
 
-
-	$('.general_radius').on('change', function() {
-	  alert( this.value );
-	});
 
 	/*******user dashboard page lising of business********/
 	var listItems = $(".all_bus_by_cat li");
@@ -246,7 +249,6 @@ $(document).ready(function(){
               		$('#ask_quote').modal('show');
               	}
               	if(data.success == '3'){
-
               		$('#general_login').modal('hide');
               		$('#work_description').modal('show');
                   	$('.describe_work').css('display','none');
@@ -375,49 +377,56 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 			if(typeof(json[0]) != 'undefined'){
 				$(this).parents('.product_detail').find('.finance').show();
 				$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
-				$(this).parents('.product_detail').find('.finance').find('a').attr('href',home_url+'/category-classifcation/'+json[0].id);
+				$(this).parents('.product_detail').find('.finance').attr('data-id',json[0].id);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.finance').hide();
 			}
 			if(typeof(json[1]) != 'undefined'){
 				$(this).parents('.product_detail').find('.energy').show();
 				$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
-				$(this).parents('.product_detail').find('.energy').find('a').attr('href',home_url+'/category-classifcation/'+json[1].id);
+				$(this).parents('.product_detail').find('.energy').attr('data-id',json[1].id);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.energy').hide();
 			}
 			if(typeof(json[2]) != 'undefined'){
 				$(this).parents('.product_detail').find('.travel').show();
 				$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
-				$(this).parents('.product_detail').find('.travel').find('a').attr('href',home_url+'/category-classifcation/'+json[2].id);
+				$(this).parents('.product_detail').find('.travel').attr('data-id',json[2].id);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.travel').hide();
 			}
 			if(typeof(json[3]) != 'undefined'){
 				$(this).parents('.product_detail').find('.telco').show();
 				$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
-				$(this).parents('.product_detail').find('.telco').find('a').attr('href',home_url+'/category-classifcation/'+json[3].id);
+				$(this).parents('.product_detail').find('.telco').attr('data-id',json[3].id);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.telco').hide();
 			}
 			if(typeof(json[4]) != 'undefined'){
 				$(this).parents('.product_detail').find('.eNews').show();
 				$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
-				$(this).parents('.product_detail').find('.eNews').find('a').attr('href',home_url+'/gcategory-classifcation/'+json[4].id);
+				$(this).parents('.product_detail').find('.eNews').attr('data-id',json[4].id);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.eNews').hide();
 			}
 			if(typeof(json[5]) != 'undefined'){
 				$(this).parents('.product_detail').find('.entertainment').show();
 				$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
-				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href',home_url+'/category-classifcation/'+json[5].id);
+				$(this).parents('.product_detail').find('.entertainment').attr('data-id',json[5].id);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.entertainment').hide();
 			}
 			if(typeof(json[6]) != 'undefined'){
 				$(this).parents('.product_detail').find('.category').show();
 				$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
-				$(this).parents('.product_detail').find('.category').find('a').attr('href',home_url+'/category-classifcation/'+json[6].id);
+				$(this).parents('.product_detail').find('.category').attr('data-id',json[6].id);
+				$(this).parents('.product_detail').find('.category').find('a').attr('href','javascript:;');
 			}else{
 				$(this).parents('.product_detail').find('.category').hide();
 			}
@@ -436,9 +445,189 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 
 });
 
-$(document).on('click', '.yep_section_bg .product_detail .back', function(){
+$(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
+	//var super_id = url.split("/").pop();
+	var super_id = $(this).parents('.product_detail').attr('data-super-id');
+	var skip = $(this).parent('.product_detail').attr('data-skip');
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+	});
 
-})
+	/*****ajax starts*****/
+	$.ajax({
+		url: home_url+'/more-catogries',
+		method:'POST',
+		data:{'skip':skip,'super_id':super_id},
+		context:this,
+		success:function(response){
+			var json = JSON.parse(response);
+			console.log(json);
+			if(typeof(json[0]) != 'undefined'){
+				$(this).parents('.product_detail').find('.finance').show();
+				$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+			}else{
+				$(this).parents('.product_detail').find('.finance').hide();
+			}
+			if(typeof(json[1]) != 'undefined'){
+				$(this).parents('.product_detail').find('.energy').show();
+				$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+			}else{
+				$(this).parents('.product_detail').find('.energy').hide();
+			}
+			if(typeof(json[2]) != 'undefined'){
+				$(this).parents('.product_detail').find('.travel').show();
+				$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+			}else{
+				$(this).parents('.product_detail').find('.travel').hide();
+			}
+			if(typeof(json[3]) != 'undefined'){
+				$(this).parents('.product_detail').find('.telco').show();
+				$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+			}else{
+				$(this).parents('.product_detail').find('.telco').hide();
+			}
+			if(typeof(json[4]) != 'undefined'){
+				$(this).parents('.product_detail').find('.eNews').show();
+				$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+			}else{
+				$(this).parents('.product_detail').find('.eNews').hide();
+			}
+			if(typeof(json[5]) != 'undefined'){
+				$(this).parents('.product_detail').find('.entertainment').show();
+				$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+			}else{
+				$(this).parents('.product_detail').find('.entertainment').hide();
+			}
+			if(typeof(json[6]) != 'undefined'){
+				$(this).parents('.product_detail').find('.category').show();
+				$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
+				$(this).parents('.product_detail').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+			}else{
+				$(this).parents('.product_detail').find('.category').hide();
+			}
+			$(this).parent('.product_detail').attr('data-skip',parseInt(skip)+7);
+			if(parseInt(json.next) == 0){
+				$(this).parents('.product_detail').find('.cat_more').find('.more_name').html('Back');
+				$(this).parent('.product_detail').attr('data-skip',0);
+				//$(this).parents('.product_detail').find('.more').addClass('back');
+			}else{
+				$(this).parents('.product_detail').find('.cat_more').find('.more_name').html('More');
+			}
+			//alert(typeof(response));
+			//$(this).parents('.product_detail').html(response);
+		}
+		});
+
+	});
+
+
+	$(document).on('click', '.yep_section_bg .product_detail .super_cat_icon', function(){
+		var super_id = $(this).attr('data-id');
+
+		//alert(super_id); return false;
+		var skip = 0;
+		$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+		});
+
+		/*****ajax starts*****/
+		$.ajax({
+			url: home_url+'/more-catogries',
+			method:'POST',
+			data:{'skip':skip,'super_id':super_id},
+			context:this,
+			success:function(response){
+				window.scrollBy(0, 10);
+				window.scrollBy(0, -10);
+				$('.categories_ajax').show();
+				$('.categories_ajax').attr('data-super-id',super_id);
+				$(this).parents('.product_detail').hide();
+				$('.back_to_super').css('display','inline-block');
+				var json = JSON.parse(response);
+				console.log(json);
+				if(typeof(json[0]) != 'undefined'){
+					$('.categories_ajax').find('.finance').show();
+					$('.categories_ajax').find('.finance').css('visibility','visible');
+					$('.categories_ajax').find('.finance').find('.catagory_name').html(json[0].category_name);
+					$('.categories_ajax').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+				}else{
+					$('.categories_ajax').find('.finance').hide();
+				}
+				if(typeof(json[1]) != 'undefined'){
+					$('.categories_ajax').find('.energy').show();
+					$('.categories_ajax').find('.energy').find('.energy_name').html(json[1].category_name);
+					$('.categories_ajax').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+				}else{
+					$('.categories_ajax').find('.energy').hide();
+				}
+				if(typeof(json[2]) != 'undefined'){
+					$('.categories_ajax').find('.travel').show();
+					$('.categories_ajax').find('.travel').css('visibility','visible');
+					$('.categories_ajax').find('.travel').find('.travel_name').html(json[2].category_name);
+					$('.categories_ajax').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+				}else{
+					$('.categories_ajax').find('.travel').hide();
+				}
+				if(typeof(json[3]) != 'undefined'){
+					$('.categories_ajax').find('.telco').show();
+					$('.categories_ajax').find('.telco').find('.telco_name').html(json[3].category_name);
+					$('.categories_ajax').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+				}else{
+					$('.categories_ajax').find('.telco').hide();
+				}
+				if(typeof(json[4]) != 'undefined'){
+					$('.categories_ajax').find('.eNews').show();
+					$('.categories_ajax').find('.eNews').find('.eNews_name').html(json[4].category_name);
+					$('.categories_ajax').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+				}else{
+					$('.categories_ajax').find('.eNews').hide();
+				}
+				if(typeof(json[5]) != 'undefined'){
+					$('.categories_ajax').find('.entertainment').show();
+					$('.categories_ajax').find('.entertainment').css('visibility','visible');
+					$('.categories_ajax').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
+					$('.categories_ajax').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+				}else{
+					$('.categories_ajax').find('.entertainment').hide();
+				}
+				if(typeof(json[6]) != 'undefined'){
+					$('.categories_ajax').find('.category').show();
+					$('.categories_ajax').find('.category').find('.category_name').html(json[6].category_name);
+					$('.categories_ajax').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+				}else{
+					$('.categories_ajax').find('.category').hide();
+				}
+				$(this).parent('.product_detail').attr('data-skip',parseInt(skip)+7);
+				if(parseInt(json.next) > 0){
+					$('.categories_ajax').find('.cat_more').show();
+					$('.categories_ajax').find('.cat_more').css('visibility','visible');
+					$('.categories_ajax').find('.cat_more').find('.more_name').html('More');
+				}else{
+					$('.categories_ajax').find('.cat_more').hide();
+				}
+				//alert(typeof(response));
+				//$(this).parents('.product_detail').html(response);
+			}
+			});
+
+		});
+
+		$(document).on('click', '.yep_section_bg .back_to_super', function(){
+			$('.categories_ajax').hide();
+			$(this).next('.product_detail').show();
+			$(this).hide();
+			//$('.product_detail').show();
+		});
 
 });/*****document ready*****/
 
@@ -501,7 +690,7 @@ function showPosition(position) {
 	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    }
 	});
-
+	jQuery('.pre_loader').css('display','block');
 	/*****ajax starts*****/
 	$.ajax({
 		url: home_url+'general_user/dashboard/catid/'+cat_id,
@@ -509,6 +698,7 @@ function showPosition(position) {
 		data:{latitude:current_loc_latitude,longitude:current_loc_longitude},
 		dataType:'html',
 		success:function(response){
+			jQuery('.pre_loader').css('display','none');
 			$('.content').html(response);
 
 			// if(response.success == '2'){
@@ -550,16 +740,17 @@ function showPosition(position) {
 		    });
 
       		$('.all_bus_by_cat li').each(function(i){
-			   var longitude = $(this).find('.hidden_longitude').val();
-			   var latitude = $(this).find('.hidden_latitude').val();
-			   var address = $(this).find('.hidden_address').val();
-			   mymap.addMarker({
-                  lat: latitude,
-                  lng: longitude,
-                  title: address,
-                  // click: function(e) {
-                  //   alert('This is '+address+'.');
-                  // }
+			   	var longitude = $(this).find('.hidden_longitude').val();
+			   	var latitude = $(this).find('.hidden_latitude').val();
+			   	var address = $(this).find('.hidden_address').val();
+			    var business_name = $(this).find('.hidden_buname').val();
+			   	mymap.addMarker({
+                  	lat: latitude,
+                  	lng: longitude,
+                  	title: address,
+                  	click: function(e) {
+                    	alert('Address : '+address+'.\n Business Name : '+ business_name);
+                  	}
                 });
 			});
 			/*****code to bind map with multiple long lat*****/
@@ -594,6 +785,117 @@ function showPosition(position) {
 			});
 
 			/******fn to display more items on load more ends*****/
+
+			$(document).on('change','#dashboard_radious_general',function(){
+		        var selected_radious = $(this).val(); 
+
+		        /*****ajax starts*****/
+	            $.ajax({
+	              url: home_url+'general_user/dashboard/catid/'+cat_id,
+	              type: 'GET',
+	              data:{latitude:current_loc_latitude,longitude:current_loc_longitude,selected_radious:selected_radious},
+	              dataType:'html',
+	              success:function(response){
+	              
+	                $('.content').html(response);
+
+
+	                var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+	                var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+	                // if(response.success == '2'){
+	                //  alert('hmm');
+	                // }
+	                
+	                /******on select of business users ->change color and give limit******/
+	                var listItems = $(".all_bus_by_cat li");
+
+	                listItems.each(function(idx, li) {
+	                    var product = $(li);
+
+	                    $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+	                      
+	                        if($(this).is(':checked')){
+	                            $(li).addClass('border_color');
+	                        } else{
+	                            $(li).removeClass('border_color');
+	                        }
+
+	                        var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+	                      if(countCheckedCheckboxes > 5){
+	                        alert('You can not select more than 5 business !');
+	                        $(li).removeClass('border_color');
+	                        return false;
+	                      }
+	                    });
+
+	                    // and the rest of your code
+	                });/*****business list code ends here****/
+
+
+	                /*****code to bind map with multiple long lat*****/
+	                var mymap = new GMaps({
+	                    el: '#mapDiv',
+	                    lat: lati,
+	                    lng: longi,
+	                    zoom:12
+	                  });
+
+	                  $('.all_bus_by_cat li').each(function(i){
+	                   var longitude = $(this).find('.hidden_longitude').val();
+	                   var latitude = $(this).find('.hidden_latitude').val();
+	                   var address = $(this).find('.hidden_address').val();
+	                   var business_name = $(this).find('.hidden_buname').val();
+	                   mymap.addMarker({
+	                            lat: latitude,
+	                            lng: longitude,
+	                            title: address,
+	                            click: function(e) {
+	                              alert('Address : '+address+'.\n Business Name : '+ business_name);
+	                            }
+	                          });
+	                });
+	                /*****code to bind map with multiple long lat*****/
+
+	                /*****more option code*****/
+	                $('.more-option').on("click",function(e) {
+	                  e.preventDefault();
+	                    $('.more_options_data').toggle();
+	                });
+	                /*****more option code******/
+
+	                /******fn to display more items on load more*****/
+	                var list = $(".all_bus_by_cat li");
+	                var numToShow = 5;
+	                var button = $(".load_more");
+	                var numInList = list.length;
+	                list.hide();
+	                if (numInList > numToShow) {
+	                  button.show();
+	                }else{
+	                  button.hide();
+	                }
+	                list.slice(0, numToShow).show();
+
+	                button.click(function(){
+	                  var showing = list.filter(':visible').length;
+	                  list.slice(showing - 1, showing + numToShow).fadeIn();
+	                  var nowShowing = list.filter(':visible').length;
+	                  if (nowShowing >= numInList) {
+	                    button.hide();
+	                  }
+	                });
+
+	                /******fn to display more items on load more ends*****/
+
+	                /****code to filetr data with radiou***/
+	                $(document).on('change','#dashboard_radious_general',function(){
+	                    var selected_radious = $(this).val();
+	                });
+	                /****end radious code here*****/
+	            
+	              }
+	            });/***ajax ends here***/   
+		    });
 	
 		}
 	});/***ajax ends here***/

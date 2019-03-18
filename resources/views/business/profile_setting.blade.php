@@ -2,8 +2,9 @@
 
 @section('content')
 
+
 <section class="register_step_1">
-  <div class="breadcrumb register_breadcrumb"><a href="JavaScript:;">Dashboard </a>/<span class="q_breadcrumb">Profile and settings</span></div>
+  <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard')}}">Dashboard </a>/<span class="q_breadcrumb">Profile and settings</span></div>
 </section>
 <section>
 
@@ -109,12 +110,32 @@
           <div class="form-group col-md-6 col-12">
             <div class="connect_facebook"><a href="javascript:;">Connect facebook profile</a></div>
           </div>
+          <div class="form-group col-md-6 col-12">
+            <div class="upload-btn-wrapper">
+                <button class="btn">Select profile image</button>
+                <input type="file" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURLprofile(this);" >
+                <span id="msg"></span>
+                @if(!empty($user_details))
+                @if(!empty($user_details['image_name']))
+                <img id="blah" src="{{url('/images/business_profile/'.$user_details['business_userid'].'/'.$user_details['image_name'])}}" alt="your image" style="height:50px;width:50px;"/>
+                @else
+                <img id="blah" src="{{ asset('img/user_placeholder.png') }}" alt="your image" />
+                @endif
+                @endif
+            </div>  
+          </div>
         </div>
 
-        <div class="upload_profile_pic">
+        <!-- <div class="upload_profile_pic">
+          <div class="form-group col-md-6 col-12">
+            <div class="upload-btn-wrapper">
+                <button class="btn">Select profile image</button>
+                <input type="file" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURLprofile(this);" >
+                <span id="msg"></span>
+            </div>   
+          </div>   
 
-
-          <input type="file" name="file" accept="image/x-png,image/gif,image/jpeg" onchange="readURLprofile(this);" >
+          
           @if(!empty($user_details))
           @if(!empty($user_details['image_name']))
           <img id="blah" src="{{url('/images/business_profile/'.$user_details['business_userid'].'/'.$user_details['image_name'])}}" alt="your image" style="height:50px;width:50px;"/>
@@ -123,7 +144,7 @@
           @endif
           @endif
           
-        </div>
+        </div> -->
     </div>
   </div>
 
@@ -138,21 +159,23 @@
               <input type="text" placeholder="Search..." class="category_search">
             </div>
             <ul>
-              <li><a href="javascript:;">Category</a>
-              <ul>
+              <?php 
+              //echo '<pre>'; print_r($categories); echo '</pre>';
+              //echo '<pre>'; print_r($business_categories); echo '</pre>';
+              foreach($business_categories AS $cat){
+                $bids[] = $cat['id'];
+              }
+              //echo '<pre>'; print_r($bids); echo '</pre>';
+              ?>
               @foreach($categories as $key=>$value)
-                          <li><a href="javascript:;" id="{{$value['category_id']}}" onclick="categories_select(this)" data-cat="parent" class="categories">{{$value['category_name']}}</a>
-                          @if(!empty($value['sub_category']))  
-                            <ul class="subcategories">
-                              @foreach($value['sub_category'] as $key1=>$value1)
-                              <li><a href="javascript:;" id="{{$value1['sub_category_id']}}" data-cat="sub" onclick="categories_select(this)">{{$value1['sub_category_name']}}</a><span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span></li>
-                              @endforeach
-                            </ul>
-                          @else
-                          <span class="checked_category_active"><img src="{{ asset('img/category_check.png') }}"/></span>
-                          @endif
-                          </li>
-                          @endforeach
+                <li><a href="javascript:;" inc_id="{{$value['id']}}" id="{{$value['category_id']}}" onclick="categoriesselect(this)" data-cat="parent" class="categories">{{$value['category_name']}}</a>
+                @if(in_array($value['id'],$bids))
+                    <span class="checked_category" style="display: block;"><img src="{{ asset('img/category_check.png') }}"/></span>
+                @else
+                  <span class="checked_category"><img src="{{ asset('img/category_check.png') }}"/></span>
+                @endif
+                </li>
+              @endforeach
             </ul>
           </div>
         </div>
@@ -161,7 +184,6 @@
           <p class="forerror addcategory">Added categories (up to 10)</p>
           <div class="added_category_list error">
             <div class="added_category category_list">
-                          
                             @if(!empty($business_categories))
                             <ul class="added_category_ul">
                                 @foreach($business_categories as $parent_category)
@@ -283,9 +305,9 @@
           <div class="file_to_upload">
             <div class="upload-btn-wrapper">
               <button class="btn">Select files to upload</button>
-              <input type="file" name="myfile[]" multiple class="select_verify_img" accept="image/x-png,image/gif,image/jpeg"/>
+              <input type="file" name="myfile[]" multiple class="select_profile_img" accept="image/x-png,image/gif,image/jpeg"/>
 
-                <span id="msg"></span>
+                <span id="msg" class="profileImages"></span>
             </div>
           </div>
         </div>
@@ -717,5 +739,22 @@
   <div class="save_agree"><a href="javascript:;"><input type="submit" id="profile_submit" name="profile_submit" value="Save"></a></div>
 </form>
 </section>
+<div id="openPopUpForQuestion" class="modal fade" role="dialog">
+      <div class="modal-dialog">
 
+        <!-- Modal content-->
+        
+            <div class="modal-content">
+              <div class="modal-header quote_header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 
+              </div>
+              <div class="modal-body">
+                  
+              </div>
+              
+            </div>
+        
+      </div>
+    </div>
 @endsection

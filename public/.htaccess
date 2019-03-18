@@ -3,6 +3,10 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+
+
+
+
     RewriteEngine On
 
     # Handle Authorization Header

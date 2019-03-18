@@ -1008,11 +1008,11 @@ width: 100%;
 
 }
 .registration_filed p {
-
     text-align: center;
     font-size: 16px;
     margin-top: 7px;
-
+		overflow: hidden;
+    text-overflow: ellipsis;
 }
 .registrationform {
     padding-top: 25px;
@@ -1764,6 +1764,11 @@ text-decoration: none;
 }
 
 @media (max-width: 767px) {
+	input {
+
+    font-size: 16px !important;
+
+}
 	.login_fields::before {
     position: absolute;
     content: '';
