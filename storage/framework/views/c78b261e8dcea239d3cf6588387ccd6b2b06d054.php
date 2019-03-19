@@ -1,15 +1,8 @@
 
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <?php 
-      if(Auth::guard('business_user')->check()){
-        $url = URL::to('/').'/business_user/business_dashboard';      
-      }
-      else{
-        $url = URL::to('/');
-      }
-    ?>
-    <div class="breadcrumb_header"><a href="<?=$url;?>">Home</a>/<span><?php if(!empty($catName)): ?> <?php echo e($catName); ?> <?php endif; ?> <span></span></span></div>
+    
+    <div class="breadcrumb_header"><a href="<?php echo e(url('/')); ?>">Home</a>/<span><?php if(!empty($catName)): ?> <?php echo e($catName); ?> <?php endif; ?> <span></span></span></div>
     <div class="share_fb">
       <a href="javascript:;">
       <img src="<?php echo e(asset('img/icon_F.png')); ?>"/>Share</a></div>
@@ -28,24 +21,24 @@
                       <h1>Search filter</h1>
                     </div>
                     <div class="row filter_this">
-                    <div class="form-group col-md-3 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="inputPassword4">Location</label>
                       <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required="">
                       <!-- <input type="text" class="form-control" id="inputPassword4" value="<?php if(!empty($address)): ?> <?php echo e($address); ?> <?php endif; ?>" required=""> -->
                       <span class="input_icons"><img src="<?php echo e(asset('img/location.png')); ?>"/></span>
                     </div>
-                    <div class="form-group custom_errow col-md-3 col-12">
+                    <div class="form-group custom_errow col-md-4 col-12">
                       <label for="inputPassword4">Radius (km)</label>
                       <select class="form-control" id="dashboard_radious_general">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
+                        <option value="10" <?php if($selected_radious == '10'): ?> selected <?php endif; ?>>10</option>
+                        <option value="20" <?php if($selected_radious == '20'): ?> selected <?php endif; ?>>20</option>
+                        <option value="30" <?php if($selected_radious == '30'): ?> selected <?php endif; ?>>30</option>
+                        <option value="40" <?php if($selected_radious == '40'): ?> selected <?php endif; ?>>40</option>
+                        <option value="50" <?php if($selected_radious == '50'): ?> selected <?php endif; ?>>50</option>
                       </select>
                      <span class="select_arrow1"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
                     </div>
-                    <div class="form-group col-md-6 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="keyword">Keyword</label>
                       <input type="text" class="form-control" id="keyword" required="">
                       <span class="input_icons"><img src="<?php echo e(asset('img/input_search.png')); ?>"/></span>
@@ -617,9 +610,10 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
+
+                        <?php if(isset($all_business) && !empty($all_business)): ?>
                         <ul class="all_bus_by_cat">
 
-                          <?php if(isset($all_business) && !empty($all_business)): ?>
                             <?php $__currentLoopData = $all_business; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$allbus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                               <li class="all_business_bycat_li">
                                 <input type="hidden" class="hidden_longitude" value="<?php echo e($allbus->logitude); ?>">
@@ -688,11 +682,10 @@
                            </li>    
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                          <?php else: ?>
-                          No Data Found!
-                          <?php endif; ?>
-                          
                         </ul>
+                        <?php else: ?>
+                        <div class="no_data_found"> No Results Found!</div>
+                        <?php endif; ?>
                         <div class="col-12">
                            <div class="load_more"><a href="JavaScript:;">Load more</a></div>
                         </div>
@@ -1215,8 +1208,8 @@
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="all_business_ph">
-                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
-                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic(this)"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic(this)"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
                                 <p><img src="<?php echo e(asset('img/info.png')); ?>">Add your phone number.</p>

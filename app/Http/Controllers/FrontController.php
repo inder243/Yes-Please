@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessSuperCategories;
-
 class FrontController extends Controller
 {
     /**
@@ -17,7 +14,6 @@ class FrontController extends Controller
     // {
     //     $this->middleware('auth');
     // }
-
     /**
      * Show the application dashboard.
      *
@@ -37,7 +33,6 @@ class FrontController extends Controller
         }
         return view('dashboard')->with(array('categories'=>$final));
     }
-
     public function moreSuperCatogries(){
         $skip = $_POST['skip'];
         $categories = YpBusinessSuperCategories::skip($skip)->take(7)->select('cat_name AS category_name','super_cat_id AS id')->get()->toArray();
@@ -46,7 +41,6 @@ class FrontController extends Controller
         $categories['next'] = $next;
         return json_encode($categories);
     }
-
     
     
     public function getCategories($id = null){

@@ -2,18 +2,14 @@
 
 @section('content')
 
+
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <?php 
-    if(Auth::guard('business_user')->check()){
-      $url = URL::to('/').'/business_user/business_dashboard';      
-    }
-    else{
-      $url = URL::to('/');
-    }
-    ?>
-    <div class="breadcrumb_header"><a href="<?=$url;?>">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif<span></span></span></div>
-    <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
+    
+    <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
+    <div class="share_fb">
+      <a href="javascript:;">
+      <img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
   </div>
       <div class="container-fluid">
         <div class="category_sec_main">
@@ -29,24 +25,24 @@
                       <h1>Search filter</h1>
                     </div>
                     <div class="row filter_this">
-                    <div class="form-group col-md-3 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="inputPassword4">Location</label>
                       <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="@if(!empty($address)) {{$address}} @endif" required="">
                       <!-- <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required=""> -->
                       <span class="input_icons"><img src="{{ asset('img/location.png') }}"/></span>
                     </div>
-                    <div class="form-group custom_errow col-md-3 col-12">
+                    <div class="form-group custom_errow col-md-4 col-12">
                       <label for="inputPassword4">Radius (km)</label>
                       <select class="form-control" id="dashboard_radious_general">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
+                        <option value="10" @if($selected_radious == '10') selected @endif>10</option>
+                        <option value="20" @if($selected_radious == '20') selected @endif>20</option>
+                        <option value="30" @if($selected_radious == '30') selected @endif>30</option>
+                        <option value="40" @if($selected_radious == '40') selected @endif>40</option>
+                        <option value="50" @if($selected_radious == '50') selected @endif>50</option>
                       </select>
                      <span class="select_arrow1"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
                     </div>
-                    <div class="form-group col-md-6 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="keyword">Keyword</label>
                       <input type="text" class="form-control" id="keyword" required="">
                       <span class="input_icons"><img src="{{ asset('img/input_search.png') }}"/></span>
@@ -618,79 +614,80 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
+                      @if(isset($all_business) && !empty($all_business))
                         <ul class="all_bus_by_cat">
-
-                          @if(isset($all_business) && !empty($all_business))
                             @foreach($all_business as $key=>$allbus)
                               <li class="all_business_bycat_li">
-                                <input type="hidden" class="hidden_longitude" value="{{ $allbus['get_business_user']['logitude']}}">
-                                <input type="hidden" class="hidden_latitude" value="{{ $allbus['get_business_user']['latitude']}}">
-                                <input type="hidden" class="hidden_address" value="{{ $allbus['get_business_user']['full_address']}}">
-                                <input type="hidden" class="hidden_buname" value="{{ $allbus['get_business_user']['business_name']}}">
+                                <input type="hidden" class="hidden_longitude" value="{{ $allbus->logitude}}">
+                                <input type="hidden" class="hidden_latitude" value="{{ $allbus->latitude}}">
+                                <input type="hidden" class="hidden_address" value="{{ $allbus->full_address}}">
+                                <input type="hidden" class="hidden_buname" value="{{ $allbus->business_name}}">
                               <div class="business_sec">
                                  <div class="b-detail">
                                     <span class="business_img">
-                                      @if($allbus['get_business_user']['image_name'])
+
+                                      @if($allbus->image_name)
                                       @php
-                                      $bus_user_id = $allbus['get_business_user']['business_userid'];
-                                      $img_url = $allbus['get_business_user']['image_name'];
+                                      $bus_user_id = $allbus->business_userid;
+                                      $img_url = $allbus->image_name;
                                       @endphp
                                       <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
                                       @else
                                       <img src="{{ asset('img/img_placeholder.png') }}"/>
                                       @endif
-                                      </span>
+
+                                    </span>
                                     <div class="sec_t">
-                                       <a href="{{ url('general_user/public_profile/'.$allbus['business_userid']) }}"><h1>{{$allbus['get_business_user']['business_name']}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
-                                       <p>{{$allbus['get_category']['category_name']}}</p>
+                                       <a href="{{ url('general_user/public_profile/'.$allbus->id) }}"><h1>{{$allbus->business_name}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
+                                       <p>{{$allbus->category_name}}</p>
                                     </div>
                                  </div>
                                  <div class="select_this">
                                     <div class="formcheck forcheckbox langcheck">
                                        <label>
-                                          <input type="checkbox" class="radio-inline check_bus" id="hmm_{{$key}}" name="radios" value="" data-title="{{$allbus['business_userid']}}">
+                                          <input type="checkbox" class="radio-inline check_bus" id="hmm_{{$key}}" name="radios" value="" data-title="{{$allbus->id}}">
                                           <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
                                           <p></p>
                                        </label>
                                     </div>
                                  </div>
                               </div>
-                              <p class="des">{{ $allbus['get_business_user']['full_address']}}</p>
+                              <p class="des">{{ $allbus->full_address}}</p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                  @php $new_num = number_format($allbus['get_business_details']['distance_kms'], 1, '.', ''); @endphp
+                                  @php $new_num = number_format($allbus->distance, 1, '.', ''); @endphp
                                     <a href="javascript:;" class="distance">Distance <span>{{ $new_num}}km</span></a>
 
-                                    @if(!empty($allbus['get_business_user']['avg_rating']))
+
+                                    @if(!empty($allbus->tot_rating))
 
                                     @php
-                                      $rating_num = number_format($allbus['get_business_user']['avg_rating'][0]['avg_rating'], 1, '.', '');
+                                      $rating_num = number_format($allbus->tot_rating, 1, '.', '');
 
-                                      $review_num = $allbus['get_business_user']['avg_rating'][0]['tot_review'];
                                     @endphp
 
                                     @else
 
-                                    @php $rating_num = 0; $review_num = 0; @endphp
+                                    @php $rating_num = 0;@endphp
 
                                     @endif
 
                                     <a href="javascript:;" class="rating">Rating <span>{{$rating_num}}/5</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>{{$review_num}}</span></a>
+                                    <a href="javascript:;" class="review">Reviews <span>@if(!empty($allbus->tot_review)) {{$allbus->tot_review}} @else 0 @endif</span></a>
                                  </div>
                                  <div class="call_chat">
                                     <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="{{ $allbus['get_business_user']['phone_number']}}" data-original-title="{{ $allbus['get_business_user']['phone_number']}}"><img/src="{{ asset('img/call.png') }}"/>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="{{ $allbus->phone_number}}" data-original-title="{{ $allbus->phone_number}}"><img/src="{{ asset('img/call.png') }}"/>
                                     </a>
                                  </div>
                               </div>
                            </li>    
                             @endforeach
-                          @else
-                          No Data Found!
-                          @endif
-                          
+
                         </ul>
+                        @else
+                        <div class="no_data_found"> No Results Found!</div>
+                        @endif
                         <div class="col-12">
                            <div class="load_more"><a href="JavaScript:;">Load more</a></div>
                         </div>
@@ -699,7 +696,7 @@
                   <div class="col-md-6 col-12">
                      <div class="category_second_bar_sec">
                         <div class="google_map_sec" id="mapDiv">
-                           
+                          
                         </div>
                         <div class="article_sec">
                            <h1>Articles</h1>
@@ -920,9 +917,7 @@
                </div>
             </div>
       </div>
-    </section>
-
-    <!-------- Login Modal for general user------->
+       <!-------- Login Modal for general user------->
     <div class="modal fade" id="general_login1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         
         <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
@@ -979,8 +974,7 @@
 
     </div>
     <!-------- Login Modal end ----->
-    <!------------------------  Category  Modal -------------->
-      <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
          <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                <div class="modal-header quote_header">
@@ -1190,7 +1184,7 @@
                                   <div class="file_to_upload gen_quote_img">
                                     <div class="upload-btn-wrapper">
                                       <button class="btn">Select files to upload</button>
-                                        <input name="myfile[]" multiple="" class="select_gen_quote_img" accept="image/x-png,image/gif,image/jpeg" type="file">
+                                        <input name="myfile[]" id="dynamic_vid_img" multiple="" class="select_gen_quote_img" accept="image/x-png,image/gif,image/jpeg" type="file">
                                     <span id="msg" class="genrl_quote_imgs"></span>
                                     </div>
                                   </div>
@@ -1215,8 +1209,8 @@
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="all_business_ph">
-                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
-                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
                                 <p><img src="{{ asset('img/info.png') }}">Add your phone number.</p>
@@ -1241,6 +1235,17 @@
             </div>
          </div>
       </div>
+
+    </section>
+    <!------------------------  Category  Modal -------------->
+      
+
+
+<script type="text/javascript">
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>
 <script type="text/javascript">
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()

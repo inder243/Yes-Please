@@ -130,7 +130,29 @@
                                        <div class="created_date">{{$date}}</div>
                                     </div>
                                     <div class="quote_basic_detail">
-                                       
+                                      @php $dynamic_formdata = json_decode($quote[0]['get_quotes']['dynamic_formdata'],true); @endphp
+
+                                      @foreach($dynamic_formdata as $dynami_key=>$dyanamic_values)
+                                        @if($dyanamic_values['filter']==1)
+                                        @if($dyanamic_values['type'] == 'textbox')
+                                          <div class="Q_detail">
+                                            <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+                                            <span>{{$dyanamic_values['value']}}</span>
+                                          </div>
+                                        @else
+                                        <div class="Q_detail">
+                                          <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+
+                                          @php $get_labels = ''; @endphp
+                                          @foreach($dyanamic_values['options'] as $checkbox_data)
+                                            @php $get_labels .= $checkbox_data['label'] . ','; @endphp
+                                          @endforeach
+                                          <span>{{$get_labels}}</span>
+                                        </div>
+                                        
+                                        @endif
+                                        @endif
+                                      @endforeach
                                        <div class="Q_detail">
                                           <span class="Q_detail_heading">Mobile Number:</span>
                                           <span>{{$quote[0]['get_quotes']['phone_number']}}</span>

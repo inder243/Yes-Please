@@ -5,8 +5,119 @@ $(document).ready(function(){
 	});*/
 
 	/**code to filter category dashboard page on radious change**/
-	$('#dashboard_radious_general').change(function(){
-        var selected_radious = $(this).val();       
+	$(document).on('change','#dashboard_radious_general',function(){
+        var selected_radious = $(this).val(); 
+
+        var current_url = window.location.href;
+		var cat_id = current_url.substring(current_url.lastIndexOf('/') + 1);
+
+		var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+        var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+        /*****ajax starts*****/
+        $.ajax({
+          url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
+          type: 'GET',
+          data:{latitude:lati,longitude:longi,selected_radious:selected_radious},
+          dataType:'html',
+          success:function(response){
+          
+            $('.content').html(response);
+
+
+            
+            // if(response.success == '2'){
+            //  alert('hmm');
+            // }
+            
+            /******on select of business users ->change color and give limit******/
+            var listItems = $(".all_bus_by_cat li");
+
+            listItems.each(function(idx, li) {
+                var product = $(li);
+
+                $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                  
+                    if($(this).is(':checked')){
+                        $(li).addClass('border_color');
+                    } else{
+                        $(li).removeClass('border_color');
+                    }
+
+                    var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                  if(countCheckedCheckboxes > 5){
+                    alert('You can not select more than 5 business !');
+                    $(li).removeClass('border_color');
+                    return false;
+                  }
+                });
+
+                // and the rest of your code
+            });/*****business list code ends here****/
+
+
+            /*****code to bind map with multiple long lat*****/
+            var mymap = new GMaps({
+                el: '#mapDiv',
+                lat: lati,
+                lng: longi,
+                zoom:12
+              });
+
+              $('.all_bus_by_cat li').each(function(i){
+               var longitude = $(this).find('.hidden_longitude').val();
+               var latitude = $(this).find('.hidden_latitude').val();
+               var address = $(this).find('.hidden_address').val();
+               var business_name = $(this).find('.hidden_buname').val();
+               mymap.addMarker({
+                        lat: latitude,
+                        lng: longitude,
+                        title: address,
+                        click: function(e) {
+                          alert('Address : '+address+'.\n Business Name : '+ business_name);
+                        }
+                      });
+            });
+            /*****code to bind map with multiple long lat*****/
+
+            /*****more option code*****/
+            $('.more-option').on("click",function(e) {
+              e.preventDefault();
+                $('.more_options_data').toggle();
+            });
+            /*****more option code******/
+
+            /******fn to display more items on load more*****/
+            var list = $(".all_bus_by_cat li");
+            var numToShow = 5;
+            var button = $(".load_more");
+            var numInList = list.length;
+            list.hide();
+            if (numInList > numToShow) {
+              button.show();
+            }else{
+              button.hide();
+            }
+            list.slice(0, numToShow).show();
+
+            button.click(function(){
+              var showing = list.filter(':visible').length;
+              list.slice(showing - 1, showing + numToShow).fadeIn();
+              var nowShowing = list.filter(':visible').length;
+              if (nowShowing >= numInList) {
+                button.hide();
+              }
+            });
+
+            /******fn to display more items on load more ends*****/
+
+            /****code to filetr data with radiou***/
+            $(document).on('change','#dashboard_radious_general',function(){
+                var selected_radious = $(this).val();
+            });
+            /****end radious code here*****/
+        
+          }
+        });/***ajax ends here***/   
     });
 	/**end code to filter category dashboard page on radious change**/
 
@@ -19,7 +130,7 @@ $(document).ready(function(){
 	if(url.indexOf(str) != -1){	
 		$('.down_errow,.bounce a').trigger('click');
 	}
-	/********* for mor eoptions on category page*******/
+	/********* for more options on category page*******/
 	// $('.more-option').on("click",function(e) {
 	// 	e.preventDefault();
 	// 	$('.more_options_data').css('display','block');

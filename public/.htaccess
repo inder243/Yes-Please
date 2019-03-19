@@ -4,9 +4,6 @@
     </IfModule>
 
 
-
-
-
     RewriteEngine On
 
     # Handle Authorization Header

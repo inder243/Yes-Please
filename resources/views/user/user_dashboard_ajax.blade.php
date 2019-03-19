@@ -1,15 +1,8 @@
 
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <?php 
-      if(Auth::guard('business_user')->check()){
-        $url = URL::to('/').'/business_user/business_dashboard';      
-      }
-      else{
-        $url = URL::to('/');
-      }
-    ?>
-    <div class="breadcrumb_header"><a href="<?=$url;?>">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
+    
+    <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
     <div class="share_fb">
       <a href="javascript:;">
       <img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
@@ -28,24 +21,24 @@
                       <h1>Search filter</h1>
                     </div>
                     <div class="row filter_this">
-                    <div class="form-group col-md-3 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="inputPassword4">Location</label>
                       <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="@if(!empty($address)) {{$address}} @endif" required="">
                       <!-- <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required=""> -->
                       <span class="input_icons"><img src="{{ asset('img/location.png') }}"/></span>
                     </div>
-                    <div class="form-group custom_errow col-md-3 col-12">
+                    <div class="form-group custom_errow col-md-4 col-12">
                       <label for="inputPassword4">Radius (km)</label>
                       <select class="form-control" id="dashboard_radious_general">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
+                        <option value="10" @if($selected_radious == '10') selected @endif>10</option>
+                        <option value="20" @if($selected_radious == '20') selected @endif>20</option>
+                        <option value="30" @if($selected_radious == '30') selected @endif>30</option>
+                        <option value="40" @if($selected_radious == '40') selected @endif>40</option>
+                        <option value="50" @if($selected_radious == '50') selected @endif>50</option>
                       </select>
                      <span class="select_arrow1"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
                     </div>
-                    <div class="form-group col-md-6 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="keyword">Keyword</label>
                       <input type="text" class="form-control" id="keyword" required="">
                       <span class="input_icons"><img src="{{ asset('img/input_search.png') }}"/></span>
@@ -617,9 +610,10 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
+
+                        @if(isset($all_business) && !empty($all_business))
                         <ul class="all_bus_by_cat">
 
-                          @if(isset($all_business) && !empty($all_business))
                             @foreach($all_business as $key=>$allbus)
                               <li class="all_business_bycat_li">
                                 <input type="hidden" class="hidden_longitude" value="{{ $allbus->logitude}}">
@@ -688,11 +682,10 @@
                            </li>    
                             @endforeach
 
-                          @else
-                          No Data Found!
-                          @endif
-                          
                         </ul>
+                        @else
+                        <div class="no_data_found"> No Results Found!</div>
+                        @endif
                         <div class="col-12">
                            <div class="load_more"><a href="JavaScript:;">Load more</a></div>
                         </div>
@@ -1214,8 +1207,8 @@
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="all_business_ph">
-                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
-                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic(this)"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic(this)"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
                                 <p><img src="{{ asset('img/info.png') }}">Add your phone number.</p>

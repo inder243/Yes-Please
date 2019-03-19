@@ -352,11 +352,17 @@ function openImage(data)
 
 //validate add parent category
 $('.parent_cat_button').click(function(e){
-    e.preventDefault();
-   if($.trim($('.parent_cat_name').val()==''))
+    //e.preventDefault();
+    
+   if($.trim($('.parent_cat_name').val())=='')
    {
-      $('#openPopUpSuperCategory .modal-body').prepend('<span class="help-block" style="color:red" id="help-block">Please fill the fields</span>');
-        return false;
+   	  if ($("#openPopUpSuperCategory .modal-body .help-block")[0]){}
+   	  else{
+   	  	$('#openPopUpSuperCategory .modal-body').prepend('<span class="help-block" style="color:red" id="help-block">Please fill the field</span>');
+        
+   	  }
+   	  return false;
+     
    }
 
 });

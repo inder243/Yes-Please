@@ -128,7 +128,29 @@
                                        <div class="created_date"><?php echo e($date); ?></div>
                                     </div>
                                     <div class="quote_basic_detail">
-                                       
+                                      <?php $dynamic_formdata = json_decode($quote[0]['get_quotes']['dynamic_formdata'],true); ?>
+
+                                      <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($dyanamic_values['filter']==1): ?>
+                                        <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                                          <div class="Q_detail">
+                                            <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                                            <span><?php echo e($dyanamic_values['value']); ?></span>
+                                          </div>
+                                        <?php else: ?>
+                                        <div class="Q_detail">
+                                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                                          <?php $get_labels = ''; ?>
+                                          <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <span><?php echo e($get_labels); ?></span>
+                                        </div>
+                                        
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                        <div class="Q_detail">
                                           <span class="Q_detail_heading">Mobile Number:</span>
                                           <span><?php echo e($quote[0]['get_quotes']['phone_number']); ?></span>

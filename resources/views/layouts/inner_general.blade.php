@@ -716,7 +716,7 @@
                       $(li).removeClass('border_color');
                   }
 
-                  var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
                 if(countCheckedCheckboxes > 5){
                   alert('You can not select more than 5 business !');
                   $(li).removeClass('border_color');

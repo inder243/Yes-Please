@@ -230,6 +230,9 @@ input[type=number]::-webkit-outer-spin-button {
 .profile_section_main .upload-btn-wrapper input[type="file"]{
     top:13px;
 }
+#ask_quote .gen_quote_img .upload-btn-wrapper input[type="file"]{
+    padding: 8px 0 27px 0;
+}
 
 
 @media (max-width: 767px) {
@@ -591,4 +594,8 @@ input[type=number] {
     text-align: left;
     padding-bottom: 12px;
 
+}
+.no_data_found {
+    text-align: center;
+    font-size: 24px;
 }

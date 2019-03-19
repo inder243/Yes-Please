@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	
+});
+
 //this function will work if there are no dynamic questions added
 function getOnlyStaticQuestions()
 {
@@ -306,8 +310,7 @@ function getOnlyStaticQuestions()
 
     });
 
-	function validate_quote_dynamicandstatic(){
-		
+	function validate_quote_dynamicandstatic(validate){
     	var site_url = $('#site_url').text();
     	data = new FormData();
 		
@@ -379,6 +382,8 @@ function getOnlyStaticQuestions()
 
 				case 'radio':
 
+				var title = $.trim($(this).find('.questitle').text());
+				
 				var alloptions = [];
 				var field = {};
 				field['title'] = title;
@@ -443,8 +448,12 @@ function getOnlyStaticQuestions()
 
       	if(phone=='')
       	{
-      		alert('Please provide phone number');
-      		return false;
+      		var this_class = $(validate).children('a').attr('class');
+      		if(this_class != 'mobile_dont_want'){
+      			alert('Please provide phone number');
+      			return false;
+      		}
+      		
       	}
       	if(desc=='')
       	{
@@ -489,7 +498,7 @@ function getOnlyStaticQuestions()
 			//console.log(data);
 		
 
-      	if( phone!='' && desc!='' && quotecount!='')
+      	if( desc!='' && quotecount!='')
       	{
       		jQuery('.pre_loader').css('display','block');
       		$.ajaxSetup({
@@ -537,6 +546,7 @@ function getOnlyStaticQuestions()
       	}
 
      }
+
    
 
     function getStaticQuestion(ele)
@@ -565,7 +575,6 @@ function getOnlyStaticQuestions()
 
     function getStaticQuestionNext(ele)
     {
-
     	var current_btn_id = $(ele).attr('id');
 
     	var data_nxt_id = $(ele).attr('data_nxt_id');
@@ -591,7 +600,6 @@ function getOnlyStaticQuestions()
     	}
 
     	if(data_nxt_id == 'static_ques_3'){
-    		
     		/****check data****/
 			var text_desc1 = $('.describe_work').find('.work_description_modal').val();
 			if(text_desc1 == ''){
@@ -605,6 +613,31 @@ function getOnlyStaticQuestions()
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
 				return false;
 			}
+
+		     /******display images on select image*****/
+			$('#ask_quote #dynamic_vid_img').change(function(e){
+		    	e.preventDefault();
+				var images = e.target.files;
+				//$('.reg_img_msg').text('');
+				var name='';
+				var count = 0;
+				$.each( images, function( key, value ) {
+					if(count > 0){
+						name += value.name+', ';
+					}else{
+						name = value.name;
+					}
+					count++;
+				  	//$('.reg_img_msg').append(value.name+', ');
+				});
+				$('#ask_quote .file_to_upload #dynamic_vid_img').after('<span id="image_names">'+name+'</span>');
+				if(count > 0){
+					$('#ask_quote .static_ques_3 .describe_work_btn .ele_next a').text('Next');
+				}
+				//alert(name);
+
+		    });
+
     	}
 
     	

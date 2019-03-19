@@ -23,7 +23,7 @@ use DB;
 class GeneralUserLoginController extends Controller
 {
 
-  use AuthenticatesUsers;
+    use AuthenticatesUsers;
 
     public function __construct()
     {
@@ -115,11 +115,10 @@ class GeneralUserLoginController extends Controller
                             $radious = '100';
                         }
                     }
-
-                    
+    
                     $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
                 //echo "<pre>";print_r($results);die;
-                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'success'=>1));
+                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1));
 
                 }catch(\Exception $e){
                     return response()->json(['success'=>'0','message'=>$e->getMessage()]);  
@@ -128,28 +127,107 @@ class GeneralUserLoginController extends Controller
             }/***if isset ends***/
 
         }else{
+
             try{
+               //  $data = array();
+               //  //get category id
+               //  $categoryId = $request->catid;
+
+               //  //get first question of form for given category
+               //  $getFirstQuestion = YpFormQuestions::where(array('cat_id'=>$categoryId))->first();
+               //  $data = $getFirstQuestion;
+
+               //  $categoryName = YpBusinessCategories::select('category_name')->where('id',$categoryId)->first();
+               //  $catName = $categoryName['category_name'];
+
+               //  $address = '';
+               //  *****get business list of selected categories*****
+               //  $get_business_by_cat = YpBusinessUserCategories::with(['get_business_user','get_business_user.avgRating','get_business_details','get_category'])->where('category_id',$categoryId)->groupBy('yp_business_user_categories.business_userid')->get()->toArray();
+
+               // // echo "<pre>";print_r($get_business_by_cat);die;
+               //  return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$get_business_by_cat,'success'=>1));
+
+
                 $data = array();
-                //get category id
-                $categoryId = $request->catid;
+                    //get category id
+                    $categoryId = $request->catid;
+                   
+                    $check_cat_exist = 
+                    //get first question of form for given category
+                    $getFirstQuestion = YpFormQuestions::where(array('cat_id'=>$categoryId))->first();
+                    $data = $getFirstQuestion;
 
-                //get first question of form for given category
-                $getFirstQuestion = YpFormQuestions::where(array('cat_id'=>$categoryId))->first();
-                $data = $getFirstQuestion;
+                    $categoryName = YpBusinessCategories::select('category_name')->where('id',$categoryId)->first();
+                    $catName = $categoryName['category_name'];
 
-                $categoryName = YpBusinessCategories::select('category_name')->where('id',$categoryId)->first();
-                $catName = $categoryName['category_name'];
+                    
+                     if (Auth::guard('general_user')->check()){
+                            //$address = Auth::guard('general_user')->user()->city;
+                            $longitude = Auth::guard('general_user')->user()->longitude;
+                            $latitude = Auth::guard('general_user')->user()->latitude;
 
-                $address = '';
-                /******get business list of selected categories******/
-                $get_business_by_cat = YpBusinessUserCategories::with(['get_business_user','get_business_user.avgRating','get_business_details','get_category'])->where('category_id',$categoryId)->groupBy('yp_business_user_categories.business_userid')->get()->toArray();
+                            $address = $this->getAddress($latitude, $longitude);
+       
+                            if($address)
+                            {
+                            $address = $address;
+                            }
+                            else
+                            {
+                            $address = '';
+                            }
+                          //echo "<pre>city";print_r($address);die;
+                            // if(!empty($address)){
+                            //     $geocodes_latlong = $this->get_geocode_latlong($address);
+                            // }
 
-               // echo "<pre>";print_r($get_business_by_cat);die;
-                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$get_business_by_cat,'success'=>1));
+                            // /******get longitude and latitude from geocode******/
+                            // if(isset($geocodes_latlong['latitude'])){
+                            //     $latitude = $geocodes_latlong['latitude'];
+                            // }else{
+                            //     $latitude = '';
+                            // }
+                            // if(isset($geocodes_latlong['longitude'])){
+                            //     $longitude = $geocodes_latlong['longitude'];
+                            // }else{
+                            //     $longitude = '';
+                            // }
+
+                            if(isset($_GET['selected_radious']) && $_GET['selected_radious'] != ''){
+                                $radious = $_GET['selected_radious'];
+                            }else{
+                                $radious = '100';
+                            }
+                        }else{
+                            $latitude = '32.0853';
+                            $longitude = '34.7818';
+
+                            $address = $this->getAddress($latitude, $longitude);
+           
+                            if($address)
+                            {
+                            $address = $address;
+                            }
+                            else
+                            {
+                            $address = '';
+                            }
+
+                            if(isset($_GET['selected_radious']) && $_GET['selected_radious'] != ''){
+                                $radious = $_GET['selected_radious'];
+                            }else{
+                                $radious = '100';
+                            }
+                        }
+                    
+    
+                    $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
+                //echo "<pre>";print_r($results);die;
+                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1));
                 
             }catch(Exception $e){
                 $errorMsg =  $e->getMessage();
-                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$get_business_by_cat,'address'=>$address,'success'=>0,'error'=>$errorMsg));
+                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'default_log'=>$longitude,'default_lat'=>$latitude,'data'=>$data,'all_business'=>$get_business_by_cat,'address'=>$address,'selected_radious'=>$radious,'success'=>0,'error'=>$errorMsg));
                
             }/****catch ends here****/
         }
