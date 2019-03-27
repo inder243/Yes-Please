@@ -11,7 +11,7 @@ class YpBusinessUsers extends Authenticatable
     protected $guard = 'business_user';
 
     protected $fillable = [
-        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','image_name','remember_token','completed_steps'
+        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','image_name','remember_token','completed_steps','advertise_mode'
     ];
 
     protected $hidden = [

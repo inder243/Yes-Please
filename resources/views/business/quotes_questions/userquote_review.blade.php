@@ -4,13 +4,13 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<a href="JavaScript:;"> Category </a>/<span class="q_breadcrumb">Review</span></div>
+           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif </span>/<span class="q_breadcrumb">Review @if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</span></div>
 
          </div>
       </section>
       <section>
          <div class="quote_req_main_finsih">
-            <h1>Business name</h1>
+            <h1>@if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</h1>
             <p>You will be able to view how the business rated and reviewed you after both of you will submit your reviews.</p>
             <div class="quote_req_main finish_re">
             <div class="improvement_section_new quote_border ">
@@ -36,13 +36,13 @@
                      <p>test</p>
                      @endif
                      @if(isset($quote_data))
-                    <?php
+                      <?php
                       $created_date = $quote_data[0]['get_gen_user']['created_at'];
 
                       $splitTimeStamp = explode(" ",$created_date);
                       $date = date('M Y',strtotime($splitTimeStamp[0]));
                       $time = date('H:i',strtotime($splitTimeStamp[1]));
-                     ?>
+                      ?>
                      <span>Member since {{$date}}</span>
                      @endif
                   </div>
@@ -52,9 +52,10 @@
                   </div>
                   <div class="review_section">
                      <ul>
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'user_type'=>'business'])->avg('rating');
+                      
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'business_id'=>$quote_data[0]['business_id'],'user_type'=>'business'])->avg('rating');
 
-                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'user_type'=>'business'])->where('review','!=','')->count('review');
+                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'business_id'=>$quote_data[0]['business_id'],'user_type'=>'business'])->where('review','!=','')->count('review');
                     
                     $total_rating = round($get_total_rating);
                     ?>
@@ -118,7 +119,8 @@
                  <div class="write_reviews">
                    <p>Write your review<span><img src="{{ asset('img/question_img.png') }}"/></span></p>
                    <div class="write_sec">
-                     <textarea name="review_text" class="review_text"></textarea>
+                     <textarea name="review_text" class="bus_review_text" id="bus_reviewtext" onkeyup="remove_errorrmsg(this)"></textarea>
+                     <span class="fill_fields" style="display:none;"></span>
                    </div>
                  </div>
                  <div class="rate_business">

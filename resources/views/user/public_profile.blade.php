@@ -7,7 +7,7 @@
   <input type="hidden" class="publicprofile_status" value="<?php echo $status;?>">
 <?php } ?>
          <div class="breadcrumb register_breadcrumb category_breadcrumb">
-            <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</span></div>
+            <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($user_details)){{$user_details['business_name']}}@endif</span></div>
             <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
          </div>
       </section>
@@ -33,11 +33,11 @@
                 </div>
                 <div class="u_detail">
                   <div class="u_detail_h">
-                    <h1>@if(!empty($user_details)){{$user_details['first_name']}} {{$user_details['last_name']}}@endif</h1>
+                    <h1>@if(!empty($user_details)){{$user_details['business_name']}}@endif</h1>
                     <a href="javascript:;" class="u_chat"><img src="{{ asset('img/text.png') }}"/></a>
-                    <a href="javascript:;" class="u_call"><img src="{{ asset('img/call.png') }}"/></a>
+                    <a href="@if(!empty($user_details))tel:{{$user_details['phone_number']}} @else javascript:; @endif" class="u_call"><img src="{{ asset('img/call.png') }}"/></a>
                   </div>
-                  <span>Category</span>
+                  <span>{{$cat_name}}</span>
                   <p class="u_distance">@if(!empty($user_details)){{$user_details['full_address']}}@endif | <span>Distance <b>@if(!empty($user_details)) @if(!empty($user_details['bu_details'])){{$user_details['bu_details'][0]['distance_kms']}}@endif @endif km</b></span></p>
                 </div>
               </div>

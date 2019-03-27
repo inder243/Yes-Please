@@ -62,8 +62,10 @@
 		$(el).parents().eq(2).remove();
 
 	}
-	function removeOptionsdiv(el) {
-		$(el).parent().remove();
+	function removeOptionsdiv(el) 
+	{
+		alert($(el).parent().attr('id'));
+		//$(el).parent().remove();
 
 	}
 	

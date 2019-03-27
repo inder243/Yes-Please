@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-	/*$('#autocomplete').autocomplete({
-		alert('hmmm');
-	});*/
 
 	/**code to filter category dashboard page on radious change**/
 	$(document).on('change','#dashboard_radious_general',function(){
@@ -73,7 +70,19 @@ $(document).ready(function(){
                         lng: longitude,
                         title: address,
                         click: function(e) {
-                          alert('Address : '+address+'.\n Business Name : '+ business_name);
+                        	var contentString = '<div id="content">'+
+					            '<div id="siteNotice">'+
+					            '</div>'+
+					            '<h1 id="firstHeading" class="firstHeading"></h1>'+
+					            '<div id="bodyContent">'+
+					            '<p><b>'+address+'</b>, '+business_name+' </p>'+
+					            '</div>'+
+					            '</div>';
+				            var infowindow = new google.maps.InfoWindow({
+					          content: contentString
+					        });
+	                    	//alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+	                    	infowindow.open(mymap, this);
                         }
                       });
             });
@@ -191,8 +200,8 @@ $(document).ready(function(){
 	  /*****code to bind map with multiple long lat*****/
 		var mymap = new GMaps({
 	      	el: '#mapDiv',
-	      	lat: 30.733350,
-  			lng: 76.779040,
+	      	lat: 32.0853,
+  			lng: 34.7818,
 	      	zoom:12
 	    });
 
@@ -206,7 +215,19 @@ $(document).ready(function(){
               lng: longitude,
               title: address,
               click: function(e) {
-                alert('Address : '+address+'.\n Business Name : '+ business_name);
+              	var contentString = '<div id="content">'+
+		            '<div id="siteNotice">'+
+		            '</div>'+
+		            '<h1 id="firstHeading" class="firstHeading"></h1>'+
+		            '<div id="bodyContent">'+
+		            '<p><b>'+address+'</b>, '+business_name+' </p>'+
+		            '</div>'+
+		            '</div>';
+	            var infowindow = new google.maps.InfoWindow({
+		          content: contentString
+		        });
+            	//alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+            	infowindow.open(mymap, this);
               }
             });
 		});
@@ -225,11 +246,11 @@ $(document).ready(function(){
     }
 
 
-    if(window.location.href.indexOf("general_dashboard") > -1) {
-      $('html, body').animate({
-	        scrollTop: $(".yep_section_bg").offset().top
-	    }, 2000);
-    }
+    // if(window.location.href.indexOf("general_dashboard") > -1) {
+    //   $('html, body').animate({
+	   //      scrollTop: $(".yep_section_bg").offset().top
+	   //  }, 2000);
+    // }
 
     /******code to check radio buttons*****
     $('.total_quote .radio-inline').on('change', function() {
@@ -305,12 +326,12 @@ $(document).ready(function(){
       		var attr_status = 'simple';
       	}
       	
-      	
+      //	alert(attr_status);return false;
 
 		var url_general = $('.action_general').val();
 		var website_url = $('.website_url').val();
 
-		var email = $('.email_gen').val();
+		var email = $('#general_login').find('.email_gen').val();
 		$('.gen_error').css('display','none');
 		$('.gen_error').text('');
 		if(email == ''){
@@ -318,7 +339,7 @@ $(document).ready(function(){
 			$('.email_gen_error').text('Please add email address');
 			return false;
 		}
-		var password = $('.password_gen').val();
+		var password = $('#general_login').find('.password_gen').val();
 		if(password == ''){
 			$('.password_gen_error').css('display','block');
 			$('.password_gen_error').text('Please add password');
@@ -335,8 +356,6 @@ $(document).ready(function(){
 		// 	$('.password_gen_error').css('display','none');
 		// 	$('.password_gen_error').text('');
 		// }
-
-
 		$.ajax({
            	type:'POST',
            	url:url_general,
@@ -490,6 +509,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
 				$(this).parents('.product_detail').find('.finance').attr('data-id',json[0].id);
 				$(this).parents('.product_detail').find('.finance').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.finance').find('a').attr('title',json[0].category_name);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('data-original-title',json[0].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.finance').hide();
 			}
@@ -498,6 +519,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
 				$(this).parents('.product_detail').find('.energy').attr('data-id',json[1].id);
 				$(this).parents('.product_detail').find('.energy').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.energy').find('a').attr('title',json[1].category_name);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('data-original-title',json[1].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.energy').hide();
 			}
@@ -506,6 +529,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
 				$(this).parents('.product_detail').find('.travel').attr('data-id',json[2].id);
 				$(this).parents('.product_detail').find('.travel').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.travel').find('a').attr('title',json[2].category_name);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('data-original-title',json[2].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.travel').hide();
 			}
@@ -514,6 +539,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
 				$(this).parents('.product_detail').find('.telco').attr('data-id',json[3].id);
 				$(this).parents('.product_detail').find('.telco').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.telco').find('a').attr('title',json[3].category_name);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('data-original-title',json[3].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.telco').hide();
 			}
@@ -522,6 +549,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
 				$(this).parents('.product_detail').find('.eNews').attr('data-id',json[4].id);
 				$(this).parents('.product_detail').find('.eNews').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('title',json[4].category_name);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('data-original-title',json[4].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.eNews').hide();
 			}
@@ -530,6 +559,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
 				$(this).parents('.product_detail').find('.entertainment').attr('data-id',json[5].id);
 				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('title',json[5].category_name);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('data-original-title',json[5].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.entertainment').hide();
 			}
@@ -538,6 +569,8 @@ $(document).on('click', '.yep_section_bg .product_detail .more', function(){
 				$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
 				$(this).parents('.product_detail').find('.category').attr('data-id',json[6].id);
 				$(this).parents('.product_detail').find('.category').find('a').attr('href','javascript:;');
+				$(this).parents('.product_detail').find('.category').find('a').attr('title',json[6].category_name);
+				$(this).parents('.product_detail').find('.category').find('a').attr('data-original-title',json[6].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.category').hide();
 			}
@@ -579,6 +612,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.finance').show();
 				$(this).parents('.product_detail').find('.finance').find('.catagory_name').html(json[0].category_name);
 				$(this).parents('.product_detail').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('title',json[0].category_name);
+				$(this).parents('.product_detail').find('.finance').find('a').attr('data-original-title',json[0].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.finance').hide();
 			}
@@ -586,6 +621,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.energy').show();
 				$(this).parents('.product_detail').find('.energy').find('.energy_name').html(json[1].category_name);
 				$(this).parents('.product_detail').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('title',json[1].category_name);
+				$(this).parents('.product_detail').find('.energy').find('a').attr('data-original-title',json[1].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.energy').hide();
 			}
@@ -593,6 +630,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.travel').show();
 				$(this).parents('.product_detail').find('.travel').find('.travel_name').html(json[2].category_name);
 				$(this).parents('.product_detail').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('title',json[2].category_name);
+				$(this).parents('.product_detail').find('.travel').find('a').attr('data-original-title',json[2].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.travel').hide();
 			}
@@ -600,6 +639,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.telco').show();
 				$(this).parents('.product_detail').find('.telco').find('.telco_name').html(json[3].category_name);
 				$(this).parents('.product_detail').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('title',json[3].category_name);
+				$(this).parents('.product_detail').find('.telco').find('a').attr('data-original-title',json[3].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.telco').hide();
 			}
@@ -607,6 +648,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.eNews').show();
 				$(this).parents('.product_detail').find('.eNews').find('.eNews_name').html(json[4].category_name);
 				$(this).parents('.product_detail').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('title',json[4].category_name);
+				$(this).parents('.product_detail').find('.eNews').find('a').attr('data-original-title',json[4].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.eNews').hide();
 			}
@@ -614,6 +657,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.entertainment').show();
 				$(this).parents('.product_detail').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
 				$(this).parents('.product_detail').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('title',json[5].category_name);
+				$(this).parents('.product_detail').find('.entertainment').find('a').attr('data-original-title',json[5].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.entertainment').hide();
 			}
@@ -621,6 +666,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 				$(this).parents('.product_detail').find('.category').show();
 				$(this).parents('.product_detail').find('.category').find('.category_name').html(json[6].category_name);
 				$(this).parents('.product_detail').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+				$(this).parents('.product_detail').find('.category').find('a').attr('title',json[6].category_name);
+				$(this).parents('.product_detail').find('.category').find('a').attr('data-original-title',json[6].category_name);
 			}else{
 				$(this).parents('.product_detail').find('.category').hide();
 			}
@@ -671,6 +718,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.finance').css('visibility','visible');
 					$('.categories_ajax').find('.finance').find('.catagory_name').html(json[0].category_name);
 					$('.categories_ajax').find('.finance').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[0].id);
+					$('.categories_ajax').find('.finance').find('a').attr('title',json[0].category_name);
+					$('.categories_ajax').find('.finance').find('a').attr('data-original-title',json[0].category_name);
 				}else{
 					$('.categories_ajax').find('.finance').hide();
 				}
@@ -678,6 +727,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.energy').show();
 					$('.categories_ajax').find('.energy').find('.energy_name').html(json[1].category_name);
 					$('.categories_ajax').find('.energy').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[1].id);
+					$('.categories_ajax').find('.energy').find('a').attr('title',json[1].category_name);
+					$('.categories_ajax').find('.energy').find('a').attr('data-original-title',json[1].category_name);
 				}else{
 					$('.categories_ajax').find('.energy').hide();
 				}
@@ -686,6 +737,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.travel').css('visibility','visible');
 					$('.categories_ajax').find('.travel').find('.travel_name').html(json[2].category_name);
 					$('.categories_ajax').find('.travel').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[2].id);
+					$('.categories_ajax').find('.travel').find('a').attr('title',json[2].category_name);
+					$('.categories_ajax').find('.travel').find('a').attr('data-original-title',json[2].category_name);
 				}else{
 					$('.categories_ajax').find('.travel').hide();
 				}
@@ -693,6 +746,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.telco').show();
 					$('.categories_ajax').find('.telco').find('.telco_name').html(json[3].category_name);
 					$('.categories_ajax').find('.telco').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[3].id);
+					$('.categories_ajax').find('.telco').find('a').attr('title',json[3].category_name);
+					$('.categories_ajax').find('.telco').find('a').attr('data-original-title',json[3].category_name);
 				}else{
 					$('.categories_ajax').find('.telco').hide();
 				}
@@ -700,6 +755,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.eNews').show();
 					$('.categories_ajax').find('.eNews').find('.eNews_name').html(json[4].category_name);
 					$('.categories_ajax').find('.eNews').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[4].id);
+					$('.categories_ajax').find('.eNews').find('a').attr('title',json[4].category_name);
+					$('.categories_ajax').find('.eNews').find('a').attr('data-original-title',json[4].category_name);
 				}else{
 					$('.categories_ajax').find('.eNews').hide();
 				}
@@ -708,6 +765,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.entertainment').css('visibility','visible');
 					$('.categories_ajax').find('.entertainment').find('.entertainment_name').html(json[5].category_name);
 					$('.categories_ajax').find('.entertainment').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[5].id);
+					$('.categories_ajax').find('.entertainment').find('a').attr('title',json[5].category_name);
+					$('.categories_ajax').find('.entertainment').find('a').attr('data-original-title',json[5].category_name);
 				}else{
 					$('.categories_ajax').find('.entertainment').hide();
 				}
@@ -715,6 +774,8 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 					$('.categories_ajax').find('.category').show();
 					$('.categories_ajax').find('.category').find('.category_name').html(json[6].category_name);
 					$('.categories_ajax').find('.category').find('a').attr('href',home_url+'/general_user/dashboard/catid/'+json[6].id);
+					$('.categories_ajax').find('.category').find('a').attr('title',json[6].category_name);
+					$('.categories_ajax').find('.category').find('a').attr('data-original-title',json[6].category_name);
 				}else{
 					$('.categories_ajax').find('.category').hide();
 				}
@@ -738,6 +799,11 @@ $(document).on('click', '.yep_section_bg .product_detail .cat_more', function(){
 			$(this).next('.product_detail').show();
 			$(this).hide();
 			//$('.product_detail').show();
+		});
+
+		/******on hide modal refresh page******/
+		$('#work_description').on('hidden.bs.modal', function () {
+			location.reload();
 		});
 
 });/*****document ready*****/
@@ -850,6 +916,31 @@ function showPosition(position) {
 		      zoom:12
 		    });
 
+		     // var contentString = '<div id="content">'+
+       //      '<div id="siteNotice">'+
+       //      '</div>'+
+       //      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+       //      '<div id="bodyContent">'+
+       //      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+       //      'sandstone rock formation in the southern part of the '+
+       //      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+       //      'south west of the nearest large town, Alice Springs; 450&#160;km '+
+       //      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+       //      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+       //      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+       //      'Aboriginal people of the area. It has many springs, waterholes, '+
+       //      'rock caves and ancient paintings. Uluru is listed as a World '+
+       //      'Heritage Site.</p>'+
+       //      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+       //      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+       //      '(last visited June 22, 2009).</p>'+
+       //      '</div>'+
+       //      '</div>';
+            var contentString = '';
+
+	        
+
+
       		$('.all_bus_by_cat li').each(function(i){
 			   	var longitude = $(this).find('.hidden_longitude').val();
 			   	var latitude = $(this).find('.hidden_latitude').val();
@@ -860,7 +951,19 @@ function showPosition(position) {
                   	lng: longitude,
                   	title: address,
                   	click: function(e) {
-                    	alert('Address : '+address+'.\n Business Name : '+ business_name);
+                  		var contentString = '<div id="content">'+
+				            '<div id="siteNotice">'+
+				            '</div>'+
+				            '<h1 id="firstHeading" class="firstHeading"></h1>'+
+				            '<div id="bodyContent">'+
+				            '<p><b>'+address+'</b>, '+business_name+' </p>'+
+				            '</div>'+
+				            '</div>';
+			            var infowindow = new google.maps.InfoWindow({
+				          content: contentString
+				        });
+                    	//alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+                    	infowindow.open(mymap, this);
                   	}
                 });
 			});
@@ -961,7 +1064,19 @@ function showPosition(position) {
 	                            lng: longitude,
 	                            title: address,
 	                            click: function(e) {
-	                              alert('Address : '+address+'.\n Business Name : '+ business_name);
+	                            	var contentString = '<div id="content">'+
+							            '<div id="siteNotice">'+
+							            '</div>'+
+							            '<h1 id="firstHeading" class="firstHeading"></h1>'+
+							            '<div id="bodyContent">'+
+							            '<p><b>'+address+'</b>, '+business_name+' </p>'+
+							            '</div>'+
+							            '</div>';
+						            var infowindow = new google.maps.InfoWindow({
+							          content: contentString
+							        });
+			                    	//alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+			                    	infowindow.open(mymap, this);
 	                            }
 	                          });
 	                });
@@ -1101,4 +1216,32 @@ function closestaticmodal(){
 function show_error(){
 	alert('errorrr');
 }
+
+/****code for search on the category dashboard page****/
+function searchFilter() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("keyword");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("all_busBy_cat");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("h1")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+
+    var visible_ul = $('.all_bus_by_cat > li:visible').length;
+    
+    if(visible_ul == 0) { // Checking if list is empty
+	    $('#no_data_found').css('display', 'block'); // Display the Not Found message
+	} else {
+	    $('#no_data_found').css('display', 'none'); // Hide the Not Found message
+	}
+
+}
+/****search functionality code ends here****/
 

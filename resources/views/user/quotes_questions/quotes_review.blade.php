@@ -1,18 +1,18 @@
 @extends('layouts.inner_general')
 
 @section('content')
-<?php //echo "<pre>";print_r($quote_data);die;?>
+
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="{{ url('/') }}">Home</a>/<a href="JavaScript:;"> Category </a>/<span class="q_breadcrumb">Review</span></div>
+           <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}">Quotes and Questions</a>/<a href="{{ url('/general_user/dashboard/catid/'.$quote_data['get_quotes']['cat_id']) }}">@if(isset($quote_data)) {{$quote_data['get_quotes']['cat_name']}}@endif</a>/<span class="q_breadcrumb">Review {{$quote_data['get_bus_user']['business_name']}}</span></div>
 
          </div>
       </section>
       <section>
          <div class="quote_req_main_finsih">
           @if(isset($quote_data))
-          @if(isset($quote_data[0]['get_bus_user']))
-            <h1>{{$quote_data[0]['get_bus_user']['business_name']}}</h1>
+          @if(isset($quote_data['get_bus_user']))
+            <h1>{{$quote_data['get_bus_user']['business_name']}}</h1>
           @else
           <h1>Business name</h1>
           @endif
@@ -24,8 +24,8 @@
 
                 @if(isset($quote_data))
                   @php 
-                  $image = $quote_data[0]['get_bus_user']['image_name'];
-                  $business_id = $quote_data[0]['get_bus_user']['business_userid'];
+                  $image = $quote_data['get_bus_user']['image_name'];
+                  $business_id = $quote_data['get_bus_user']['business_userid'];
                   @endphp
                   @if($image)
                   <div class="user_img qhome_improvmentimg"><img src="{{url('/images/business_profile/'.$business_id.'/'.$image)}}"/></div>
@@ -36,11 +36,11 @@
                 
                   <div class="otheruser_detail">
                      @if(isset($quote_data))
-                       <h1>{{$quote_data[0]['get_bus_user']['first_name']}} {{$quote_data[0]['get_bus_user']['last_name']}}</h1>
-                       <p>{{$quote_data[0]['get_bus_user']['full_address']}}</p>
+                       <h1><a href="{{url('/general_user/public_profile/'.$quote_data['get_bus_user']['id'])}}">{{$quote_data['get_bus_user']['business_name']}}</a></h1>
+                       <p>{{$quote_data['get_bus_user']['full_address']}}</p>
                        
                         @php
-                        $created_date = $quote_data[0]['get_bus_user']['created_at'];
+                        $created_date = $quote_data['get_bus_user']['created_at'];
 
                         $splitTimeStamp = explode(" ",$created_date);
                         $date = date('M Y',strtotime($splitTimeStamp[0]));
@@ -54,14 +54,17 @@
                      @endif
                   </div>
                   <div class="contact_user">
-                     <a href="tel:{{Auth::user()->phone_number}}" class="user_call"><img src="{{ asset('img/call.png') }}"/></a>
+                    @if(isset($quote_data))
+                     <a href="tel:{{$quote_data['get_bus_user']['phone_number']}}" class="user_call"><img src="{{ asset('img/call.png') }}"/></a>
                      <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
+                     @endif
                   </div>
                   <div class="review_section">
-                     <ul>
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->avg('rating');
 
-                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->where('review','!=','')->count('review');
+                     <ul>
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->avg('rating');
+
+                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->where('review','!=','')->count('review');
                     
                     $total_rating = round($get_total_rating);
                     ?>
@@ -119,15 +122,16 @@
                 <form id="general_review_submit" action="{{ route('general_user.quote_review_submit') }}" method="POST">
                      @csrf
 
-                     <input type="hidden" name="review_gen_id" value="{{$quote_data[0]['general_id']}}">
-                     <input type="hidden" name="review_quote_id" value="{{$quote_data[0]['quote_id']}}">
-                     <input type="hidden" name="review_bus_id" value="{{$quote_data[0]['business_id']}}">
+                     <input type="hidden" name="review_gen_id" value="{{$quote_data['general_id']}}">
+                     <input type="hidden" name="review_quote_id" value="{{$quote_data['quote_id']}}">
+                     <input type="hidden" name="review_bus_id" value="{{$quote_data['business_id']}}">
                      <input type="hidden" name="review_type" value="general">
 
                  <div class="write_reviews">
                    <p>Write your review<span><img src="{{ asset('img/question_img.png') }}"/></span></p>
                    <div class="write_sec">
-                     <textarea name="review_text" class="gen_review_text"></textarea>
+                     <textarea name="review_text" onkeyup="remove_errmsg(this)" class="gen_review_text" id="gen_reviewtext"></textarea>
+                     <span class="fill_fields" style="display:none;"></span>
                    </div>
                  </div>
                  <div class="rate_business">
@@ -139,6 +143,9 @@
                      <li id="star_4" data-id="4" data-status="inactive" onClick="gen_change_review(this); return false;"><img src="{{ asset('img/inactive_star.png') }}"/></li>
                      <li id="star_5" data-id="5" data-status="inactive" onClick="gen_change_review(this); return false;"><img src="{{ asset('img/inactive_star.png') }}"/></li>
                    </ul>
+
+                   <span class="fill_fields" style="display:none;text-align: center;"></span>
+
                    <input type="hidden" name="gen_star_active" class="gen_hidden_star_active" value="">
                    <div class="review_later">
                      <a href ="{{ url('general_user/quote_questions') }}" class="review_later1">Review later</a>

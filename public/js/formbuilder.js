@@ -1,6 +1,89 @@
-$(document).ready(function(){
-	
+
+$(document).on('click','.dynamicradio_button', function () {
+
+	var site_url = $('#site_url').text();
+	var lastdiv = $('.dynmic_quoteform .form-ques:visible');//get last question
+	var catid = $('.dynmic_quoteform .hiddencatId').val();//get catid
+	var qid = $(lastdiv).attr('data-id');//get id of question
+	var qtype = $(lastdiv).attr('data-type');//get type of question
+	var value = '';
+
+	if(qtype=="radio")//get value of radio
+	{
+		$(lastdiv).find('input[type=radio]').each(function(){
+        var option = {};
+          if($(this).is(":checked")){
+            value = $(this).val();
+          }
+        });
+	}
+
+	methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url);
+
 });
+
+
+function methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url)
+{
+	//set csrf token
+	if(qid!='' && value!='' && qtype!='' && catid!='')
+	{
+		$.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+		$.ajax({
+          url: site_url+"/general_user/getdata",        
+          type:'POST',
+          data: {'qid':qid,'value':value,'type':qtype,'catid':catid},	
+          success:function(response){  
+           
+			if(response.success==1)
+			{
+				if(response.data!='')
+				{
+					if(response.nextid!='' && $(".dynamicQues_"+response.nextid).length != 0) 
+					{
+					  	$('.form-ques').hide();
+						$('.dynamicQues_'+response.nextid).show();
+						$('.submit_dynamic_from').parent().show();
+						
+					}
+					else
+					{
+						$('.form-ques').hide();
+						$('.dynmic_quoteform .modal-body .ask_for_quote_section').append(response.data);
+						$('.submit_dynamic_from').parent().show();
+
+					}
+				}
+				else
+				{
+					
+					var Ques = 'dynamicQues_'+qid;
+					$('.form-ques').hide();
+					$('.dynmic_quoteform .static_ques_1').show();
+					$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id',Ques);
+					$('.submit_dynamic_from').parent().show();
+					
+				}
+				
+			}
+			else
+			{
+				alert(response.message);
+			}
+          }
+        });
+	}
+	else
+	{
+		alert('Please answer given question');
+		return false;
+	}
+}
 
 //this function will work if there are no dynamic questions added
 function getOnlyStaticQuestions()
@@ -58,6 +141,7 @@ function getOnlyStaticQuestions()
 		var catid = $('.dynmic_quoteform .hiddencatId').val();//get catid
 		
 		console.log(lastdiv);
+
 		var qid = $(lastdiv).attr('data-id');//get id of question
 		var qtype = $(lastdiv).attr('data-type');//get type of question
 		var value = '';
@@ -97,76 +181,7 @@ function getOnlyStaticQuestions()
 		console.log(qid);
 		console.log(qtype);
 
-		//set csrf token
-		if(qid!='' && value!='' && qtype!='' && catid!='')
-		{
-			$.ajaxSetup({
-	          headers: {
-	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	          }
-	        });
-
-			$.ajax({
-	          url: site_url+"/general_user/getdata",        
-	          type:'POST',
-	          data: {'qid':qid,'value':value,'type':qtype,'catid':catid},	
-	          success:function(response){  
-	           
-				if(response.success==1)
-				{
-					if(response.data!='')
-					{
-						if(response.nextid!='' && $(".dynamicQues_"+response.nextid).length != 0) 
-						{
-						  	$('.form-ques').hide();
-							$('.dynamicQues_'+response.nextid).show();
-							$('.submit_dynamic_from').parent().show();
-							/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-						}
-						else
-						{
-							$('.form-ques').hide();
-							$('.dynmic_quoteform .modal-body .ask_for_quote_section').append(response.data);
-							$('.submit_dynamic_from').parent().show();
-
-							/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-						}
-					}
-					else
-					{
-						
-						var Ques = 'dynamicQues_'+qid;
-						$('.form-ques').hide();
-						$('.dynmic_quoteform .static_ques_1').show();
-						$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id',Ques);
-						$('.submit_dynamic_from').parent().show();
-						/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-					}
-					
-					
-					//alert(response.message);
-				}
-				else
-				{
-					alert(response.message);
-				}
-	          }
-	        });
-		}
-		else
-		{
-			alert('Please answer given question');
-			return false;
-		}
+		methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url);
 		
 	}
 
@@ -310,10 +325,10 @@ function getOnlyStaticQuestions()
 
     });
 
-	function validate_quote_dynamicandstatic(validate){
+	function validate_quote_dynamicandstatic(obj)
+	{
     	var site_url = $('#site_url').text();
     	data = new FormData();
-		
       	var fields = [];
       	$('.dynmic_quoteform .form-ques').each(function(){
       		var type = $(this).attr('data-type'); //get type of field
@@ -445,16 +460,40 @@ function getOnlyStaticQuestions()
       	var phone = $('.dynmic_quoteform').find('#dynamic_mobile_phone').val();
       	var desc = $('.dynmic_quoteform').find('#dynamic_description').val();
       	var quotecount = $('.dynmic_quoteform').find('input[name="radios"]:checked').val();
-
-      	if(phone=='')
-      	{
-      		var this_class = $(validate).children('a').attr('class');
+      	var hiddencatId = $('.dynmic_quoteform').find('.hiddencatId').val();
+      	
+      	if(phone==''){
+      		var this_class = $(obj).find('a').attr('class');
       		if(this_class != 'mobile_dont_want'){
-      			alert('Please provide phone number');
+      			$('#dynamic_mobile_phone').next('.fill_fields').css('display','block');
+			    $('#dynamic_mobile_phone').next('.fill_fields').text('Please enter Mobile phone.');
+			    $('#dynamic_mobile_phone').addClass('error_border');
       			return false;
+      		}else{
+      			
+      			$('#dynamic_mobile_phone').next('.fill_fields').css('display','none');
+	      		$('#dynamic_mobile_phone').removeClass('error_border');
       		}
-      		
       	}
+      	if((phone).length < 9 || (phone).length > 15){
+      		var this_class = $(obj).find('a').attr('class');
+      		if(this_class != 'mobile_dont_want'){
+				$('#dynamic_mobile_phone').next('.fill_fields').css('display','block');
+		      	$('#dynamic_mobile_phone').next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
+		      	$('#dynamic_mobile_phone').addClass('error_border');
+		      	return false;
+		    }else{
+		    	
+      			$('#dynamic_mobile_phone').next('.fill_fields').css('display','none');
+	      		$('#dynamic_mobile_phone').removeClass('error_border');
+		    }
+	    }
+
+	    var this_class = $(obj).find('a').attr('class');
+  		if(this_class == 'mobile_dont_want'){
+  			phone = '';
+  		}
+
       	if(desc=='')
       	{
       		alert('Please provide Description');
@@ -493,6 +532,7 @@ function getOnlyStaticQuestions()
 			data.append('phone',phone);
 			data.append('desc',desc);
 			data.append('quotecount',quotecount);
+			data.append('hiddencatId',hiddencatId);
 			data.append('multipleBusiness',multipleBusiness);
 			//alert('dfgkmfkjg');
 			//console.log(data);
@@ -575,8 +615,11 @@ function getOnlyStaticQuestions()
 
     function getStaticQuestionNext(ele)
     {
+    	
+    	//return false;
     	var current_btn_id = $(ele).attr('id');
-
+    	var toShowQues = $(ele).attr('data_nxt_id');
+    	//alert(current_btn_id);
     	var data_nxt_id = $(ele).attr('data_nxt_id');
 
     	quotesSelected ='';
@@ -602,42 +645,23 @@ function getOnlyStaticQuestions()
     	if(data_nxt_id == 'static_ques_3'){
     		/****check data****/
 			var text_desc1 = $('.describe_work').find('.work_description_modal').val();
+
 			if(text_desc1 == ''){
-				
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
+				$('.describe_work').find('.work_description_modal').next('.fill_fields').css('display','block');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Please add description');
 				return false;
-			}else if((text_desc1).length < 100 || (text_desc1).length > 2000){
-				
+			}
+			else if((text_desc1).length < 100 || (text_desc1).length > 2000){
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
+				$('.describe_work').find('.work_description_modal').next('.fill_fields').css('display','block');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
 				return false;
+			}else{
+				$('.describe_work').find('.work_description_modal').removeClass('error_border');
+				$('.describe_work').find('.work_description_modal').next('.fill_fields').css('display','none');
 			}
-
-		     /******display images on select image*****/
-			$('#ask_quote #dynamic_vid_img').change(function(e){
-		    	e.preventDefault();
-				var images = e.target.files;
-				//$('.reg_img_msg').text('');
-				var name='';
-				var count = 0;
-				$.each( images, function( key, value ) {
-					if(count > 0){
-						name += value.name+', ';
-					}else{
-						name = value.name;
-					}
-					count++;
-				  	//$('.reg_img_msg').append(value.name+', ');
-				});
-				$('#ask_quote .file_to_upload #dynamic_vid_img').after('<span id="image_names">'+name+'</span>');
-				if(count > 0){
-					$('#ask_quote .static_ques_3 .describe_work_btn .ele_next a').text('Next');
-				}
-				//alert(name);
-
-		    });
-
+			
     	}
 
     	
@@ -657,9 +681,6 @@ function getOnlyStaticQuestions()
 	            success:function(data){
 	            	
 	              if(data.success == '1'){
-	              	
-	              	var toShowQues = $(ele).attr('data_nxt_id');
-	    
 			    	//$('.'+toShowQues).show();
 			    	$('.dynmic_quoteform .form-ques').hide();
 			    	$('.dynmic_quoteform .static_ques').hide();
@@ -676,14 +697,16 @@ function getOnlyStaticQuestions()
 	              	$('#ask_quote').modal('hide');
 	              	$('#ask_quote').modal('hide');
 	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
+	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus-nxtques',toShowQues);
 	                
 	              }
 	            }
 
 	        });/****ajax ends here****/
-    	}else{
+    	}
+    	else
+    	{
     		var toShowQues = $(ele).attr('data_nxt_id');
-	    	//$('.'+toShowQues).show();
 	    	$('.dynmic_quoteform .form-ques').hide();
 	    	$('.dynmic_quoteform .static_ques').hide();
 	    	$('.dynmic_quoteform .'+toShowQues).show();
@@ -692,7 +715,29 @@ function getOnlyStaticQuestions()
       	
     }/******fn get static next question*****/
 
+     /******display images on select image*****/
+     $(document).on('change', '#ask_quote #dynamic_vid_img', function(e){
+    	e.preventDefault();
+		var images = e.target.files;
+		//$('.reg_img_msg').text('');
+		var name='';
+		var count = 0;
+		$.each( images, function( key, value ) {
+			if(count > 0){
+				name += value.name+', ';
+			}else{
+				name = value.name;
+			}
+			count++;
+		  	//$('.reg_img_msg').append(value.name+', ');
+		});
+		$('#ask_quote .file_to_upload #dynamic_vid_img').after('<span id="image_names">'+name+'</span>');
+		if(count > 0){
+			$('#ask_quote .static_ques_3 .describe_work_btn .ele_next a').text('Next');
+		}
+		//alert(name);
 
+    });
     function closdynamicemodal()
     {
     	$('#ask_quote').modal('hide');
@@ -712,10 +757,12 @@ function getOnlyStaticQuestions()
 		
       	var attr_status = $('#sign_in_general1').attr('data-checkstatus');
       	
+      	var attr_status_nxt_question = '';
 
       	if(attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotes_login')
       	{
       		var attr_status = 'quotes';
+      		 attr_status_nxt_question = $('#sign_in_general1').attr('data-checkstatus-nxtques');
       	}
       	else if( attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotessingle')
       	{
@@ -770,6 +817,9 @@ function getOnlyStaticQuestions()
               	if(data.success == '2'){
               		$('#general_login1').modal('hide');
               		$('#ask_quote').modal('show');
+              		$('.dynmic_quoteform .form-ques').hide();
+			    	$('.dynmic_quoteform .static_ques').hide();
+			    	$('.dynmic_quoteform .'+attr_status_nxt_question).show();
               		
               	}
               	if(data.success == '3'){

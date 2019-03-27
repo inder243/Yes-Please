@@ -1,15 +1,15 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions</a>/<span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></span></div>
       </section>
         <section>
           <div class="quote_req_main">
             <?php if(isset($quote_data[0]['status'])): ?>
               <?php if($quote_data[0]['status'] == '4'): ?>
-              <h1>Quote accepted by user</h1>
+              <h1>Quote accepted by <?php if(isset($quote_data[0]['get_gen_user'])): ?><?php echo e($quote_data[0]['get_gen_user']['first_name']); ?> <?php echo e($quote_data[0]['get_gen_user']['last_name']); ?><?php endif; ?></h1>
               <?php elseif($quote_data[0]['status'] == '3'): ?>
-              <h1>Quote quoted by user</h1>
+              <h1>Quote is Quoted</h1>
               <?php elseif($quote_data[0]['status'] == '6'): ?>
               <h1>Quote Completed</h1>
               <?php endif; ?>
@@ -19,7 +19,7 @@
               <?php if($quote_data[0]['status'] == '4'): ?>
               <div class="improvement_section_new accepted-quote">
               <?php elseif($quote_data[0]['status'] == '3'): ?>
-              <div class="improvement_section_new new_quote q_quoted">
+              <div class="improvement_section_new new_quote q_quoted1">
               <?php elseif($quote_data[0]['status'] == '6'): ?>
               <div class="improvement_section_new new_quote">
               <?php endif; ?>
@@ -124,11 +124,11 @@
                 <div class="Q_tag">
                   <?php if(isset($quote_data[0]['status'])): ?>
                     <?php if($quote_data[0]['status'] == '4'): ?>
-                    <div class="new_lable q_accepted_table">ACCEPTED</div>
+                    <div class="new_lable q_accepted_table bus_accepted">ACCEPTED</div>
                     <?php elseif($quote_data[0]['status'] == '3'): ?>
-                    <div class="new_lable q_quoted_table">QUOTED</div>
+                    <div class="new_lable q_quoted_table bus_quoted">QUOTED</div>
                     <?php elseif($quote_data[0]['status'] == '6'): ?>
-                    <div class="new_lable">COMPLETED</div>
+                    <div class="new_lable bus_completed">COMPLETED</div>
                     <?php endif; ?>
                   <?php endif; ?>
                     <?php $datetime = $allquotes['created_at'];
@@ -141,11 +141,43 @@
                      <div class="created_date"><?php echo e($date); ?></div>
                   </div>
                   <div class="quote_basic_detail">
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span><?php echo e($allquotes['phone_number']); ?></span>
-                     </div>
-                    
+
+                    <?php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); ?>
+
+                    <?php if(!empty($dynamic_formdata )): ?>
+                    <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <?php if($dyanamic_values['filter']==1): ?>
+                      <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                          <span><?php echo e($dyanamic_values['value']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php else: ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                          <?php $get_labels = ''; ?>
+                          <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          <span><?php echo e($get_labels); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
+                    <?php if(!empty($allquotes['phone_number'])): ?>
+                    <div class="Q_detail">
+                      <span class="Q_detail_heading">Mobile Number:</span>
+                      <span><?php echo e($allquotes['phone_number']); ?></span>
+                    </div>
+                    <?php endif; ?>
+
                   </div>
                   <div class="Q_description">
                      <p><?php echo e($allquotes['work_description']); ?></p>
@@ -182,7 +214,18 @@
           <div class="container-fluid">
             <div class="your_quote">
               <h1>Your quote</h1>
-              <div class="doller_hr"><h1>$ <?php if(isset($quote_data[0]['quote_reply'])): ?><?php echo e($quote_data[0]['quote_reply']['price_quotes']); ?> <?php else: ?> 100 <?php endif; ?> </h1><p>/hour</p></div>
+
+              <?php if(isset($quote_data[0]['quote_reply'])): ?>
+                <?php if($quote_data[0]['quote_reply']['price_type'] == 2): ?>
+                  <?php $price_type = '/hour'; ?>
+                <?php else: ?>
+                  <?php $price_type = ''; ?>
+                <?php endif; ?>
+              <?php else: ?>
+              <?php $price_type = ''; ?>
+              <?php endif; ?>
+
+              <div class="doller_hr"><h1>$ <?php if(isset($quote_data[0]['quote_reply'])): ?><?php echo e($quote_data[0]['quote_reply']['price_quotes']); ?> <?php else: ?> 100 <?php endif; ?> </h1><p><?php echo e($price_type); ?></p></div>
               <p class="your_quote_des"><?php if(isset($quote_data[0]['quote_reply'])): ?> <?php echo e($quote_data[0]['quote_reply']['details']); ?> <?php endif; ?>
               </p>
               <div class="total_pics">

@@ -399,7 +399,7 @@ justify-content: flex-start;
 flex-wrap: wrap;
 }
 
-.mobile_validate_submit {
+.mobile_validate_submit, .mobile_dont_want {
     background-color: #ed0c6e;
     text-align: center;
     display: inline-block;
@@ -418,7 +418,7 @@ flex-wrap: wrap;
     cursor:pointer;
 }
 
-.mobile_validate_submit:hover {
+.mobile_validate_submit:hover, .mobile_dont_want:hover {
     text-decoration: none;
     background-color: #d50861;
 }
@@ -598,4 +598,20 @@ input[type=number] {
 .no_data_found {
     text-align: center;
     font-size: 24px;
+}
+.no_result_quotes {
+    text-align: center;
+    font-size: 28px;
+    margin: 0 0 30px 0;
+}
+.gen_single_quote_upload{
+    width:100%;
+}
+.review_section li a img, .r-star li a img, .rate_str {
+    cursor: default;
+}
+.template_title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }

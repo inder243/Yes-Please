@@ -2,7 +2,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div> <a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote request</span></div>
+           <div> <a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes->cat_id)); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></a>/<span class="q_breadcrumb">  Quote request</span></div>
 
            <div class="for_accepted_quote">
             <div class="finish_quote">
@@ -52,10 +52,7 @@
                      ?>
                      <span>Member since <?php echo e($date); ?></span>
                   </div>
-                  <div class="contact_user">
-                     <a href="tel:<?php echo e(Auth::user()->phone_number); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
-                     <a href="JavaScript:;" class="user_text"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
-                  </div>
+                  
                   <div class="review_section">
                      <ul>
                         <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->avg('rating');
@@ -133,18 +130,43 @@
                   </div>
                 </div>
                   <div class="quote_basic_detail">
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span><?php echo e($allquotes['phone_number']); ?></span>
-                     </div>
-                     <!-- <div class="Q_detail">
-                        <span class="Q_detail_heading">Required task:</span>
-                        <span>Design house</span>
-                     </div>
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Design type: </span>
-                        <span>Modern</span>
-                     </div> -->
+
+                    <?php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); ?>
+
+                    <?php if(!empty($dynamic_formdata )): ?>
+                    <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <?php if($dyanamic_values['filter']==1): ?>
+                      <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                          <span><?php echo e($dyanamic_values['value']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php else: ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                          <?php $get_labels = ''; ?>
+                          <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          <span><?php echo e($get_labels); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
+                    <?php if(!empty($allquotes['phone_number'])): ?>
+                    <div class="Q_detail">
+                      <span class="Q_detail_heading">Mobile Number:</span>
+                      <span><?php echo e($allquotes['phone_number']); ?></span>
+                    </div>
+                    <?php endif; ?>
+
                   </div>
                   <div class="Q_description">
                      <p><?php echo e($allquotes['work_description']); ?></p>
@@ -181,10 +203,12 @@
 
               <div class="show_quote">
 
-                <div class="total_list_quote">
+                <div class="showing_answer">
                   <ul>
                     <li>
-                      <div class="user_quote_img">
+                      <div class="main_ans_Sec">
+                      <div class="main_ans_Sec_container">
+                      <div class="ans_img">
                         <?php
                         $bus_user_id = $get_user_data['get_bus_user']['business_userid'];
                         $img_url = $get_user_data['get_bus_user']['image_name'];
@@ -196,10 +220,88 @@
                         <img src="<?php echo e(asset('img/user_placeholder.png')); ?>">
                         <?php endif; ?>
                       </div>
-                      <div class="other_details_quote">
-                        <h1><?php if(isset($get_user_data['get_bus_user'])): ?><?php echo e($get_user_data['get_bus_user']['first_name']); ?> <?php echo e($get_user_data['get_bus_user']['last_name']); ?> <?php endif; ?></h1>
-                        <p><span>$ <?php echo e($get_user_data['price_quotes']); ?></span> for everything</p>
+                      <div class="main_ans_sec_detail">
+                        <div class="heading_dec">
+                          <h1><?php if(isset($get_user_data['get_bus_user'])): ?><?php echo e($get_user_data['get_bus_user']['business_name']); ?> <?php endif; ?></h1>
+
+                          <?php $details = mb_strimwidth($get_user_data['details'], 0, 30, "..."); ?>
+
+                        <?php if($get_user_data['price_type'] == 2): ?>
+                        <?php $price_type = '/hour'; ?>
+                        <?php else: ?>
+                        <?php $price_type = ''; ?>
+                        <?php endif; ?>
+
+                          <div class="rate_hours"><h2>$<?php echo e($get_user_data['price_quotes']); ?></h2><p class="complete_detail"></p><?php echo e($price_type); ?></div>
+
+                        </div>
+                            <div class="chat_call_sec star-sec">
+
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->avg('rating');
+
+                        $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->where('review','!=','')->count('review');
+                        
+                        $total_rating = round($get_total_rating);
+                        ?>
+                        <?php if(isset($total_rating)): ?>
+                          <?php if($total_rating == '5'): ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                          <?php elseif($total_rating == '4'): ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                          <?php elseif($total_rating == '3'): ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                          <?php elseif($total_rating == '2'): ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                          <?php elseif($total_rating == '1'): ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/active_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                          <?php else: ?>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                            <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a> 
+                          <?php endif; ?> 
+                        <?php else: ?>
+                        <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                        <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                        <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                        <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                        <a href="javascript:;" class="rate_str"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
+                        <?php endif; ?>
+                        
+                        <p><?php echo e($get_total_reviews); ?> </p>
+                        <p>reviews</p>
+                        <a href="javascript:;" class="chat_this">
+                          <img src="<?php echo e(asset('img/text.png')); ?>"/>
+                        </a>
+                        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="<?php echo e($get_user_data['get_bus_user']['phone_number']); ?>" data-original-title="<?php echo e($get_user_data['get_bus_user']['phone_number']); ?>" class="call_this">
+                          <img src="<?php echo e(asset('img/call.png')); ?>"/>
+                        </a>
                       </div>
+                      </div>
+                    </div>
+                    </div>
+
                     </li>
                   </ul>
                   

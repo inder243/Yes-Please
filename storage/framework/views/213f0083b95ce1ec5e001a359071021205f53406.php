@@ -41,9 +41,6 @@
                             <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(url('/general_user/general_dashboard')); ?>"><img src="<?php echo e(asset('img/dashboard.png')); ?>" />Dashboard</a>
-                        </li>
-                        <li>
                             <a href="<?php echo e(url('/general_user/quote_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
@@ -60,6 +57,9 @@
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Favorite businesses</a>
                         </li>
                         <li>
                           <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
@@ -81,9 +81,6 @@
                           <li>
                             <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Contact </a>
                           </li>
-                        <li>
-                          <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
-                        </li>
                         <?php endif; ?>
                     </ul>
                 </div>
@@ -435,6 +432,8 @@
                   </button>
                </div>
                <div class="modal-body quote_body">
+                <input type="hidden" class="hidden_catname" name="hidden_catname" value="<?php if(isset($cat_name)): ?><?php echo e($cat_name); ?><?php endif; ?>">
+                <input type="hidden" class="hidden_catid" name="hidden_catid" value="<?php if(isset($cat_id)): ?><?php echo e($cat_id); ?><?php endif; ?>">
                 <!---------work description popup starts--------->
                   <div class="describe_work">
                         <h1>Describe your work</h1>
@@ -449,7 +448,7 @@
                            </div>
                            <div class="describe_work_btn mb-5">
                               <!-- <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div> -->
-                              <div class="ele_next"><a href="javascript:;" class="desc_work_modal" >Next &gt;</a></div>
+                              <div class="ele_next"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
                            </div>
                         </div>
                      </div>
@@ -467,13 +466,8 @@
                      <div class="drag_option_main">
                         <div class="select_upload">
                            <div class="upload_file_section">
-                              <div class="drag_file" id="drag_div">
-                                 <div class="fallback">
-                                  <input name="file" class="disp_none" type="file" multiple style="width:1px;border:0px" /></div>
-                                <a href="javascript:;">Drag and drop files here to upload</a>
-                              </div>
-                              <span>OR</span>
-                              <div class="file_to_upload">
+                              
+                              <div class="file_to_upload gen_single_quote_upload">
                               <div class="upload-btn-wrapper">
                                 <button class="btn">Select files to upload</button>
                                 <input type="file" name="myfile[]" multiple class="select_verify_img" accept="image/x-png,image/gif,image/jpeg"/>
@@ -489,7 +483,7 @@
                 </div>
                 <div class="P_N_btn">
                      <a href="javascript:;" class="btn_for_previous prev_pic_vid">< Previous</a>
-                     <a href="javascript:;" class="btn_for_skip skip_pic_vid">Next</a>
+                     <a href="javascript:;" class="btn_for_skip skip_pic_vid">Skip</a>
                   </div>
                 </div>
                 <!-----------upload image video popup ends----------->
@@ -502,12 +496,13 @@
                         <div class="ph_detail">
                            <div class="form-group ">
                               <label for="inputEmail4">Phone number</label>
-                              <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="" onkeyup="remove_errmsg(this)">
+                              
+                              <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="<?php if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)): ?><?php echo e(Auth::guard('general_user')->user()->phone_number); ?><?php endif; ?>" onkeyup="remove_errmsg(this)">
                               <span class="fill_fields" role="alert"></span>
                            </div>
                            <div class="all_business_ph">
-                              <div class="ele_pre"><input type="submit" value="Validate" class="mobile_validate_submit"></div>
-                              <div class="ele_next"><input type="submit" class="mobile_dont_want mobile_validate_submit" value="Don’t want"></div>
+                              <div class="ele_pre"><input type="submit" name="validate" value="Validate" class="mobile_validate_submit mobileValidateSubmit"></div>
+                              <div class="ele_next"><input type="submit" name="dont_want" class="mobile_dont_want" value="Don’t want"></div>
                            </div>
                            <div class="t_detail mb-4">
                               <p><img src="<?php echo e(asset('img/info.png')); ?>">Add phone number.</p>
@@ -639,7 +634,7 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
     
-    <!-----autocomplete address----->
+    <!--autocomplete address-->
     <script>
     var placeSearch, autocomplete;
     var componentForm = {
@@ -749,7 +744,19 @@
                       lng: longitude,
                       title: address,
                       click: function(e) {
-                        alert('Address : '+address+'.\n Business Name : '+ business_name);
+                          var contentString = '<div id="content">'+
+                              '<div id="siteNotice">'+
+                              '</div>'+
+                              '<h1 id="firstHeading" class="firstHeading"></h1>'+
+                              '<div id="bodyContent">'+
+                              '<p><b>'+address+'</b>, '+business_name+' </p>'+
+                              '</div>'+
+                              '</div>';
+                            var infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                          });
+                          //alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+                          infowindow.open(mymap, this);
                       }
                     });
           });
@@ -851,7 +858,19 @@
                                 lng: longitude,
                                 title: address,
                                 click: function(e) {
-                                  alert('Address : '+address+'.\n Business Name : '+ business_name);
+                                    var contentString = '<div id="content">'+
+                                      '<div id="siteNotice">'+
+                                      '</div>'+
+                                      '<h1 id="firstHeading" class="firstHeading"></h1>'+
+                                      '<div id="bodyContent">'+
+                                      '<p><b>'+address+'</b>, '+business_name+' </p>'+
+                                      '</div>'+
+                                      '</div>';
+                                    var infowindow = new google.maps.InfoWindow({
+                                    content: contentString
+                                    });
+                                    //alert('Addreshhs : '+address+'.\n Business Name : '+ business_name);
+                                    infowindow.open(mymap, this);
                                 }
                               });
                     });
@@ -979,18 +998,14 @@
 
       <script>
          var swiper = new Swiper('.swiper-container', {
-           slidesPerView: 5,
-           spaceBetween: 6,
-           slidesPerGroup:5,
-           loop: true,
-           loopFillGroupWithBlank: true,
-           nextButton: '.swiper-button-next',
-           prevButton: '.swiper-button-prev',
-           pagination: {
-             el: '.swiper-pagination',
-             clickable: true,
-           },
-           navigation: {
+           
+            slidesPerView: 4,
+            spaceBetween: 30,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            navigation: {
              nextEl: '.swiper-button-next',
              prevEl: '.swiper-button-prev',
            },
@@ -1021,39 +1036,33 @@
                    spaceBetween: 30,
                }
            }
-         });
+
+        });
+        /*****code to hide next prev arrows from swiper slider*****/
+        var swiper__slidecount = swiper.slides.length - 2;
+        if (swiper__slidecount < 2) {
+            $('.swiper-container').find('.swiper-button-prev,.swiper-button-next').remove();
+        }
       </script>
 
-    <script>
-      $(document).ready(function(){
-         
-          $('.tpicker').datetimepicker({
-            format: 'HH:mm'
-          });
-         $('.dpicker').datepicker();
-           
-        });
+      <script>
+            var swiper2 = new Swiper('.swiper2', {
+                slidesPerView: 8,
+                spaceBetween: 10,
+                //slidesPerGroup:8,
 
-          var isLoop = true;
-          if($('.swiper-slide').length < 8) {
-              isLoop = false;
-          }
-
-
-          var swiper = new Swiper('.swiper2', {
-            slidesPerView: 8,
-            spaceBetween: 10,
-            slidesPerGroup:8,
-            loop: isLoop,
-           //loopFillGroupWithBlank: true,
-            pagination: {
-              el: '.swiper21',
-              clickable: true,
-              renderBullet: function (index, className) {
-                return '<span class="' + className + '">' + (index + 1) + '</span>';
-              },
-            },
-            breakpoints: {
+                pagination: {
+                  el: '.swiper21',
+                  clickable: true,
+                  // renderBullet: function (index, className) {
+                  //   return '<span class="' + className + '">' + (index + 1) + '</span>';
+                  // },
+                },
+                navigation: {
+                 nextEl: '.swiper-button-next',
+                 prevEl: '.swiper-button-prev',
+               },
+                breakpoints: {
                 1199: {
                     slidesPerView: 5,
                     spaceBetween: 20,
@@ -1080,7 +1089,80 @@
                     spaceBetween: 30,
                 }
             }
+            });
+
+            /*****code to hide next prev arrows from swiper slider*****/
+            var swiper__slidecount1 = swiper2.slides.length - 2;
+            if (swiper__slidecount1 < 2) {
+                $('.swiper2').find('.swiper-button-prev,.swiper-button-next').remove();
+            }
+
+
+        </script>
+
+    <script>
+      $(document).ready(function(){
+         
+          $('.tpicker').datetimepicker({
+            format: 'HH:mm'
           });
+         $('.dpicker').datepicker();
+           
+        });
+
+          // var isLoop = true;
+          // if($('.swiper-slide').length < 8) {
+          //     isLoop = false;
+          // }
+
+
+          // var swiper1 = new Swiper('.swiper2', {
+          //   slidesPerView: 8,
+          //   spaceBetween: 10,
+          //   slidesPerGroup:8,
+          //   loop: isLoop,
+          //  //loopFillGroupWithBlank: true,
+          //   pagination: {
+          //     el: '.swiper21',
+          //     clickable: true,
+          //     renderBullet: function (index, className) {
+          //       return '<span class="' + className + '">' + (index + 1) + '</span>';
+          //     },
+          //   },
+          //   breakpoints: {
+          //       1199: {
+          //           slidesPerView: 5,
+          //           spaceBetween: 20,
+          //       },
+          //       992: {
+          //           slidesPerView: 5,
+          //           spaceBetween: 45,
+          //       },
+          //       767: {
+          //           slidesPerView: 3,
+          //           spaceBetween: 30,
+          //       },
+
+          //       640: {
+          //           slidesPerView: 3,
+          //           spaceBetween: 30,
+          //       },
+          //       420: {
+          //           slidesPerView: 2,
+          //           spaceBetween: 30,
+          //       },
+          //       320: {
+          //           slidesPerView: 2,
+          //           spaceBetween: 30,
+          //       }
+          //   }
+          // });
+
+          // /*****code to hide next prev arrows from swiper slider*****/
+          // var swiper__slidecount1 = swiper1.slides.length - 2;
+          // if (swiper__slidecount1 < 2) {
+          //   $('.swiper2').find('.swiper-button-prev,.swiper-button-next').remove();
+          // }
 
 
         </script>

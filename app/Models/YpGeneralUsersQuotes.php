@@ -11,7 +11,7 @@ class YpGeneralUsersQuotes extends Authenticatable
     protected $guard = 'general_user';
 
     protected $fillable = [
-        'quote_id','general_id','filter_data','dynamic_formdata','quote_count','work_description','uploaded_files','phone_number'
+        'quote_id','general_id','filter_data','dynamic_formdata','quote_count','work_description','uploaded_files','phone_number','cat_id','cat_name'
     ];
 
 

@@ -40,15 +40,24 @@ class GeneralUserController extends Controller
 
     public function dashboard()
     {
-      $super_categories = YpBusinessSuperCategories::all()->take(7)->toArray();
-      foreach($super_categories AS $super_cat){
-        $super_cat_id = $super_cat['super_cat_id'];
-        $YpBusinessCategories = YpBusinessCategories::where('super_cat_id',$super_cat_id)->get()->toArray();
-        if(!empty($YpBusinessCategories)){
-          $final[] = $super_cat;
-        }
-        //echo '<pre>';print_r($YpBusinessCategories); echo '</pre>';
-      }
+        $categories = YpBusinessCategories::all()->take(7)->toArray();
+        $super_categories = DB::table('yp_business_super_categories')
+            ->join('yp_business_categories', 'yp_business_super_categories.super_cat_id', '=', 'yp_business_categories.super_cat_id')
+            ->select('yp_business_super_categories.*')
+            ->distinct('yp_business_categories.super_cat_id')
+            ->take(7)
+            ->get()->toArray();
+
+         //echo '<pre>';print_r($super_categories); echo '</pre>';
+         foreach($super_categories AS $super_cat){
+            $arr['id'] = $super_cat->id;
+            $arr['super_cat_id'] = $super_cat->super_cat_id;
+            $arr['cat_name'] = $super_cat->cat_name;
+            $arr['category_status'] = $super_cat->category_status;
+            $arr['created_at'] = $super_cat->created_at;
+            $arr['updated_at'] = $super_cat->updated_at;
+            $final[] = $arr;
+         }
       return view('dashboard')->with(array('categories'=>$final));
 
     }/**dahsboard fn ends**/
@@ -174,6 +183,19 @@ class GeneralUserController extends Controller
 
         if(isset($_POST)){
 
+            if(isset($_POST['hidden_catid'])){
+                $cat_id = $_POST['hidden_catid'];
+            }else{
+                $cat_id = '';
+            }
+
+            if(isset($_POST['hidden_catname'])){
+                $cat_name = $_POST['hidden_catname'];
+            }else{
+                $cat_name = '';
+            }
+
+
             if(isset($_POST['work_description_text'])){
                 $work_description = $_POST['work_description_text'];
             }else{
@@ -186,12 +208,23 @@ class GeneralUserController extends Controller
             }else{
                 $mobile_phone = '';
             }
+
+            if(isset($_POST['validate'])){
+                $mobile_phone = $mobile_phone;
+            }else if(isset($_POST['dont_want'])){
+                $mobile_phone = '';
+            }else{
+                $mobile_phone = '';
+            }
+
             $quote_id = str_shuffle(rand(1,1000).strtotime("now"));
 
-            $YpGeneralUsersQuotes->quote_id = $quote_id;
-            $YpGeneralUsersQuotes->general_id = $g_id;
+            $YpGeneralUsersQuotes->quote_id         = $quote_id;
+            $YpGeneralUsersQuotes->general_id       = $g_id;
             $YpGeneralUsersQuotes->work_description = $work_description;
-            $YpGeneralUsersQuotes->phone_number = $mobile_phone;
+            $YpGeneralUsersQuotes->phone_number     = $mobile_phone;
+            $YpGeneralUsersQuotes->cat_id           = $cat_id;
+            $YpGeneralUsersQuotes->cat_name         = $cat_name;
             $YpGeneralUsersQuotes->save();
 
             /****check selected files from button****/
@@ -257,7 +290,7 @@ class GeneralUserController extends Controller
 
            // return Redirect::back();
            // return redirect()->intended('general_user/public_profile/'.$b_id.'/status');
-            return redirect('general_user/public_profile/'.$b_id.'/status');
+            return redirect('general_user/public_profile/'.$b_id.'/'.$cat_id.'/status');
         }
 
     }/***send quote ends here***/

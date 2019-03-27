@@ -30,8 +30,20 @@ class GeneralUserLoginController extends Controller
       $this->middleware('guest:general_user', ['except' => ['logout','index','showPublicProfile']]);
     }
 
-    public function index(Request $request,$catid = null, $location = null)
-    {
+    public function index(Request $request,$catid = null, $location = null){
+
+      if(!is_numeric($catid)){
+        return abort(404);
+      }
+
+      $check_id_exist_db = YpBusinessCategories::where('id','28hhhh')->get()->toArray();
+
+      /******if id is empty the redierct to 404 page******/
+      if(empty($check_id_exist_db)){
+
+        return abort(404);
+
+      }else{
 
         if($request->ajax()){
            
@@ -126,7 +138,7 @@ class GeneralUserLoginController extends Controller
                 
             }/***if isset ends***/
 
-        }else{
+        }else{ /******$request->ajax else*******/
 
             try{
                //  $data = array();
@@ -230,7 +242,11 @@ class GeneralUserLoginController extends Controller
                 return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'default_log'=>$longitude,'default_lat'=>$latitude,'data'=>$data,'all_business'=>$get_business_by_cat,'address'=>$address,'selected_radious'=>$radious,'success'=>0,'error'=>$errorMsg));
                
             }/****catch ends here****/
-        }
+        }/******$request->ajax else ends*******/
+        
+      }/*** 404 else ends***/
+
+        
         
     }/*****function ends here*****/
     
@@ -241,6 +257,7 @@ class GeneralUserLoginController extends Controller
     
     public function login(Request $request)
     {
+
       // Validate the form data
       $this->validate($request, [
         'email'   => 'required|email',
@@ -248,6 +265,7 @@ class GeneralUserLoginController extends Controller
       ]);
 
       if($request->attr_status == 'quotes'){
+     
         // Attempt to log the user in
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         // if successful, then redirect to their intended location
@@ -267,12 +285,9 @@ class GeneralUserLoginController extends Controller
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
       }
       else if($request->attr_status == 'quotes_login'){
-        // Attempt to log the user in
+
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
-        // if successful, then redirect to their intended location
-        //return redirect()->intended(route('user.dashboard'));
-        //return view('/user/user_dashboard');
-        // return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/general_user/dashboard/catid/1']);
+      
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
               return response()->json(['success'=>'2','message'=>'Login Successfull']);
           }else{
@@ -281,17 +296,13 @@ class GeneralUserLoginController extends Controller
 
 
         }
-        // if unsuccessful, then redirect back to the login with the form data
-        //return redirect()->back()->withInput($request->only('email', 'remember'));
+       
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
       }
       else if($request->attr_status == 'quotessingle'){
-        // Attempt to log the user in
+  
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
-        // if successful, then redirect to their intended location
-        //return redirect()->intended(route('user.dashboard'));
-        //return view('/user/user_dashboard');
-        // return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/general_user/dashboard/catid/1']);
+       
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
               return response()->json(['success'=>'3','message'=>'Login Successfull']);
           }else{
@@ -300,28 +311,36 @@ class GeneralUserLoginController extends Controller
 
 
         }
-        // if unsuccessful, then redirect back to the login with the form data
-        //return redirect()->back()->withInput($request->only('email', 'remember'));
+       
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
-      }
-      else{
+      }else if($request->attr_status == 'simple'){
 
-        // Attempt to log the user in
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
-        // if successful, then redirect to their intended location
-        //return redirect()->intended(route('user.dashboard'));
-        //return view('/user/user_dashboard');
-        // return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/general_user/dashboard/catid/1']);
+        
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/general_user/general_dashboard']);
+              return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/']);
           }else{
               return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
 
         }
-        // if unsuccessful, then redirect back to the login with the form data
-        //return redirect()->back()->withInput($request->only('email', 'remember'));
+       
+        return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
+      }
+      else{
+
+        if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+        
+          if(Auth::guard('general_user')->user()->admin_approve == '1'){
+              return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/']);
+          }else{
+              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+          }
+
+
+        }
+      
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
       }
 
@@ -371,8 +390,24 @@ class GeneralUserLoginController extends Controller
     /******
     fn to show public profile page
     ******/
-    public function showPublicProfile($b_id,$status = null){
+    public function showPublicProfile($b_id,$catId,$status = null){
 
+      if(!is_numeric($b_id) || !is_numeric($catId)){
+        return abort(404);
+      }
+
+      $check_businessID = YpBusinessUsers::where('id',$b_id)->get()->toArray();
+      $check_catID = YpBusinessCategories::where('id',$catId)->get()->toArray();
+
+      if(empty($check_businessID) || empty($check_catID)){
+
+        return abort(404);
+
+      }else{
+
+        /**get category name**/
+        $get_cat_name = YpBusinessCategories::select('category_name')->where('id',$catId)->first();
+        
         $get_business_userid = YpBusinessUsers::select('business_userid')->where('id',$b_id)->first();
 
         if($get_business_userid){
@@ -415,7 +450,9 @@ class GeneralUserLoginController extends Controller
         
         //$userCategoryModel = new YpBusinessUserCategories();
         
-        return view('user.public_profile')->with(array('user_details'=>$user_details,'round_rating'=>$round_rating,'total_review'=>$tot_review,'status'=>$status,'b_id'=>$b_id));
+        return view('user.public_profile')->with(array('user_details'=>$user_details,'round_rating'=>$round_rating,'total_review'=>$tot_review,'status'=>$status,'b_id'=>$b_id,'cat_name'=>$get_cat_name->category_name,'cat_id'=>$catId));
+
+      }/*****check id else ends*****/
         
     }/***show profile page ends here***/
 
@@ -495,11 +532,11 @@ class GeneralUserLoginController extends Controller
             if(Auth::guard('general_user')->attempt(['email'=>$user->email, 'password'=>$password_rand])){
                   // return redirect()->to('/general_user/dashboard');
                 //return redirect()->intended('/general_user/dashboard');
-                return redirect('/general_user/general_dashboard');
+                return redirect('/');
             }
         }
        // return redirect()->to('/general_user/dashboard');
-        return redirect('/general_user/general_dashboard');
+        return redirect('/');
         //return redirect()->intended('general_user');
     }
 

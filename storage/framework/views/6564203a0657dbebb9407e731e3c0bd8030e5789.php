@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -113,9 +113,9 @@
                   <div class="Q_tag">
                      <?php if(isset($quote_data[0]['status'])): ?>
                        <?php if($quote_data[0]['status'] == '1'): ?>
-                       <div class="new_lable">NEW</div>
+                       <div class="new_lable bus_new">NEW</div>
                        <?php elseif($quote_data[0]['status'] == '2'): ?>
-                       <div class="new_lable q_quoted_table">READ</div>
+                       <div class="new_lable q_quoted_table bus_read">READ</div>
                        <?php endif; ?>
                      <?php endif; ?>
 
@@ -129,11 +129,43 @@
                      <div class="created_date"><?php echo e($date); ?></div>
                   </div>
                   <div class="quote_basic_detail">
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span><?php echo e($allquotes['phone_number']); ?></span>
-                     </div>
-                    
+
+                    <?php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); ?>
+
+                    <?php if(!empty($dynamic_formdata )): ?>
+                    <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <?php if($dyanamic_values['filter']==1): ?>
+                      <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                          <span><?php echo e($dyanamic_values['value']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php else: ?>
+                        <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                          <?php $get_labels = ''; ?>
+                          <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          <span><?php echo e($get_labels); ?></span>
+                        </div>
+                        <?php endif; ?>
+                      <?php endif; ?>
+                      <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
+                    <?php if(!empty($allquotes['phone_number'])): ?>
+                    <div class="Q_detail">
+                      <span class="Q_detail_heading">Mobile Number:</span>
+                      <span><?php echo e($allquotes['phone_number']); ?></span>
+                    </div>
+                    <?php endif; ?>
+
                   </div>
                   <div class="Q_description">
                      <p><?php echo e($allquotes['work_description']); ?></p>
@@ -176,7 +208,7 @@
                   <div class="row  searchf_input">
                      <div class="form-group col-md-6 col-12">
                         <label for="quote_price">Price quote</label>
-                        <input type="number" onKeyPress="if(this.value.length==15) return false;"  name="quote_price" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control<?php echo e($errors->has('quote_price') ? ' error_border' : ''); ?>" id="quote_price" value="<?php echo e(old('quote_price')); ?>">
+                        <input type="number" onKeyPress="if(this.value.length==7) return false;"  name="quote_price" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control<?php echo e($errors->has('quote_price') ? ' error_border' : ''); ?>" id="quote_price" value="<?php echo e(old('quote_price')); ?>">
 
                         <?php if($errors->has('quote_price')): ?>
                             <span class="fill_fields" role="alert">

@@ -24,6 +24,9 @@ class YpGeneralUsersQuotes extends Migration
             $table->string('work_description')->nullable();
             $table->text('uploaded_files')->nullable();
             $table->string('phone_number')->nullable();
+            $table->integer('cat_id')->unsigned()->index();
+            $table->foreign('cat_id')->references('id')->on('yp_business_categories')->onDelete('cascade');
+            $table->text('cat_name')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP')); 
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

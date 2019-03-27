@@ -91,13 +91,30 @@ $(document).ready(function(){
     $('.submit_reviewr').click(function(e){
       e.preventDefault();
 
+      var check_review_text = $('#business_review_submit').find('.bus_review_text').val();
       var check_rated_star = $('#business_review_submit').find('.hidden_star_active').val();
 
-      if(check_rated_star == '0' || check_rated_star == ''){
-        alert('Please rate us');
+      if(check_review_text.length == 0){
+
+        $('#business_review_submit').find('.bus_review_text').addClass('error_border');
+        $('#business_review_submit').find('.bus_review_text').next('.fill_fields').css('display','block');
+        $('#business_review_submit').find('.bus_review_text').next('.fill_fields').text('Please add Review');
+        return false;
+
+      }else if(check_review_text.length < 50 || check_review_text.length > 2000){
+
+        $('#business_review_submit').find('.bus_review_text').addClass('error_border');
+        $('#business_review_submit').find('.bus_review_text').next('.fill_fields').css('display','block');
+        $('#business_review_submit').find('.bus_review_text').next('.fill_fields').text('Please add minimum 50 chars and 2000 maximum');
+        return false;
+        
+      }else if(check_rated_star == '0' || check_rated_star == ''){
+        alert('Please rate.');
         return false;
       }else{
-        $('#business_review_submit').submit();
+      	if(confirm('Are you sure you want to Submit this Rating?')) {
+        	$('#business_review_submit').submit();
+        }
       }
 
     });
@@ -237,3 +254,16 @@ function openBigImage(data){
     $('#showBigImageModalBusiness').modal('show');
 }
 /****fn ends to open big images on quote pages***/
+
+
+/******function to remove error messages on quotes*******/
+function remove_errorrmsg(data){
+	var value_field = $(data).val();
+	var current_id = $(data).attr('id');
+
+	if(current_id == "bus_reviewtext"){
+		$(data).next('.fill_fields').css('display','none');
+    	$(data).removeClass('error_border');
+	}
+
+}

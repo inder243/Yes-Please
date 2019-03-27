@@ -36,9 +36,6 @@
                             <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
                         <li>
-                            <a href="{{ url('/general_user/general_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
-                        </li>
-                        <li>
                             <a href="{{ url('/general_user/quote_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                         </li>
                         <li>
@@ -55,6 +52,9 @@
                         </li>
                         <li>
                             <a href="#"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />Favorite businesses</a>
                         </li>
                         <li>
                             <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>

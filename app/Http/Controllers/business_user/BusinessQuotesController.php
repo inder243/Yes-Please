@@ -44,6 +44,12 @@ class BusinessQuotesController extends Controller
                 return $e->getMessage();
             }
 
+            if(empty($quotes)){
+                $hide_sorting = '1';
+            }else{
+                $hide_sorting = '0';
+            }
+
         }else if($quote_status != null && $quote_status == 'all'){
 
             if($quote_keyword !== null){
@@ -63,6 +69,8 @@ class BusinessQuotesController extends Controller
                 }
 
             }
+
+            $hide_sorting = '0';
 
         }else if($quote_status !== 'all' && $quote_status !== null){
 
@@ -84,6 +92,8 @@ class BusinessQuotesController extends Controller
 
             }
 
+            $hide_sorting = '0';
+
         }else{
 
             try{
@@ -91,10 +101,12 @@ class BusinessQuotesController extends Controller
             }catch(\Exception $e){
                 return $e->getMessage();
             }
+
+            $hide_sorting = '0';
             
         }
         
-    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword]);
+    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting]);
     }
 
     /********************
@@ -122,7 +134,7 @@ class BusinessQuotesController extends Controller
 
         $validator = Validator::make($_POST, [
                 'quote_price' => ['required', 'numeric', 'digits_between:1,15'],
-                'quote_details' => ['string', 'min:30','max:255'],
+                'quote_details' => ['string', 'min:30','max:10000'],
             ]);
 
         if($validator->fails()) {
@@ -266,6 +278,8 @@ class BusinessQuotesController extends Controller
     fn to display quote accepted page
     *******************************/
     public function showQuoteAccepted($quote_id,$quote_status){
+        // echo $quote_id;
+        // echo "<pre>status";echo $quote_status;die;
         $b_id = Auth::user()->id;
         $business_userid = Auth::user()->business_userid;
         $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
@@ -274,10 +288,10 @@ class BusinessQuotesController extends Controller
                 $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
             },'quote_reply'=> function($q) use($b_id,$quote_id) {
                 $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
-            }])->where(['quote_id'=>$quote_id])->get()->toArray();
+            }])->where(['quote_id'=>$quote_id,'status'=>$quote_status])->get()->toArray();
 
         //$quote_data = YpBusinessUsersQuotes::with(['get_gen_user','quote_reply','get_review'])->where(['business_id'=>$b_id, 'quote_id'=>$quote_id])->get()->toArray();
-       //echo "<pre>";print_r($quote_data);die;
+      //echo "<pre>";print_r($quote_data);die;
         return view('business.quotes_questions.quoted_accepted')->with(['quote_data'=>$quote_data,'business_userid'=>$business_userid,'allquotes'=>$allquotes]);
     }/*******end of quote accepted******/
 
@@ -373,12 +387,17 @@ class BusinessQuotesController extends Controller
         /*******get all templates******/
         $quote_templates = YpBusinessUserQuoteTemplates::where('business_id',$b_id)->get()->toArray();
 
-        $html = '<tr><th>S.no</th><th>Template Title</th><th>Template Text</th><th>Action</th></tr>';
+        $html = '<tr class="template_head_tr"><th>S.no</th><th>Template Title</th><th>Template Text</th><th>Action</th></tr>';
 
         if(!empty($quote_templates)){
             foreach($quote_templates as $key=>$template){
+                if($key % 2){
+                    $even_odd = 'style="background-color: #ececec;"';
+                }else{
+                    $even_odd = '';
+                }
                 $sno = $key+1;
-                $html.= '<tr id="'.$template['id'].'"><td>'.$sno.'</td><td>'.$template['template_title'].'</td><td class="td_temp_text">'.$template['template_text'].'</td><td><a href="" onclick="use_template(this);return false;">Use</a> | <a href="javascript:void(0)" data-temp_id="'.$template['id'].'" onclick="delete_template(this);return false;">Delete</a></td></tr>';
+                $html.= '<tr id="'.$template['id'].'" '.$even_odd.'><td>'.$sno.'</td><td>'.$template['template_title'].'</td><td class="td_temp_text">'.$template['template_text'].'</td><td><a href="" onclick="use_template(this);return false;">Use</a> | <a href="javascript:void(0)" data-temp_id="'.$template['id'].'" onclick="delete_template(this);return false;">Delete</a></td></tr>';
             }
         }/****end if***/
 

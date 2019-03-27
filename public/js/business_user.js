@@ -60,13 +60,15 @@ $(document).ready(function(){
 			$('.registrationform .outside_checkbox').css('border','2px solid #ff0900');
 			$('.registrationform .fill_fields').html('Please mark a checkbox');
 			return false;
-		}*/
-		
+		}
+
 		if (!$('#agree').is(':checked')) {
 			$('#agree').siblings('.outside_checkbox').attr('style','border:2px solid red'); 
 			$('.bu_error_terms').html('Please agree with terms');
 			return false;
-		}else if($('.added_category_list_heading .added_category ul.added_category_ul li').length == 0){
+		}else */
+		
+		if($('.added_category_list_heading .added_category ul.added_category_ul li').length == 0){
 			$('.added_category_list').addClass('error');
 			$('.fill_fields').removeClass('disp_none');
 

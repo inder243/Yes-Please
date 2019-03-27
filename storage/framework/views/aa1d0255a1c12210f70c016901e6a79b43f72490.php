@@ -1,6 +1,7 @@
 <?php $__env->startSection('content'); ?>
+
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/general_user/general_dashboard')); ?>">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/')); ?>">Home </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
       </section>
       <section>
          <div class="container-fluid">
@@ -29,7 +30,7 @@
                               <div class="row  searchf_input">
                                  <div class="form-group custom_errow col-md-6 col-12">
                                     <label for="inputPassword4">Type</label>
-                                    <select name="select_status" class="form-control " id="exampleSelect1" required>
+                                    <select <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> disabled="" <?php endif; ?> <?php endif; ?> name="select_status" class="form-control " id="exampleSelect1" required>
                                       <option value="all" selected="">All</option>
                                       <option value="1" <?php if($quote_status == 1): ?> selected <?php endif; ?>>New</option>
                                       <!-- <option value="2" <?php if($quote_status == 2): ?> selected <?php endif; ?>>Read</option>
@@ -42,32 +43,33 @@
                                  </div>
                                  <div class="form-group col-md-6 col-12">
                                     <label for="inputPassword4">Keyword</label>
-                                    <input type="text" class="form-control gen_quote_keyword" name="gen_quote_keyword" value="<?php if(!empty($quote_keyword)): ?><?php echo e($quote_keyword); ?> <?php endif; ?>" id="inputPassword4">
+                                    <input <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> readonly="" <?php endif; ?> <?php endif; ?> type="text" class="form-control gen_quote_keyword" name="gen_quote_keyword" value="<?php if(!empty($quote_keyword)): ?><?php echo e($quote_keyword); ?> <?php endif; ?>" id="inputPassword4">
                                  </div>
                               </div>
                               <div class="search_btn">
-                                 <a href="javascript:;"><input type="submit" name="search_submt" value="Search"></a>
+                                 <input <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> disabled="" <?php endif; ?> <?php endif; ?> type="submit" name="search_submt" value="Search" class="quotes_srch">
                               </div>
                            	</div>
                        		</form>
                            <div class="all_quote_section">
+                            <?php if(!empty($quotes)): ?>
+                            <?php $__currentLoopData = $quotes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $quote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                           <?php $__currentLoopData = $quotes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $quote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                           <?php $acceptedSts = ''; ?>
-                            <?php $newSts = ''; ?>
-                            <?php $compltSts = ''; ?>
-                            <?php $__currentLoopData = $quote; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sQuote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <?php if($sQuote['status']==4): ?>
-                                <?php $acceptedSts = 1; ?>
-                              <?php endif; ?>
-                              <?php if($sQuote['status']==1): ?>
-                                <?php $newSts = 1; ?>
-                              <?php endif; ?>
-                              <?php if($sQuote['status']==6): ?>
-                                <?php $compltSts = 1; ?>
-                              <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                              <?php $acceptedSts = ''; ?>
+                              <?php $newSts = ''; ?>
+                              <?php $compltSts = ''; ?>
+                              
+                              <?php $__currentLoopData = $quote; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sQuote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($sQuote['status']==4): ?>
+                                  <?php $acceptedSts = 1; ?>
+                                <?php endif; ?>
+                                <?php if($sQuote['status']==1): ?>
+                                  <?php $newSts = 1; ?>
+                                <?php endif; ?>
+                                <?php if($sQuote['status']==6): ?>
+                                  <?php $compltSts = 1; ?>
+                                <?php endif; ?>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
                           <!--  <div class="quote_section" style="display:none;"> -->
@@ -105,56 +107,64 @@
                                     <div class="created_date_for_mobile">
 
                                       <?php $datetime = $quote[0]['get_quotes']['created_at'];
-                                            $splitTimeStamp = explode(" ",$datetime);
-                                            // $date = $splitTimeStamp[0];
-                                            // $time = $splitTimeStamp[1];
-                                            $date = date('d/m/Y',strtotime($splitTimeStamp[0]));
-                                            $time = date('H:i',strtotime($splitTimeStamp[1]));
+                                        $splitTimeStamp = explode(" ",$datetime);
+                                        // $date = $splitTimeStamp[0];
+                                        // $time = $splitTimeStamp[1];
+                                        $date = date('d/m/Y',strtotime($splitTimeStamp[0]));
+                                        $time = date('H:i',strtotime($splitTimeStamp[1]));
                                       ?>
 
                                        <span class="c_time"><?php echo e($time); ?></span>
                                        <span class="c_date"><?php echo e($date); ?></span>
                                     </div>
                                     <div class="Q_tag">
-                                     
                                       
                                       <?php if(isset($acceptedSts) && $acceptedSts==1): ?>
-                                      <div class="new_lable q_accepted_table">ACCEPTED</div>
+                                      <div class="new_lable q_accepted_table gen_accepted">ACCEPTED</div>
                                       <?php elseif(isset($newSts) && $newSts==1): ?>
-                                      <div class="new_lable">NEW</div>
+                                      <div class="new_lable gen_new">NEW</div>
                                       <?php elseif(isset($compltSts) && $compltSts==1): ?>
-                                      <div class="new_lable">Completed</div>
+                                      <div class="new_lable gen_completed">Completed</div>
                                       <?php endif; ?> 
                                        <div class="created_date"><?php echo e($date); ?></div>
                                     </div>
                                     <div class="quote_basic_detail">
                                       <?php $dynamic_formdata = json_decode($quote[0]['get_quotes']['dynamic_formdata'],true); ?>
 
+                                      <?php if(!empty($dynamic_formdata )): ?>
                                       <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php if($dyanamic_values['filter']==1): ?>
                                         <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                                          <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
                                           <div class="Q_detail">
                                             <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
                                             <span><?php echo e($dyanamic_values['value']); ?></span>
                                           </div>
+                                          <?php endif; ?>
                                         <?php else: ?>
-                                        <div class="Q_detail">
-                                          <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
 
-                                          <?php $get_labels = ''; ?>
-                                          <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php $get_labels .= $checkbox_data['label'] . ','; ?>
-                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                          <span><?php echo e($get_labels); ?></span>
-                                        </div>
-                                        
+                                          <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                                          <div class="Q_detail">
+                                            <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                                            <?php $get_labels = ''; ?>
+                                            <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                              <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <span><?php echo e($get_labels); ?></span>
+                                          </div>
+                                          <?php endif; ?>
                                         <?php endif; ?>
                                         <?php endif; ?>
                                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Mobile Number:</span>
-                                          <span><?php echo e($quote[0]['get_quotes']['phone_number']); ?></span>
-                                       </div>
+                                      <?php endif; ?>
+
+                                      <?php if(!empty($quote[0]['get_quotes']['phone_number'])): ?>
+                                      <div class="Q_detail">
+                                        <span class="Q_detail_heading">Mobile Number:</span>
+                                        <span><?php echo e($quote[0]['get_quotes']['phone_number']); ?></span>
+                                      </div>
+                                      <?php endif; ?>
                                        <!-- <div class="Q_detail">
                                           <span class="Q_detail_heading">Required task:</span>
                                           <span>Design house</span>
@@ -165,13 +175,16 @@
                                        </div> -->
                                     </div>
                                     <div class="Q_description">
-                                       <p><?php echo e($quote[0]['get_quotes']['work_description']); ?></p>
+                                      <?php $descriptn = mb_strimwidth($quote[0]['get_quotes']['work_description'], 0, 150, "..."); ?>
+                                       <p><?php echo e($descriptn); ?></p>
                                     </div>
                                  </div>
                               </a>
                            </div>
                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        
+                          <?php else: ?>
+                          <div class="no_result_quotes">No Results Found!</div>
+                          <?php endif; ?>
                           
                            </div>
 
@@ -186,13 +199,22 @@
                                   <div class="col-lg-6 col-12">
                                     <div class="ignore_section">
                                       <div class="Q_tag">
-                                             <div class="new_lable ignore_table">IGNORED</div>
+                                             <div class="new_lable ignore_table gen_ignore">IGNORED</div>
                                       </div>
                                       <div class="content_image">
                                         <div class="userPic"><img src="<?php echo e(asset('img/user_placeholder.png')); ?>"/></div>
                                         <div class="contect_detail">
-                                          <h1><?php echo e($ignored_quote['get_bus_user']['first_name']); ?> <?php echo e($ignored_quote['get_bus_user']['last_name']); ?></h1>
-                                          <p><span>$ <?php echo e($ignored_quote['quote_reply']['price_quotes']); ?></span>  for everything</p>
+                                          <h1><?php echo e($ignored_quote['get_bus_user']['business_name']); ?>, Quote id : <?php echo e($ignored_quote['get_quotes']['quote_id']); ?></h1>
+
+                                          <?php $details = mb_strimwidth($ignored_quote['quote_reply']['details'], 0, 30, "..."); ?>
+
+                                          <?php if($ignored_quote['quote_reply']['price_type'] == 2): ?>
+                                          <?php $price_type = '/hour'; ?>
+                                          <?php else: ?>
+                                          <?php $price_type = ''; ?>
+                                          <?php endif; ?>
+
+                                          <p><span>$ <?php echo e($ignored_quote['quote_reply']['price_quotes'].$price_type); ?></span>for <?php echo e($details); ?></p>
                                         </div>
                                       </div>
                                     </div>
@@ -216,7 +238,7 @@
                                  </div>
                                  <div class="form-group col-md-6 col-12">
                                    <div class="search_btn for_search">
-                                      <a href="javascript:;">Search</a>
+                                      <input type="submit" value="Search" class="question_srch">
                                    </div>
                                  </div>
                               </div>

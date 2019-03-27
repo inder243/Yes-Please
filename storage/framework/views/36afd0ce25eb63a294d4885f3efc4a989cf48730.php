@@ -1,16 +1,16 @@
 <?php $__env->startSection('content'); ?>
-<?php //echo "<pre>";print_r($quote_data);die;?>
+
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="JavaScript:;"> Category </a>/<span class="q_breadcrumb">Review</span></div>
+           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>">Quotes and Questions</a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$quote_data['get_quotes']['cat_id'])); ?>"><?php if(isset($quote_data)): ?> <?php echo e($quote_data['get_quotes']['cat_name']); ?><?php endif; ?></a>/<span class="q_breadcrumb">Review <?php echo e($quote_data['get_bus_user']['business_name']); ?></span></div>
 
          </div>
       </section>
       <section>
          <div class="quote_req_main_finsih">
           <?php if(isset($quote_data)): ?>
-          <?php if(isset($quote_data[0]['get_bus_user'])): ?>
-            <h1><?php echo e($quote_data[0]['get_bus_user']['business_name']); ?></h1>
+          <?php if(isset($quote_data['get_bus_user'])): ?>
+            <h1><?php echo e($quote_data['get_bus_user']['business_name']); ?></h1>
           <?php else: ?>
           <h1>Business name</h1>
           <?php endif; ?>
@@ -22,8 +22,8 @@
 
                 <?php if(isset($quote_data)): ?>
                   <?php 
-                  $image = $quote_data[0]['get_bus_user']['image_name'];
-                  $business_id = $quote_data[0]['get_bus_user']['business_userid'];
+                  $image = $quote_data['get_bus_user']['image_name'];
+                  $business_id = $quote_data['get_bus_user']['business_userid'];
                   ?>
                   <?php if($image): ?>
                   <div class="user_img qhome_improvmentimg"><img src="<?php echo e(url('/images/business_profile/'.$business_id.'/'.$image)); ?>"/></div>
@@ -34,11 +34,11 @@
                 
                   <div class="otheruser_detail">
                      <?php if(isset($quote_data)): ?>
-                       <h1><?php echo e($quote_data[0]['get_bus_user']['first_name']); ?> <?php echo e($quote_data[0]['get_bus_user']['last_name']); ?></h1>
-                       <p><?php echo e($quote_data[0]['get_bus_user']['full_address']); ?></p>
+                       <h1><a href="<?php echo e(url('/general_user/public_profile/'.$quote_data['get_bus_user']['id'])); ?>"><?php echo e($quote_data['get_bus_user']['business_name']); ?></a></h1>
+                       <p><?php echo e($quote_data['get_bus_user']['full_address']); ?></p>
                        
                         <?php
-                        $created_date = $quote_data[0]['get_bus_user']['created_at'];
+                        $created_date = $quote_data['get_bus_user']['created_at'];
 
                         $splitTimeStamp = explode(" ",$created_date);
                         $date = date('M Y',strtotime($splitTimeStamp[0]));
@@ -52,14 +52,17 @@
                      <?php endif; ?>
                   </div>
                   <div class="contact_user">
-                     <a href="tel:<?php echo e(Auth::user()->phone_number); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
+                    <?php if(isset($quote_data)): ?>
+                     <a href="tel:<?php echo e($quote_data['get_bus_user']['phone_number']); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
                      <a href="JavaScript:;" class="user_text"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
+                     <?php endif; ?>
                   </div>
                   <div class="review_section">
-                     <ul>
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->avg('rating');
 
-                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->where('review','!=','')->count('review');
+                     <ul>
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->avg('rating');
+
+                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->where('review','!=','')->count('review');
                     
                     $total_rating = round($get_total_rating);
                     ?>
@@ -117,15 +120,16 @@
                 <form id="general_review_submit" action="<?php echo e(route('general_user.quote_review_submit')); ?>" method="POST">
                      <?php echo csrf_field(); ?>
 
-                     <input type="hidden" name="review_gen_id" value="<?php echo e($quote_data[0]['general_id']); ?>">
-                     <input type="hidden" name="review_quote_id" value="<?php echo e($quote_data[0]['quote_id']); ?>">
-                     <input type="hidden" name="review_bus_id" value="<?php echo e($quote_data[0]['business_id']); ?>">
+                     <input type="hidden" name="review_gen_id" value="<?php echo e($quote_data['general_id']); ?>">
+                     <input type="hidden" name="review_quote_id" value="<?php echo e($quote_data['quote_id']); ?>">
+                     <input type="hidden" name="review_bus_id" value="<?php echo e($quote_data['business_id']); ?>">
                      <input type="hidden" name="review_type" value="general">
 
                  <div class="write_reviews">
                    <p>Write your review<span><img src="<?php echo e(asset('img/question_img.png')); ?>"/></span></p>
                    <div class="write_sec">
-                     <textarea name="review_text" class="gen_review_text"></textarea>
+                     <textarea name="review_text" onkeyup="remove_errmsg(this)" class="gen_review_text" id="gen_reviewtext"></textarea>
+                     <span class="fill_fields" style="display:none;"></span>
                    </div>
                  </div>
                  <div class="rate_business">
@@ -137,6 +141,9 @@
                      <li id="star_4" data-id="4" data-status="inactive" onClick="gen_change_review(this); return false;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></li>
                      <li id="star_5" data-id="5" data-status="inactive" onClick="gen_change_review(this); return false;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></li>
                    </ul>
+
+                   <span class="fill_fields" style="display:none;text-align: center;"></span>
+
                    <input type="hidden" name="gen_star_active" class="gen_hidden_star_active" value="">
                    <div class="review_later">
                      <a href ="<?php echo e(url('general_user/quote_questions')); ?>" class="review_later1">Review later</a>

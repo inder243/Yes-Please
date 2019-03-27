@@ -2,7 +2,6 @@ $(document).ready(function(){
 
   $('.select_gen_quote_img').change(function(e){
     e.preventDefault();
-    alert('hm');
     var images = e.target.files;
     $('.genrl_quote_imgs').text('');
     $.each( images, function( key, value ) {
@@ -63,25 +62,25 @@ $(document).ready(function(){
 		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    }
 		  });
-
-		$.ajax({
-           	type:'POST',
-           	url:home_url+'general_user/quote_accept',
-           	data:{quote_id:quote_id, business_id:business_id},
-           	success:function(data){
-           		if(data.success == '1'){
-           			location.href = home_url+'general_user/quoteaccepted/'+quote_id;
-           			
-           		}
-              	if(data.success == '2'){
-              		alert(data.message);
-              	}
-              	if(data.success == '0'){
-              		alert(data.message);
-              	}
-           	}
+      if (confirm('Are you sure you want to Accept this?')) {
+  		  $.ajax({
+         	type:'POST',
+         	url:home_url+'general_user/quote_accept',
+         	data:{quote_id:quote_id, business_id:business_id},
+         	success:function(data){
+         		if(data.success == '1'){
+         			location.href = home_url+'general_user/quoteaccepted/'+quote_id;
+         		}
+          	if(data.success == '2'){
+          		alert(data.message);
+          	}
+          	if(data.success == '0'){
+          		alert(data.message);
+          	}
+         	}
 
         });/****ajax ends here****/
+      }/***confirm ends***/
 
     });/******accept click ends here******/
 
@@ -97,25 +96,27 @@ $(document).ready(function(){
 		    headers: {
 		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    }
-		});
+		  });
 
-		$.ajax({
-           	type:'POST',
-           	url:home_url+'general_user/quote_ignore',
-           	data:{quote_id:quote_id, business_id:business_id},
-           	success:function(data){
-           		if(data.success == '1'){
-           			location.href = home_url+'general_user/quote_questions/';
-           		}
-              	if(data.success == '2'){
-              		alert(data.message);
-              	}
-              	if(data.success == '0'){
-              		alert(data.message);
-              	}
-           	}
+      if (confirm('Are you sure you want to Ignore this?')) {
+    		$.ajax({
+         	type:'POST',
+         	url:home_url+'general_user/quote_ignore',
+         	data:{quote_id:quote_id, business_id:business_id},
+         	success:function(data){
+         		if(data.success == '1'){
+         			location.href = home_url+'general_user/quote_questions/';
+         		}
+            	if(data.success == '2'){
+            		alert(data.message);
+            	}
+            	if(data.success == '0'){
+            		alert(data.message);
+            	}
+         	}
 
         });/****ajax ends here****/
+      }/***confirm ends***/
 
     });/******ignore click ends here******/
 
@@ -124,13 +125,30 @@ $(document).ready(function(){
     $('.submit_reviewr').click(function(e){
       e.preventDefault();
 
+      var check_review_text = $('#general_review_submit').find('.gen_review_text').val();
       var check_rated_star = $('#general_review_submit').find('.gen_hidden_star_active').val();
 
-      if(check_rated_star == '0' || check_rated_star == ''){
+      if(check_review_text.length == 0){
+
+        $('#general_review_submit').find('.gen_review_text').addClass('error_border');
+        $('#general_review_submit').find('.gen_review_text').next('.fill_fields').css('display','block');
+        $('#general_review_submit').find('.gen_review_text').next('.fill_fields').text('Please add Review');
+        return false;
+
+      }else if(check_review_text.length < 50 || check_review_text.length > 2000){
+
+        $('#general_review_submit').find('.gen_review_text').addClass('error_border');
+        $('#general_review_submit').find('.gen_review_text').next('.fill_fields').css('display','block');
+        $('#general_review_submit').find('.gen_review_text').next('.fill_fields').text('Please add minimum 50 chars and 2000 maximum');
+        return false;
+
+      }else if(check_rated_star == '0' || check_rated_star == ''){
         alert('Please rate us');
         return false;
       }else{
-        $('#general_review_submit').submit();
+        if (confirm('Are you sure you want to Submit this Rating?')) {
+          $('#general_review_submit').submit();
+        }
       }
 
     });
@@ -147,17 +165,50 @@ $(document).ready(function(){
     });
 
     $('.desc_work_modal').click(function(e){
+      /******display images on select image*****/
+      $('#work_description .select_verify_img').change(function(e){
+            e.preventDefault();
+          var images = e.target.files;
+          //$('.reg_img_msg').text('');
+          var name='';
+          var count = 0;
+          $.each( images, function( key, value ) {
+            if(count > 0){
+              name += value.name+', ';
+            }else{
+              name = value.name+', ';
+            }
+            count++;
+              //$('.reg_img_msg').append(value.name+', ');
+          });
+          if(name != ''){            
+            name = name.slice(0, -2);
+            $('#work_description .registrationform .drag_option_main').after('<span id="image_names">'+name+'</span>');
+            if(count > 0){
+              $('#work_description .img_vid_popup .P_N_btn a.skip_pic_vid').text('Next');
+            }
+          }
+          //alert(name);
+
+        });
+
+
 
       /****check data****/
       var text_desc = $('#work_description').find('.work_description_modal').val();
       if(text_desc == ''){
         $('#work_description').find('.work_description_modal').addClass('error_border');
+        $('#work_description').find('.work_description_modal').next('.fill_fields').css('display','block');
         $('#work_description').find('.work_description_modal').next('.fill_fields').text('Please add description');
         return false;
       }else if((text_desc).length < 100 || (text_desc).length > 2000){
         $('#work_description').find('.work_description_modal').addClass('error_border');
+        $('#work_description').find('.work_description_modal').next('.fill_fields').css('display','block');
         $('#work_description').find('.work_description_modal').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
         return false;
+      }else{
+        $('#work_description').find('.work_description_modal').removeClass('error_border');
+        $('#work_description').find('.work_description_modal').next('.fill_fields').css('display','none');
       }
 
       $.ajaxSetup({
@@ -200,23 +251,25 @@ $(document).ready(function(){
       $('.mobile_phone_pop').css('display','block');
     });
 
-    $('.mobile_validate_submit').click(function(){
+    $('.mobileValidateSubmit').click(function(){
         var mobile_filed_val = $('#work_description').find('.mobl_phn').val();
-        if(mobile_filed_val == ''){
-          $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','block');
-          $('#work_description').find('.mobl_phn').next('.fill_fields').text('Please enter Mobile phone.');
-          $('#work_description').find('.mobl_phn').addClass('error_border');
-          return false;
-        }
-        if((mobile_filed_val).length < 9 || (mobile_filed_val).length > 15){
-          $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','block');
-          $('#work_description').find('.mobl_phn').next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
-          $('#work_description').find('.mobl_phn').addClass('error_border');
-          return false;
-        }else{
-          $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','none');
-          $('#work_description').find('.mobl_phn').removeClass('error_border');
-        }
+        // if(!$(this).hasClass('mobile_dont_want')){         
+          if(mobile_filed_val == ''){
+            $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','block');
+            $('#work_description').find('.mobl_phn').next('.fill_fields').text('Please enter Mobile phone.');
+            $('#work_description').find('.mobl_phn').addClass('error_border');
+            return false;
+          }        
+          if((mobile_filed_val).length < 9 || (mobile_filed_val).length > 15){
+            $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','block');
+            $('#work_description').find('.mobl_phn').next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
+            $('#work_description').find('.mobl_phn').addClass('error_border');
+            return false;
+          }else{
+            $('#work_description').find('.mobl_phn').next('.fill_fields').css('display','none');
+            $('#work_description').find('.mobl_phn').removeClass('error_border');
+          }
+        // }
 
         var mobile_filed_val1 = $('#ask_quote').find('.mobl_phn').val();
         if(mobile_filed_val1 == ''){
@@ -293,75 +346,45 @@ function remove_errmsg(data){
   var current_id = $(data).attr('id');
   
   if(current_id == "description"){
-    if(value_field == ""){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).addClass('error_border');
-      return false;
-    }else if((value_field).length < 100 || (value_field).length > 2000){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Description must be between 100 and 2000 digits.');
-      $(data).addClass('error_border');
-      return false;
-    }else{
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
+    $('#work_description').find('.describe_work p').text('');
+    $('#work_description').find('.describe_work p').text('('+(value_field).length+'/2000 letters minimum 100)');
+    $(data).removeClass('error_border');
+    $(data).next('.fill_fields').css('display','none');
   }else if(current_id == "dynamic_description"){
     $('#ask_quote').find('.static_ques_2 p').text('');
     $('#ask_quote').find('.static_ques_2 p').text('('+(value_field).length+'/2000 letters minimum 100)');
-    if(value_field == ""){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).addClass('error_border');
-      return false;
-    }else if((value_field).length < 100 || (value_field).length > 2000){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Description must be between 100 and 2000 digits.');
-      $(data).addClass('error_border');
-      return false;
-    }else{
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
+    $(data).removeClass('error_border');
+    $(data).next('.fill_fields').css('display','none');
+
   }else if(current_id == "mobile_phone"){
-    if(value_field == ""){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Please enter Mobile phone.');
-      $(data).addClass('error_border');
-      return false;
-    }else{
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
+    $(data).next('.fill_fields').css('display','none');
+    $(data).removeClass('error_border');
+    // if(value_field == ""){
+    //   $(data).next('.fill_fields').css('display','block');
+    //   $(data).next('.fill_fields').text('Please enter Mobile phone.');
+    //   $(data).addClass('error_border');
+    //   return false;
+    // }else{
+    //   $(data).next('.fill_fields').css('display','none');
+    //   $(data).removeClass('error_border');
+    // }
 
-    if((value_field).length < 9 || (value_field).length > 15){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
-      $(data).addClass('error_border');
-      return false;
-    }else {
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
+    // if((value_field).length < 9 || (value_field).length > 15){
+    //   $(data).next('.fill_fields').css('display','block');
+    //   $(data).next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
+    //   $(data).addClass('error_border');
+    //   return false;
+    // }else {
+    //   $(data).next('.fill_fields').css('display','none');
+    //   $(data).removeClass('error_border');
+    // }
   }else if(current_id == "dynamic_mobile_phone"){
-    if(value_field == ""){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Please enter Mobile phone.');
-      $(data).addClass('error_border');
-      return false;
-    }else{
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
-
-    if((value_field).length < 9 || (value_field).length > 15){
-      $(data).next('.fill_fields').css('display','block');
-      $(data).next('.fill_fields').text('Mobile phone must be between 9 and 15 digits.');
-      $(data).addClass('error_border');
-      return false;
-    }else {
-      $(data).next('.fill_fields').css('display','none');
-      $(data).removeClass('error_border');
-    }
+    $(data).next('.fill_fields').css('display','none');
+    $(data).removeClass('error_border');
+    
+  }else if(current_id == "gen_reviewtext"){
+    $(data).next('.fill_fields').css('display','none');
+    $(data).removeClass('error_border');
   }else if(value_field == ""){
     $(data).next('.fill_fields').css('display','block');
     $(data).addClass('error_border');

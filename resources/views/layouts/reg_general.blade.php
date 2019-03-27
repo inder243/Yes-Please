@@ -28,14 +28,12 @@
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="{{ asset('img/menu-red.png') }}" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
+                        @if (Auth::guard('general_user')->check())
                         <li>
-                            <a href="#"><img src="{{ asset('img/home.png') }}" />Home</a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
                         <li>
-                            <a href="#"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                            <a href="{{ url('/general_user/quote_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                         </li>
                         <li>
                             <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -53,8 +51,29 @@
                             <a href="#"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
                         </li>
                         <li>
-                            <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />Favorite businesses</a>
                         </li>
+                        <li>
+                          <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                        </li>
+                        @else
+                        <li>
+                          <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/question.png') }}" />I'm a User</a>
+                          </li>
+                          <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/profile.png') }}" />I'm a Business! </a>
+                          </li>
+                          <li>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />  About Yes, please</a>
+                          </li>
+
+                          <li>
+                            <a href="#"><img src="{{ asset('img/messages.png') }}" />Contact </a>
+                          </li>
+                        @endif
                     </ul>
                 </div>
 

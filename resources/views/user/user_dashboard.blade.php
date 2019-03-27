@@ -34,6 +34,7 @@
                     <div class="form-group custom_errow col-md-4 col-12">
                       <label for="inputPassword4">Radius (km)</label>
                       <select class="form-control" id="dashboard_radious_general">
+                        <option value="" selected="" disabled="">Select Radius</option>
                         <option value="10" @if($selected_radious == '10') selected @endif>10</option>
                         <option value="20" @if($selected_radious == '20') selected @endif>20</option>
                         <option value="30" @if($selected_radious == '30') selected @endif>30</option>
@@ -44,7 +45,7 @@
                     </div>
                     <div class="form-group col-md-4 col-12">
                       <label for="keyword">Keyword</label>
-                      <input type="text" class="form-control" id="keyword" required="">
+                      <input type="text" class="form-control" id="keyword" onkeyup="searchFilter()">
                       <span class="input_icons"><img src="{{ asset('img/input_search.png') }}"/></span>
                     </div>
                   </div>
@@ -615,7 +616,7 @@
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
                       @if(isset($all_business) && !empty($all_business))
-                        <ul class="all_bus_by_cat">
+                        <ul class="all_bus_by_cat" id="all_busBy_cat">
                             @foreach($all_business as $key=>$allbus)
                               <li class="all_business_bycat_li">
                                 <input type="hidden" class="hidden_longitude" value="{{ $allbus->logitude}}">
@@ -638,7 +639,7 @@
 
                                     </span>
                                     <div class="sec_t">
-                                       <a href="{{ url('general_user/public_profile/'.$allbus->id) }}"><h1>{{$allbus->business_name}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
+                                       <a href="{{ url('general_user/public_profile/'.$allbus->id.'/'.$categoryId) }}"><h1>{{$allbus->business_name}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
                                        <p>{{$allbus->category_name}}</p>
                                     </div>
                                  </div>
@@ -685,6 +686,7 @@
                             @endforeach
 
                         </ul>
+                        <div class="no_data_found" id="no_data_found" style="display:none"> No Results Found!</div>
                         @else
                         <div class="no_data_found"> No Results Found!</div>
                         @endif
@@ -984,7 +986,7 @@
                </div>
                <form class="dynmic_quoteform">
 
-                 <input type="hidden" class="hiddencatId" value="{{$categoryId}}">
+                 <input type="hidden" class="hiddencatId" name="hiddencatId" value="{{$categoryId}}">
                  <div class="modal-body quote_body">
                     
                       <div class="ask_for_quote_section">
@@ -1069,7 +1071,7 @@
                                     <li>
                                          <div class="formcheck">
                                             <label>
-                                               <input type="radio" class="radio-inline" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
+                                               <input type="radio" class="radio-inline dynamicradio_button" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
                                                <span class="outside"><span class="inside"></span></span>
                                                <p>{{$option->option_name}}</p>
                                             </label>
@@ -1163,7 +1165,7 @@
                              </div>
                              <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" id="static_ques_descriptionn" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                                <div class="ele_next" id="static_ques_descriptionn" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;">Next &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1205,12 +1207,12 @@
                           <div class="ph_detail">
                              <div class="form-group ">
                                 <label for="inputEmail4">Phone number</label>
-                                <input onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="dynamic_mobile_phone" value="" onkeyup="remove_errmsg(this)" type="number">
+                                <input onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="dynamic_mobile_phone" value="@if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)){{Auth::guard('general_user')->user()->phone_number}}@endif" onkeyup="remove_errmsg(this)" type="number">
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="all_business_ph">
-                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
-                                <div class="ele_next" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
                                 <p><img src="{{ asset('img/info.png') }}">Add your phone number.</p>

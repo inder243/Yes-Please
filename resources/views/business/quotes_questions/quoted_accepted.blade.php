@@ -3,15 +3,15 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
         <section>
           <div class="quote_req_main">
             @if(isset($quote_data[0]['status']))
               @if($quote_data[0]['status'] == '4')
-              <h1>Quote accepted by user</h1>
+              <h1>Quote accepted by @if(isset($quote_data[0]['get_gen_user'])){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</h1>
               @elseif($quote_data[0]['status'] == '3')
-              <h1>Quote quoted by user</h1>
+              <h1>Quote is Quoted</h1>
               @elseif($quote_data[0]['status'] == '6')
               <h1>Quote Completed</h1>
               @endif
@@ -21,7 +21,7 @@
               @if($quote_data[0]['status'] == '4')
               <div class="improvement_section_new accepted-quote">
               @elseif($quote_data[0]['status'] == '3')
-              <div class="improvement_section_new new_quote q_quoted">
+              <div class="improvement_section_new new_quote q_quoted1">
               @elseif($quote_data[0]['status'] == '6')
               <div class="improvement_section_new new_quote">
               @endif
@@ -126,11 +126,11 @@
                 <div class="Q_tag">
                   @if(isset($quote_data[0]['status']))
                     @if($quote_data[0]['status'] == '4')
-                    <div class="new_lable q_accepted_table">ACCEPTED</div>
+                    <div class="new_lable q_accepted_table bus_accepted">ACCEPTED</div>
                     @elseif($quote_data[0]['status'] == '3')
-                    <div class="new_lable q_quoted_table">QUOTED</div>
+                    <div class="new_lable q_quoted_table bus_quoted">QUOTED</div>
                     @elseif($quote_data[0]['status'] == '6')
-                    <div class="new_lable">COMPLETED</div>
+                    <div class="new_lable bus_completed">COMPLETED</div>
                     @endif
                   @endif
                     <?php $datetime = $allquotes['created_at'];
@@ -143,11 +143,43 @@
                      <div class="created_date">{{$date}}</div>
                   </div>
                   <div class="quote_basic_detail">
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span>{{ $allquotes['phone_number']}}</span>
-                     </div>
-                    
+
+                    @php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); @endphp
+
+                    @if(!empty($dynamic_formdata ))
+                    @foreach($dynamic_formdata as $dynami_key=>$dyanamic_values)
+                      @if($dyanamic_values['filter']==1)
+                      @if($dyanamic_values['type'] == 'textbox')
+                        @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value']))
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+                          <span>{{$dyanamic_values['value']}}</span>
+                        </div>
+                        @endif
+                      @else
+                        @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options']))
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+
+                          @php $get_labels = ''; @endphp
+                          @foreach($dyanamic_values['options'] as $checkbox_data)
+                            @php $get_labels .= $checkbox_data['label'] . ','; @endphp
+                          @endforeach
+                          <span>{{$get_labels}}</span>
+                        </div>
+                        @endif
+                      @endif
+                      @endif
+                    @endforeach
+                    @endif
+
+                    @if(!empty($allquotes['phone_number']))
+                    <div class="Q_detail">
+                      <span class="Q_detail_heading">Mobile Number:</span>
+                      <span>{{$allquotes['phone_number']}}</span>
+                    </div>
+                    @endif
+
                   </div>
                   <div class="Q_description">
                      <p>{{ $allquotes['work_description']}}</p>
@@ -184,7 +216,18 @@
           <div class="container-fluid">
             <div class="your_quote">
               <h1>Your quote</h1>
-              <div class="doller_hr"><h1>$ @if(isset($quote_data[0]['quote_reply'])){{$quote_data[0]['quote_reply']['price_quotes']}} @else 100 @endif </h1><p>/hour</p></div>
+
+              @if(isset($quote_data[0]['quote_reply']))
+                @if($quote_data[0]['quote_reply']['price_type'] == 2)
+                  @php $price_type = '/hour'; @endphp
+                @else
+                  @php $price_type = ''; @endphp
+                @endif
+              @else
+              @php $price_type = ''; @endphp
+              @endif
+
+              <div class="doller_hr"><h1>$ @if(isset($quote_data[0]['quote_reply'])){{$quote_data[0]['quote_reply']['price_quotes']}} @else 100 @endif </h1><p>{{$price_type}}</p></div>
               <p class="your_quote_des">@if(isset($quote_data[0]['quote_reply'])) {{$quote_data[0]['quote_reply']['details']}} @endif
               </p>
               <div class="total_pics">

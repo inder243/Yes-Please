@@ -26,7 +26,7 @@
                                  <div class="row searchf_input">
                                     <div class="form-group custom_errow col-md-6 col-12">
                                        <label for="inputPassword4">Status</label>
-                                       <select name="select_status" class="form-control" id="exampleSelect1" required>
+                                       <select <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> disabled="" <?php endif; ?> <?php endif; ?> name="select_status" class="form-control" id="exampleSelect1" required>
                                           <option value="all" selected="">All</option>
                                           <option value="1" <?php if($quote_status == 1): ?> selected <?php endif; ?>>New</option>
                                           <option value="2" <?php if($quote_status == 2): ?> selected <?php endif; ?>>Read</option>
@@ -39,15 +39,16 @@
                                     </div>
                                     <div class="form-group col-md-6 col-12">
                                        <label for="inputPassword4">Keyword</label>
-                                       <input type="text" class="form-control bus_quote_keyword" name="bus_quote_keyword" value="<?php if(!empty($quote_keyword)): ?><?php echo e($quote_keyword); ?> <?php endif; ?>" id="inputPassword4">
+                                       <input <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> readonly="" <?php endif; ?> <?php endif; ?> type="text" class="form-control bus_quote_keyword" name="bus_quote_keyword" value="<?php if(!empty($quote_keyword)): ?><?php echo e($quote_keyword); ?> <?php endif; ?>" id="inputPassword4">
                                     </div>
                                  </div>
                                  <div class="search_btn">
-                                    <a href="javascript:;"><input type="submit" name="search_submt" value="Search"></a>
+                                    <input <?php if(isset($hide_sorting)): ?> <?php if($hide_sorting == '1'): ?> disabled="" <?php endif; ?> <?php endif; ?> type="submit" name="search_submt" value="Search">
                                  </div>
                               </div>
                            </form>
                            <div class="all_quote_section">
+                           <?php if(!empty($quotes)): ?>
                            <?php $__currentLoopData = $quotes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $quote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <!-- <div class="quote_section" style="display:none;"> -->
                            <div class="quote_section">
@@ -84,38 +85,73 @@
                                     </div>
                                     <div class="Q_tag">
                                        <?php if($quote['status'] == 1): ?>
-                                       <div class="new_lable">NEW</div>
+                                       <div class="new_lable bus_new">NEW</div>
                                        <?php elseif($quote['status'] == 2): ?>
-                                       <div class="new_lable q_quoted_table">READ</div>
+                                       <div class="new_lable q_quoted_table bus_read">READ</div>
                                        <?php elseif($quote['status'] == 3): ?>
-                                       <div class="new_lable q_quoted_table">QUOTED</div>
+                                       <div class="new_lable q_quoted_table bus_quoted">QUOTED</div>
                                        <?php elseif($quote['status'] == 4): ?>
-                                       <div class="new_lable q_accepted_table">ACCEPTED</div>
+                                       <div class="new_lable q_accepted_table bus_accepted">ACCEPTED</div>
                                        <?php elseif($quote['status'] == 5): ?>
-                                       <div class="new_lable">REJECTED</div>
+                                       <div class="new_lable bus_rejected">REJECTED</div>
                                        <?php else: ?>
-                                       <div class="new_lable">Completed</div>
+                                       <div class="new_lable bus_completed">Completed</div>
                                        <?php endif; ?>
                                        <div class="created_date"><?php echo e($date); ?></div>
                                     </div>
                                     <div class="quote_basic_detail">
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">General user:</span>
-                                          <span><?php echo e($quote['get_gen_user']['first_name']); ?> <?php echo e($quote['get_gen_user']['last_name']); ?></span>
-                                       </div>
+
+                                       <?php $dynamic_formdata = json_decode($quote['get_quotes']['dynamic_formdata'],true); ?>
+
+                                       <?php if(!empty($dynamic_formdata )): ?>
+                                       <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if($dyanamic_values['filter']==1): ?>
+                                          <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                                             <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
+                                             <div class="Q_detail">
+                                               <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                                               <span><?php echo e($dyanamic_values['value']); ?></span>
+                                             </div>
+                                             <?php endif; ?>
+                                          <?php else: ?>
+
+                                             <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                                             <div class="Q_detail">
+                                               <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                                               <?php $get_labels = ''; ?>
+                                               <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                 <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                               <span><?php echo e($get_labels); ?></span>
+                                             </div>
+                                             <?php endif; ?>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                      <?php endif; ?>
+
+                                       
+                                       <?php if(!empty($quote['get_quotes']['phone_number'])): ?>
                                        <div class="Q_detail">
                                           <span class="Q_detail_heading">Mobile Number:</span>
                                           <span><?php echo e($quote['get_quotes']['phone_number']); ?></span>
                                        </div>
+                                       <?php endif; ?>
+
                                     </div>
                                     <div class="Q_description">
-                                       <p><?php echo e($quote['get_quotes']['work_description']); ?></p>
+                                       <?php $descriptn = mb_strimwidth($quote['get_quotes']['work_description'], 0, 150, "..."); ?>
+                                       <p><?php echo e($descriptn); ?></p>
                                     </div>
                                  </div>
                               </a>
                            </div>
                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        
+                           
+                           <?php else: ?>
+                           <div class="no_result_quotes">No Results Found!</div>
+                           <?php endif; ?>
                           
                            </div>
                            <!-- <div class="load_more"><a href="JavaScript:;">Load more</a></div> -->
@@ -141,8 +177,8 @@
                                  </div>
                               </div>
                               <div class="search_btn">
-                                 <a href="javascript:;">Search</a>
-                              </div>
+                                 <input type="submit" value="Search">
+                              </div> 
                            </div>
                            <div class="quote_section">
                               <a href="question_detail.html" class="new_quote">

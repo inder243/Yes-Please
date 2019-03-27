@@ -131,7 +131,7 @@
                         <div class="form-group col-md-6 col-12">
                             <label for="password_confirmation"><?php echo e(__('Confirm Password')); ?> <span class="mandatery_star">*</span>
                             </label>
-                            <input id="password_confirmation" type="password" class="form-control<?php echo e($errors->has('password') ? ' error_border' : ''); ?>" name="password_confirmation" value="<?php echo e(old('password')); ?>">
+                            <input id="password_confirmation" type="password" class="form-control<?php echo e($errors->has('password') ? ' error_border' : ''); ?>" name="password_confirmation" value="<?php echo e(old('password_confirmation')); ?>">
                         </div>
                         <div class="form-group col-md-6 col-12">
                             <label for="inputPassword4"><?php echo e(__('Phone number')); ?> <span class="mandatery_star">*</span></label>
@@ -158,7 +158,7 @@
                             </div>
                         </div>
                         <?php if($errors->has('checkbox')): ?>
-                            <span class="fill_fields option_accept check-center" role="alert">
+                            <span class="fill_fields option_accept check-center" role="alert" style="text-align:center;">
                                 <?php echo e($errors->first('checkbox')); ?>
 
                             </span>

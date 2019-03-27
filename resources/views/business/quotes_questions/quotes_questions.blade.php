@@ -28,7 +28,7 @@
                                  <div class="row searchf_input">
                                     <div class="form-group custom_errow col-md-6 col-12">
                                        <label for="inputPassword4">Status</label>
-                                       <select name="select_status" class="form-control" id="exampleSelect1" required>
+                                       <select @if(isset($hide_sorting)) @if($hide_sorting == '1') disabled="" @endif @endif name="select_status" class="form-control" id="exampleSelect1" required>
                                           <option value="all" selected="">All</option>
                                           <option value="1" @if($quote_status == 1) selected @endif>New</option>
                                           <option value="2" @if($quote_status == 2) selected @endif>Read</option>
@@ -41,15 +41,16 @@
                                     </div>
                                     <div class="form-group col-md-6 col-12">
                                        <label for="inputPassword4">Keyword</label>
-                                       <input type="text" class="form-control bus_quote_keyword" name="bus_quote_keyword" value="@if(!empty($quote_keyword)){{$quote_keyword}} @endif" id="inputPassword4">
+                                       <input @if(isset($hide_sorting)) @if($hide_sorting == '1') readonly="" @endif @endif type="text" class="form-control bus_quote_keyword" name="bus_quote_keyword" value="@if(!empty($quote_keyword)){{$quote_keyword}} @endif" id="inputPassword4">
                                     </div>
                                  </div>
                                  <div class="search_btn">
-                                    <a href="javascript:;"><input type="submit" name="search_submt" value="Search"></a>
+                                    <input @if(isset($hide_sorting)) @if($hide_sorting == '1') disabled="" @endif @endif type="submit" name="search_submt" value="Search">
                                  </div>
                               </div>
                            </form>
                            <div class="all_quote_section">
+                           @if(!empty($quotes))
                            @foreach($quotes as $quote)
                            <!-- <div class="quote_section" style="display:none;"> -->
                            <div class="quote_section">
@@ -86,38 +87,73 @@
                                     </div>
                                     <div class="Q_tag">
                                        @if($quote['status'] == 1)
-                                       <div class="new_lable">NEW</div>
+                                       <div class="new_lable bus_new">NEW</div>
                                        @elseif($quote['status'] == 2)
-                                       <div class="new_lable q_quoted_table">READ</div>
+                                       <div class="new_lable q_quoted_table bus_read">READ</div>
                                        @elseif($quote['status'] == 3)
-                                       <div class="new_lable q_quoted_table">QUOTED</div>
+                                       <div class="new_lable q_quoted_table bus_quoted">QUOTED</div>
                                        @elseif($quote['status'] == 4)
-                                       <div class="new_lable q_accepted_table">ACCEPTED</div>
+                                       <div class="new_lable q_accepted_table bus_accepted">ACCEPTED</div>
                                        @elseif($quote['status'] == 5)
-                                       <div class="new_lable">REJECTED</div>
+                                       <div class="new_lable bus_rejected">REJECTED</div>
                                        @else
-                                       <div class="new_lable">Completed</div>
+                                       <div class="new_lable bus_completed">Completed</div>
                                        @endif
                                        <div class="created_date">{{$date}}</div>
                                     </div>
                                     <div class="quote_basic_detail">
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">General user:</span>
-                                          <span>{{$quote['get_gen_user']['first_name']}} {{$quote['get_gen_user']['last_name']}}</span>
-                                       </div>
+
+                                       @php $dynamic_formdata = json_decode($quote['get_quotes']['dynamic_formdata'],true); @endphp
+
+                                       @if(!empty($dynamic_formdata ))
+                                       @foreach($dynamic_formdata as $dynami_key=>$dyanamic_values)
+                                          @if($dyanamic_values['filter']==1)
+                                          @if($dyanamic_values['type'] == 'textbox')
+                                             @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value']))
+                                             <div class="Q_detail">
+                                               <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+                                               <span>{{$dyanamic_values['value']}}</span>
+                                             </div>
+                                             @endif
+                                          @else
+
+                                             @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options']))
+                                             <div class="Q_detail">
+                                               <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+
+                                               @php $get_labels = ''; @endphp
+                                               @foreach($dyanamic_values['options'] as $checkbox_data)
+                                                 @php $get_labels .= $checkbox_data['label'] . ','; @endphp
+                                               @endforeach
+                                               <span>{{$get_labels}}</span>
+                                             </div>
+                                             @endif
+                                        @endif
+                                        @endif
+                                      @endforeach
+                                      @endif
+
+                                       
+                                       @if(!empty($quote['get_quotes']['phone_number']))
                                        <div class="Q_detail">
                                           <span class="Q_detail_heading">Mobile Number:</span>
                                           <span>{{$quote['get_quotes']['phone_number']}}</span>
                                        </div>
+                                       @endif
+
                                     </div>
                                     <div class="Q_description">
-                                       <p>{{$quote['get_quotes']['work_description']}}</p>
+                                       @php $descriptn = mb_strimwidth($quote['get_quotes']['work_description'], 0, 150, "..."); @endphp
+                                       <p>{{$descriptn}}</p>
                                     </div>
                                  </div>
                               </a>
                            </div>
                            @endforeach
-                        
+                           
+                           @else
+                           <div class="no_result_quotes">No Results Found!</div>
+                           @endif
                           
                            </div>
                            <!-- <div class="load_more"><a href="JavaScript:;">Load more</a></div> -->
@@ -143,8 +179,8 @@
                                  </div>
                               </div>
                               <div class="search_btn">
-                                 <a href="javascript:;">Search</a>
-                              </div>
+                                 <input type="submit" value="Search">
+                              </div> 
                            </div>
                            <div class="quote_section">
                               <a href="question_detail.html" class="new_quote">

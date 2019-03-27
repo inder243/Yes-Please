@@ -128,7 +128,7 @@
                         <div class="form-group col-md-6 col-12">
                             <label for="password_confirmation">{{ __('Confirm Password') }} <span class="mandatery_star">*</span>
                             </label>
-                            <input id="password_confirmation" type="password" class="form-control{{ $errors->has('password') ? ' error_border' : '' }}" name="password_confirmation" value="{{old('password')}}">
+                            <input id="password_confirmation" type="password" class="form-control{{ $errors->has('password') ? ' error_border' : '' }}" name="password_confirmation" value="{{old('password_confirmation')}}">
                         </div>
                         <div class="form-group col-md-6 col-12">
                             <label for="inputPassword4">{{ __('Phone number') }} <span class="mandatery_star">*</span></label>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                         @if ($errors->has('checkbox'))
-                            <span class="fill_fields option_accept check-center" role="alert">
+                            <span class="fill_fields option_accept check-center" role="alert" style="text-align:center;">
                                 {{ $errors->first('checkbox') }}
                             </span>
                         @endif

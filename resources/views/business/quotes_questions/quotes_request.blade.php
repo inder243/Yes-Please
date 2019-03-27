@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> Home improvement</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -115,9 +115,9 @@
                   <div class="Q_tag">
                      @if(isset($quote_data[0]['status']))
                        @if($quote_data[0]['status'] == '1')
-                       <div class="new_lable">NEW</div>
+                       <div class="new_lable bus_new">NEW</div>
                        @elseif($quote_data[0]['status'] == '2')
-                       <div class="new_lable q_quoted_table">READ</div>
+                       <div class="new_lable q_quoted_table bus_read">READ</div>
                        @endif
                      @endif
 
@@ -131,11 +131,43 @@
                      <div class="created_date">{{$date}}</div>
                   </div>
                   <div class="quote_basic_detail">
-                     <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span>{{ $allquotes['phone_number']}}</span>
-                     </div>
-                    
+
+                    @php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); @endphp
+
+                    @if(!empty($dynamic_formdata ))
+                    @foreach($dynamic_formdata as $dynami_key=>$dyanamic_values)
+                      @if($dyanamic_values['filter']==1)
+                      @if($dyanamic_values['type'] == 'textbox')
+                        @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value']))
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+                          <span>{{$dyanamic_values['value']}}</span>
+                        </div>
+                        @endif
+                      @else
+                        @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options']))
+                        <div class="Q_detail">
+                          <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+
+                          @php $get_labels = ''; @endphp
+                          @foreach($dyanamic_values['options'] as $checkbox_data)
+                            @php $get_labels .= $checkbox_data['label'] . ','; @endphp
+                          @endforeach
+                          <span>{{$get_labels}}</span>
+                        </div>
+                        @endif
+                      @endif
+                      @endif
+                    @endforeach
+                    @endif
+
+                    @if(!empty($allquotes['phone_number']))
+                    <div class="Q_detail">
+                      <span class="Q_detail_heading">Mobile Number:</span>
+                      <span>{{$allquotes['phone_number']}}</span>
+                    </div>
+                    @endif
+
                   </div>
                   <div class="Q_description">
                      <p>{{ $allquotes['work_description']}}</p>
@@ -178,7 +210,7 @@
                   <div class="row  searchf_input">
                      <div class="form-group col-md-6 col-12">
                         <label for="quote_price">Price quote</label>
-                        <input type="number" onKeyPress="if(this.value.length==15) return false;"  name="quote_price" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control{{ $errors->has('quote_price') ? ' error_border' : '' }}" id="quote_price" value="{{old('quote_price')}}">
+                        <input type="number" onKeyPress="if(this.value.length==7) return false;"  name="quote_price" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control{{ $errors->has('quote_price') ? ' error_border' : '' }}" id="quote_price" value="{{old('quote_price')}}">
 
                         @if ($errors->has('quote_price'))
                             <span class="fill_fields" role="alert">

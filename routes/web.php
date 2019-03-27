@@ -163,6 +163,10 @@ Route::prefix('business_user')->group(function() {
     Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
     Route::post('/quote_template_delete', 'business_user\BusinessQuotesController@deleteQuoteTemplates')->name('business_user.deletequote_template');
     Route::post('/add_selected_service', 'Auth\RegisterBusinessUserController@addSelectedService')->name('business_user.add_selected_service');
+    Route::get('/advertisement_free_mode', 'business_user\AdvertisementController@index');
+    Route::get('/advertisement_pro_mode', 'business_user\AdvertisementController@proMode');
+    Route::post('/save_pro_mode_settings', 'business_user\AdvertisementController@saveProModeSettings')->name('business_user.saveProModeSettings');
+
   });
 
 Route::prefix('general_user')->group(function() {
@@ -171,7 +175,7 @@ Route::prefix('general_user')->group(function() {
    Route::post('/login', 'Auth\GeneralUserLoginController@login')->name('general_user.login.submit');
    Route::get('logout/', 'Auth\GeneralUserLoginController@logout')->name('general_user.logout');
    Route::get('/user/{id?}', 'Auth\GeneralUserLoginController@beforeLogin')->name('general_user.beforelogin');
-   Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
+   //Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
     Route::get('/dashboard/catid/{catid}/{location?}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
    // Route::post('/dashboard/catid/{catid}', 'general_user\GeneralUserController@categoryBusiness')->name('user.dashboardabc');
     Route::get('/register', 'Auth\RegisterGeneralUserController@showUserRegisterForm')->name('general_user.register');
@@ -213,7 +217,7 @@ Route::prefix('general_user')->group(function() {
    'general_user\GeneralUserController@showPublicProfile')->name('business_user.public_profile');*/
 
     /******public profile page with/without login******/
-    Route::get('/public_profile/{id}/{status?}',
+    Route::get('/public_profile/{id}/{catId}/{status?}',
    'Auth\GeneralUserLoginController@showPublicProfile')->name('business_user.public_profile');
 
     //get question for dynamic form builder

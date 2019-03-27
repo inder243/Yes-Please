@@ -49,12 +49,16 @@ class BusinessUserController extends Controller
         /*****quotes count get****/
         $quotes = YpBusinessUsersQuotes::where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get();
         $quoteCount = $quotes->count();
-        
+
+        //get payment mode of business user
+
+        $getPaymentModeOfBusinessUser = YpBusinessUsers::select('advertise_mode')->where('id',$b_id)->first();
+
         if($completed_steps < 7){
             Auth::guard('business_user')->logout();
             return redirect('/business_user/register_'.$arr[$redirect_to_step].'/'.$business_user_id);
         }else{
-            return view('/business/business_dashboard')->with('quoteCount',$quoteCount);
+            return view('/business/business_dashboard')->with(array('quoteCount'=>$quoteCount,'paymentMode'=>$getPaymentModeOfBusinessUser));
         }
     }
 

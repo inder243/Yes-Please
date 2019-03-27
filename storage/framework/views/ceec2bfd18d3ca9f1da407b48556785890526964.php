@@ -2,18 +2,32 @@
 
  <section class="register_step_1">
         <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-          <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+          <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes['cat_id'])); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes['cat_name']); ?><?php endif; ?></a>/<span class="q_breadcrumb">  Quote</span></div>
           <div class="for_accepted_quote">
             <div class="finish_quote">
-                <!-- <?php if(!empty($all_data[0]['get_reviews'])): ?>
-                  <?php if(array_search('general', array_column($all_data[0]['get_reviews'], 'user_type')) > -1): ?>
-                  <a href="<?php echo e(url('/general_user/quote_questions')); ?>" data-quoteid="<?php echo e($all_data[0]['quote_id']); ?>" class="finish_job_quotes">This job has been finished</a>
-                  <?php else: ?>
-                  <a href="<?php echo e(url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id'])); ?>" data-quoteid="<?php echo e($all_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+
+              <?php if(!empty($all_data)): ?>
+                <?php $__currentLoopData = $all_data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$quote_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                
+                  <?php if(!empty($quote_data['quotes']) && $quote_data['quotes']['status']== 4): ?>
+
+                    <?php if(!empty($quote_data['get_reviewss'])): ?>
+
+                      <?php if(array_search('general', array_column($quote_data['get_reviewss'], 'user_type')) > -1): ?>
+                      <a href="<?php echo e(url('/general_user/quote_questions')); ?>" data-quoteid="<?php echo e($quote_data['quote_id']); ?>" class="finish_job_quotes">Job Completed</a>
+                      <?php else: ?>
+                      <a href="<?php echo e(url('/general_user/user_quotereviews/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>" data-quoteid="<?php echo e($quote_data['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+                      <?php endif; ?>
+
+                    <?php else: ?>
+                    <a href="<?php echo e(url('/general_user/user_quotereviews/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>" data-quoteid="<?php echo e($quote_data['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
+
+                    <?php endif; ?>
+
+
                   <?php endif; ?>
-                <?php else: ?>
-                <a href="<?php echo e(url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id'])); ?>" data-quoteid="<?php echo e($all_data[0]['quote_id']); ?>" class="finish_job_quotes">Finish job</a>
-                <?php endif; ?> -->
+                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              <?php endif; ?>
               
             </div>
             <div class="cancel_quote"><a href="<?php echo e(url('general_user/quote_questions')); ?>">Cancel</a></div>
@@ -22,7 +36,7 @@
       </section>
         <section>
           <div class="quote_req_main">
-            <h1>Quote in Car</h1>
+            <h1>Quote in <?php if(!empty($allquotes)): ?><?php echo e($allquotes->cat_name); ?><?php endif; ?></h1>
             <div class="improvement_section_new accepted-quote">
               <div class="user_profile_sec">
                 <?php $image = Auth::user()->image_url;
@@ -46,10 +60,7 @@
                      ?>
                      <span>Member since <?php echo e($date); ?></span>
                 </div>
-                <div class="contact_user">
-                  <a href="tel:<?php echo e(Auth::user()->phone_number); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
-                     <a href="JavaScript:;" class="user_text"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
-                </div>
+                
                 <div class="review_section">
                   <ul>
                       <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->avg('rating');
@@ -120,15 +131,47 @@
                       $time = date('H:i',strtotime($splitTimeStamp[1]));
                     ?>
 
-                   <div class="new_lable q_accepted_table">ACCEPTED</div>
+                   <div class="new_lable q_accepted_table gen_accepted">ACCEPTED</div>
                    <div class="created_date"><?php echo e($date); ?></div>
                 </div>
                 <div class="quote_basic_detail">
-                   <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span><?php echo e($allquotes['phone_number']); ?></span>
-                     </div>
-                  
+
+                  <?php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); ?>
+
+                  <?php if(!empty($dynamic_formdata )): ?>
+                  <?php $__currentLoopData = $dynamic_formdata; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dynami_key=>$dyanamic_values): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($dyanamic_values['filter']==1): ?>
+                    <?php if($dyanamic_values['type'] == 'textbox'): ?>
+                      <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value'])): ?>
+                      <div class="Q_detail">
+                        <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+                        <span><?php echo e($dyanamic_values['value']); ?></span>
+                      </div>
+                      <?php endif; ?>
+                    <?php else: ?>
+                      <?php if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options'])): ?>
+                      <div class="Q_detail">
+                        <span class="Q_detail_heading"><?php echo e($dyanamic_values['title']); ?> :</span>
+
+                        <?php $get_labels = ''; ?>
+                        <?php $__currentLoopData = $dyanamic_values['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $checkbox_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <?php $get_labels .= $checkbox_data['label'] . ','; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <span><?php echo e($get_labels); ?></span>
+                      </div>
+                      <?php endif; ?>
+                    <?php endif; ?>
+                    <?php endif; ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <?php endif; ?>
+
+                  <?php if(!empty($allquotes['phone_number'])): ?>
+                  <div class="Q_detail">
+                    <span class="Q_detail_heading">Mobile Number:</span>
+                    <span><?php echo e($allquotes['phone_number']); ?></span>
+                  </div>
+                  <?php endif; ?>
+
                 </div>
                 <div class="Q_description">
                   <p><?php echo e($allquotes['work_description']); ?></p>
@@ -153,8 +196,8 @@
                           <?php endif; ?>
                         </div>
                         <!-- Add Arrows -->
-                        <div class="swiper-button-next for_next_arrow"></div>
-                        <div class="swiper-button-prev for_back_arrow"></div>
+                        <div class="swiper-button-next for_next_arrow1"></div>
+                        <div class="swiper-button-prev for_back_arrow1"></div>
                      </div>
                   </div>
               </div>
@@ -175,6 +218,7 @@
                     <?php $__currentLoopData = $all_data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$quote_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                       <?php if(!empty($quote_data['quotes'])): ?>
                         <li class="border-accept">
+                          <a href="<?php echo e(url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>" class="gen_req_link">
                           <h1>ACCEPTED</h1>
                           <div class="b_name_list">
                           <div class="user_quote_img">
@@ -191,18 +235,29 @@
 
                           </div>
                           <div class="other_details_quote">
-                            <a href="<?php echo e(url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>">
-                            <h1><?php echo e($quote_data['get_bus_user']['first_name']); ?> <?php echo e($quote_data['get_bus_user']['last_name']); ?></h1></a>
-                            <p><span>$ <?php echo e($quote_data['price_quotes']); ?></span> for everything</p>
+                            
+                            <h1><?php echo e($quote_data['get_bus_user']['business_name']); ?></h1>
+
+                            <?php $details = mb_strimwidth($quote_data['details'], 0, 30, "..."); ?>
+
+                            <?php if($quote_data['price_type'] == 2): ?>
+                            <?php $price_type = '/hour'; ?>
+                            <?php else: ?>
+                            <?php $price_type = ''; ?>
+                            <?php endif; ?>
+
+                            <p><span>$ <?php echo e($quote_data['price_quotes'].$price_type); ?></span> for <?php echo e($details); ?></p>
                           </div>
                           <div class="for_discount_pt">
                             <span>Entitled for discount for points</span>
                           </div>
                         </div>
+                        </a>
                         </li>
 
                       <?php else: ?>
                         <li>
+                          <a href="<?php echo e(url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>" class="gen_req_link">
                           <div class="user_quote_img">
                             <?php
                             $bus_user_id = $quote_data['get_bus_user']['business_userid'];
@@ -216,9 +271,19 @@
                             <?php endif; ?>
                           </div>
                           <div class="other_details_quote">
-                            <a href="<?php echo e(url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>"><h1><?php echo e($quote_data['get_bus_user']['first_name']); ?> <?php echo e($quote_data['get_bus_user']['last_name']); ?></h1></a>
-                            <p><span>$ <?php echo e($quote_data['price_quotes']); ?></span> for everything</p>
+                            <h1><?php echo e($quote_data['get_bus_user']['business_name']); ?></h1>
+
+                            <?php $details = mb_strimwidth($quote_data['details'], 0, 30, "..."); ?>
+
+                            <?php if($quote_data['price_type'] == 2): ?>
+                            <?php $price_type = '/hour'; ?>
+                            <?php else: ?>
+                            <?php $price_type = ''; ?>
+                            <?php endif; ?>
+
+                            <p><span>$ <?php echo e($quote_data['price_quotes'].$price_type); ?></span>for <?php echo e($details); ?></p>
                           </div>
+                          </a>
                         </li>
                       <?php endif; ?>
                       

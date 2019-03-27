@@ -734,10 +734,7 @@
   <div class="agree">
     <div class="terms_agree">
       <div class="formcheck forcheckbox">
-        <label>
-          <input type="checkbox" class="radio-inline" id="agree" name="agree" value="">
-          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>I agree to <a href="#" class="text_term">terms</a> </p>
-        </label>
+    
         <span class="bu_error bu_error_terms" style="margin: 0px;display: block;"></span>
       </div>
     </div>

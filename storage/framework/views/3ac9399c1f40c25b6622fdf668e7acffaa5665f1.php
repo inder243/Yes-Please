@@ -208,51 +208,90 @@
     </div>
 
     <!------Modal to display popup to add template title----->
-    <div id="showtemplatetitle" class="modal fade" role="dialog">
-        
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+
+    <div class="modal fade" id="showtemplatetitle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    Please enter title for a template
-                    <input type="text" name="temp_title" class="temp_title" maxlength="25" value="">
+                  <div class="login_body_main">
+                    <h1 class="template_title">Please enter template title</h1>
+                    <div class="login_section">
+                      
+                      <div class="login_fields">
+                        
+
+                             
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              
+                              <input type="text" name="temp_title" class="form-control temp_title" maxlength="25" value="">
+
+                              <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                              </span>
+                            </div>
+                            <div class="form-group col-md-12 col-12">
+                            <div class="login_btn"><a><input type="submit" class="btn btn-primary templattitle_submit" value="Submit"></a></div>
+                            </div>
+                           
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary templattitle_submit">Submit</button>
-                </div>
+
             </div>
         </div>
     </div>
+    
 
     <!------Modal to display all templates here----->
-    <div id="showalltemplates" class="modal fade" role="dialog">
-        
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
+    
 
+     <div class="modal fade" id="showalltemplates" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="template_table">
                     <table style="width:100%" id="all_quote_templates">
-                     <!--  <tr>
-                        <th>S.no</th>
-                        <th>Template Title</th>
-                        <th>Template Text</th>
-                        <th>Action</th>
-                      </tr>
-                      <?php if(isset($quote_templates)): ?>
-                        <?php $__currentLoopData = $quote_templates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$template): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr id="<?php echo e($template['id']); ?>">
-                        <td><?php echo e($key+1); ?></td>
-                        <td><?php echo e($template['template_title']); ?></td>
-                        <td class="td_temp_text"><?php echo e($template['template_text']); ?></td>
-                        <td><a href="" onclick="use_template(this);return false;">Use</a> | <a href="javascript:void(0)" data-temp_id="<?php echo e($template['id']); ?>" onclick="delete_template(this);return false;">Delete</a></td>
+                        <tr class="template_head_tr">
+                            <th>S.no</th>
+                            <th>Template Title</th>
+                            <th>Template Text</th>
+                            <th>Action</th>
                         </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    <?php endif; ?>   -->
+
+                        <tr>
+                            <td>S.no</td>
+                            <td>Template Title</td>
+                            <td>Template Text</td>
+                            <td>Action</td>
+                        </tr>
+
+                        <tr>
+                            <td>S.no</td>
+                            <td>Template Title</td>
+                            <td>Template Text</td>
+                            <td>Action</td>
+                        </tr>
+
+                        <tr>
+                            <td>S.no</td>
+                            <td>Template Title</td>
+                            <td>Template Text</td>
+                            <td>Action</td>
+                        </tr>
                     </table>
+                  </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -301,28 +340,97 @@
             navigation: {
              nextEl: '.swiper-button-next',
              prevEl: '.swiper-button-prev',
+           },
+           breakpoints: {
+               1199: {
+                   slidesPerView: 5,
+                   spaceBetween: 20,
+               },
+               992: {
+                   slidesPerView: 5,
+                   spaceBetween: 45,
+               },
+               767: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+
+               640: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+               420: {
+                   slidesPerView: 3,
+                   spaceBetween: 20,
+               },
+               320: {
+                   slidesPerView: 2,
+                   spaceBetween: 30,
+               }
            }
 
         });
+        /*****code to hide next prev arrows from swiper slider*****/
+        var swiper__slidecount = swiper.slides.length - 2;
+        if (swiper__slidecount < 2) {
+            $('.swiper-container').find('.swiper-button-prev,.swiper-button-next').remove();
+        }
       </script>
 
-     <!--  <script>
-            var swiper = new Swiper('.swiper2', {
-                slidesPerView: 10,
-                spaceBetween: 6,
-                slidesPerGroup:10,
+      <script>
+            var swiper2 = new Swiper('.swiper2', {
+                slidesPerView: 8,
+                spaceBetween: 10,
+                //slidesPerGroup:8,
 
                 pagination: {
                   el: '.swiper21',
                   clickable: true,
-                  renderBullet: function (index, className) {
-                    return '<span class="' + className + '">' + (index + 1) + '</span>';
-                  },
+                  // renderBullet: function (index, className) {
+                  //   return '<span class="' + className + '">' + (index + 1) + '</span>';
+                  // },
+                },
+                navigation: {
+                 nextEl: '.swiper-button-next',
+                 prevEl: '.swiper-button-prev',
+               },
+                breakpoints: {
+                1199: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 5,
+                    spaceBetween: 45,
+                },
+                767: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+                420: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                320: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
                 }
+            }
             });
 
+            /*****code to hide next prev arrows from swiper slider*****/
+            var swiper__slidecount1 = swiper2.slides.length - 2;
+            if (swiper__slidecount1 < 2) {
+                $('.swiper2').find('.swiper-button-prev,.swiper-button-next').remove();
+            }
 
-        </script> -->
+
+        </script>
 
     <script>
         $(document).ready(function(){

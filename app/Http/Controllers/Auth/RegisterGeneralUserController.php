@@ -163,7 +163,7 @@ class RegisterGeneralUserController extends Controller
         if(Auth::guard('general_user')->attempt(['email'=>$_POST['email'], 'password'=>$_POST['password']])){
               // return redirect()->to('/general_user/dashboard');
            // return redirect()->intended('/general_user/general_dashboard');
-            return redirect('/general_user/general_dashboard');
+            return redirect('/');
         }
 
     }

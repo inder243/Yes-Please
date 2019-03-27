@@ -3142,8 +3142,8 @@ color: #1b2137;
 
 .quote_section {
 	background-color: rgb(255, 255, 255);
-	/* box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
-	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12); */
+	 box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
 	margin-bottom: 15px;
 	border-radius: 10px;
 	position: relative;
@@ -3199,16 +3199,63 @@ color: #1b2137;
 }
 
 .new_lable {
-	background-color: rgb(51, 102, 153);
-	box-shadow: -1.169px 3.825px 0px 0px rgba(0, 0, 0, 0.14);
-	-webkit-box-shadow: -1.169px 3.825px 0px 0px rgba(0, 0, 0, 0.14);
-	text-align: center;
-	color: #fff;
-	font-size: 16px;
-	padding: 4px 30px 4px 30px;
-	position: relative;
-}
 
+    background-color: rgb(51, 102, 153);
+    box-shadow: 2.831px 3.825px 0px -1px rgba(0, 0, 0, 0.14);
+    -webkit-box-shadow: 2.831px 3.825px 0px -1px rgba(0, 0, 0, 0.14);
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    padding: 4px 25px 4px 30px;
+    position: relative;
+    right: 5px;
+
+}
+.gen_new::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #336699;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_completed::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #336699;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_accepted::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #339933;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.ignore_table::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #ffcb08;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.bus_rejected::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #336699;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
 .created_date {
 	font-size: 12px;
 	color: #999999;
@@ -3216,7 +3263,12 @@ color: #1b2137;
 	text-align: right;
 	padding-right: 20px;
 }
-
+.quotes_srch {
+    width: 124px !important;
+}
+.for_search input {
+    margin-top: 30px;
+}
 .Q_tag {
 	position: absolute;
 	right: -7px;
@@ -3231,7 +3283,7 @@ color: #1b2137;
 	border-right: 6px solid transparent;
 	position: absolute;
 	bottom: -6px;
-	right: 1px;
+	right: -4px;
 	z-index: 1;
 }
 
@@ -3355,6 +3407,7 @@ color: #1b2137;
     width: 100%;
     margin-top: 30px;
     height: 39px;
+		line-height: 39px;
 }
 .border-transparent {
     border-color: transparent;
@@ -3589,29 +3642,30 @@ color: #1b2137;
     font-size: 18px;
 }
 .show_quote a {
-    font-size: 14px;
-    color: #222223;
-    margin-bottom: 15px;
-    display: inline-block;
-    margin-top: 15px;
+	font-size: 14px;
+ color: #222223;
+ margin-bottom: 15px;
+ display: inline-block;
+ margin-top: 15px;
+ padding: 20px 15px 20px 15px;
 }
 .show_quote a img {
     width: 15px;
     margin-left: 10px;
 }
 .total_list_quote ul li {
-    list-style: none;
+	list-style: none;
     background-color: #fff;
     border: 1px solid #e0dfdf;
     border-radius: 5px;
-    padding: 20px 15px 20px 15px;
+    padding: 0;
     display: flex;
     align-items: center;
-	 margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 .other_details_quote h1 {
     font-size: 16px;
-    text-align: left;
+    text-align: left !important;
 		font-family: 'GOTHICB0';
 }
 .other_details_quote {
@@ -3741,7 +3795,6 @@ padding-bottom: 12px;
 .heading_dec h1 {
 	font-family: 'GOTHICB0';
 	text-align: left;
-
 }
 .complete_detail {
     padding-top: 10px;
@@ -3750,7 +3803,9 @@ padding-bottom: 12px;
     margin-right: 20px;
     margin-top: 0;
     margin-bottom: 0;
+		padding:0px;
 }
+
 .chat_call_sec > a > img {
     width: 20px;
     margin-left: 0;
@@ -4356,9 +4411,40 @@ margin-bottom: 10px;
     margin-top: 40px;
 }
 
-
-
-
+.gen_req_link {
+    width: 100%;
+    margin-top: 0 !important;
+}
+.gen_req_link > h1 {
+    text-align: left !important;
+    color: #393;
+    margin-bottom: 10px;
+}
+.gen_req_link img {
+    width: 50px !important;
+}
+.gen_req_link:hover {
+    text-decoration: none;
+}
+.rate_hours {
+    display: flex;
+    margin-top: 9px;
+}
+.rate_hours h2 {
+    font-weight: 700;
+    font-size: 20px;
+    margin-right: 5px;
+}
+.rate_hours > p {
+    padding: 0 !important;
+}
+.star-sec {
+    align-items: center;
+}
+.star-sec p {
+    margin-right: 10px;
+    color: #a8a7a7;
+}
 /*********************************** Quote request end ***********************************/
 /*********************************** Media query start ******************************/
 
@@ -4375,9 +4461,15 @@ margin-bottom: 10px;
 	.category_bar {
 		display: flex;
 	}
+	.rating_btns a {
+		margin-left: 0;
+}
 }
 
 @media (max-width: 991px) {
+	.rating_btns a {
+    margin-left: 0;
+}
 	.call_chat {
 	    display: inherit;
 	}
@@ -4405,9 +4497,47 @@ margin-bottom: 10px;
 	.ignore_p_section .col-lg-6.col-12:only-child {
     margin-left: 0;
 }
+.rating_btns a:last-child {
+    margin-top: 10px;
+    text-align: center;
+}
 }
 
 @media (max-width: 767px) {
+	.heading_dec {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+.heading_dec h1 {
+    text-align: center;
+    margin-top: 10px;
+}
+.rate_hours {
+    text-align: center;
+    display: inline-block;
+}
+.star-sec {
+    text-align: center;
+    display: inline-block;
+}
+.chat_call_sec > a {
+    margin-top: 10px;
+}
+.star-sec p {
+    margin-top: 9px;
+}
+	.main_ans_Sec_container {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+.main_ans_sec_detail {
+    width: 100%;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
+}
 	.cat_text {
     width: 45px;
 

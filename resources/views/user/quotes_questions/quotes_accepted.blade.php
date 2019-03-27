@@ -4,18 +4,32 @@
 
  <section class="register_step_1">
         <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-          <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
+          <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}"> Quotes and questions </a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquotes['cat_id']) }}">@if(isset($allquotes)) {{$allquotes['cat_name']}}@endif</a>/<span class="q_breadcrumb">  Quote</span></div>
           <div class="for_accepted_quote">
             <div class="finish_quote">
-                <!-- @if(!empty($all_data[0]['get_reviews']))
-                  @if(array_search('general', array_column($all_data[0]['get_reviews'], 'user_type')) > -1)
-                  <a href="{{ url('/general_user/quote_questions') }}" data-quoteid="{{$all_data[0]['quote_id']}}" class="finish_job_quotes">This job has been finished</a>
-                  @else
-                  <a href="{{ url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id']) }}" data-quoteid="{{$all_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+
+              @if(!empty($all_data))
+                @foreach($all_data as $key=>$quote_data)
+                
+                  @if(!empty($quote_data['quotes']) && $quote_data['quotes']['status']== 4)
+
+                    @if(!empty($quote_data['get_reviewss']))
+
+                      @if(array_search('general', array_column($quote_data['get_reviewss'], 'user_type')) > -1)
+                      <a href="{{ url('/general_user/quote_questions') }}" data-quoteid="{{$quote_data['quote_id']}}" class="finish_job_quotes">Job Completed</a>
+                      @else
+                      <a href="{{ url('/general_user/user_quotereviews/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}" data-quoteid="{{$quote_data['quote_id']}}" class="finish_job_quotes">Finish job</a>
+                      @endif
+
+                    @else
+                    <a href="{{ url('/general_user/user_quotereviews/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}" data-quoteid="{{$quote_data['quote_id']}}" class="finish_job_quotes">Finish job</a>
+
+                    @endif
+
+
                   @endif
-                @else
-                <a href="{{ url('/general_user/user_quotereviews/'.$all_data[0]['quote_id'].'/'.$all_data[0]['business_id']) }}" data-quoteid="{{$all_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
-                @endif -->
+                 @endforeach
+              @endif
               
             </div>
             <div class="cancel_quote"><a href="{{ url('general_user/quote_questions') }}">Cancel</a></div>
@@ -24,7 +38,7 @@
       </section>
         <section>
           <div class="quote_req_main">
-            <h1>Quote in Car</h1>
+            <h1>Quote in @if(!empty($allquotes)){{$allquotes->cat_name}}@endif</h1>
             <div class="improvement_section_new accepted-quote">
               <div class="user_profile_sec">
                 <?php $image = Auth::user()->image_url;
@@ -48,10 +62,7 @@
                      ?>
                      <span>Member since {{$date}}</span>
                 </div>
-                <div class="contact_user">
-                  <a href="tel:{{Auth::user()->phone_number}}" class="user_call"><img src="{{ asset('img/call.png') }}"/></a>
-                     <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
-                </div>
+                
                 <div class="review_section">
                   <ul>
                       <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'business'])->avg('rating');
@@ -122,15 +133,47 @@
                       $time = date('H:i',strtotime($splitTimeStamp[1]));
                     ?>
 
-                   <div class="new_lable q_accepted_table">ACCEPTED</div>
+                   <div class="new_lable q_accepted_table gen_accepted">ACCEPTED</div>
                    <div class="created_date">{{$date}}</div>
                 </div>
                 <div class="quote_basic_detail">
-                   <div class="Q_detail">
-                        <span class="Q_detail_heading">Mobile Number:</span>
-                        <span>{{ $allquotes['phone_number']}}</span>
-                     </div>
-                  
+
+                  @php $dynamic_formdata = json_decode($allquotes['dynamic_formdata'],true); @endphp
+
+                  @if(!empty($dynamic_formdata ))
+                  @foreach($dynamic_formdata as $dynami_key=>$dyanamic_values)
+                    @if($dyanamic_values['filter']==1)
+                    @if($dyanamic_values['type'] == 'textbox')
+                      @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['value']))
+                      <div class="Q_detail">
+                        <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+                        <span>{{$dyanamic_values['value']}}</span>
+                      </div>
+                      @endif
+                    @else
+                      @if(!empty($dyanamic_values['title']) && !empty($dyanamic_values['options']))
+                      <div class="Q_detail">
+                        <span class="Q_detail_heading">{{$dyanamic_values['title']}} :</span>
+
+                        @php $get_labels = ''; @endphp
+                        @foreach($dyanamic_values['options'] as $checkbox_data)
+                          @php $get_labels .= $checkbox_data['label'] . ','; @endphp
+                        @endforeach
+                        <span>{{$get_labels}}</span>
+                      </div>
+                      @endif
+                    @endif
+                    @endif
+                  @endforeach
+                  @endif
+
+                  @if(!empty($allquotes['phone_number']))
+                  <div class="Q_detail">
+                    <span class="Q_detail_heading">Mobile Number:</span>
+                    <span>{{$allquotes['phone_number']}}</span>
+                  </div>
+                  @endif
+
                 </div>
                 <div class="Q_description">
                   <p>{{ $allquotes['work_description']}}</p>
@@ -155,8 +198,8 @@
                           @endif
                         </div>
                         <!-- Add Arrows -->
-                        <div class="swiper-button-next for_next_arrow"></div>
-                        <div class="swiper-button-prev for_back_arrow"></div>
+                        <div class="swiper-button-next for_next_arrow1"></div>
+                        <div class="swiper-button-prev for_back_arrow1"></div>
                      </div>
                   </div>
               </div>
@@ -177,6 +220,7 @@
                     @foreach($all_data as $key=>$quote_data)
                       @if(!empty($quote_data['quotes']))
                         <li class="border-accept">
+                          <a href="{{ url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}" class="gen_req_link">
                           <h1>ACCEPTED</h1>
                           <div class="b_name_list">
                           <div class="user_quote_img">
@@ -193,18 +237,29 @@
 
                           </div>
                           <div class="other_details_quote">
-                            <a href="{{ url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}">
-                            <h1>{{$quote_data['get_bus_user']['first_name'] }} {{$quote_data['get_bus_user']['last_name']}}</h1></a>
-                            <p><span>$ {{$quote_data['price_quotes']}}</span> for everything</p>
+                            
+                            <h1>{{$quote_data['get_bus_user']['business_name']}}</h1>
+
+                            @php $details = mb_strimwidth($quote_data['details'], 0, 30, "..."); @endphp
+
+                            @if($quote_data['price_type'] == 2)
+                            @php $price_type = '/hour'; @endphp
+                            @else
+                            @php $price_type = ''; @endphp
+                            @endif
+
+                            <p><span>$ {{$quote_data['price_quotes'].$price_type}}</span> for {{$details}}</p>
                           </div>
                           <div class="for_discount_pt">
                             <span>Entitled for discount for points</span>
                           </div>
                         </div>
+                        </a>
                         </li>
 
                       @else
                         <li>
+                          <a href="{{ url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}" class="gen_req_link">
                           <div class="user_quote_img">
                             @php
                             $bus_user_id = $quote_data['get_bus_user']['business_userid'];
@@ -218,9 +273,19 @@
                             @endif
                           </div>
                           <div class="other_details_quote">
-                            <a href="{{ url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id']) }}"><h1>{{$quote_data['get_bus_user']['first_name'] }} {{$quote_data['get_bus_user']['last_name']}}</h1></a>
-                            <p><span>$ {{$quote_data['price_quotes']}}</span> for everything</p>
+                            <h1>{{$quote_data['get_bus_user']['business_name']}}</h1>
+
+                            @php $details = mb_strimwidth($quote_data['details'], 0, 30, "..."); @endphp
+
+                            @if($quote_data['price_type'] == 2)
+                            @php $price_type = '/hour'; @endphp
+                            @else
+                            @php $price_type = ''; @endphp
+                            @endif
+
+                            <p><span>$ {{$quote_data['price_quotes'].$price_type}}</span>for {{$details}}</p>
                           </div>
+                          </a>
                         </li>
                       @endif
                       

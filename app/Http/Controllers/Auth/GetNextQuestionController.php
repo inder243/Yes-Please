@@ -9,6 +9,7 @@ use App\Models\YpFormQuestions;
 use App\Models\YpQuesJumps;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsersQuotes;
+use App\Models\YpBusinessCategories;
 use Mail;
 
 
@@ -154,7 +155,7 @@ class GetNextQuestionController extends Controller
                                     $html.='<div class="total_quote dynamic_rad"><ul>';
                                     foreach($options as $option)
                                     {
-                                        $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                        $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                                     }
                                 }
@@ -307,7 +308,7 @@ class GetNextQuestionController extends Controller
                             $html.='<div class="total_quote dynamic_rad"><ul>';
                             foreach($options as $option)
                             {
-                                $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                             }
                         }
@@ -385,25 +386,11 @@ class GetNextQuestionController extends Controller
         
     }   
 
-    //function to save data of send quote dynamic form
-    public function saveDynamicData(Request $request)
-    {
-        try
-        {
-            echo "<pre>";
-            print_r($request->answers);
-            return response()->json(['success'=>1,'message'=>$e->getMessage()],200);
-        }
-        catch(Exception $e)
-        {
-            return response()->json(['success'=>0,'message'=>$e->getMessage()],200);
-        }
-
-    }
-
+    
     //function to save data of send quote dynamic form
     public function saveQuoteData(Request $request)
     {
+
         try
         {
           // echo "<pre>dggggggg";
@@ -423,7 +410,7 @@ class GetNextQuestionController extends Controller
           
             $answers = json_decode($_POST['answers']);
             
-            if($request->phone!='' && $request->desc!='' && $request->quotecount!='')
+            if($request->desc!='' && $request->quotecount!='')
             {
 
                 //check if multiple business have been selected
@@ -466,16 +453,22 @@ class GetNextQuestionController extends Controller
 
                 $allAnswers = json_encode($answers);
 
+                /******get cat name*****/
+                $get_cat_name = YpBusinessCategories::select('category_name')->where('id',$request->hiddencatId)->first();
+                $cat_name = $get_cat_name->category_name;
+
                 $quote_id = str_shuffle(rand(1,1000).strtotime("now"));
                 //save quote data 
-                $YpGeneralUsersQuotes = new YpGeneralUsersQuotes;
-                $YpGeneralUsersQuotes->quote_id = $quote_id;
-                $YpGeneralUsersQuotes->filter_data = $dataToFilter;
+                $YpGeneralUsersQuotes                   = new YpGeneralUsersQuotes;
+                $YpGeneralUsersQuotes->quote_id         = $quote_id;
+                $YpGeneralUsersQuotes->filter_data      = $dataToFilter;
                 $YpGeneralUsersQuotes->dynamic_formdata = $allAnswers;
-                $YpGeneralUsersQuotes->general_id = $g_id;
+                $YpGeneralUsersQuotes->general_id       = $g_id;
                 $YpGeneralUsersQuotes->work_description = $request->desc;
-                $YpGeneralUsersQuotes->phone_number = $request->phone;
-                $YpGeneralUsersQuotes->quote_count = $request->quotecount;
+                $YpGeneralUsersQuotes->phone_number     = $request->phone;
+                $YpGeneralUsersQuotes->quote_count      = $request->quotecount;
+                $YpGeneralUsersQuotes->cat_id           = $request->hiddencatId;
+                $YpGeneralUsersQuotes->cat_name         = $cat_name;
                 $YpGeneralUsersQuotes->save();
 
                 if (!empty($_FILES['files'])) {
@@ -592,10 +585,10 @@ class GetNextQuestionController extends Controller
                
                 return response()->json(['success'=>1,'message'=>'Data saved successfully.'],200);
             }
-            else if($request->phone=='')
-            {
-                return response()->json(['success'=>0,'message'=>'Phone number is missing.'],200);
-            }
+            // else if($request->phone=='')
+            // {
+            //     return response()->json(['success'=>0,'message'=>'Phone number is missing.'],200);
+            // }
             else if($request->desc=='')
             {
                 return response()->json(['success'=>0,'message'=>'Describe your work.'],200);
