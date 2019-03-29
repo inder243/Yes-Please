@@ -54,6 +54,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                    @if(!empty($verify_bu) && count($verify_bu)>0)
                                     <?php $count=1; ?>
                                     @foreach($verify_bu as $user)
                                     <?php 
@@ -84,6 +85,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

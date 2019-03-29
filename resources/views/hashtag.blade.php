@@ -46,7 +46,7 @@
                                     {{csrf_field()}}
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Hashtag</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="hashtag" placeholder="Enter hashtag..." class="form-control" maxlength="250" value="{{ old('hashtag') }}" required>
+                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="hashtag" placeholder="Enter hashtag..." class="form-control" maxlength="30" value="{{ old('hashtag') }}" required>
                                             @if (Session::has('success_message'))
                                             <span class="help-block succ-admin forhide">{{ Session::get('success_message') }}</span>
                                             @endif
@@ -82,6 +82,7 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                     @if(!empty($hashtag) && count($hashtag)>0)
                                     <?php $count=1; ?>
                                     @foreach($hashtag as $hash)
 
@@ -95,6 +96,15 @@
                                     </tr>
                                     <?php $count++; ?>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                         <td scope="row"></td>
+                                        <td>
+                                             No Data Found
+                                        </td>
+                                   
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

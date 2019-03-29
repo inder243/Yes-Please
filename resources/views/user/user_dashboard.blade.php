@@ -2,10 +2,14 @@
 
 @section('content')
 
+
 <section class="register_step_1">
   <div class="breadcrumb register_breadcrumb category_breadcrumb">
-    <div class="breadcrumb_header"><a href="JavaScript:;">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif<span></span></span></div>
-    <div class="share_fb"><a href="javascript:;"/><img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
+    
+    <div class="breadcrumb_header"><a href="{{ url('/') }}">Home</a>/<span>@if(!empty($catName)) {{$catName}} @endif <span></span></span></div>
+    <div class="share_fb">
+      <a href="javascript:;">
+      <img src="{{ asset('img/icon_F.png') }}"/>Share</a></div>
   </div>
       <div class="container-fluid">
         <div class="category_sec_main">
@@ -21,298 +25,30 @@
                       <h1>Search filter</h1>
                     </div>
                     <div class="row filter_this">
-                    <div class="form-group col-md-3 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="inputPassword4">Location</label>
-                      <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required="">
+                      <input type="text" onFocus="geolocate_dash()" class="form-control autocomplete_dash" id="autocomplete" value="@if(!empty($address)) {{$address}} @endif" required="">
+                      <!-- <input type="text" class="form-control" id="inputPassword4" value="@if(!empty($address)) {{$address}} @endif" required=""> -->
                       <span class="input_icons"><img src="{{ asset('img/location.png') }}"/></span>
                     </div>
-                    <div class="form-group custom_errow col-md-3 col-12">
+                    <div class="form-group custom_errow col-md-4 col-12">
                       <label for="inputPassword4">Radius (km)</label>
-                      <select class="form-control general_radius" id="exampleSelect1">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
+                      <select class="form-control" id="dashboard_radious_general">
+                        <option value="10" @if($selected_radious == '10') selected @endif>10</option>
+                        <option value="20" @if($selected_radious == '20') selected @endif>20</option>
+                        <option value="30" @if($selected_radious == '30') selected @endif>30</option>
+                        <option value="40" @if($selected_radious == '40') selected @endif>40</option>
+                        <option value="50" @if($selected_radious == '50') selected @endif>50</option>
                       </select>
                      <span class="select_arrow1"><img src="{{ asset('img/custom_arrow.png') }}" class="img-fluid"></span>
                     </div>
-                    <div class="form-group col-md-6 col-12">
+                    <div class="form-group col-md-4 col-12">
                       <label for="keyword">Keyword</label>
-                      <input type="text" class="form-control" id="keyword" required="">
+                      <input type="text" class="form-control" id="keyword" onkeyup="searchFilter()">
                       <span class="input_icons"><img src="{{ asset('img/input_search.png') }}"/></span>
                     </div>
                   </div>
-                  <!-- <div class="language_section row">
-                    <div class="col-md-6 col-lg-3 col-12">
-                      <div class="L_heading">
-                        <h1>Languages</h1>
-                        </div>
-                        <div class="lan_list">
-                            <ul>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>English</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Chinese</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Hebrew</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Russian</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>French</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Ukrainian</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>German</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Polish</p>
-                                  </label>
-                              </div>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 col-12">
-                      <div class="L_heading">
-                        <h1>Types</h1>
-                        </div>
-                        <div class="lan_list">
-                            <ul>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Website</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Banner</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Application</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Bussiness card</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Icons</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Logo</p>
-                                  </label>
-                              </div>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 col-12">
-                      <div class="L_heading">
-                        <h1>Another filter</h1>
-                        </div>
-                        <div class="lan_list">
-                            <ul>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 col-12">
-                      <div class="L_heading">
-                        <h1>Another filter</h1>
-                        </div>
-                        <div class="lan_list">
-                            <ul>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                              <li>
-                                <div class="formcheck forcheckbox langcheck">
-                                  <label>
-                                    <input type="checkbox" class="radio-inline" name="radios" value="">
-                                    <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>Category</p>
-                                  </label>
-                              </div>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="more-option">
-                      <a href="javascript:;">More options
-                      <span class="more_down_arrow"><img src="{{ asset('img/custom_arrow.png') }}"/></span>
-                      </a>
-                    </div>
-                  </div> -->
-
+                  
                   <div class="more_options_data" style="display:none;">
                   <div class="language_section row for_more_option">
                     <div class="col-md-6 col-lg-4 col-12">
@@ -603,70 +339,87 @@
                 </div>
               </div>
 
-              <div class="category_second_sec">
+              <div class="category_second_sec user_dashbord_cat">
+                <input type="hidden" class="hidden_default_longitude" value="@if(isset($longitude)){{ $longitude}}@endif">
+                <input type="hidden" class="hidden_default_latitude" value="@if(isset($latitude)){{ $latitude}}@endif">
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
-                        <ul class="all_bus_by_cat">
-
-                          @if(isset($all_business) && !empty($all_business))
+                      @if(isset($all_business) && !empty($all_business))
+                        <ul class="all_bus_by_cat" id="all_busBy_cat">
                             @foreach($all_business as $key=>$allbus)
                               <li class="all_business_bycat_li">
-                                <input type="hidden" class="hidden_longitude" value="{{ $allbus['get_business_user']['logitude']}}">
-                                <input type="hidden" class="hidden_latitude" value="{{ $allbus['get_business_user']['latitude']}}">
-                                <input type="hidden" class="hidden_address" value="{{ $allbus['get_business_user']['full_address']}}">
+                                <input type="hidden" class="hidden_longitude" value="{{ $allbus->logitude}}">
+                                <input type="hidden" class="hidden_latitude" value="{{ $allbus->latitude}}">
+                                <input type="hidden" class="hidden_address" value="{{ $allbus->full_address}}">
+                                <input type="hidden" class="hidden_buname" value="{{ $allbus->business_name}}">
                               <div class="business_sec">
                                  <div class="b-detail">
-                                    <span class="business_img"><img src="{{ asset('img/img_placeholder.png') }}"/></span>
+                                    <span class="business_img">
+
+                                      @if($allbus->image_name)
+                                      @php
+                                      $bus_user_id = $allbus->business_userid;
+                                      $img_url = $allbus->image_name;
+                                      @endphp
+                                      <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
+                                      @else
+                                      <img src="{{ asset('img/img_placeholder.png') }}"/>
+                                      @endif
+
+                                    </span>
                                     <div class="sec_t">
-                                       <a href="{{ url('general_user/public_profile/'.$allbus['business_userid']) }}"><h1>{{$allbus['get_business_user']['business_name']}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
-                                       <p>{{$allbus['get_category']['category_name']}}</p>
+                                       <a href="{{ url('general_user/public_profile/'.$allbus->id) }}"><h1>{{$allbus->business_name}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></a>
+                                       <p>{{$allbus->category_name}}</p>
                                     </div>
                                  </div>
                                  <div class="select_this">
                                     <div class="formcheck forcheckbox langcheck">
                                        <label>
-                                          <input type="checkbox" class="radio-inline check_bus" id="hmm_{{$key}}" name="radios" value="" data-title="{{$allbus['business_userid']}}">
+                                          <input type="checkbox" class="radio-inline check_bus" id="hmm_{{$key}}" name="radios" value="" data-title="{{$allbus->id}}">
                                           <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
                                           <p></p>
                                        </label>
                                     </div>
                                  </div>
                               </div>
-                              <p class="des">{{ $allbus['get_business_user']['full_address']}}</p>
+                              <p class="des">{{ $allbus->full_address}}</p>
                               <div class="distance_rating">
                                  <div class="rate_review">
-                                  @php $new_num = number_format($allbus['get_business_details']['distance_kms'], 2, '.', ''); @endphp
+                                  @php $new_num = number_format($allbus->distance, 1, '.', ''); @endphp
                                     <a href="javascript:;" class="distance">Distance <span>{{ $new_num}}km</span></a>
 
-                                    @if(!empty($allbus['get_business_user']['avg_rating']))
+
+                                    @if(!empty($allbus->tot_rating))
 
                                     @php
-                                      $rating_num = number_format($allbus['get_business_user']['avg_rating'][0]['avg_rating'], 2, '.', '');
+                                      $rating_num = number_format($allbus->tot_rating, 1, '.', '');
 
-                                      $review_num = $allbus['get_business_user']['avg_rating'][0]['tot_review'];
                                     @endphp
 
                                     @else
 
-                                    @php $rating_num = 0; $review_num = 0; @endphp
+                                    @php $rating_num = 0;@endphp
 
                                     @endif
 
                                     <a href="javascript:;" class="rating">Rating <span>{{$rating_num}}/5</span></a>
-                                    <a href="javascript:;" class="review">Reviews <span>{{$review_num}}</span></a>
+                                    <a href="javascript:;" class="review">Reviews <span>@if(!empty($allbus->tot_review)) {{$allbus->tot_review}} @else 0 @endif</span></a>
                                  </div>
                                  <div class="call_chat">
                                     <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
-                                    <a href="tel:{{$allbus['get_business_user']['phone_number']}}" class="call" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $allbus['get_business_user']['phone_number']}}"><img/src="{{ asset('img/call.png') }}"/>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="{{ $allbus->phone_number}}" data-original-title="{{ $allbus->phone_number}}"><img/src="{{ asset('img/call.png') }}"/>
                                     </a>
                                  </div>
                               </div>
                            </li>    
                             @endforeach
-                          @endif
-                          
+
                         </ul>
+                        <div class="no_data_found" id="no_data_found" style="display:none"> No Results Found!</div>
+                        @else
+                        <div class="no_data_found"> No Results Found!</div>
+                        @endif
                         <div class="col-12">
                            <div class="load_more"><a href="JavaScript:;">Load more</a></div>
                         </div>
@@ -675,7 +428,7 @@
                   <div class="col-md-6 col-12">
                      <div class="category_second_bar_sec">
                         <div class="google_map_sec" id="mapDiv">
-                           
+                          
                         </div>
                         <div class="article_sec">
                            <h1>Articles</h1>
@@ -896,13 +649,68 @@
                </div>
             </div>
       </div>
-    </section>
-    <!------------------------  Category  Modal -------------->
-      <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+       <!-------- Login Modal for general user------->
+    <div class="modal fade" id="general_login1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Login or register</h1>
+                    <div class="login_section">
+                      <div class="login_with_social">
+                        <a href="javascript:;" class="phonelogin"><img src="{{ asset('img/icon_ph.png') }}" class="img-fluid"/> Login with <b>Phone number</b></a>
+                        <a href="{{url('general_user/redirectfb')}}" class="fblogin"><img src="{{ asset('img/icon_F.pn') }}g" class="img-fluid"/> Login with <b>Facebook</b></a>
+                        <a href="{{url('general_user/redirect')}}" class="googlelogin"><img src="{{ asset('img/google_plus.png') }}" class="img-fluid"/> Login with <b>Google+</b></a>
+                      </div>
+                      <div class="login_fields">
+                        <!-- <form id="sign_in_general" method="POST" action="{{ route('general_user.login.submit') }}"> -->
+                          <form id="sign_in_general1" method="POST" action="">
+                            {{ csrf_field() }}
+
+                              <span class="fill_fields gen_error" role="alert" style="display:none;">
+                              </span> 
+
+                             <input type="hidden" class="action_general" value="{{ route('general_user.login.submit') }}">
+                              <input type="hidden" class="website_url" value="{{ url('') }}">
+
+
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control email_gen" name="email" placeholder="Email Address" value="{{ old('email') }}" required autofocus>
+                              <span class="fill_fields email_gen_error" role="alert" style="display:none;">
+                              </span>
+                            </div>
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control password_gen" name="password" placeholder="Password">
+                              <span class="fill_fields password_gen_error" role="alert" style="display:none;">
+                              </span>
+                            </div>
+                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <div class="login_btn"><a><input type="button" value="Login" onclick="testsubmit(this);"></a></div>
+                            <div class="register_page"><a href="{{ route('general_user.register') }}" target="_blank">Register</a></div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-------- Login Modal end ----->
+    <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
          <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                <div class="modal-header quote_header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close ask_quote_close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
                </div>
@@ -986,15 +794,15 @@
                             <div class="quote_recieve form-ques dynamicQues_{{$data['id']}}"  data-id="{{$data['id']}}" data-type="{{$data['type']}}" data-filter="{{$data['filter']}}">
                               <h1>{{$data['title']}}</h1>
                               @if(isset($data['options']) && !empty($data['options']))
-                              <div class="total_quote">
+                              <div class="total_quote dynamic_rad">
                                 <ul>
                                   @foreach(json_decode($data['options']) as $option)
                                   
                                     <li>
-                                         <div class="formcheck forcheckbox langcheck">
+                                         <div class="formcheck">
                                             <label>
-                                               <input type="radio" class="radio-inline" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
-                                               <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
+                                               <input type="radio" class="radio-inline dynamicradio_button" name="radios{{$data['id']}}[]" value="{{$option->option_value}}" data-text="{{$option->option_name}}">
+                                               <span class="outside"><span class="inside"></span></span>
                                                <p>{{$option->option_name}}</p>
                                             </label>
                                          </div>
@@ -1012,6 +820,8 @@
                           </div>
                         </div>
                           @endif
+                        @else
+                        <div class="next_btn buttonForOnlyStaticQues" onclick="getOnlyStaticQuestions();"><a href="javascript:;">Please Proceed</a></div>
                         @endif
                         <div class="quote_recieve static_ques_1 static_ques" style="display:none">
                           <h1>How many quotes you want to receive?</h1>
@@ -1085,7 +895,7 @@
                              </div>
                              <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_1" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                                <div class="ele_next" id="static_ques_descriptionn" data_nxt_id="static_ques_3" onclick="getStaticQuestionNext(this);"><a href="javascript:;">Next &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1098,16 +908,16 @@
                             <div class="drag_option_main">
                               <div class="select_upload">
                                 <div class="upload_file_section">
-                                  <div class="drag_file dz-clickable" id="drag_div">
+                                  <!-- <div class="drag_file dz-clickable" id="drag_div">
                                  
                                     <a href="javascript:;">Drag and drop files here to upload</a>
                                   </div>
-                                  <span>OR</span>
-                                  <div class="file_to_upload">
+                                  <span>OR</span> -->
+                                  <div class="file_to_upload gen_quote_img">
                                     <div class="upload-btn-wrapper">
                                       <button class="btn">Select files to upload</button>
-                                        <input name="myfile[]" multiple="" class="select_verify_img" accept="image/x-png,image/gif,image/jpeg" type="file">
-                                    <span id="msg"></span>
+                                        <input name="myfile[]" id="dynamic_vid_img" multiple="" class="select_gen_quote_img" accept="image/x-png,image/gif,image/jpeg" type="file">
+                                    <span id="msg" class="genrl_quote_imgs"></span>
                                     </div>
                                   </div>
                                 </div>
@@ -1115,7 +925,7 @@
                             </div>
                             <div class="describe_work_btn">
                                 <div class="ele_pre" data_nxt_id="static_ques_2" onclick="getStaticQuestion(this);"><a href="javascript:;">&lt; Previous</a></div>
-                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Next &gt;</a></div>
+                                <div class="ele_next" data_nxt_id="static_ques_4" onclick="getStaticQuestionNext(this);"><a href="javascript:;" class="skip_pic_vid" >Skip &gt;</a></div>
                              </div>
                           </div>
                         </div>
@@ -1127,12 +937,12 @@
                           <div class="ph_detail">
                              <div class="form-group ">
                                 <label for="inputEmail4">Phone number</label>
-                                <input onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="dynamic_mobile_phone" value="" onkeyup="remove_errmsg(this)" type="number">
+                                <input onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="dynamic_mobile_phone" value="@if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)){{Auth::guard('general_user')->user()->phone_number}}@endif" onkeyup="remove_errmsg(this)" type="number">
                                 <span class="fill_fields" role="alert"></span>
                              </div>
                              <div class="all_business_ph">
-                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
-                                <div class="ele_next" onclick="validate_quote_dynamicandstatic()"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
+                                <div class="ele_pre" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_validate_submit">Validate</a></div>
+                                <div class="ele_next" onclick="validate_quote_dynamicandstatic(validate)"><a href="javascript:;" class="mobile_dont_want">Don’t want</a></div>
                              </div>
                              <div class="t_detail">
                                 <p><img src="{{ asset('img/info.png') }}">Add your phone number.</p>
@@ -1157,5 +967,21 @@
             </div>
          </div>
       </div>
+
+    </section>
+    <!------------------------  Category  Modal -------------->
       
+
+
+<script type="text/javascript">
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>
+<script type="text/javascript">
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>
+
 @endsection

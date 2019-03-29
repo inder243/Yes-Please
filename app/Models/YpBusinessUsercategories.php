@@ -8,7 +8,7 @@ class YpBusinessUsercategories extends Model
 {
     protected $table = 'yp_business_user_categories';
     protected $fillable = [
-       'business_userid','category_id','sub_category_id'
+       'business_userid','category_id','sub_category_id','quote_with_ph','quote_without_ph','accept_request'
     ];
     protected $hidden = [
        // 'remember_token',

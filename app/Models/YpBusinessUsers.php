@@ -11,7 +11,7 @@ class YpBusinessUsers extends Authenticatable
     protected $guard = 'business_user';
 
     protected $fillable = [
-        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','remember_token','completed_steps'
+        'business_userid','business_name','first_name','last_name', 'email', 'password','phone_number','full_address','logitude','latitude','image_name','remember_token','completed_steps','advertise_mode'
     ];
 
     protected $hidden = [
@@ -50,6 +50,16 @@ class YpBusinessUsers extends Authenticatable
 
     public function get_review(){
         return $this->hasMany('App\Models\YpUserReviews','id','business_id');
+    }
+
+    public function get_reviewss(){
+        return $this->hasMany('App\Models\YpUserReviews','business_id','id');
+    }
+
+    public function avgRating(){
+        return $this->get_reviewss()
+          ->selectRaw('avg(rating) as avg_rating,count(review) as tot_review, business_id')
+          ->groupBy('business_id')->where('user_type','general');
     }
     
 }

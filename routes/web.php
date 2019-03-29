@@ -11,9 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+Route::get('/', 'FrontController@index')->name('front');
+Route::get('/category-classifcation/{id}', 'FrontController@getCategories')->name('cat-home');
+Route::post('more-catogries', 'FrontController@moreCatogries')->name('more-cateogries');
+Route::post('more-super-catogries', 'FrontController@moreSuperCatogries')->name('more-cateogries');
 
 Auth::routes();
 
@@ -54,6 +55,12 @@ Route::prefix('admin')->group(function() {
   # Route::post('/create_new_form', 'Auth\AdminController@createNewForm');
    Route::get('/create_new_form/{id}', 'Auth\AdminController@createNewForm')->name('admin.create_new_form');
    Route::post('/save_dynamic_form', 'Auth\AdminController@saveDynamicForm');
+
+
+   /* code did by Parvinder */
+
+   Route::post('/add_Super_category', 'Auth\AdminController@add_Super_category')->name('admin.add_Super_category');
+
   });
 
 Route::prefix('business_user')->group(function() {
@@ -72,6 +79,12 @@ Route::prefix('business_user')->group(function() {
    /****step three***/
    Route::get('/register_three/{id}', 'Auth\RegisterBusinessUserController@showBusinessRegisterForm_three')->name('business_user.register_three');
    Route::post('/register_three/{id}', 'Auth\RegisterBusinessUserController@create_three')->name('business_user.register_three.submit');
+
+
+   Route::post('/getFormsData/{id}', 'Auth\RegisterBusinessUserController@getFormsData')->name('business_user.getFormsData'); /* get forms data on register screen using category id*/
+   
+
+
    
   /****step four***/
    Route::get('/register_four/{id}', 'Auth\RegisterBusinessUserController@showBusinessRegisterForm_four');
@@ -126,9 +139,17 @@ Route::prefix('business_user')->group(function() {
     Route::post('/remove_businessuser_category', 'business_user\BusinessUserController@removeBusinessUserCategory');
     Route::post('/categorysearch/{id}', 'business_user\BusinessUserController@category_search');
     Route::post('/removeprofileimg', 'business_user\BusinessUserController@removeProfileImages')->name('business_user.remove');
+    //add categories
+    Route::post('/add_business_user_category_auth', 'business_user\BusinessUserController@addBusinessUserCategory');
+    //Remove categories
+    Route::post('/remove_business_user_category_auth', 'business_user\BusinessUserController@removeBusinessUserCategory');
+    /* get forms data on register screen using category id*/
+    Route::post('/get_forms_data_auth/{id}', 'business_user\BusinessUserController@getFormsData')->name('business_user.getFormsData');
+    //Adding services from categories
+    Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
     /**********Quotes and Questions*********/
-    Route::get('/quotes_questions/{id?}',
+    Route::get('/quotes_questions/{status?}/{keyword?}',
    'business_user\BusinessQuotesController@showQuotesQuestions')->name('business_user.quotes');
     Route::get('/quotes_request/{quote_id}',
    'business_user\BusinessQuotesController@showQuotesRequest')->name('business_user.quotes_request');
@@ -141,6 +162,10 @@ Route::prefix('business_user')->group(function() {
     Route::post('/get_all_templates', 'business_user\BusinessQuotesController@getAllQuoteTemplates')->name('business_user.get_all_templates');
     Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
     Route::post('/quote_template_delete', 'business_user\BusinessQuotesController@deleteQuoteTemplates')->name('business_user.deletequote_template');
+    Route::post('/add_selected_service', 'Auth\RegisterBusinessUserController@addSelectedService')->name('business_user.add_selected_service');
+    Route::get('/advertisement_free_mode', 'business_user\AdvertisementController@index');
+    Route::get('/advertisement_pro_mode', 'business_user\AdvertisementController@proMode');
+    Route::post('/save_pro_mode_settings', 'business_user\AdvertisementController@saveProModeSettings')->name('business_user.saveProModeSettings');
 
   });
 
@@ -150,8 +175,8 @@ Route::prefix('general_user')->group(function() {
    Route::post('/login', 'Auth\GeneralUserLoginController@login')->name('general_user.login.submit');
    Route::get('logout/', 'Auth\GeneralUserLoginController@logout')->name('general_user.logout');
    Route::get('/user/{id?}', 'Auth\GeneralUserLoginController@beforeLogin')->name('general_user.beforelogin');
-   Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
-    Route::get('/dashboard/catid/{catid}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
+   //Route::get('/general_dashboard', 'general_user\GeneralUserController@dashboard')->name('general_user.dashboard');
+    Route::get('/dashboard/catid/{catid}/{location?}', 'Auth\GeneralUserLoginController@index')->name('user.dashboard');
    // Route::post('/dashboard/catid/{catid}', 'general_user\GeneralUserController@categoryBusiness')->name('user.dashboardabc');
     Route::get('/register', 'Auth\RegisterGeneralUserController@showUserRegisterForm')->name('general_user.register');
     Route::post('/register', 'Auth\RegisterGeneralUserController@create')->name('general_user.register.submit');
@@ -171,23 +196,29 @@ Route::prefix('general_user')->group(function() {
     Route::get('/callbackfb', 'Auth\GeneralUserLoginController@callbackfb');
 
     /**********quotes and questions**********/
-    Route::get('/quote_questions/{status?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
+    Route::get('/quote_questions/{status?}/{keyword?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
     Route::get('/quotesrply/{quote_id}', 'general_user\GeneralQuotesController@quoteReplies');
     Route::get('/quoteaccepted/{quote_id}', 'general_user\GeneralQuotesController@quoteAccepted');
+    Route::get('/quotecompleted/{quote_id}', 'general_user\GeneralQuotesController@quoteCompleted');
     Route::get('/quotesrequest/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showQuoteRequest');
+    Route::get('/quotesreqcompleted/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showQuoteRequestCompleted');
     Route::post('/quote_accept', 'general_user\GeneralQuotesController@quoteRequestAccept');
     Route::post('/quote_ignore', 'general_user\GeneralQuotesController@quoteRequestIgnore');
-    Route::get('/user_quotereviews/{quote_id}', 'general_user\GeneralQuotesController@showUserQuotesReview')->name('general_user.quote_review');
+    Route::get('/user_quotereviews/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showUserQuotesReview')->name('general_user.quote_review');
     Route::post('/user_quotereviews', 'general_user\GeneralQuotesController@submitUserQuotesReview')->name('general_user.quote_review_submit');
-    Route::post('/quotesend', 'general_user\GeneralUserController@sendQuotes')->name('general_user.askquote_remove');
+    Route::post('/quotesend/{b_id?}', 'general_user\GeneralUserController@sendQuotes')->name('general_user.askquote_remove');
     Route::post('/check_login', 'Auth\GetNextQuestionController@checkLogin')->name('general_user.login_check');
     /******dropzone links*****/
     Route::post('/uploadmultiple_askquote', 'general_user\GeneralUserController@uploadUserMultipleFilesQuotes')->name('general_user.askquote.submit');
     Route::post('/removeimg_askquote', 'general_user\GeneralUserController@removeImagesQuotes')->name('general_user.askquote_remove');
 
     /********public profile page*******/
-    Route::get('/public_profile/{id}',
-   'general_user\GeneralUserController@showPublicProfile')->name('business_user.public_profile');
+    /*Route::get('/public_profile/{id}/{status?}',
+   'general_user\GeneralUserController@showPublicProfile')->name('business_user.public_profile');*/
+
+    /******public profile page with/without login******/
+    Route::get('/public_profile/{id}/{catId}/{status?}',
+   'Auth\GeneralUserLoginController@showPublicProfile')->name('business_user.public_profile');
 
     //get question for dynamic form builder
     Route::post('/getdata', 'Auth\GetNextQuestionController@getdata');

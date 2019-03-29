@@ -9,6 +9,7 @@ use App\Models\YpFormQuestions;
 use App\Models\YpQuesJumps;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsersQuotes;
+use App\Models\YpBusinessCategories;
 use Mail;
 
 
@@ -151,10 +152,10 @@ class GetNextQuestionController extends Controller
                                
                                 if(isset($options) && !empty($options))
                                 {
-                                    $html.='<div class="total_quote"><ul>';
+                                    $html.='<div class="total_quote dynamic_rad"><ul>';
                                     foreach($options as $option)
                                     {
-                                        $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                        $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                                     }
                                 }
@@ -176,7 +177,7 @@ class GetNextQuestionController extends Controller
                                 $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle">'.$getJumpQuestion['title'].'</h1>';
                                 if(isset($options) && !empty($options))
                                 {
-                                    $html.='<div class="total_quote"><div class="form-group custom_errow"><label>Radius (km)</label><select class="form-control">';
+                                    $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$getJumpQuestion['title'].'</label><select class="form-control">';
                                     foreach($options as $option)
                                     {
                                         $html.= '<option value='.$option->option_value.'>'.$option->option_name.'</option>';
@@ -202,7 +203,7 @@ class GetNextQuestionController extends Controller
                                     $html.='<ul>';
                                     foreach($options as $option)
                                     {
-                                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                                     }
                                 }
@@ -304,10 +305,10 @@ class GetNextQuestionController extends Controller
                         
                         if(isset($options) && !empty($options))
                         {
-                            $html.='<div class="total_quote"><ul>';
+                            $html.='<div class="total_quote dynamic_rad"><ul>';
                             foreach($options as $option)
                             {
-                                $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                             }
                         }
@@ -329,7 +330,7 @@ class GetNextQuestionController extends Controller
                             $html.='<ul>';
                             foreach($options as $option)
                             {
-                                $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="checkbox" data-text='.$option->option_name.'><span class="outside"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+                                $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="checkbox" data-text='.$option->option_name.'><span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
 
                             }
                         }
@@ -350,7 +351,7 @@ class GetNextQuestionController extends Controller
                         $html.='<div class="quote_recieve form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle">'.$title.'</h1>';
                         if(isset($options) && !empty($options))
                         {
-                            $html.='<div class="total_quote"><div class="form-group custom_errow"><label>Radius (km)</label><select class="form-control">';
+                            $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$title.'</label><select class="form-control">';
                             foreach($options as $option)
                             {
                                 
@@ -385,25 +386,11 @@ class GetNextQuestionController extends Controller
         
     }   
 
-    //function to save data of send quote dynamic form
-    public function saveDynamicData(Request $request)
-    {
-        try
-        {
-            echo "<pre>";
-            print_r($request->answers);
-            return response()->json(['success'=>1,'message'=>$e->getMessage()],200);
-        }
-        catch(Exception $e)
-        {
-            return response()->json(['success'=>0,'message'=>$e->getMessage()],200);
-        }
-
-    }
-
+    
     //function to save data of send quote dynamic form
     public function saveQuoteData(Request $request)
     {
+
         try
         {
           // echo "<pre>dggggggg";
@@ -423,34 +410,41 @@ class GetNextQuestionController extends Controller
           
             $answers = json_decode($_POST['answers']);
             
-            if($request->phone!='' && $request->desc!='' && $request->quotecount!='')
+            if($request->desc!='' && $request->quotecount!='')
             {
 
                 //check if multiple business have been selected
 
                 $g_id = Auth::guard('general_user')->user()->id;
+                $g_user_id = Auth::guard('general_user')->user()->user_id;
 
                 $filteredData = array();
-                foreach($answers as $ans)
+                if(!empty($answers))
                 {
-                    if($ans->filter==1 || $ans->filter=='1')
+                    foreach($answers as $ans)
                     {
-                       if ($ans->type=='checkbox' || $ans->type=='radio' || $ans->type=='dropdown')
-                       {
-                            $options = $ans->options;
+                        if($ans->filter==1 || $ans->filter=='1')
+                        {
+                           if ($ans->type=='checkbox' || $ans->type=='radio' || $ans->type=='dropdown')
+                           {
+                                $options = $ans->options;
+                                
+                                foreach($options as $option)
+                                {
+                                    $filteredData[]= $option->label;
+                                }
+                           }
+                           else{
+                                $filteredData[] =$ans->value;
+                           } 
                             
-                            foreach($options as $option)
-                            {
-                                $filteredData[]= $option->label;
-                            }
-                       }
-                       else{
-                            $filteredData[] =$ans->value;
-                       } 
-                        
+                        }
                     }
                 }
                 
+                
+               
+
                 if(is_array($filteredData))
                 {
                     $dataToFilter = implode(',',$filteredData);
@@ -459,17 +453,23 @@ class GetNextQuestionController extends Controller
 
                 $allAnswers = json_encode($answers);
 
+                /******get cat name*****/
+                $get_cat_name = YpBusinessCategories::select('category_name')->where('id',$request->hiddencatId)->first();
+                $cat_name = $get_cat_name->category_name;
+
                 $quote_id = str_shuffle(rand(1,1000).strtotime("now"));
                 //save quote data 
-                $YpGeneralUsersQuotes = new YpGeneralUsersQuotes;
-                $YpGeneralUsersQuotes->quote_id = $quote_id;
-                $YpGeneralUsersQuotes->filter_data = $dataToFilter;
+                $YpGeneralUsersQuotes                   = new YpGeneralUsersQuotes;
+                $YpGeneralUsersQuotes->quote_id         = $quote_id;
+                $YpGeneralUsersQuotes->filter_data      = $dataToFilter;
                 $YpGeneralUsersQuotes->dynamic_formdata = $allAnswers;
-                $YpGeneralUsersQuotes->general_id = $g_id;
+                $YpGeneralUsersQuotes->general_id       = $g_id;
                 $YpGeneralUsersQuotes->work_description = $request->desc;
-                $YpGeneralUsersQuotes->phone_number = $request->phone;
-                $YpGeneralUsersQuotes->quote_count = $request->quotecount;
-                $YpGeneralUsersQuotes->save();
+                $YpGeneralUsersQuotes->phone_number     = $request->phone;
+                $YpGeneralUsersQuotes->quote_count      = $request->quotecount;
+                $YpGeneralUsersQuotes->cat_id           = $request->hiddencatId;
+                $YpGeneralUsersQuotes->cat_name         = $cat_name;
+                //$YpGeneralUsersQuotes->save();
 
                 if (!empty($_FILES['files'])) {
                     foreach($Allimages as $fils){
@@ -479,55 +479,40 @@ class GetNextQuestionController extends Controller
                                 
                         $filename = rand(10,100).time().'.'.$extension;
                         
-                        if($file->move(public_path().'/images/general_quotes/'.$g_id.'/', $filename)){                
+                        if($file->move(public_path().'/images/general_quotes/'.$g_user_id.'/', $filename)){                
                            
                             $pic_vid_arr['pic'][] = $filename;
                             
                             $pic_vid_json = json_encode($pic_vid_arr);
                             $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
-                            $YpGeneralUsersQuotes->save();
+                           // $YpGeneralUsersQuotes->save();
                         }
                     }
                     
                 }
                 
-                /****check selected files from button****/
-                if ($request->hasFile('myfile')) {
-                    foreach($request->file('myfile') as $files){
-                        $file = $files;             
-                        $extension = $file->getClientOriginalExtension(); // getting image extension            
-                        $filename = rand(10,100).time().'.'.$extension;
-                        
-                        if($file->move(public_path().'/images/general_quotes/'.$general_userid.'/', $filename)){                
-                           
-                            $pic_vid_arr['pic'][] = $filename;
-                            
-                            $pic_vid_json = json_encode($pic_vid_arr);
-                            $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
-                            $YpGeneralUsersQuotes->save();
-                        }
-                    }
-                    
-                }
+                
 
                 //save business user ids and general user id.
 
                if(!empty($request->multipleBusiness))
                {
-                   $businessUserIds = $request->multipleBusiness;
-                   $businessUserIdsString = implode(',',$request->multipleBusiness);
-                    foreach($businessUserIds as $businessUser)
+                    $businessUserIds = $request->multipleBusiness;
+                   
+                   $businessUserIdsString = explode(',',$request->multipleBusiness);
+
+                    foreach($businessUserIdsString as $businessUser)
                     {
                         $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
                         $YpBusinessUsersQuotes->business_id = $businessUser;
                         $YpBusinessUsersQuotes->general_id = $g_id;
                         $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
                         $YpBusinessUsersQuotes->status = 1;
-                        $YpBusinessUsersQuotes->save();
+                        //$YpBusinessUsersQuotes->save();
                     }
 
                     //send email to selected business users
-                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (".$businessUserIdsString.")"));
+                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (".$businessUserIds.")"));
 
                    if(!empty($getEmails) && !empty($getEmails[0]))
                    {
@@ -551,7 +536,52 @@ class GetNextQuestionController extends Controller
                }
                else
                {
-                    $businessUserIds =  DB::select(DB::raw("SELECT DISTINCT business_id FROM yp_business_selected_services where service_text in (".$dataToFilterQuotes.") ORDER BY RAND() LIMIT 5"));
+
+                    //get bidamount of category given by admin
+
+                    if($request->phone=='')
+                    {
+                        $getBidAmount = YpBusinessCategories::select("quote_without_ph")->where('id',$request->hiddencatId)->first();
+                        if($getBidAmount!='')
+                        {
+                            $bidAmount = $getBidAmount['quote_without_ph'];
+                        }
+                    }
+                    else
+                    {
+                        $getBidAmount = YpBusinessCategories::select("quote_with_ph")->where('id',$request->hiddencatId)->first();
+                        if($getBidAmount!='')
+                        {
+                            $bidAmount = $getBidAmount['quote_with_ph'];
+                        }
+                    }
+                    
+                    
+
+                    $businessUserIds = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',5) as businessUserIds FROM yp_business_selected_services inner join yp_business_user_cc_details on yp_business_selected_services.business_id = yp_business_user_cc_details.b_id 
+                        where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId." and  yp_business_user_cc_details.updated_wallet_amount>=".$bidAmount." ORDER BY RAND()"));
+                   
+                    $businessUserIds = $businessUserIds[0]->businessUserIds;
+
+                   if(!empty($businessUserIds))
+                   {
+                        $ProbusinessUserIds = explode(',',$businessUserIds);
+
+                       foreach($ProbusinessUserIds as $ProbusinessUserId)
+                       {
+                            $businessWithMinAmountUserIds = DB::select(DB::raw("SELECT yp_business_user_categories.business_userid FROM `yp_business_user_categories` inner join yp_business_user_cc_details on yp_business_user_categories.business_userid = yp_business_user_cc_details.b_id where yp_business_user_cc_details.updated_wallet_amount>=yp_business_user_categories.quote_with_ph and yp_business_user_categories.business_userid=".$ProbusinessUserId." limit 1"));
+                            echo "<pre>";
+                            print_r($businessWithMinAmountUserIds[0]->business_userid);
+                       }
+
+                       exit;
+
+                   }
+                   else
+                   {
+                        $businessUserIds = DB::select(DB::raw("SELECT DISTINCT yp_business_selected_services.business_id FROM yp_business_selected_services 
+                        where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId."  ORDER BY RAND() LIMIT 5"));
+                   }
 
                     if(!empty($businessUserIds))
                     {
@@ -563,15 +593,17 @@ class GetNextQuestionController extends Controller
                             $YpBusinessUsersQuotes->general_id = $g_id;
                             $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
                             $YpBusinessUsersQuotes->status = 1;
-                            $YpBusinessUsersQuotes->save();
+                           // $YpBusinessUsersQuotes->save();
+
+                            $buserids[] = $businessUser->business_id;
                         }
                     }
 
-                    //send email to 5 random business users
-                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (SELECT DISTINCT business_id FROM yp_business_selected_services where service_text in (".$dataToFilterQuotes.") ORDER BY RAND() )LIMIT 5"));
-                   
 
-                   if(!empty($getEmails) && !empty($getEmails[0]))
+                    //send email to 5 random business users
+                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (".implode(',',$buserids).")"));
+
+                   if(!empty($getEmails) && !empty($getEmails[0]) && $getEmails[0]->emails!='')
                    {
                         if(!empty($getEmails[0]->emails))
                         {
@@ -590,17 +622,21 @@ class GetNextQuestionController extends Controller
                             });
                         }
                    }
+                   else
+                   {
+                         return response()->json(['success'=>2,'message'=>'Sorry No Business Found For Selected Service.'],200);
+                   }
                }
 
                
               
                
-                return response()->json(['success'=>1,'message'=>'Dat saved successfully.'],200);
+                return response()->json(['success'=>1,'message'=>'Data saved successfully.'],200);
             }
-            else if($request->phone=='')
-            {
-                return response()->json(['success'=>0,'message'=>'Phone number is missing.'],200);
-            }
+            // else if($request->phone=='')
+            // {
+            //     return response()->json(['success'=>0,'message'=>'Phone number is missing.'],200);
+            // }
             else if($request->desc=='')
             {
                 return response()->json(['success'=>0,'message'=>'Describe your work.'],200);

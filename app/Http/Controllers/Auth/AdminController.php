@@ -13,6 +13,8 @@ use App\Models\YpBusinessUsers;
 use App\Models\YpVerificationBusinessUsers;
 use App\Models\YpQuesJumps;
 use App\Models\YpFormQuestions;
+use App\Models\YpBusinessUserCcDetails;
+
 use DB;
 use Session;
 
@@ -52,7 +54,15 @@ class AdminController extends Controller
     public function add_Super_Category(Request $request)
     {
         $superCategoryName = $request->input('superCategory');
-        $general_categoryid = str_shuffle(rand(1,1000).strtotime("now"));
+        if($superCategoryName=='')
+        {
+            Session::flash('error_message', 'Please Provide category name.');
+            return back()->withInput();
+        }
+        
+        // $general_categoryid = str_shuffle(rand(1,1000).strtotime("now"));
+        $general_categoryid = time();
+        //die($general_categoryid);
 
         $category = YpBusinessSuperCategories::where('cat_name', trim($superCategoryName))->first();
         if($category)
@@ -74,8 +84,29 @@ class AdminController extends Controller
 
         $superCategory = $request->input('superCategory');
 
-
+        if($superCategory=='')
+        {
+            Session::flash('error_message', 'Please Provide SuperCategory.');
+            return back()->withInput();
+        }
+        else if(trim($_POST['category'])=='')
+        {
+            Session::flash('error_message', 'Please Provide Category.');
+            return back()->withInput();
+        }
+        else if(trim($_POST['q_with_ph'])=='')
+        {
+            Session::flash('error_message', 'Please Provide quote with phone number.');
+            return back()->withInput();
+        }
+        else if(trim($_POST['q_without_ph'])=='')
+        {
+            Session::flash('error_message', 'Please Provide quote without phone number.');
+            return back()->withInput();
+        }
         // $category = DB::table('yp_business_categories')->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
+
+
 
         $category = YpBusinessCategories::where('super_cat_id', $superCategory)->where('category_name', trim($_POST['category']))->where('category_status','1')->first();
         if($category)
@@ -90,6 +121,8 @@ class AdminController extends Controller
         $business_category->category_id = $general_categoryid;
         $business_category->super_cat_id = $superCategory;
         $business_category->category_name = trim($_POST['category']);
+        $business_category->quote_with_ph = trim($_POST['q_with_ph']);
+        $business_category->quote_without_ph = trim($_POST['q_without_ph']);
         $business_category->save();
 
         Session::flash('success_message', 'Category added successfully.');
@@ -149,7 +182,22 @@ class AdminController extends Controller
     public function edit_category()
     {
         // $category = DB::table('yp_business_categories')->where('category_name', trim($_POST['name']))->where('id','!=', trim($_POST['id']))->where('category_status','1')->first();
-
+        if(trim($_POST['name'])=='')
+        {
+            echo "error";
+        
+        }
+        else if(trim($_POST['edit_q_with_ph'])<=0)
+        {
+            echo "error1";
+        
+        }
+        else if(trim($_POST['edit_q_without_ph'])<=0)
+        {
+            echo "error2";
+        
+        }
+        
         $category = YpBusinessCategories::where('category_name', trim($_POST['name']))->where('id','!=', trim($_POST['id']))->where('category_status','1')->first();
         
         // echo '<pre>'; print_r($category); die('here');
@@ -165,7 +213,7 @@ class AdminController extends Controller
             // ->update(['category_name' => trim($_POST['name'])]);
 
             YpBusinessCategories::where('id', $_POST['id'])
-            ->update(['category_name' => trim($_POST['name'])]);
+            ->update(['category_name' => trim($_POST['name']),'quote_with_ph'=>trim($_POST['edit_q_with_ph']),'quote_without_ph'=>trim($_POST['edit_q_without_ph'])]);
 
             echo "success";
         
@@ -211,24 +259,15 @@ class AdminController extends Controller
     public function delete_category()
     {
 
-        // echo '<pre>'; print_r($_POST); die('here345'); 
+           // YpBusinessCategories::where('id', $_POST['id'])
+           //  ->update(['category_status' => '0']);
+           // YpBusinessSubCategories::where('cat_id', $_POST['id'])
+           //  ->update(['sub_category_status' => '0']);
 
-            // DB::table('yp_business_categories')
-            // ->where('id', $_POST['id'])
-            // ->update(['category_status' => '0']);
-
-
-            // DB::table('yp_business_sub_categories')
-            // ->where('cat_id', $_POST['id'])
-            // ->update(['sub_category_status' => '0']);
-
-
-           YpBusinessCategories::where('id', $_POST['id'])
-            ->update(['category_status' => '0']);
-
-
-           YpBusinessSubCategories::where('cat_id', $_POST['id'])
-            ->update(['sub_category_status' => '0']);
+        YpBusinessCategories::where('id', $_POST['id'])
+            ->delete();
+        YpBusinessSubCategories::where('cat_id', $_POST['id'])
+            ->delete();
 
     }
 
@@ -238,14 +277,10 @@ class AdminController extends Controller
     public function delete_subcategory()
     {
 
-        // echo '<pre>'; print_r($_POST); die('here345'); 
-
-            // DB::table('yp_business_sub_categories')
-            // ->where('id', $_POST['id'])
-            // ->update(['sub_category_status' => '0']);
-
+        // YpBusinessSubCategories::where('id', $_POST['id'])
+        //     ->update(['sub_category_status' => '0']);
         YpBusinessSubCategories::where('id', $_POST['id'])
-            ->update(['sub_category_status' => '0']);
+            ->delete();
 
     }
 
@@ -268,6 +303,11 @@ class AdminController extends Controller
 
         // $hashtag = DB::table('yp_hashtag')->where('hashtag_name', trim($_POST['hashtag']))->where('hashtag_status','1')->first();
 
+        if(trim($_POST['hashtag'])=='')
+        {
+            Session::flash('error_message', 'Please Provide Hashtag');
+            return back()->withInput();
+        } 
 
         $hashtag = Yphashtag::where('hashtag_name', trim($_POST['hashtag']))->where('hashtag_status','1')->first();
 
@@ -292,7 +332,11 @@ class AdminController extends Controller
 
     public function edit_hashtag()
     {
-
+        if(trim($_POST['name'])=='')
+        {
+            echo "error";
+        
+        }
 
         // $hashtag = DB::table('yp_hashtag')->where('hashtag_name', trim($_POST['name']))->where('id','!=', trim($_POST['id']))->where('hashtag_status','1')->first();
 
@@ -322,15 +366,11 @@ class AdminController extends Controller
 
     public function delete_hashtag()
     {
+        /*Yphashtag::where('id', $_POST['id'])
+        ->update(['hashtag_status' => '0']);*/
 
-        // echo '<pre>'; print_r($_POST); die('here345'); 
-
-            // DB::table('yp_hashtag')
-            // ->where('id', $_POST['id'])
-            // ->update(['hashtag_status' => '0']);
-
-             Yphashtag::where('id', $_POST['id'])
-            ->update(['hashtag_status' => '0']);
+        Yphashtag::where('id', $_POST['id'])
+        ->delete();
 
     }
 

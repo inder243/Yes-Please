@@ -30,11 +30,12 @@
         <img id="loading-image" src="{{ asset('img/pre_loader.svg') }}"/>
         </div>
     </div>
-    
             <nav class="side_bar_menu">
                 <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="{{ asset('img/menu-red.png') }}" class="img-fluid" /></a>
                     <ul class="custom_sidebar_menu">
+
+                      @if (Auth::guard('general_user')->check())
                         <li>
                             <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
                         </li>
@@ -60,131 +61,278 @@
                             <a href="#"><img src="{{ asset('img/profile.png') }}" />Profile and Settings</a>
                         </li>
                         <li>
-                            <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                          <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
                         </li>
+                        @else
+                        <li>
+                          <a href="{{ url('/') }}"><img src="{{ asset('img/home.png') }}" />Home</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/question.png') }}" />I'm a User</a>
+                          </li>
+                          <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#login_business" data-backdrop="static" data-keyboard="false"><img src="{{ asset('img/profile.png') }}" />I'm a Business! </a>
+                          </li>
+                          <li>
+                            <a href="#"><img src="{{ asset('img/profile.png') }}" />  About Yes, please</a>
+                          </li>
+
+                          <li>
+                            <a href="#"><img src="{{ asset('img/messages.png') }}" />Contact </a>
+                          </li>
+                        <li>
+                          <a href="{{ route('general_user.logout') }}" class="logout"><img src="{{ asset('img/logout.png') }}" />Logout</a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
 
-    <section class="second_tabbar category_barht ">
-         <div class="second_header category_bar">
-            <div class="menu_search category_bar1">
-               <div class="second_menu">
-                  <a href="javascript:;" onclick="openNav()"><img src="{{ asset('img/menu.png') }}" / class="img-fluid"></a>
-               </div>
-               <div class="search-input1 cat-input1">
-                  <input type="search" placeholder="Search...">
-                  <span>in Tel Aviv</span>
-                  <img src="{{ asset('img/search.png') }}" class="img-fluid">
-               </div>
-            </div>
-            <div class="second_header_logo category_bar2"><a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" class="img-fluid" /></a></div>
-            <div class="second_header_links category_bar3">
-               <div class="username_list">
-                  <div class="notification_sec">
-                     <a href="javascript:;"><img src="{{ asset('img/notifications.png') }}">
-                     <span>3</span>
-                     </a>
-                  </div>
-                  <div class="messsage_sec">
-                     <a href="javascript:;"><img src="{{ asset('img/messages_list.png') }}">
-                     <span>7</span>
-                     </a>
-                  </div>
-                  <div class="user_profile">
-                     <a href="javascript:;">
-                        
-                        @if (Auth::guard('general_user')->check())
-                        <?php 
-                        $gen_user_id = Auth::guard('general_user')->user()->user_id;
-                        $img_url = Auth::guard('general_user')->user()->image_url;
-                        ?>
-                        @if($img_url)
-                        <img src="{{url('/images/users/'.$gen_user_id.'/'.$img_url)}}">
+                <section class="second_tabbar category_barht ">
+                  <div class="second_header category_bar">
+                    <div class="menu_search category_bar1">
+                      <div class="second_menu">
+                        <a href="javascript:;" onclick="openNav()"><img src="{{ asset('img/menu.png') }}" / class="img-fluid"></a>
+                      </div>
+                      <div class="search-input1 cat-input1">
+                        <input type="search" placeholder="Search...">
+                        <span>in Tel Aviv</span>
+                        <img src="{{ asset('img/search.png') }}" class="img-fluid">
+                      </div>
+                    </div>
+                    <div class="second_header_logo category_bar2"><a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" class="img-fluid" /></a></div>
+                      <div class="second_header_links category_bar3">
+                        <div class="username_list">
+                          <div class="notification_sec">
+                            <a href="javascript:;"><img src="{{ asset('img/notifications.png') }}">
+                            <!-- <span>3</span> -->
+                            </a>
+                          </div>
+                          <div class="messsage_sec">
+                            <a href="javascript:;"><img src="{{ asset('img/messages_list.png') }}">
+                            <!-- <span>7</span> -->
+                            </a>
+                          </div>
+                          @if (Auth::guard('general_user')->check())
+                            <div class="user_profile">
+                              <a href="javascript:;">
+                         
+                                <?php 
+                                $gen_user_id = Auth::guard('general_user')->user()->user_id;
+                                $img_url = Auth::guard('general_user')->user()->image_url;
+                                ?>
+                                @if($img_url)
+                                <img src="{{url('/images/users/'.$gen_user_id.'/'.$img_url)}}">
+                                @else
+                                <img src="{{ asset('img/user_placeholder.png') }}">
+                                @endif
+                                <p>{{ Auth::guard('general_user')->user()->first_name }} {{ Auth::guard('general_user')->user()->last_name }}</p>
+                          
+                              </a>
+                            </div>
                         @else
-                        <img src="{{ asset('img/user_placeholder.png') }}">
+                          <div class="second_header_links">
+                            <a href="{{ route('general_user.register') }}" class="regidter_tab">Register</a>
+                            <a href="javascript:;" class="signin_tab" data-toggle="modal" data-target="#general_login" data-backdrop="static" data-keyboard="false">Sign in</a>
+                          </div>
                         @endif
-                        <p>{{ Auth::guard('general_user')->user()->first_name }} {{ Auth::guard('general_user')->user()->last_name }}</p>
-                        @else
-                        <img src="{{ asset('img/user_placeholder.png') }}">
-                        <p>Firstname Lastname</p>
-                        @endif
-                     </a>
+
+                      </div>
+                    </div>
                   </div>
-               </div>
-            </div>
-         </div>
-      </section>
+                </section>
 
-      <input type="hidden" id="home_url" value="{{ URL::asset('') }}">
-      <div id="site_url" style="display:none">{{ url('/') }}</div>
+                <input type="hidden" id="home_url" value="{{ URL::asset('') }}">
+                <div id="site_url" style="display:none">{{ url('/') }}</div>
 
-    <div class="content">
-    @yield('content')
-    </div>
-    <section class="yes_please_footer">
-        <div class=" position-relative">
-          <div class="row">
-            <div class="col-md-6 col-lg-3 col-12">
-              <div class="general_user_logo">
-                <span><a href="{{ url('/') }}"><img src="{{ asset('img/footer_logo.png') }}"/></a></span>
-                <div class="store_icons">
-                  <a href="javascript:;" class="google_play"/><img src="{{ asset('img/google_play.png') }}"/></a>
-                  <a href="javascript:;" class="app_store"/><img src="{{ asset('img/apple_store.png') }}"/></a>
+                  <div class="content">
+                  @yield('content')
+                  </div>
+                  <section class="yes_please_footer">
+                    <div class=" position-relative">
+                      <div class="row">
+                        <div class="col-md-6 col-lg-3 col-12">
+                          <div class="general_user_logo">
+                            <span><a href="{{ url('/') }}"><img src="{{ asset('img/footer_logo.png') }}"/></a></span>
+                            <div class="store_icons">
+                              <a href="javascript:;" class="google_play"/><img src="{{ asset('img/google_play.png') }}"/></a>
+                              <a href="javascript:;" class="app_store"/><img src="{{ asset('img/apple_store.png') }}"/></a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 col-12">
+                            <div class="menu_section menu_section1">
+                            <h1>Menu</h1>
+                            <ul>
+                              <li><a href="javascript"/>Home</a></li>
+                              <li><a href="javascript"/>Pricelist</a></li>
+                              <li><a href="javascript"/>Agreement</a></li>
+                              <li><a href="javascript"/>About</a></li>
+                              <li><a href="javascript"/>Contact</a></li>
+                              <li><a href="javascript"/>Register</a></li>
+                              <li><a href="javascript"/>Sign in</a></li>
+                              <li><a href="javascript"/>Add business</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 col-6">
+                      <div class="menu_section">
+                        <h1>Categories</h1>
+                        <ul>
+                          <li><a href="javascript"/>Professionals</a></li>
+                          <li><a href="javascript"/>Autos</a></li>
+                          <li><a href="javascript"/>Courses and studies</a></li>
+                          <li><a href="javascript"/>Tourism</a></li>
+                          <li><a href="javascript"/>Financial</a></li>
+                          <li><a href="javascript"/>Home, office and garden</a></li>
+                          <li><a href="javascript"/>Computers and electronics</a></li>
+                          <li><a href="javascript"/>Health & Beauty</a></li>
+                          <li><a href="javascript"/>Various</a></li>
+                        </ul>
+                      </div>
+                    </div>
+
+                  <div class="col-md-6 col-lg-3 col-6">
+                    <div class="menu_section">
+                      <h1>Popular</h1>
+                      <ul>
+                        <li><a href="javascript"/>Travel</a></li>
+                        <li><a href="javascript"/>Finance</a></li>
+                        <li><a href="javascript"/>eNews</a></li>
+                        <li><a href="javascript"/>Health & Beauty</a></li>
+                        <li><a href="javascript"/>Finance</a></li>
+                        <li><a href="javascript"/>Tourism</a></li>
+                        <li><a href="javascript"/>Development</a></li>
+                        <li><a href="javascript"/>Transport</a></li>
+                        <li><a href="javascript"/>Home & office</a></li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3 col-12">
-              <div class="menu_section menu_section1">
-                <h1>Menu</h1>
-                <ul>
-                  <li><a href="javascript"/>Home</a></li>
-                  <li><a href="javascript"/>Pricelist</a></li>
-                  <li><a href="javascript"/>Agreement</a></li>
-                  <li><a href="javascript"/>About</a></li>
-                  <li><a href="javascript"/>Contact</a></li>
-                  <li><a href="javascript"/>Register</a></li>
-                  <li><a href="javascript"/>Sign in</a></li>
-                  <li><a href="javascript"/>Add business</a></li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-3 col-6">
-              <div class="menu_section">
-                <h1>Categories</h1>
-                <ul>
-                  <li><a href="javascript"/>Professionals</a></li>
-                  <li><a href="javascript"/>Autos</a></li>
-                  <li><a href="javascript"/>Courses and studies</a></li>
-                  <li><a href="javascript"/>Tourism</a></li>
-                  <li><a href="javascript"/>Financial</a></li>
-                  <li><a href="javascript"/>Home, office and garden</a></li>
-                  <li><a href="javascript"/>Computers and electronics</a></li>
-                  <li><a href="javascript"/>Health & Beauty</a></li>
-                  <li><a href="javascript"/>Various</a></li>
-                </ul>
-              </div>
-            </div>
+                <div class="general_user_fb_icon"><a href="javascript:;"><img src="{{ asset('img/general_user_footer_facebook.png') }}"/></a></div>
+                </div>
+                  </section>
 
-            <div class="col-md-6 col-lg-3 col-6">
-              <div class="menu_section">
-                <h1>Popular</h1>
-                <ul>
-                  <li><a href="javascript"/>Travel</a></li>
-                  <li><a href="javascript"/>Finance</a></li>
-                  <li><a href="javascript"/>eNews</a></li>
-                  <li><a href="javascript"/>Health & Beauty</a></li>
-                  <li><a href="javascript"/>Finance</a></li>
-                  <li><a href="javascript"/>Tourism</a></li>
-                  <li><a href="javascript"/>Development</a></li>
-                  <li><a href="javascript"/>Transport</a></li>
-                  <li><a href="javascript"/>Home & office</a></li>
-                </ul>
-              </div>
+    <!-------- Login Modal for business user------->
+ <div class="modal fade" id="login_business" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Sign in</h1>
+                    <div class="login_section">
+                      <div class="login_with_social">
+                        <a href="javascript:;" class="fblogin"><img src="{{ asset('img/icon_F.png') }}" class="img-fluid"/> Login with <b>Facebook</b></a>
+                        <a href="javascript:;" class="googlelogin"><img src="{{ asset('img/google_plus.png') }}" class="img-fluid"/> Login with <b>Google+</b></a>
+                      </div>
+                      <div class="login_fields">
+                         <form id="sign_in_business" method="POST" action="">
+                            {{ csrf_field() }}
+                            <span class="fill_fields bu_error" role="alert" style="display:none;">
+                              </span> 
+                            <input type="hidden" class="action_business" value="{{ route('business_user.login.submit') }}">
+                              <input type="hidden" class="website_url_b" value="{{ url('') }}">
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control email_bu" name="email" placeholder="Email Address" value="{{ old('email') }}" required autofocus>
+                              <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                              </span>
+                            </div>
+                            <div class="form-group col-md-12 col-12 padding_none">
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control password_bu" name="password" placeholder="Password">
+                              <span class="fill_fields password_business_error" role="alert" style="display:none;">
+                            </div>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
+                            <div class="login_btn"><a><input type="submit" value="Login"></a></div>
+                            <div class="register_page"><a href="{{ route('business_user.register') }}">Register</a></div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
             </div>
-          </div>
-          <div class="general_user_fb_icon"><a href="javascript:;"><img src="{{ asset('img/general_user_footer_facebook.png') }}"/></a></div>
         </div>
-    </section>
+    </div>
+<!-------- Login Modal end ----->
+
+<!-- Forgot Password Popup --> 
+    <div class="modal fade" id="business_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        {{ csrf_field() }}
+                        
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Forgot Password Popup business user--> 
+    <div class="modal fade" id="user_forgot_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+            <div class="modal-content login_model">
+                <div class="modal-header">
+                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Forgot Password</h1>
+                  </div>
+                  <form id="forgot_password_business" method="POST" action="">
+                        {{ csrf_field() }}                       
+
+                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
+                        <div class="form-group col-md-12 col-12 padding_none">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control email_bu forget_email" name="email" placeholder="Email Address" value="" required="" autofocus="">
+                          <span class="fill_fields email_business_error" role="alert" style="display:none;">
+                          </span>
+                          <span class="fill_fields bu_error" role="alert" style="display:none; width:100%;">
+                            hello
+                        </span> 
+                        </div>                        
+                        <div class="login_btn">
+                            <a><input type="button" id="submit" value="Submit"></a>
+                        </div>                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ask quote Modal -->
           <div class="modal fade" id="ask_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -336,7 +484,7 @@
                 </div>
                 <div class="P_N_btn">
                      <a href="javascript:;" class="btn_for_previous prev_pic_vid">< Previous</a>
-                     <a href="javascript:;" class="btn_for_skip skip_pic_vid">Next</a>
+                     <a href="javascript:;" class="btn_for_skip skip_pic_vid">Skip</a>
                   </div>
                 </div>
                 <!-----------upload image video popup ends----------->
@@ -416,7 +564,6 @@
                              <input type="hidden" class="action_general" value="{{ route('general_user.login.submit') }}">
                               <input type="hidden" class="website_url" value="{{ url('') }}">
 
-
                             <div class="form-group col-md-12 col-12 padding_none">
                               <label for="email">Email</label>
                               <input type="email" class="form-control email_gen" name="email" placeholder="Email Address" value="{{ old('email') }}" required autofocus>
@@ -444,28 +591,433 @@
     </div>
     <!-------- Login Modal end ----->
 
+    <!---modal to open big image --->
+    <div class="modal fade" id="showBigImageModalUser" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                         
+                     </div>
+                    
+                    <div class="modal-body">
+                     <img style="width:100%" src=""/>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>  
+    <!---modal to open big image endshere --->
+
 
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
 
    <!--  <script type="text/javascript" src="{{ URL::asset('js/wow.min.js') }}"></script> -->
-   <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
+    @if (Auth::guard('general_user')->check())
+
+    @else
+    <script type="text/javascript" src="{{ URL::asset('js/business_user.js') }}"></script>
+    @endif
     <script type="text/javascript" src="{{ URL::asset('js/general_user.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/general_quotes.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/formbuilder.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ" 
-          type="text/javascript"></script> -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ"></script>
+    
+    <!-----autocomplete address----->
+    <script>
+    var placeSearch, autocomplete;
+    var componentForm = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      administrative_area_level_1: 'short_name',
+      country: 'long_name',
+      postal_code: 'short_name'
+    };
+
+    function initAutocomplete_dash() {
+      // Create the autocomplete object, restricting the search to geographical
+      // location types.
+      autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
+
+      
+
+      // When the user selects an address from the dropdown, populate the address
+      // fields in the form.
+      autocomplete.addListener('place_changed', fillInAddress_hash);
+
+    }
+
+    function fillInAddress_hash() {
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+      var address = place.formatted_address;
+     
+      //if(address == 'undefined'){
+      /*if(address == "" && typeof address == typeof undefined){
+        alert('no');
+        return false;
+      }*/
+      console.log(place.formatted_address);
+      console.log(place);
+
+      $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      var current_url = window.location.href;
+      var cat_id = current_url.substring(current_url.lastIndexOf('/') + 1);
+
+      var home_url = $('#home_url').val();
+
+      /*****ajax starts*****/
+      $.ajax({
+        url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
+        type: 'GET',
+        data:{address:address},
+        dataType:'html',
+        success:function(response){
+        
+          $('.content').html(response);
+
+
+          var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+          var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+          // if(response.success == '2'){
+          //  alert('hmm');
+          // }
+          
+          /******on select of business users ->change color and give limit******/
+          var listItems = $(".all_bus_by_cat li");
+
+          listItems.each(function(idx, li) {
+              var product = $(li);
+
+              $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                
+                  if($(this).is(':checked')){
+                      $(li).addClass('border_color');
+                  } else{
+                      $(li).removeClass('border_color');
+                  }
+
+                var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                if(countCheckedCheckboxes > 5){
+                  alert('You can not select more than 5 business !');
+                  $(li).removeClass('border_color');
+                  return false;
+                }
+              });
+
+              // and the rest of your code
+          });/*****business list code ends here****/
+
+
+          /*****code to bind map with multiple long lat*****/
+          var mymap = new GMaps({
+              el: '#mapDiv',
+              lat: lati,
+              lng: longi,
+              zoom:12
+            });
+
+            $('.all_bus_by_cat li').each(function(i){
+             var longitude = $(this).find('.hidden_longitude').val();
+             var latitude = $(this).find('.hidden_latitude').val();
+             var address = $(this).find('.hidden_address').val();
+             var business_name = $(this).find('.hidden_buname').val();
+             mymap.addMarker({
+                      lat: latitude,
+                      lng: longitude,
+                      title: address,
+                      click: function(e) {
+                        alert('Address : '+address+'.\n Business Name : '+ business_name);
+                      }
+                    });
+          });
+          /*****code to bind map with multiple long lat*****/
+
+          /*****more option code*****/
+          $('.more-option').on("click",function(e) {
+            e.preventDefault();
+              $('.more_options_data').toggle();
+          });
+          /*****more option code******/
+
+          /******fn to display more items on load more*****/
+          var list = $(".all_bus_by_cat li");
+          var numToShow = 5;
+          var button = $(".load_more");
+          var numInList = list.length;
+          list.hide();
+          if (numInList > numToShow) {
+            button.show();
+          }else{
+            button.hide();
+          }
+          list.slice(0, numToShow).show();
+
+          button.click(function(){
+            var showing = list.filter(':visible').length;
+            list.slice(showing - 1, showing + numToShow).fadeIn();
+            var nowShowing = list.filter(':visible').length;
+            if (nowShowing >= numInList) {
+              button.hide();
+            }
+          });
+
+          /******fn to display more items on load more ends*****/
+
+          /****code to filetr data with radiou***/
+          $(document).on('change','#dashboard_radious_general',function(){
+              var selected_radious = $(this).val();
+              /*****ajax starts*****/
+                $.ajax({
+                  url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
+                  type: 'GET',
+                  data:{address:address,selected_radious:selected_radious},
+                  dataType:'html',
+                  success:function(response){
+                  
+                    $('.content').html(response);
+
+
+                    var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
+                    var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
+                    // if(response.success == '2'){
+                    //  alert('hmm');
+                    // }
+                    
+                    /******on select of business users ->change color and give limit******/
+                    var listItems = $(".all_bus_by_cat li");
+
+                    listItems.each(function(idx, li) {
+                        var product = $(li);
+
+                        $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                          
+                            if($(this).is(':checked')){
+                                $(li).addClass('border_color');
+                            } else{
+                                $(li).removeClass('border_color');
+                            }
+
+                            var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
+                          if(countCheckedCheckboxes > 5){
+                            alert('You can not select more than 5 business !');
+                            $(li).removeClass('border_color');
+                            return false;
+                          }
+                        });
+
+                        // and the rest of your code
+                    });/*****business list code ends here****/
+
+
+                    /*****code to bind map with multiple long lat*****/
+                    var mymap = new GMaps({
+                        el: '#mapDiv',
+                        lat: lati,
+                        lng: longi,
+                        zoom:12
+                      });
+
+                      $('.all_bus_by_cat li').each(function(i){
+                       var longitude = $(this).find('.hidden_longitude').val();
+                       var latitude = $(this).find('.hidden_latitude').val();
+                       var address = $(this).find('.hidden_address').val();
+                       var business_name = $(this).find('.hidden_buname').val();
+            
+                       mymap.addMarker({
+                                lat: latitude,
+                                lng: longitude,
+                                title: address,
+                                click: function(e) {
+                                  alert('Address : '+address+'.\n Business Name : '+ business_name);
+                                }
+                              });
+                    });
+                    /*****code to bind map with multiple long lat*****/
+
+                    /*****more option code*****/
+                    $('.more-option').on("click",function(e) {
+                      e.preventDefault();
+                        $('.more_options_data').toggle();
+                    });
+                    /*****more option code******/
+
+                    /******fn to display more items on load more*****/
+                    var list = $(".all_bus_by_cat li");
+                    var numToShow = 5;
+                    var button = $(".load_more");
+                    var numInList = list.length;
+                    list.hide();
+                    if (numInList > numToShow) {
+                      button.show();
+                    }else{
+                      button.hide();
+                    }
+                    list.slice(0, numToShow).show();
+
+                    button.click(function(){
+                      var showing = list.filter(':visible').length;
+                      list.slice(showing - 1, showing + numToShow).fadeIn();
+                      var nowShowing = list.filter(':visible').length;
+                      if (nowShowing >= numInList) {
+                        button.hide();
+                      }
+                    });
+
+                    /****code to filetr data with radiou***/
+                   /* $(document).on('change','#dashboard_radious_general',function(){
+                        var selected_radious = $(this).val();
+                    });*/
+                    /****end radious code here*****/
+                
+                  }
+                });/***ajax ends here***/
+
+          });
+          /****end radious code here*****/
+      
+        }
+      });/***ajax ends here***/
+
+
+    }
+
+    function geolocate_dash() {
+//alert($('.autocomplete_dash').val());
+      
+       var initialCall = true;
+         if(initialCall){
+          initAutocomplete_dash();
+          initialCall = false;
+          
+        }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var geolocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          var circle = new google.maps.Circle({
+            center: geolocation,
+            radius: position.coords.accuracy
+          });
+          autocomplete.setBounds(circle.getBounds());
+        });
+      }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqlzdmRasNAVLVYfUb26BiOjkSvny4YHQ&libraries=places&callback=initAutocomplete_dash"></script>
+    <!-----autocomplete address ends----->
+
+    <script>
+         /*var swiper = new Swiper('.swiper-container', {
+           
+            slidesPerView: 4,
+            spaceBetween: 30,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            navigation: {
+             nextEl: '.swiper-button-next',
+             prevEl: '.swiper-button-prev',
+           },
+
+           breakpoints: {
+                1199: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 5,
+                    spaceBetween: 45,
+                },
+                767: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+                420: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                320: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                }
+            }
+
+
+        });*/
+      </script>
+
+      <script>
+         var swiper = new Swiper('.swiper-container', {
+           slidesPerView: 5,
+           spaceBetween: 6,
+           slidesPerGroup:5,
+           loop: true,
+           loopFillGroupWithBlank: true,
+           nextButton: '.swiper-button-next',
+           prevButton: '.swiper-button-prev',
+           pagination: {
+             el: '.swiper-pagination',
+             clickable: true,
+           },
+           navigation: {
+             nextEl: '.swiper-button-next',
+             prevEl: '.swiper-button-prev',
+           },
+           breakpoints: {
+               1199: {
+                   slidesPerView: 5,
+                   spaceBetween: 20,
+               },
+               992: {
+                   slidesPerView: 5,
+                   spaceBetween: 45,
+               },
+               767: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+
+               640: {
+                   slidesPerView: 3,
+                   spaceBetween: 30,
+               },
+               420: {
+                   slidesPerView: 3,
+                   spaceBetween: 20,
+               },
+               320: {
+                   slidesPerView: 2,
+                   spaceBetween: 30,
+               }
+           }
+         });
+      </script>
+
     <script>
       $(document).ready(function(){
          
@@ -475,11 +1027,19 @@
          $('.dpicker').datepicker();
            
         });
-          var swiper = new Swiper('.swiper2', {
-            slidesPerView: 10,
-            spaceBetween: 6,
-            slidesPerGroup:10,
 
+          var isLoop = true;
+          if($('.swiper-slide').length < 8) {
+              isLoop = false;
+          }
+
+
+          var swiper = new Swiper('.swiper2', {
+            slidesPerView: 8,
+            spaceBetween: 10,
+            slidesPerGroup:8,
+            loop: isLoop,
+           //loopFillGroupWithBlank: true,
             pagination: {
               el: '.swiper21',
               clickable: true,

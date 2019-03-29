@@ -39,7 +39,7 @@
                     <a href="{{ url('/business_user/business_dashboard') }}"><img src="{{ asset('img/dashboard.png') }}" />Dashboard</a>
                 </li>
                 <li>
-                    <a href="#"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
+                    <a href="{{ url('/business_user/quotes_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                 </li>
                 <li>
                     <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
@@ -79,22 +79,32 @@
                   <div class="username_list">
                     <div class="notification_sec">
                       <a href="javascript:;"><img src="{{ asset('img/notifications.png') }}"/>
-                      <span>3</span>
+                      <!-- <span>3</span> -->
                     </a>
                     </div>
                     <div class="messsage_sec">
                       <a href="javascript:;"><img src="{{ asset('img/messages_list.png') }}"/>
-                      <span>7</span>
+                      <!-- <span>7</span> -->
                     </a>
                     </div>
                     <div class="user_profile">
                       <a href="javascript:;">
-                      <img src="{{ asset('img/user_placeholder.png') }}"/>
-                      @if (Auth::guard('business_user')->check())
-                      <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
-                      @else
-                      <p>Firstname Lastname</p>
-                      @endif
+                        @if (Auth::guard('business_user')->check())
+                        @php
+                        $bus_user_id = Auth::guard('business_user')->user()->business_userid;
+                        $img_url = Auth::guard('business_user')->user()->image_name;
+                        @endphp
+
+                        @if($img_url)
+                        <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}">
+                        @else
+                        <img src="{{ asset('img/user_placeholder.png') }}"/>
+                        @endif
+
+                        <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                        @else
+                        <p>Firstname Lastname</p>
+                        @endif
                     </a>
                     </div>
                   </div>
@@ -118,10 +128,10 @@
                 <li><a href="javascript:;">Help</a></li>
             </ul>
         </div>
-        <div class="footer_notification">
+        <!-- <div class="footer_notification">
             <div class="cross-button">x</div>    
             <h1>Registration is completed and here you can lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
-        </div>
+        </div> -->
         <div class="footer_notification_for_mobile">
             <div class="cross-button">x</div> 
             <h1>Registration is completed and here you can lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
@@ -167,7 +177,7 @@
                               <input type="password" class="form-control password_bu" name="password" placeholder="Password">
                               <span class="fill_fields password_business_error" role="alert" style="display:none;">
                             </div>
-                            <p class="forgot_pass"><a href="javascript:;">Forgot your password?</a></p>
+                            <p class="forgot_pass_bus"><a href="javascript:;">Forgot your password?</a></p>
                             <div class="login_btn"><a><input type="submit" value="Login"></a></div>
                             <div class="register_page"><a href="{{ route('business_user.register') }}">Register</a></div>
                         </form>

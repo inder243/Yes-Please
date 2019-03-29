@@ -1,6 +1,136 @@
-//event will be called each time next button is clicked
-	function getNextQuesButton()
+
+$(document).on('click','.dynamicradio_button', function () {
+
+	var site_url = $('#site_url').text();
+	var lastdiv = $('.dynmic_quoteform .form-ques:visible');//get last question
+	var catid = $('.dynmic_quoteform .hiddencatId').val();//get catid
+	var qid = $(lastdiv).attr('data-id');//get id of question
+	var qtype = $(lastdiv).attr('data-type');//get type of question
+	var value = '';
+
+	if(qtype=="radio")//get value of radio
 	{
+		$(lastdiv).find('input[type=radio]').each(function(){
+        var option = {};
+          if($(this).is(":checked")){
+            value = $(this).val();
+          }
+        });
+	}
+
+	methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url);
+
+});
+
+
+function methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url)
+{
+	//set csrf token
+	if(qid!='' && value!='' && qtype!='' && catid!='')
+	{
+		$.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+		$.ajax({
+          url: site_url+"/general_user/getdata",        
+          type:'POST',
+          data: {'qid':qid,'value':value,'type':qtype,'catid':catid},	
+          success:function(response){  
+           
+			if(response.success==1)
+			{
+				if(response.data!='')
+				{
+					if(response.nextid!='' && $(".dynamicQues_"+response.nextid).length != 0) 
+					{
+					  	$('.form-ques').hide();
+						$('.dynamicQues_'+response.nextid).show();
+						$('.submit_dynamic_from').parent().show();
+						
+					}
+					else
+					{
+						$('.form-ques').hide();
+						$('.dynmic_quoteform .modal-body .ask_for_quote_section').append(response.data);
+						$('.submit_dynamic_from').parent().show();
+
+					}
+				}
+				else
+				{
+					
+					var Ques = 'dynamicQues_'+qid;
+					$('.form-ques').hide();
+					$('.dynmic_quoteform .static_ques_1').show();
+					$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id',Ques);
+					$('.submit_dynamic_from').parent().show();
+					
+				}
+				
+			}
+			else
+			{
+				alert(response.message);
+			}
+          }
+        });
+	}
+	else
+	{
+		alert('Please answer given question');
+		return false;
+	}
+}
+
+//this function will work if there are no dynamic questions added
+function getOnlyStaticQuestions()
+{
+	$('.buttonForOnlyStaticQues').hide();
+	$('.dynmic_quoteform .static_ques_1').show();
+	$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id','buttonForOnlyStaticQues');
+}
+
+
+//event will be called each time next button is clicked
+	function getNextQuesButton(){
+
+		/*****code to check how many business users are checked****/
+		var listItems = $(".all_bus_by_cat li");
+
+		var multipleBusiness = [];
+		var count_users = 0;
+		listItems.each(function(idx, li) {
+	    
+		   selectedli = $(li).find('.select_this');
+		   selectedChk = $(selectedli).find('input[type=checkbox]');
+		   chkBoxId = $(selectedChk).attr('id');
+
+		   if($('#' + chkBoxId).is(":checked")){
+		   		multipleBusiness.push($('#' + chkBoxId).attr('data-title'));
+		   		count_users++;	
+		   }
+		  
+			    	
+		});
+
+      	if(count_users >= 1){
+
+      		for(var i=1; i<=5; i++){
+      			if(i == count_users){
+      				/******make the radio button selected*****/
+					$('.static_ques_1').find('.total_quote ul li').find("input[name=radios][value=" + count_users + "]").attr('checked', 'checked');
+      			}else{
+      				/*****make other options disbale******/
+      				$('.static_ques_1').find('.total_quote ul li').find("input[name=radios][value=" + i + "]").attr('disabled', true);
+      			}
+      		}/*** end for loop***/
+
+      	}/**end if**/
+      	/*****code ends to check how many business users are checked****/
+
 		/*$('.tpicker').datetimepicker({
 			format: 'HH:mm'
 		});
@@ -11,6 +141,7 @@
 		var catid = $('.dynmic_quoteform .hiddencatId').val();//get catid
 		
 		console.log(lastdiv);
+
 		var qid = $(lastdiv).attr('data-id');//get id of question
 		var qtype = $(lastdiv).attr('data-type');//get type of question
 		var value = '';
@@ -50,76 +181,7 @@
 		console.log(qid);
 		console.log(qtype);
 
-		//set csrf token
-		if(qid!='' && value!='' && qtype!='' && catid!='')
-		{
-			$.ajaxSetup({
-	          headers: {
-	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	          }
-	        });
-
-			$.ajax({
-	          url: site_url+"/general_user/getdata",        
-	          type:'POST',
-	          data: {'qid':qid,'value':value,'type':qtype,'catid':catid},	
-	          success:function(response){  
-	           
-				if(response.success==1)
-				{
-					if(response.data!='')
-					{
-						if(response.nextid!='' && $(".dynamicQues_"+response.nextid).length != 0) 
-						{
-						  	$('.form-ques').hide();
-							$('.dynamicQues_'+response.nextid).show();
-							$('.submit_dynamic_from').parent().show();
-							/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-						}
-						else
-						{
-							$('.form-ques').hide();
-							$('.dynmic_quoteform .modal-body .ask_for_quote_section').append(response.data);
-							$('.submit_dynamic_from').parent().show();
-
-							/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-						}
-					}
-					else
-					{
-						
-						var Ques = 'dynamicQues_'+qid;
-						$('.form-ques').hide();
-						$('.dynmic_quoteform .static_ques_1').show();
-						$('.dynmic_quoteform .static_ques_1').find('.ele_pre').attr('data_nxt_id',Ques);
-						$('.submit_dynamic_from').parent().show();
-						/*$('.tpicker').datetimepicker({
-								format: 'HH:mm'
-							});
-							$('.dpicker').datepicker();*/
-					}
-					
-					
-					//alert(response.message);
-				}
-				else
-				{
-					alert(response.message);
-				}
-	          }
-	        });
-		}
-		else
-		{
-			alert('Please answer given question');
-			return false;
-		}
+		methodAjaxToGetNextQuestion(qid,value,qtype,catid,site_url);
 		
 	}
 
@@ -263,8 +325,8 @@
 
     });
 
-	function validate_quote_dynamicandstatic(){
-		
+	function validate_quote_dynamicandstatic(validate)
+	{
     	var site_url = $('#site_url').text();
     	data = new FormData();
 		
@@ -336,8 +398,11 @@
 
 				case 'radio':
 
+				var title = $.trim($(this).find('.questitle').text());
+				
 				var alloptions = [];
 				var field = {};
+				field['title'] = title;
 				field['q_id'] = q_id;
 				field['options'] = {};
 				field['filter'] = filter;
@@ -363,6 +428,7 @@
 				//required = 'true';
 				var field = {};
 				field['q_id'] = q_id;
+				field['title'] = title;
 				field['filter'] = filter;
 				field['value'] = $.trim($(this).find(":selected").val());
 				field['label'] = $.trim($(this).find(":selected").text());
@@ -391,7 +457,6 @@
 					    	
 		});
 	    
-      	
 
       	var phone = $('.dynmic_quoteform').find('#dynamic_mobile_phone').val();
       	var desc = $('.dynmic_quoteform').find('#dynamic_description').val();
@@ -399,8 +464,12 @@
 
       	if(phone=='')
       	{
-      		alert('Please provide phone number');
-      		return false;
+      		var this_class = $(validate).children('a').attr('class');
+      		if(this_class != 'mobile_dont_want'){
+      			alert('Please provide phone number');
+      			return false;
+      		}
+      		
       	}
       	if(desc=='')
       	{
@@ -443,9 +512,9 @@
 			data.append('multipleBusiness',multipleBusiness);
 			//alert('dfgkmfkjg');
 			//console.log(data);
-			
+		
 
-      	if(fields.length >0 && phone!='' && desc!='' && quotecount!='')
+      	if( desc!='' && quotecount!='')
       	{
       		jQuery('.pre_loader').css('display','block');
       		$.ajaxSetup({
@@ -472,37 +541,63 @@
 			    	$('.dynmic_quoteform .static_ques').hide();
 			    	$('.dynmic_quoteform .final_ques_thanks').show();
 				}
+				else if(response.success==2)
+				{
+					jQuery('.pre_loader').css('display','none');
+					$('.dynmic_quoteform .form-ques').hide();
+			    	$('.dynmic_quoteform .static_ques').hide();
+			    	$('.dynmic_quoteform .final_ques_thanks').find('h1').text(response.message);
+			    	$('.dynmic_quoteform .final_ques_thanks').show();
+			    	$('.dynmic_quoteform .final_ques_thanks').find('.ph_detail').css('display','none');
+			    	
+				}
 				else
 				{
 					jQuery('.pre_loader').css('display','none');
 					alert(response.message);
 				}
+
 	          }
 	        })
       	}
 
      }
+
    
 
     function getStaticQuestion(ele)
     {
     	
-    	var toShowQues = $(ele).attr('data_nxt_id');
+		var toShowQues = $(ele).attr('data_nxt_id');
+
+		if(toShowQues=="buttonForOnlyStaticQues")
+		{
+			$('.dynmic_quoteform .form-ques').hide();
+			$('.dynmic_quoteform .static_ques').hide();
+			$('.dynmic_quoteform .buttonForOnlyStaticQues').show();
+		}
+		else
+		{
+			$('.dynmic_quoteform .form-ques').hide();
+			$('.dynmic_quoteform .static_ques').hide();
+			$('.dynmic_quoteform .'+toShowQues).show();
     	
-    	//$('.dynmic_quoteform .static_ques_1').show();
-    	$('.dynmic_quoteform .form-ques').hide();
-    	$('.dynmic_quoteform .static_ques').hide();
-    	$('.dynmic_quoteform .'+toShowQues).show();
+		}
+		
+		
     	
     	
     }
 
     function getStaticQuestionNext(ele)
     {
-
+    	
+    	//return false;
     	var current_btn_id = $(ele).attr('id');
-
+    	var toShowQues = $(ele).attr('data_nxt_id');
+    	//alert(current_btn_id);
     	var data_nxt_id = $(ele).attr('data_nxt_id');
+
     	quotesSelected ='';
 
     	if(data_nxt_id == 'static_ques_2'){
@@ -523,22 +618,31 @@
             }
     	}
 
-    	if(data_nxt_id == 'static_ques_3'){
+    	if(data_nxt_id == 'static_ques_3')
+    	{
     		/****check data****/
 			var text_desc1 = $('.describe_work').find('.work_description_modal').val();
-			if(text_desc1 == ''){
+			if(text_desc1 == '')
+			{
+				
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Please add description');
 				return false;
-			}else if((text_desc1).length < 100 || (text_desc1).length > 2000){
+			}
+			else if((text_desc1).length < 100 || (text_desc1).length > 2000){
+				
 				$('.describe_work').find('.work_description_modal').addClass('error_border');
 				$('.describe_work').find('.work_description_modal').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
 				return false;
 			}
+			
+		    
+
     	}
 
     	
-    	if(current_btn_id == 'dynamicquote_chk_login'){
+    	if(current_btn_id == 'dynamicquote_chk_login')
+    	{
     		$.ajaxSetup({
 		        headers: {
 		          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -554,9 +658,6 @@
 	            success:function(data){
 	            	
 	              if(data.success == '1'){
-	              	
-	              	var toShowQues = $(ele).attr('data_nxt_id');
-	    
 			    	//$('.'+toShowQues).show();
 			    	$('.dynmic_quoteform .form-ques').hide();
 			    	$('.dynmic_quoteform .static_ques').hide();
@@ -573,14 +674,16 @@
 	              	$('#ask_quote').modal('hide');
 	              	$('#ask_quote').modal('hide');
 	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
+	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus-nxtques',toShowQues);
 	                
 	              }
 	            }
 
 	        });/****ajax ends here****/
-    	}else{
+    	}
+    	else
+    	{
     		var toShowQues = $(ele).attr('data_nxt_id');
-	    	//$('.'+toShowQues).show();
 	    	$('.dynmic_quoteform .form-ques').hide();
 	    	$('.dynmic_quoteform .static_ques').hide();
 	    	$('.dynmic_quoteform .'+toShowQues).show();
@@ -589,7 +692,29 @@
       	
     }/******fn get static next question*****/
 
+     /******display images on select image*****/
+	$('#ask_quote #dynamic_vid_img').change(function(e){
+    	e.preventDefault();
+		var images = e.target.files;
+		//$('.reg_img_msg').text('');
+		var name='';
+		var count = 0;
+		$.each( images, function( key, value ) {
+			if(count > 0){
+				name += value.name+', ';
+			}else{
+				name = value.name;
+			}
+			count++;
+		  	//$('.reg_img_msg').append(value.name+', ');
+		});
+		$('#ask_quote .file_to_upload #dynamic_vid_img').after('<span id="image_names">'+name+'</span>');
+		if(count > 0){
+			$('#ask_quote .static_ques_3 .describe_work_btn .ele_next a').text('Next');
+		}
+		//alert(name);
 
+    });
     function closdynamicemodal()
     {
     	$('#ask_quote').modal('hide');
@@ -609,10 +734,12 @@
 		
       	var attr_status = $('#sign_in_general1').attr('data-checkstatus');
       	
+      	var attr_status_nxt_question = '';
 
       	if(attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotes_login')
       	{
       		var attr_status = 'quotes';
+      		 attr_status_nxt_question = $('#sign_in_general1').attr('data-checkstatus-nxtques');
       	}
       	else if( attr_status != 'undefined' && attr_status != undefined && attr_status == 'quotessingle')
       	{
@@ -667,6 +794,9 @@
               	if(data.success == '2'){
               		$('#general_login1').modal('hide');
               		$('#ask_quote').modal('show');
+              		$('.dynmic_quoteform .form-ques').hide();
+			    	$('.dynmic_quoteform .static_ques').hide();
+			    	$('.dynmic_quoteform .'+attr_status_nxt_question).show();
               		
               	}
               	if(data.success == '3'){
@@ -681,6 +811,14 @@
         });
   	return false;
   }
+
+
+
+  $(document).on("click",".ask_quote_close",function() {
+
+  	
+  	location.reload();
+  });
 /*
     $(document).on('hide.bs.modal','#ask_quote', function () {
 
