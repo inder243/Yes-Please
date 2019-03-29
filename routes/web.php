@@ -195,7 +195,7 @@ Route::prefix('general_user')->group(function() {
     Route::get('/redirectfb', 'Auth\GeneralUserLoginController@redirectfb');
     Route::get('/callbackfb', 'Auth\GeneralUserLoginController@callbackfb');
 
-    /**********quotes and questions**********/
+    /**********quotes**********/
     Route::get('/quote_questions/{status?}/{keyword?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
     Route::get('/quotesrply/{quote_id}', 'general_user\GeneralQuotesController@quoteReplies');
     Route::get('/quoteaccepted/{quote_id}', 'general_user\GeneralQuotesController@quoteAccepted');
@@ -206,7 +206,7 @@ Route::prefix('general_user')->group(function() {
     Route::post('/quote_ignore', 'general_user\GeneralQuotesController@quoteRequestIgnore');
     Route::get('/user_quotereviews/{quote_id}/{business_id}', 'general_user\GeneralQuotesController@showUserQuotesReview')->name('general_user.quote_review');
     Route::post('/user_quotereviews', 'general_user\GeneralQuotesController@submitUserQuotesReview')->name('general_user.quote_review_submit');
-    Route::post('/quotesend/{b_id?}', 'general_user\GeneralUserController@sendQuotes')->name('general_user.askquote_remove');
+    Route::post('/quotesend/{b_id?}', 'general_user\GeneralQuotesController@sendQuotes')->name('general_user.askquote_remove');
     Route::post('/check_login', 'Auth\GetNextQuestionController@checkLogin')->name('general_user.login_check');
     /******dropzone links*****/
     Route::post('/uploadmultiple_askquote', 'general_user\GeneralUserController@uploadUserMultipleFilesQuotes')->name('general_user.askquote.submit');
@@ -225,6 +225,11 @@ Route::prefix('general_user')->group(function() {
     //get answers for dynamic form builder
     Route::post('/savedynamicdata', 'general_user\GetNextQuestionController@saveDynamicData');
     Route::post('/savequotedata', 'Auth\GetNextQuestionController@saveQuoteData');
+
+
+    /*******questions********/
+    Route::post('/questionsend/{b_id?}', 'general_user\GeneralQuestionsController@sendQuestions')->name('general_user.send_questions');
+    /*******question ends********/
     
   });
 

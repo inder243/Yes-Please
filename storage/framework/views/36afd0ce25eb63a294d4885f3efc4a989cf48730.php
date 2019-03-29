@@ -34,7 +34,7 @@
                 
                   <div class="otheruser_detail">
                      <?php if(isset($quote_data)): ?>
-                       <h1><a href="<?php echo e(url('/general_user/public_profile/'.$quote_data['get_bus_user']['id'])); ?>"><?php echo e($quote_data['get_bus_user']['business_name']); ?></a></h1>
+                       <h1><a href="<?php echo e(url('/general_user/public_profile/'.$quote_data['get_bus_user']['id'].'/'.$quote_data['get_quotes']['cat_id'])); ?>"><?php echo e($quote_data['get_bus_user']['business_name']); ?></a></h1>
                        <p><?php echo e($quote_data['get_bus_user']['full_address']); ?></p>
                        
                         <?php
@@ -53,16 +53,16 @@
                   </div>
                   <div class="contact_user">
                     <?php if(isset($quote_data)): ?>
-                     <a href="tel:<?php echo e($quote_data['get_bus_user']['phone_number']); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
+                     <a href="javascript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="<?php echo e($quote_data['get_bus_user']['phone_number']); ?>" data-original-title="<?php echo e($quote_data['get_bus_user']['phone_number']); ?>"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
                      <a href="JavaScript:;" class="user_text"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
                      <?php endif; ?>
                   </div>
                   <div class="review_section">
 
                      <ul>
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->avg('rating');
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$quote_data['business_id']])->avg('rating');
 
-                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$quote_data['business_id']])->where('review','!=','')->count('review');
+                    $get_total_reviews = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$quote_data['business_id']])->where('review','!=','')->count('review');
                     
                     $total_rating = round($get_total_rating);
                     ?>

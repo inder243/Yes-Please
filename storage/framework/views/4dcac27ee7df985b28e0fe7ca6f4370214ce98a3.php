@@ -36,9 +36,6 @@
                             <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(url('/general_user/general_dashboard')); ?>"><img src="<?php echo e(asset('img/dashboard.png')); ?>" />Dashboard</a>
-                        </li>
-                        <li>
                             <a href="<?php echo e(url('/general_user/quote_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
@@ -55,6 +52,9 @@
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Favorite businesses</a>
                         </li>
                         <li>
                             <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>

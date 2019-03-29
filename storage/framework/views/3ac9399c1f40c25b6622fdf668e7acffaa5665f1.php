@@ -502,6 +502,10 @@
                 scrollTop: $(".second_tabbar").offset().top
             }, 800);
         });
+
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
     </script>
 </body>
 

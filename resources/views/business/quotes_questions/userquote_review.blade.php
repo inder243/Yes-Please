@@ -47,15 +47,15 @@
                      @endif
                   </div>
                   <div class="contact_user">
-                     <a href="tel:{{$quote_data[0]['get_gen_user']['phone_number']}}" class="user_call"><img src="{{ asset('img/call.png') }}"/></a>
+                     <a href="javascript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="{{ $quote_data[0]['get_gen_user']['phone_number']}}" data-original-title="{{ $quote_data[0]['get_gen_user']['phone_number']}}"><img src="{{ asset('img/call.png') }}"/></a>
                      <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
                   </div>
                   <div class="review_section">
                      <ul>
                       
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'business_id'=>$quote_data[0]['business_id'],'user_type'=>'business'])->avg('rating');
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'user_type'=>'business'])->avg('rating');
 
-                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'business_id'=>$quote_data[0]['business_id'],'user_type'=>'business'])->where('review','!=','')->count('review');
+                    $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>$quote_data[0]['get_gen_user']['id'],'user_type'=>'business'])->where('review','!=','')->count('review');
                     
                     $total_rating = round($get_total_rating);
                     ?>

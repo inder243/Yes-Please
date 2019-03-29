@@ -323,8 +323,8 @@
      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script> 
     <script type="text/javascript" src="{{ URL::asset('js/wow.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
-    <script type="text/javascript" src="{{ URL::asset('js/business_user.js') }}"></script>
-    <script type="text/javascript" src="{{ URL::asset('js/business_quotes.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/business/business_user.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/business/business_quotes.js') }}"></script>
     <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
 
      <script>
@@ -500,6 +500,10 @@
             $('html, body').animate({
                 scrollTop: $(".second_tabbar").offset().top
             }, 800);
+        });
+
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 </body>

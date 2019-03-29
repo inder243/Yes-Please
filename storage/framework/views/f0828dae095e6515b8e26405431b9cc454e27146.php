@@ -61,16 +61,31 @@
 
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="<?php echo e(old('category')); ?>" required>
-                                            <?php if(Session::has('success_message')): ?>
-                                            <span class="help-block succ-admin forhide"><?php echo e(Session::get('success_message')); ?></span>
-                                            <?php endif; ?>
-                                             <?php if(Session::has('error_message')): ?>
-                                            <span class="help-block error forhide"><?php echo e(Session::get('error_message')); ?></span>
-                                            <?php endif; ?>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="<?php echo e(old('category')); ?>" required>
+                                           
                                         </div>
                                     </div>
-                              
+
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="q_with_ph" class=" form-control-label">Enter quote with phone number</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <input id="q_with_ph" name="q_with_ph" placeholder="Quote with phone number" class="form-control" maxlength="30" value="" required="" type="number">
+                                        </div>                                                                              
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="q_without_ph" class=" form-control-label">Enter quote without phone number</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <input id="q_without_ph" name="q_without_ph" placeholder="Quote without phone number" class="form-control" maxlength="30" value="" required="" type="number">
+                                        </div>                                                                              
+                                    </div>
+
+                               <?php if(Session::has('success_message')): ?>
+                                <span class="help-block succ-admin forhide"><?php echo e(Session::get('success_message')); ?></span>
+                                <?php endif; ?>
+                                 <?php if(Session::has('error_message')): ?>
+                                <span class="help-block error forhide"><?php echo e(Session::get('error_message')); ?></span>
+                                <?php endif; ?>
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary btn-sm">
@@ -106,7 +121,7 @@
                                         <th scope="row"><?php echo e($count); ?></th>
                                         <td><?php echo e($cat->category_name); ?></td>
                                         <td>
-                                            <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="<?php echo e($cat->id); ?>" data-name= "<?php echo e($cat->category_name); ?>"></a>
+                                            <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="<?php echo e($cat->id); ?>" data-name= "<?php echo e($cat->category_name); ?>" data-with-ph= "<?php echo e($cat->quote_with_ph); ?>" data-without-ph= "<?php echo e($cat->quote_without_ph); ?>"></a>
                                             <a href='javascript:void(0);'  data-id="<?php echo e($cat->id); ?>" class="fa fa-times delete_category"></a>
                                         </td>
                                         <td>
@@ -114,6 +129,7 @@
                                             <a href="<?php echo e(url('/admin/create_new_form')); ?>/<?php echo e($cat->id); ?>">create form</a>
                                         </td>
                                     </tr>
+
                                     <?php $count++; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php else: ?>
@@ -152,12 +168,26 @@
                     </div>
                     <div class="modal-body">
                         
-                          <div class="row form-group">
-                                <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="30"  required>
-                                    <span class="help-block" id="help-block"></span>
-                                </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
+                            <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="30"  required>
+                                <span class="help-block" id="help-block"></span>
                             </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="edit_q_with_ph" class="form-control-label">Quote with phone number</label></div>
+                            <div class="col-12 col-md-9"><input id="edit_q_with_ph" name="edit_q_with_ph" placeholder="Enter quote with phone number" class="form-control" maxlength="30" required="" type="number">
+                                <span class="help-block" id="help-block1"> </span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="edit_q_without_ph" class="form-control-label">Quote without phone number</label></div>
+                            <div class="col-12 col-md-9"><input id="edit_q_without_ph" name="edit_q_without_ph" placeholder="Enter quote without phone number" class="form-control" maxlength="30" required="" type="number">
+                                <span class="help-block" id="help-block2"> </span>
+                            </div>
+                        </div>
+
+
                             <input type="hidden" name="hidden_id" id="hidden_id">
                             <input type="hidden" name="hidden_url" id="hidden_url" value="<?php echo e(url('/')); ?>">
                     </div>

@@ -43,11 +43,7 @@
 
           <div class="col-md-3 col-6 padding_rt">
             <div class="dashboard_box">
-              @if($paymentMode['advertise_mode']==0)
               <a href="{{ url('/business_user/advertisement_free_mode') }}" class="budget_left_bg">
-              @else
-              <a href="{{ url('/business_user/advertisement_dashboard') }}" class="budget_left_bg">
-              @endif
                 <div class="box_heading">
                   <h2>Budget left</h2>
                   <h1>Budget left</h1>

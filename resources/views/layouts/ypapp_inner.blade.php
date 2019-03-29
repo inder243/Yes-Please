@@ -224,9 +224,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script> 
 
     
-    <script type="text/javascript" src="{{ URL::asset('js/bu_registration.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/business/bu_registration.js') }}"></script>
     @if (Auth::guard('business_user')->check())
-    <script type="text/javascript" src="{{ URL::asset('js/business_user.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/business/business_user.js') }}"></script>
     @endif
     <script>
         $(document).ready(function(){

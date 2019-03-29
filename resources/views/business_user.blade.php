@@ -39,7 +39,7 @@
                        
                        <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Basic Table</strong>
+                                <strong class="card-title">Business Users</strong>
                             </div>
                             <div class="card-body">
                                 <table class="table">

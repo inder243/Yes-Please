@@ -61,6 +61,16 @@
                 <div class="pro_mode_setting">
                   <div class="mode_setting_main">
                     <p>Pro mode settings</p>
+                    @if (Session::has('error_message'))
+                    <div class="pro_mode_error">
+                      <p>{{ Session::get('error_message') }}</p>
+                    </div>
+                     @endif
+                    @if (Session::has('success_message'))
+                    <div class="pro_mode_success">
+                      <p>{{ Session::get('success_message')}}</p>
+                    </div>
+                    @endif
                     <div class="mode_settings">
                       
                         <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
@@ -89,7 +99,7 @@
                                   @foreach($getSelectedCats as $getSelectedCat)
                                   <li class="home_imp_list">
                                     <div class="text-input">
-                                    <input type="text" value="@if($getSelectedCat['quote_with_ph']!=0){{$getSelectedCat['quote_with_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
+                                    <input type="number" value="@if($getSelectedCat['quote_with_ph']!=0){{$getSelectedCat['quote_with_ph']}}@else{{$getSelectedCat['buser_cat']['quote_with_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
                                     <span>5 NIS minimum</span>
                                     </div>
                                   </li>
@@ -111,7 +121,7 @@
                                   <li class="home_imp_list">
                                     <h1>Home improvement</h1>
                                     <div class="text-input">
-                                    <input type="text" value="@if($getSelectedCat['quote_without_ph']!=0){{$getSelectedCat['quote_without_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
+                                    <input type="number" value="@if($getSelectedCat['quote_without_ph']!=0){{$getSelectedCat['quote_without_ph']}}@else{{$getSelectedCat['buser_cat']['quote_without_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
                                     <span>1 NIS minimum</span>
                                   </div>
                                   </li>
@@ -175,7 +185,7 @@
                       <div class="col-md-3 col-6">
                         <ul class="call_bid_input">
                           <li>
-                            <input type="text">
+                            <input type="number" id="monthly_budget" name="monthly_budget" value="@if(isset($monthlyBudget['wallet_amount']) && !empty($monthlyBudget['wallet_amount'])){{$monthlyBudget['wallet_amount']}}@endif" required>
                           </li>
                         </ul>
                       </div>

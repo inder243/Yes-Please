@@ -128,10 +128,10 @@
                 <li><a href="javascript:;">Help</a></li>
             </ul>
         </div>
-        <div class="footer_notification">
+        <!-- <div class="footer_notification">
             <div class="cross-button">x</div>    
             <h1>Registration is completed and here you can lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
-        </div>
+        </div> -->
         <div class="footer_notification_for_mobile">
             <div class="cross-button">x</div> 
             <h1>Registration is completed and here you can lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
@@ -199,7 +199,7 @@
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>  -->
     <script type="text/javascript" src="<?php echo e(URL::asset('js/wow.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/dropzone.min.js')); ?>"></script>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/business_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_user.js')); ?>"></script>
     
     <script>
         wow = new WOW({

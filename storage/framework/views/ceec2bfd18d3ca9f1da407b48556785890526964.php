@@ -258,6 +258,7 @@
                       <?php else: ?>
                         <li>
                           <a href="<?php echo e(url('general_user/quotesrequest/'.$quote_data['quote_id'].'/'.$quote_data['business_id'])); ?>" class="gen_req_link">
+                          <div class="b_name_list">
                           <div class="user_quote_img">
                             <?php
                             $bus_user_id = $quote_data['get_bus_user']['business_userid'];
@@ -282,6 +283,7 @@
                             <?php endif; ?>
 
                             <p><span>$ <?php echo e($quote_data['price_quotes'].$price_type); ?></span>for <?php echo e($details); ?></p>
+                          </div>
                           </div>
                           </a>
                         </li>

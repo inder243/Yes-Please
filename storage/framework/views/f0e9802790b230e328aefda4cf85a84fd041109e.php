@@ -51,6 +51,9 @@
                             <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
                         </li>
                         <li>
+                            <a href="#"><img src="<?php echo e(asset('img/profile.png')); ?>" />Favorite businesses</a>
+                        </li>
+                        <li>
                           <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
                         </li>
                         <?php else: ?>
@@ -267,7 +270,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/wow.min.js')); ?>"></script>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/general_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/general_user.js')); ?>"></script>
     <script>
         wow = new WOW({
             animateClass: 'animated',

@@ -57,7 +57,7 @@
                   </div>
                 
                 <div class="contact_user">
-                  <a href="tel:<?php echo e($quote_data[0]['get_gen_user']['phone_number']); ?>" class="user_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
+                  <a href="javascript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="<?php echo e($quote_data[0]['get_gen_user']['phone_number']); ?>" data-original-title="<?php echo e($quote_data[0]['get_gen_user']['phone_number']); ?>"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
                   <a href="JavaScript:;" class="user_text"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
                 </div>
                 <div class="review_section">

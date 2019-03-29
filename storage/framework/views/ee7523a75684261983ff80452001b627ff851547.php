@@ -33,7 +33,7 @@
                   <div class="u_detail_h">
                     <h1><?php if(!empty($user_details)): ?><?php echo e($user_details['business_name']); ?><?php endif; ?></h1>
                     <a href="javascript:;" class="u_chat"><img src="<?php echo e(asset('img/text.png')); ?>"/></a>
-                    <a href="<?php if(!empty($user_details)): ?>tel:<?php echo e($user_details['phone_number']); ?> <?php else: ?> javascript:; <?php endif; ?>" class="u_call"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
+                    <a href="javascript:;" class="u_call" data-toggle="tooltip" data-placement="top" title="<?php echo e($user_details['phone_number']); ?>" data-original-title="<?php echo e($user_details['phone_number']); ?>"><img src="<?php echo e(asset('img/call.png')); ?>"/></a>
                   </div>
                   <span><?php echo e($cat_name); ?></span>
                   <p class="u_distance"><?php if(!empty($user_details)): ?><?php echo e($user_details['full_address']); ?><?php endif; ?> | <span>Distance <b><?php if(!empty($user_details)): ?> <?php if(!empty($user_details['bu_details'])): ?><?php echo e($user_details['bu_details'][0]['distance_kms']); ?><?php endif; ?> <?php endif; ?> km</b></span></p>
@@ -46,7 +46,7 @@
                   <a href="javascript:;"><img src="<?php echo e(asset('img/inactive_star.png')); ?>"/></a>
                   <div class="rating_btns">
                     <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
-                    <a href="javascript:;">Ask question</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#ask_question">Ask question</a>
                     <a href="javascript:;">Schedule appointment</a>
                   </div>
                 </span>

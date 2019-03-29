@@ -60,16 +60,31 @@
 
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                        <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="{{ old('category') }}" required>
-                                            @if (Session::has('success_message'))
-                                            <span class="help-block succ-admin forhide">{{ Session::get('success_message') }}</span>
-                                            @endif
-                                             @if (Session::has('error_message'))
-                                            <span class="help-block error forhide">{{ Session::get('error_message') }}</span>
-                                            @endif
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="{{ old('category') }}" required>
+                                           
                                         </div>
                                     </div>
-                              
+
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="q_with_ph" class=" form-control-label">Enter quote with phone number</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <input id="q_with_ph" name="q_with_ph" placeholder="Quote with phone number" class="form-control" maxlength="30" value="" required="" type="number">
+                                        </div>                                                                              
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="q_without_ph" class=" form-control-label">Enter quote without phone number</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <input id="q_without_ph" name="q_without_ph" placeholder="Quote without phone number" class="form-control" maxlength="30" value="" required="" type="number">
+                                        </div>                                                                              
+                                    </div>
+
+                               @if (Session::has('success_message'))
+                                <span class="help-block succ-admin forhide">{{ Session::get('success_message') }}</span>
+                                @endif
+                                 @if (Session::has('error_message'))
+                                <span class="help-block error forhide">{{ Session::get('error_message') }}</span>
+                                @endif
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary btn-sm">
@@ -105,7 +120,7 @@
                                         <th scope="row">{{ $count }}</th>
                                         <td>{{ $cat->category_name }}</td>
                                         <td>
-                                            <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="{{ $cat->id }}" data-name= "{{ $cat->category_name }}"></a>
+                                            <a href='javascript:void(0);' data-toggle="modal" data-target="#mediumModal"  class="fa fa-pencil edit" data-id="{{ $cat->id }}" data-name= "{{ $cat->category_name }}" data-with-ph= "{{ $cat->quote_with_ph }}" data-without-ph= "{{ $cat->quote_without_ph }}"></a>
                                             <a href='javascript:void(0);'  data-id="{{ $cat->id }}" class="fa fa-times delete_category"></a>
                                         </td>
                                         <td>
@@ -113,6 +128,7 @@
                                             <a href="{{url('/admin/create_new_form')}}/{{ $cat->id }}">create form</a>
                                         </td>
                                     </tr>
+
                                     <?php $count++; ?>
                                     @endforeach
                                     @else
@@ -151,12 +167,26 @@
                     </div>
                     <div class="modal-body">
                         
-                          <div class="row form-group">
-                                <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="30"  required>
-                                    <span class="help-block" id="help-block"></span>
-                                </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
+                            <div class="col-12 col-md-9"><input type="text" id="edit_category" name="edit_category" placeholder="Enter category..." class="form-control" maxlength="30"  required>
+                                <span class="help-block" id="help-block"></span>
                             </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="edit_q_with_ph" class="form-control-label">Quote with phone number</label></div>
+                            <div class="col-12 col-md-9"><input id="edit_q_with_ph" name="edit_q_with_ph" placeholder="Enter quote with phone number" class="form-control" maxlength="30" required="" type="number">
+                                <span class="help-block" id="help-block1"> </span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="edit_q_without_ph" class="form-control-label">Quote without phone number</label></div>
+                            <div class="col-12 col-md-9"><input id="edit_q_without_ph" name="edit_q_without_ph" placeholder="Enter quote without phone number" class="form-control" maxlength="30" required="" type="number">
+                                <span class="help-block" id="help-block2"> </span>
+                            </div>
+                        </div>
+
+
                             <input type="hidden" name="hidden_id" id="hidden_id">
                             <input type="hidden" name="hidden_url" id="hidden_url" value="{{ url('/') }}">
                     </div>

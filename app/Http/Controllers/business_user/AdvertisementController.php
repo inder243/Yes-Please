@@ -17,12 +17,18 @@ use App\Models\YpBusinessUserHashtags;
 use App\Models\YpBusinessUsersQuotes;
 use App\Models\YpFormQuestions;
 use App\Models\YpBusinessSelectedServices;
+use App\Models\YpBusinessUserTransactions;
+use App\Models\YpBusinessUserCcDetails;
+use App\Http\Traits\BusinessUserProSettingsTrait;
+
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
 
 class AdvertisementController extends Controller
 {
+
+    
     /**
      * Create a new controller instance.
      *
@@ -38,10 +44,23 @@ class AdvertisementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    use BusinessUserProSettingsTrait;
     //function thet will render advertisement free page
     public function index()
     {
-        return view('/business/advertisement_free_mode');
+        //get settings from BusinessUserProSettingsTrait
+
+        $getSettings = $this->getProSettings();
+
+        if($getSettings['advertise_mode']==1)
+        {
+           return view('/business/advertisement_dashboard')->with(array('monthlyBudget'=>$getSettings));
+        }
+        else
+        {
+            return view('/business/advertisement_free_mode');
+        }
+        
      
     }
 
@@ -53,7 +72,19 @@ class AdvertisementController extends Controller
 
         $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
 
-        return view('/business/advertisement_pro_mode')->with(array('getSelectedCats'=>$getSelectedCats));
+        //get settings from BusinessUserProSettingsTrait
+        $getSettings = $this->getProSettings();
+
+        if($getSettings['advertise_mode']==1)
+        {
+           return view('/business/advertisement_dashboard')->with(array('monthlyBudget'=>$getSettings));
+        }
+        else
+        {
+            return view('/business/advertisement_pro_mode')->with(array('getSelectedCats'=>$getSelectedCats,'monthlyBudget'=>$getSettings));
+        }
+
+        
        
     }
 
@@ -62,59 +93,117 @@ class AdvertisementController extends Controller
     {
         try
         {
-             //get business user id from auth
+            //get business user id from auth
             $bUserId  = Auth::user()->id;
+
+            //get settings from BusinessUserProSettingsTrait
+
+            $getSettings = $this->getProSettings();
+
+            if($getSettings['advertise_mode']==1)
+            {
+                Session::flash('success_message', 'Pro Mode already activated');
+                return back()->withInput();  
+            }
+
+            
+
+            $monthlyBudget = isset($_POST['monthly_budget'])?$_POST['monthly_budget']:'';
+            if($monthlyBudget=='')
+            {
+                $error ="Please provide monthly budget.";
+                Session::flash('error_message', $error);
+                return back()->withInput();
+            }
             if(!empty($_POST))
             {
                 $data = $_POST;
+                
 
                 foreach($data as $key=>$categoryData)
                 {
-                    $categoryId = $key;
+                    if($key!='monthly_budget')
+                    {
+                        $categoryId = $key;
 
-                    if(isset($categoryData[0]) && !empty($categoryData[0]))
-                    {
-                        $quoteWithPh = $categoryData[0];
-                    }
-                    else
-                    {
-                        $quoteWithPh = 0;
-                    }
+                        if(isset($categoryData[0]) && !empty($categoryData[0]))
+                        {
+                            $quoteWithPh = $categoryData[0];
+                        }
+                        else
+                        {
+                            $quoteWithPh = 0;
+                        }
 
-                    if(isset($categoryData[1]) && !empty($categoryData[1]))
-                    {
-                        $quoteWithoutPh = $categoryData[1];
-                    }
-                    else
-                    {
-                        $quoteWithoutPh = 0;
-                    }
+                        if(isset($categoryData[1]) && !empty($categoryData[1]))
+                        {
+                            $quoteWithoutPh = $categoryData[1];
+                        }
+                        else
+                        {
+                            $quoteWithoutPh = 0;
+                        }
 
-                    if(isset($categoryData[2]) && !empty($categoryData[2]) && $categoryData[2]=="on")
-                    {
-                        $activeQuote = 1;
-                    }
-                    else
-                    {
-                        $activeQuote = 0;
+                        if(isset($categoryData[2]) && !empty($categoryData[2]) && ($categoryData[2]=="on" || $categoryData[2]==1))
+                        {
+                            $activeQuote = 1;
+                        }
+                        else
+                        {
+                            $activeQuote = 0;
+                        }
+                        
+                        YpBusinessUsercategories::where("category_id",$categoryId)->where("business_userid",$bUserId)->update(array('quote_with_ph'=>$quoteWithPh,'quote_without_ph'=>$quoteWithoutPh,'accept_request'=>$activeQuote)); 
                     }
                     
-                    YpBusinessUsercategories::where("category_id",$categoryId)->where("business_userid",$bUserId)->update(array('quote_with_ph'=>$quoteWithPh,'quote_without_ph'=>$quoteWithoutPh,'accept_request'=>$activeQuote));
                 }
 
-                return redirect('business_user/advertisement_pro_mode')->with('status', 'Data saved successfullly');
+
+                //save monthly budget in cc detail table and save transaction in transactions table.
+
+                $YpBusinessUserCcDetails = new YpBusinessUserCcDetails;
+                $YpBusinessUserCcDetails->b_id=$bUserId;
+               // $YpBusinessUserCcDetails->response = $response;
+                $YpBusinessUserCcDetails->customer_id=time();
+                $YpBusinessUserCcDetails->wallet_amount=$monthlyBudget;
+                $YpBusinessUserCcDetails->updated_wallet_amount=$monthlyBudget;
+                $YpBusinessUserCcDetails->lastdigit=4444;
+                $YpBusinessUserCcDetails->expire_month="10";
+                $YpBusinessUserCcDetails->expire_year="22";
+                $YpBusinessUserCcDetails->card_added_on=date('Y-m-d');
+                $YpBusinessUserCcDetails->save();
+                
+                $YpBusinessUserTransactions = new YpBusinessUserTransactions;
+                $YpBusinessUserTransactions->trans_id=time();
+               // $YpBusinessUserTransactions->response = $response;
+                $YpBusinessUserTransactions->b_id=$bUserId;
+                $YpBusinessUserTransactions->cat_id=0;
+                $YpBusinessUserTransactions->transaction_made_on=date('Y-m-d');
+                $YpBusinessUserTransactions->amount=$monthlyBudget;
+                $YpBusinessUserTransactions->status=1;
+                $YpBusinessUserTransactions->save();
+
+                //update user pro_mode
+                YpBusinessUsers::where("id",$bUserId)->update(array('advertise_mode'=>1));
+
+                $monthlyBudget = YpBusinessUserCcDetails::select("wallet_amount","updated_wallet_amount")->where("b_id",$bUserId)->first();
+ 
+                return view('/business/advertisement_dashboard')->with(array('monthlyBudget'=>$monthlyBudget));
+                
             }
             else
             {
-                $error ="Please try again.";
-                return view('/business/advertisement_pro_mode')->withErrors($error);
+                $error ="Somethng went wrong,Please try again.";
+                Session::flash('error_message', $error);
+                return back()->withInput();
             }
 
         }
         catch(Exception $e)
         {
-            $errors = $e->getMessage();
-            return view('/business/advertisement_pro_mode')->withErrors($error);
+            $error = $e->getMessage();
+            Session::flash('error_message', $error);
+            return back()->withInput();
         }
        
     }

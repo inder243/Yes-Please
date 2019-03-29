@@ -35,7 +35,7 @@
                   <div class="u_detail_h">
                     <h1>@if(!empty($user_details)){{$user_details['business_name']}}@endif</h1>
                     <a href="javascript:;" class="u_chat"><img src="{{ asset('img/text.png') }}"/></a>
-                    <a href="@if(!empty($user_details))tel:{{$user_details['phone_number']}} @else javascript:; @endif" class="u_call"><img src="{{ asset('img/call.png') }}"/></a>
+                    <a href="javascript:;" class="u_call" data-toggle="tooltip" data-placement="top" title="{{ $user_details['phone_number']}}" data-original-title="{{ $user_details['phone_number']}}"><img src="{{ asset('img/call.png') }}"/></a>
                   </div>
                   <span>{{$cat_name}}</span>
                   <p class="u_distance">@if(!empty($user_details)){{$user_details['full_address']}}@endif | <span>Distance <b>@if(!empty($user_details)) @if(!empty($user_details['bu_details'])){{$user_details['bu_details'][0]['distance_kms']}}@endif @endif km</b></span></p>
@@ -48,7 +48,7 @@
                   <a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a>
                   <div class="rating_btns">
                     <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
-                    <a href="javascript:;">Ask question</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#ask_question">Ask question</a>
                     <a href="javascript:;">Schedule appointment</a>
                   </div>
                 </span>

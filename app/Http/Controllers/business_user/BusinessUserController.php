@@ -116,11 +116,13 @@ class BusinessUserController extends Controller
             
         }
 
+       $uploaded_files1 = YpVerificationBusinessUsers::select('uploaded_files')->where('business_user_id', '=',  $business_user_id)->get()->toArray();
+
         /*******check drag and drop files********/
         if(isset($_POST['dropzone_file']) && !empty($_POST['dropzone_file'])){
             foreach ($_POST['dropzone_file'] as $filenames) {
-                if(!empty($uploaded_files[0]['uploaded_files'])){
-                    $pic_vid_arr = json_decode($uploaded_files[0]['uploaded_files']);
+                if(!empty($uploaded_files1[0]['uploaded_files'])){
+                    $pic_vid_arr = json_decode($uploaded_files1[0]['uploaded_files']);
                     $pic_vid_arr->pic[] = $filenames;
                 }else{
                     $pic_vid_arr['pic'][] = $filenames;

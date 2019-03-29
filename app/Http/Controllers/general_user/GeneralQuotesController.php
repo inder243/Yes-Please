@@ -10,6 +10,10 @@ use App\Models\YpBusinessUsersQuotesReply;
 use App\Models\YpUserReviews;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsers;
+use App\Models\YpFormQuestions;
+use Mail;
+use File;
+Use Redirect;
 
 class GeneralQuotesController extends Controller
 {
@@ -22,6 +26,130 @@ class GeneralQuotesController extends Controller
     {
         $this->middleware('auth:general_user');
     }
+
+    /**********
+    *****fn to send quotes
+    ***********/
+    public function sendQuotes(Request $request,$b_id = null){
+
+        $general_userid = Auth::user()->user_id;
+        $g_id = Auth::user()->id;
+
+        $YpGeneralUsersQuotes = new YpGeneralUsersQuotes;
+
+        if(isset($_POST)){
+
+            if(isset($_POST['hidden_catid'])){
+                $cat_id = $_POST['hidden_catid'];
+            }else{
+                $cat_id = '';
+            }
+
+            if(isset($_POST['hidden_catname'])){
+                $cat_name = $_POST['hidden_catname'];
+            }else{
+                $cat_name = '';
+            }
+
+
+            if(isset($_POST['work_description_text'])){
+                $work_description = $_POST['work_description_text'];
+            }else{
+                $work_description = '';
+            }
+
+
+            if(isset($_POST['mobile_phone'])){
+                $mobile_phone = $_POST['mobile_phone'];
+            }else{
+                $mobile_phone = '';
+            }
+
+            if(isset($_POST['validate'])){
+                $mobile_phone = $mobile_phone;
+            }else if(isset($_POST['dont_want'])){
+                $mobile_phone = '';
+            }else{
+                $mobile_phone = '';
+            }
+
+            $quote_id = str_shuffle(rand(1,1000).strtotime("now"));
+
+            $YpGeneralUsersQuotes->quote_id         = $quote_id;
+            $YpGeneralUsersQuotes->general_id       = $g_id;
+            $YpGeneralUsersQuotes->work_description = $work_description;
+            $YpGeneralUsersQuotes->phone_number     = $mobile_phone;
+            $YpGeneralUsersQuotes->cat_id           = $cat_id;
+            $YpGeneralUsersQuotes->cat_name         = $cat_name;
+            $YpGeneralUsersQuotes->save();
+
+            /****check selected files from button****/
+            if ($request->hasFile('myfile')) {
+                foreach($request->file('myfile') as $files){
+                    $file = $files;             
+                    $extension = $file->getClientOriginalExtension(); // getting image extension            
+                    $filename = rand(10,100).time().'.'.$extension;
+                    
+                    if($file->move(public_path().'/images/general_quotes/'.$general_userid.'/', $filename)){                
+                       
+                        $pic_vid_arr['pic'][] = $filename;
+                        
+                        $pic_vid_json = json_encode($pic_vid_arr);
+                        $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
+                        $YpGeneralUsersQuotes->save();
+                    }
+                }
+                
+            }/*********code ends to upload selected files********/
+
+            /*******check drag and drop files********/
+            if(isset($_POST['dropzone_file']) && !empty($_POST['dropzone_file'])){
+                foreach ($_POST['dropzone_file'] as $filenames) {
+                   
+                    $pic_vid_arr['pic'][] = $filenames;
+                    
+                    $pic_vid_json = json_encode($pic_vid_arr);
+                    
+                    $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
+                    $YpGeneralUsersQuotes->save();
+                }
+            }/*****drag and drop ends*****/
+
+            $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
+            $YpBusinessUsersQuotes->business_id = $b_id;
+            $YpBusinessUsersQuotes->general_id = $g_id;
+            $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
+            $YpBusinessUsersQuotes->status = 1;
+            $YpBusinessUsersQuotes->save();
+
+
+            $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id =".$b_id));
+
+            if(!empty($getEmails) && !empty($getEmails[0])){
+
+                if(!empty($getEmails[0]->emails)){
+
+                    $emails = explode(',',$getEmails[0]->emails);
+
+                    $send_email_from = $_ENV['send_email_from'];
+                    $data ='';
+
+                    Mail::send('emails.send_quote_email', ['data'=>$data], function ($message) use ($emails,$send_email_from) {
+
+                        $message->from($send_email_from, 'Yes Please'); 
+
+                        $message->to($emails)->subject('Yes Please Quote Request');
+
+                    });
+                }
+            }
+
+           // return Redirect::back();
+           // return redirect()->intended('general_user/public_profile/'.$b_id.'/status');
+            return redirect('general_user/public_profile/'.$b_id.'/'.$cat_id.'/status');
+        }
+
+    }/***send quote ends here***/
 
     /***
     *get all quotes and questions

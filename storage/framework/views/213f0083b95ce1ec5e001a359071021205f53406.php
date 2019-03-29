@@ -427,7 +427,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                <div class="modal-header quote_header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close close_single_quote" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
                </div>
@@ -448,7 +448,7 @@
                            </div>
                            <div class="describe_work_btn mb-5">
                               <!-- <div class="ele_pre"><a href="javascript:;">&lt; Previous</a></div> -->
-                              <div class="ele_next"><a href="javascript:;" class="desc_work_modal">Next &gt;</a></div>
+                              <div class="ele_next"><a href="javascript:;" id="descr_single_quote" class="desc_work_modal">Next &gt;</a></div>
                            </div>
                         </div>
                      </div>
@@ -610,6 +610,211 @@
     </div>  
     <!---modal to open big image endshere --->
 
+  <!-- ask question Modal -->
+  <div class="modal fade" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <?php
+      if(!empty($b_id)){
+        $ask_ques_url = url('/general_user/questionsend/'.$b_id);
+      }else{
+        $ask_ques_url = url('/general_user/questionsend');
+      }
+
+      ?>
+      <input type="hidden" class="ask_qus_url" value="<?php echo e($ask_ques_url); ?>">
+      <input type="hidden" class="hidden_cat_name" name="hidden_catname" value="<?php if(isset($cat_name)): ?><?php echo e($cat_name); ?><?php endif; ?>">
+      <input type="hidden" class="hidden_cat_id" name="hidden_catid" value="<?php if(isset($cat_id)): ?><?php echo e($cat_id); ?><?php endif; ?>">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header question_header">
+          <button type="button" class="close close_single_questions" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body question_body">
+          <div class="ask_question_main">
+            <div class="how_to_ask">
+              <h1>How to ask a question</h1>
+              <div class="how_to_ask_steps">
+                <ul>
+                  <li>
+                    <span>1.</span>Use questions to ask specific business or
+                      all businesses question about your needs.
+                  </li>
+                  <li>
+                    <span>2.</span>Questions are not meant to get prices or
+                      to contact the businesses.
+                  </li>
+                  <li>
+                    <span>3.</span>To get the best results please write clearly
+                      a title for your question and describe in
+                      details your question.
+                  </li>
+                </ul>
+                <div class="for_next_btn">
+                  <a href="javascript:;" class="how_ask_qus">Next ></a>
+                </div>
+              </div>
+            </div>
+            <div class="describe_question descrptn_qus" style="display:none;">
+              <h1>Describe your question</h1>
+              <p>(2000 letters)</p>
+              <div class="descibe_question_steps">
+                <div class="title_des">
+                  <div class="form-group des_ques col-12">
+                <label for="inputPassword4">Title</label>
+                <input type="text" class="form-control question_title" id="single_ques_title" onkeyup="removeErrmsgs(this)">
+                <span class="fill_fields" role="alert" style="display:none;"></span>
+                  </div>
+                  <div class="form-group des_ques col-12">
+                    <label for="inputPassword4">Description</label>
+                    <textarea class="question_description" id="single_ques_desc" onkeyup="removeErrmsgs(this)"></textarea>
+                    <span class="fill_fields" role="alert" style="display:none;"></span>
+                  </div>
+                </div>
+                <div class="for_next_btn">
+                  <!-- <a href="javascript:;" class="descr_ques" data-toggle="modal" data-target="#similiar_result"> -->
+                    <a href="javascript:;" class="descr_ques">Next ></a>
+                </div>
+              </div>
+            </div>
+            <div class="similar_result_section similar_result_qus" style="display:none;">
+              <h1>We found similar results</h1>
+              <p>Try to found answer to your question</p>
+              <div class="questin_total_ans">
+                <ul>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>How long it takes to design paper for office?</h1>
+                      <p>(5 answers)</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>How long is A4 Page?</h1>
+                      <p>(2 answers)</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>Curabitur sit amet justo vel est dictum tincidunt. Maecenas egestas, libero vitae iaculis
+                          mollis, erat risus tempus est, non vehicula mauris nibh ac magna?</h1>
+                      <p>(17 answers)</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>Nullam rhoncus vel ipsum non consectetur?</h1>
+                      <p>(3 answers)</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>Donec at ultricies est, a varius leo?</h1>
+                      <p>(14 answers)</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="Question_main_div">
+                      <h1>Vestibulum vel sagittis mi, non aliquam enim. Curabitur sed tellus aliquet, rhoncus nibh id, gravida nulla?</h1>
+                      <p>(3 answers)</p>
+                    </div>
+                  </li>
+                </ul>
+                <div class="send_to_business">
+                  <!-- <a href="javascript:;" data-toggle="modal" data-target="#exampleModalCenter_login"> -->
+
+                    <a href="javascript:;" class="no_send_ques">No, send question to businesses</a>
+                </div>
+              </div>
+            </div>
+            <div class="describe_question Question_sent" style="display:none;">
+              <h1>Question sent</h1>
+              <div class="descibe_question_steps">
+                <div class="question_sent_mail">
+                  <h1>Your question was sent to relevant business. Whenever business wil reply to your question you’ll receive a notification. You can go to questions page to view your questions.</h1>
+                  <h1>You can go to questions page to view your questions.</h1>
+                </div>
+                <div class="for_next_btn seequestion_close">
+                    <a href="javascript:;" >See questions</a>
+                  <a href="javascript:;">Close</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- ask question Modal end-->
+
+<!-- Similar  Modal start-->
+
+<div class="modal fade" id="similiar_result" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+  <div class="modal-content login_model">
+    <div class="modal-header">
+
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body ">
+      <div class="similar_result_section">
+        <h1>We found similar results</h1>
+        <p>Try to found answer to your question</p>
+        <div class="questin_total_ans">
+          <ul>
+            <li>
+              <div class="Question_main_div">
+                <h1>How long it takes to design paper for office?</h1>
+                <p>(5 answers)</p>
+              </div>
+            </li>
+            <li>
+              <div class="Question_main_div">
+                <h1>How long is A4 Page?</h1>
+                <p>(2 answers)</p>
+              </div>
+            </li>
+            <li>
+              <div class="Question_main_div">
+                <h1>Curabitur sit amet justo vel est dictum tincidunt. Maecenas egestas, libero vitae iaculis
+                    mollis, erat risus tempus est, non vehicula mauris nibh ac magna?</h1>
+                <p>(17 answers)</p>
+              </div>
+            </li>
+            <li>
+              <div class="Question_main_div">
+                <h1>Nullam rhoncus vel ipsum non consectetur?</h1>
+                <p>(3 answers)</p>
+              </div>
+            </li>
+            <li>
+              <div class="Question_main_div">
+                <h1>Donec at ultricies est, a varius leo?</h1>
+                <p>(14 answers)</p>
+              </div>
+            </li>
+            <li>
+              <div class="Question_main_div">
+                <h1>Vestibulum vel sagittis mi, non aliquam enim. Curabitur sed tellus aliquet, rhoncus nibh id, gravida nulla?</h1>
+                <p>(3 answers)</p>
+              </div>
+            </li>
+          </ul>
+          <div class="send_to_business">
+            <a href="javascript:;" data-toggle="modal" data-target="#exampleModalCenter_login">No, send question to businesses</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<!-- Similar  Modal end-->
+
 
 
     <!-- Optional JavaScript -->
@@ -625,11 +830,12 @@
     <?php if(Auth::guard('general_user')->check()): ?>
 
     <?php else: ?>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/business_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_user.js')); ?>"></script>
     <?php endif; ?>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/general_user.js')); ?>"></script>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/general_quotes.js')); ?>"></script>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/formbuilder.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/general_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/general_quotes.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/general_questions.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/formbuilder.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
@@ -759,7 +965,7 @@
                           infowindow.open(mymap, this);
                       }
                     });
-          });
+            });
           /*****code to bind map with multiple long lat*****/
 
           /*****more option code*****/

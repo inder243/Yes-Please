@@ -34,7 +34,6 @@ class BusinessQuotesController extends Controller
     *********************************/
     public function showQuotesQuestions($quote_status = null, $quote_keyword = null){
         $b_id = Auth::id();
-       
 
         if($quote_status == null && $quote_keyword == null){
 
@@ -113,14 +112,27 @@ class BusinessQuotesController extends Controller
     Show quote request page
     **********************/
     public function showQuotesRequest($quote_id){
-        $b_id = Auth::id();
-        $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
-        $quotes = YpBusinessUsersQuotes::where(array('business_id'=>$b_id, 'quote_id'=>$quote_id))->update(['status'=>2]);
 
-        $quote_data = YpBusinessUsersQuotes::with('get_gen_user')->where(['business_id'=>$b_id,'quote_id'=>$quote_id])->where('status','!=',0)->get()->toArray();
+        if(!is_numeric($quote_id)){
+            return abort(404);
+        }
+        $check_quoteId = YpGeneralUsersQuotes::where('id',$quote_id)->get()->toArray();
+        if(empty($check_quoteId)){
+            
+            return abort(404);
+
+        }else{
+            $b_id = Auth::id();
+            $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
+            $quotes = YpBusinessUsersQuotes::where(array('business_id'=>$b_id, 'quote_id'=>$quote_id))->update(['status'=>2]);
+
+            $quote_data = YpBusinessUsersQuotes::with('get_gen_user')->where(['business_id'=>$b_id,'quote_id'=>$quote_id])->where('status','!=',0)->get()->toArray();
 
 
-        return view('business.quotes_questions.quotes_request')->with(['quote_id'=>$quote_id,'quote_data'=>$quote_data,'allquotes'=>$allquotes]);
+            return view('business.quotes_questions.quotes_request')->with(['quote_id'=>$quote_id,'quote_data'=>$quote_data,'allquotes'=>$allquotes]);
+        }/****404 else ends***/
+
+        
     }/*****end of show quote request fn******/
 
     /*****************
@@ -143,7 +155,7 @@ class BusinessQuotesController extends Controller
             
         }else{
 
-            $uploaded_files = YpBusinessUsersQuotesReply::select('uploaded_files')->where('business_id', '=',  $b_id)->get()->toArray();
+            $uploaded_files = YpBusinessUsersQuotesReply::select('uploaded_files')->where(['business_id'=> $b_id,'quote_id'=>$quote_id])->get()->toArray();
 
             $quoteRequestData = YpBusinessUsersQuotesReply::where(['business_id'=> $b_id,'quote_id'=>$quote_id])->first();
 
@@ -167,15 +179,10 @@ class BusinessQuotesController extends Controller
                     
                     if($file->move(public_path().'/images/quotes_request/'.$business_user_id.'/', $filename)){                
                        
-                        if(!empty($uploaded_files[0]['uploaded_files'])){
-                            $pic_vid_arr = json_decode($uploaded_files[0]['uploaded_files']);
-                            $pic_vid_arr->pic[] = $filename;
-                            
-                        }else{
-                            $pic_vid_arr['pic'][] = $filename;
-                        }
+                        $pic_vid_arr['pic'][] = $filename;
                         
                         $pic_vid_json = json_encode($pic_vid_arr);
+                        
                         $quoteRequestData->uploaded_files = $pic_vid_json;
                         $quoteRequestData->save();
                     }
@@ -186,12 +193,8 @@ class BusinessQuotesController extends Controller
             /*******check drag and drop files********/
             if(isset($_POST['dropzone_file']) && !empty($_POST['dropzone_file'])){
                 foreach ($_POST['dropzone_file'] as $filenames) {
-                    if(!empty($uploaded_files[0]['uploaded_files'])){
-                        $pic_vid_arr = json_decode($uploaded_files[0]['uploaded_files']);
-                        $pic_vid_arr->pic[] = $filenames;
-                    }else{
-                        $pic_vid_arr['pic'][] = $filenames;
-                    }
+                    
+                    $pic_vid_arr['pic'][] = $filenames;
                     
                     $pic_vid_json = json_encode($pic_vid_arr);
                     
@@ -278,33 +281,69 @@ class BusinessQuotesController extends Controller
     fn to display quote accepted page
     *******************************/
     public function showQuoteAccepted($quote_id,$quote_status){
-        // echo $quote_id;
-        // echo "<pre>status";echo $quote_status;die;
-        $b_id = Auth::user()->id;
-        $business_userid = Auth::user()->business_userid;
-        $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
 
-        $quote_data = YpBusinessUsersQuotes::with(['get_gen_user','get_review'=> function($q) use($b_id,$quote_id) {
-                $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
-            },'quote_reply'=> function($q) use($b_id,$quote_id) {
-                $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
-            }])->where(['quote_id'=>$quote_id,'status'=>$quote_status])->get()->toArray();
+        if(!is_numeric($quote_id) || !is_numeric($quote_status)){
+            return abort(404);
+        }
 
-        //$quote_data = YpBusinessUsersQuotes::with(['get_gen_user','quote_reply','get_review'])->where(['business_id'=>$b_id, 'quote_id'=>$quote_id])->get()->toArray();
-      //echo "<pre>";print_r($quote_data);die;
-        return view('business.quotes_questions.quoted_accepted')->with(['quote_data'=>$quote_data,'business_userid'=>$business_userid,'allquotes'=>$allquotes]);
+        $check_quoteId = YpGeneralUsersQuotes::where('id',$quote_id)->get()->toArray();
+        
+        if(empty($check_quoteId)){
+
+            return abort(404);
+
+        }else{
+            // echo $quote_id;
+            // echo "<pre>status";echo $quote_status;die;
+            $b_id = Auth::user()->id;
+            $business_userid = Auth::user()->business_userid;
+            $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
+
+            $quote_data = YpBusinessUsersQuotes::with(['get_gen_user','get_review'=> function($q) use($b_id,$quote_id) {
+                    $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
+                },'quote_reply'=> function($q) use($b_id,$quote_id) {
+                    $q->where(['business_id'=>$b_id,'quote_id'=>$quote_id]); 
+                }])->where(['quote_id'=>$quote_id,'status'=>$quote_status])->get()->toArray();
+
+            if(empty($quote_data)){
+            
+                return abort(404);
+
+            }
+            //$quote_data = YpBusinessUsersQuotes::with(['get_gen_user','quote_reply','get_review'])->where(['business_id'=>$b_id, 'quote_id'=>$quote_id])->get()->toArray();
+         
+            return view('business.quotes_questions.quoted_accepted')->with(['quote_data'=>$quote_data,'business_userid'=>$business_userid,'allquotes'=>$allquotes]);
+        }/***404 else ends***/
+
+        
     }/*******end of quote accepted******/
 
     /********************
     show user review page
     **********************/
     public function showUserQuoteReview($quote_id){
-        $b_id = Auth::user()->id;
-        $business_userid = Auth::user()->business_userid;
-        $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
-        $quote_data = YpBusinessUsersQuotes::with(['get_gen_user','quote_reply'])->where(['business_id'=>$b_id, 'quote_id'=>$quote_id])->get()->toArray();
 
-        return view('business.quotes_questions.userquote_review')->with(['quote_data'=>$quote_data,'business_userid'=>$business_userid,'allquotes'=>$allquotes]);
+        if(!is_numeric($quote_id)){
+            return abort(404);
+        }
+
+        $check_quoteId = YpGeneralUsersQuotes::where('id',$quote_id)->get()->toArray();
+
+        if(empty($check_quoteId)){
+            
+            return abort(404);
+
+        }else{
+
+            $b_id = Auth::user()->id;
+            $business_userid = Auth::user()->business_userid;
+            $allquotes = YpGeneralUsersQuotes::where('id',$quote_id)->first();
+            $quote_data = YpBusinessUsersQuotes::with(['get_gen_user','quote_reply'])->where(['business_id'=>$b_id, 'quote_id'=>$quote_id])->get()->toArray();
+
+            return view('business.quotes_questions.userquote_review')->with(['quote_data'=>$quote_data,'business_userid'=>$business_userid,'allquotes'=>$allquotes]);
+
+        }/****404 else ends****/
+        
     }
 
     /*************************
@@ -312,41 +351,43 @@ class BusinessQuotesController extends Controller
     **************************/
     public function submitUserQuoteReview(){
 
-        $quoteReview = YpUserReviews::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id'],'user_type'=>'business'])->first();
+        if(isset($_POST)){
+            $quoteReview = YpUserReviews::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id'],'user_type'=>'business'])->first();
 
-        if(!empty($quoteReview)){
-            $quoteReview = $quoteReview;
-        }else{
-            $quoteReview = new YpUserReviews;
-        }
+            if(!empty($quoteReview)){
+                $quoteReview = $quoteReview;
+            }else{
+                $quoteReview = new YpUserReviews;
+            }
 
-        if(isset($_POST['star_active']) && !empty($_POST['star_active'])){
-            $star_active = $_POST['star_active'];
-        }else{
-            $star_active = '0';
-        }
-        $quoteReview->business_id    = $_POST['review_bus_id'];
-        $quoteReview->quote_id       = $_POST['review_quote_id'];
-        $quoteReview->general_id     = $_POST['review_gen_id'];
-        $quoteReview->review         = $_POST['review_text'];
-        $quoteReview->rating         = $star_active;
-        $quoteReview->user_type      = $_POST['review_type'];
-        $quoteReview->save();
+            if(isset($_POST['star_active']) && !empty($_POST['star_active'])){
+                $star_active = $_POST['star_active'];
+            }else{
+                $star_active = '0';
+            }
+            $quoteReview->business_id    = $_POST['review_bus_id'];
+            $quoteReview->quote_id       = $_POST['review_quote_id'];
+            $quoteReview->general_id     = $_POST['review_gen_id'];
+            $quoteReview->review         = $_POST['review_text'];
+            $quoteReview->rating         = $star_active;
+            $quoteReview->user_type      = $_POST['review_type'];
+            $quoteReview->save();
 
-        /*****code to update status of the quote after review****/
-        $QuoteStatus = YpBusinessUsersQuotes::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id']])->first();
+            /*****code to update status of the quote after review****/
+            $QuoteStatus = YpBusinessUsersQuotes::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id']])->first();
 
-        if(!empty($QuoteStatus)){
-            $QuoteStatus = $QuoteStatus;
+            if(!empty($QuoteStatus)){
+                $QuoteStatus = $QuoteStatus;
 
-            $QuoteStatus->status   = 6;
-            $QuoteStatus->save();
-        }
+                $QuoteStatus->status   = 6;
+                $QuoteStatus->save();
+            }
+            
+
+           // return redirect()->intended('business_user/quotes_questions');
+            return redirect('business_user/quotes_questions');
+        }/**isset ends***/
         
-
-       // return redirect()->intended('business_user/quotes_questions');
-        return redirect('business_user/quotes_questions');
-
     }/*******fn ends here*******/
 
     /***************************

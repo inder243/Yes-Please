@@ -10,6 +10,7 @@ use App\Models\YpQuesJumps;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsersQuotes;
 use App\Models\YpBusinessCategories;
+use App\Http\Traits\BusinessUserProSettingsTrait;
 use Mail;
 
 
@@ -20,6 +21,8 @@ class GetNextQuestionController extends Controller
      *
      * @return void
      */
+
+    use BusinessUserProSettingsTrait;
     public function __construct()
     {
        // $this->middleware('guest:general_user', ['except' => ['getdata']]);
@@ -393,8 +396,8 @@ class GetNextQuestionController extends Controller
 
         try
         {
-          // echo "<pre>dggggggg";
-          // print_r($_FILES['files']);
+           
+
            //echo "<pre>2111111111111";
            //print_r($request->files);
             /****check selected files from button****/
@@ -485,7 +488,7 @@ class GetNextQuestionController extends Controller
                             
                             $pic_vid_json = json_encode($pic_vid_arr);
                             $YpGeneralUsersQuotes->uploaded_files = $pic_vid_json;
-                            $YpGeneralUsersQuotes->save();
+                           $YpGeneralUsersQuotes->save();
                         }
                     }
                     
@@ -536,25 +539,114 @@ class GetNextQuestionController extends Controller
                }
                else
                {
-                    $businessUserIds =  DB::select(DB::raw("SELECT DISTINCT business_id FROM yp_business_selected_services where service_text in (".$dataToFilterQuotes.") ORDER BY RAND() LIMIT 5"));
+                    //get minimum bidamount of category set by admin
 
-                    if(!empty($businessUserIds))
+                    if($request->phone=='')
                     {
-                        foreach($businessUserIds as $businessUser)
+                        $getBidAmount = YpBusinessCategories::select("quote_without_ph")->where('id',$request->hiddencatId)->first();
+                        if($getBidAmount!='')
+                        {
+                            $bidAmount = $getBidAmount['quote_without_ph'];
+                            $columNameForBid = 'quote_without_ph'; //get column for query
+                        }
+                    }
+                    else
+                    {
+                        $getBidAmount = YpBusinessCategories::select("quote_with_ph")->where('id',$request->hiddencatId)->first();
+                        if($getBidAmount!='')
+                        {
+                            $bidAmount = $getBidAmount['quote_with_ph'];
+                            $columNameForBid = 'quote_with_ph'; //get column for query
+                        }
+                    }
+                    //get minimum bidamount of category set by admin
+                    
+                    $countOfmembersToSendBid = 5;
+
+                    //get 5 pro members which have wallet amount equal to or greater than category bid amount given by admin 
+                    $businessUserIds = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',5) as businessUserIds FROM yp_business_selected_services inner join yp_business_user_cc_details on yp_business_selected_services.business_id = yp_business_user_cc_details.b_id 
+                        where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId." and  yp_business_user_cc_details.updated_wallet_amount>=".$bidAmount." ORDER BY RAND()"));
+                   
+
+                    $businessUserIds = $businessUserIds[0]->businessUserIds;
+
+                   if(!empty($businessUserIds))
+                   {
+                        $ProbusinessUserIds = explode(',',$businessUserIds);
+
+                        //check if each business user has amount in wallet set by them as min bid amount for category
+                       foreach($ProbusinessUserIds as $ProbusinessUserId)
+                       {
+                       
+                            $businessWithMinAmountUserIds = DB::select(DB::raw("SELECT yp_business_user_categories.business_userid FROM yp_business_user_categories where yp_business_user_categories.category_id=".$request->hiddencatId." and business_userid=".$ProbusinessUserId." and ".$columNameForBid."<=(SELECT updated_wallet_amount  FROM `yp_business_user_cc_details` WHERE `b_id` = ".$ProbusinessUserId.")"));
+
+                            if(!empty($businessWithMinAmountUserIds[0]->business_userid))
+                            {
+                                $businessUsersToSendBid[] = $businessWithMinAmountUserIds[0]->business_userid;
+                                
+                                $buserids[] = $businessWithMinAmountUserIds[0]->business_userid;
+                            }
+                            
+                       }
+                       
+                        
+               
+                        $countOfProMembers = count($businessUsersToSendBid);
+                       $countOfmembersToSendBid = $countOfmembersToSendBid-$countOfProMembers;
+                       //if from above calculations members are less than 5 then get remaining free business users
+
+
+                       if($countOfmembersToSendBid>0)
+                       {
+
+                            $businessUserIdsFree = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',".$countOfmembersToSendBid.") as buids FROM yp_business_selected_services where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId."  and yp_business_selected_services.business_id not in (".implode(',',$ProbusinessUserIds).")  ORDER BY RAND()"));
+
+                            //merge both pro and free members
+                            if(!empty($businessUserIdsFree[0]->buids))
+                            {
+                                $buserids = array_merge($buserids,explode(',',$businessUserIdsFree[0]->buids));
+                            }
+                       }
+                      
+
+                   }
+                   else//if no pro member has wallet amount set by admin then get 5 free members
+                   {
+                        $businessUserIds = DB::select(DB::raw("SELECT DISTINCT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',5) as buids FROM yp_business_selected_services 
+                        where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId."  ORDER BY RAND()"));
+
+                        if(!empty($businessUserIds[0]->buids))
+                        {
+                            $buserids = explode(',',$businessUserIds[0]->buids);
+                            
+                        }
+                   }
+
+                
+
+                   $deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
+
+                    if(!empty($buserids))
+                    {
+                        foreach($buserids as $businessUser)
                         {
 
                             $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
-                            $YpBusinessUsersQuotes->business_id = $businessUser->business_id;
+                            $YpBusinessUsersQuotes->business_id = $businessUser;
                             $YpBusinessUsersQuotes->general_id = $g_id;
                             $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
                             $YpBusinessUsersQuotes->status = 1;
                             $YpBusinessUsersQuotes->save();
+
+                            $buseridsToSendEmail[] = $businessUser;
                         }
                     }
 
+                   //deduct amount from wallet 
+
                     //send email to 5 random business users
-                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (SELECT DISTINCT business_id FROM yp_business_selected_services where service_text in (".$dataToFilterQuotes.") ORDER BY RAND() )LIMIT 5"));
-                   
+                   $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (".implode(',',$buseridsToSendEmail).")"));
+
                    if(!empty($getEmails) && !empty($getEmails[0]) && $getEmails[0]->emails!='')
                    {
                         if(!empty($getEmails[0]->emails))
@@ -580,9 +672,6 @@ class GetNextQuestionController extends Controller
                    }
                }
 
-               
-              
-               
                 return response()->json(['success'=>1,'message'=>'Data saved successfully.'],200);
             }
             // else if($request->phone=='')

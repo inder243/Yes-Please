@@ -48,7 +48,7 @@
                      @endif
                   </div>
                   <div class="contact_user">
-                     <a href="tel:{{$quote_data[0]['get_gen_user']['phone_number']}}" class="user_call"><img src="{{ asset('img/call.png') }}"/></a>
+                     <a href="javascript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="{{ $quote_data[0]['get_gen_user']['phone_number']}}" data-original-title="{{ $quote_data[0]['get_gen_user']['phone_number']}}"><img src="{{ asset('img/call.png') }}"/></a>
                      <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
                   </div>
                   <div class="review_section">

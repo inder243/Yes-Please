@@ -30,15 +30,18 @@ class GeneralUserLoginController extends Controller
       $this->middleware('guest:general_user', ['except' => ['logout','index','showPublicProfile']]);
     }
 
+    /******
+    ** fn to display business on category page with locations
+    *******/
     public function index(Request $request,$catid = null, $location = null){
 
       if(!is_numeric($catid)){
         return abort(404);
       }
 
-      $check_id_exist_db = YpBusinessCategories::where('id','28hhhh')->get()->toArray();
+      $check_id_exist_db = YpBusinessCategories::where('id','28')->get()->toArray();
 
-      /******if id is empty the redierct to 404 page******/
+      /******if id is empty the redirect to 404 page******/
       if(empty($check_id_exist_db)){
 
         return abort(404);
@@ -298,8 +301,7 @@ class GeneralUserLoginController extends Controller
         }
        
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
-      }
-      else if($request->attr_status == 'quotessingle'){
+      }else if($request->attr_status == 'quotessingle'){
   
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
        
@@ -313,6 +315,22 @@ class GeneralUserLoginController extends Controller
         }
        
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
+
+      }else if($request->attr_status == 'questionsingle'){
+  
+        if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+       
+          if(Auth::guard('general_user')->user()->admin_approve == '1'){
+              return response()->json(['success'=>'4','message'=>'Login Successfull']);
+          }else{
+              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+          }
+
+
+        }
+       
+        return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
+
       }else if($request->attr_status == 'simple'){
 
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
