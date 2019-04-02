@@ -820,14 +820,18 @@ function getOnlyStaticQuestions()
               		$('.dynmic_quoteform .form-ques').hide();
 			    	$('.dynmic_quoteform .static_ques').hide();
 			    	$('.dynmic_quoteform .'+attr_status_nxt_question).show();
+			    	$('#ask_quote').find('.static_ques_4').find('.mobl_phn').val('');
+              		$('#ask_quote').find('.static_ques_4').find('.mobl_phn').val(data.phone);
               		
               	}
               	if(data.success == '3'){
 
               		$('#general_login1').modal('hide');
               		$('#work_description').modal('show');
-                  	$('.describe_work').css('display','none');
-                  	$('.img_vid_popup').css('display','block');
+                  	$('#work_description').find('.describe_work').css('display','none');
+                  	$('#work_description').find('.img_vid_popup').css('display','block');
+                  	$('#work_description').find('.mobile_phone_pop').find('.mobl_phn').val('');
+                  	$('#work_description').find('.mobile_phone_pop').find('.mobl_phn').val(data.phone);
               	}
            	}
 

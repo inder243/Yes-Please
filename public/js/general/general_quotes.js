@@ -174,30 +174,26 @@ $(document).ready(function(){
       e.preventDefault();
       /******display images on select image*****/
       $('#work_description .select_verify_img').change(function(e){
-            e.preventDefault();
-          var images = e.target.files;
-          //$('.reg_img_msg').text('');
-          var name='';
-          var count = 0;
-          $.each( images, function( key, value ) {
-            if(count > 0){
-              name += value.name+', ';
-            }else{
-              name = value.name+', ';
-            }
-            count++;
-              //$('.reg_img_msg').append(value.name+', ');
-          });
-          if(name != ''){            
-            name = name.slice(0, -2);
-            $('#work_description .registrationform .drag_option_main').after('<span id="image_names">'+name+'</span>');
-            if(count > 0){
-              $('#work_description .img_vid_popup .P_N_btn a.skip_pic_vid').text('Next');
-            }
+        e.preventDefault();
+        var images = e.target.files;
+        //$('.reg_img_msg').text('');
+        var name='';
+        var count = 0;
+        $.each( images, function( key, value ) {
+          if(count > 0){
+            name += value.name+', ';
+          }else{
+            name = value.name+', ';
           }
-          //alert(name);
+          count++;
+          $('#work_description .registrationform .drag_option_main').find('#msg').append(value.name+', ');
 
+          if(count > 0){
+            $('#work_description .img_vid_popup .P_N_btn a.skip_pic_vid').text('Next');
+          }
         });
+
+      });
 
       /****check data****/
       var text_desc = $('#work_description').find('.work_description_modal').val();

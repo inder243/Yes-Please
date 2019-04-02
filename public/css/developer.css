@@ -16,6 +16,23 @@
   transition: .5s all;
   border: none;
 }
+.cookies {
+    padding-bottom: 30px;
+}
+.cookies_main {
+    text-align: center;
+    color: #1b2137;
+    position: relative;
+}
+.js-cookie-consent-agree.cookie-consent__agree {
+    background-color: #ed0c6e;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    display: inline-block;
+    padding: 3px 7px 3px 7px;
+    border-radius: 3px;
+}
 .next #next_submit:hover {
 
     text-decoration: none;
@@ -614,4 +631,8 @@ input[type=number] {
     font-size: 20px;
     text-align: center;
     margin-bottom: 20px;
+}
+#single_ques_title:focus {
+    box-shadow: none;
+    border: 1px solid #d8d3d3;
 }

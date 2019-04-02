@@ -9,11 +9,12 @@ use App\Models\YpBusinessUserCcDetails;
 use App\Models\YpBusinessUserCategories;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessUserTransactions;
+use App\Models\YpBusinessUsersQuotes;
 
 
 
 trait BusinessUserProSettingsTrait {
-    public function getProSettings() 
+    public function getProSettings($currentMonth,$currentYear) 
     {
     	//get business user id from auth
         $bUserId  = Auth::user()->id;
@@ -27,7 +28,11 @@ trait BusinessUserProSettingsTrait {
         	$proSettings['wallet_amount'] = $monthlyBudget['wallet_amount']; //total amount
         	$proSettings['updated_wallet_amount'] = $monthlyBudget['updated_wallet_amount'];//updated amount
         }
-
+        else
+        {
+            $proSettings['wallet_amount'] = 0; //total amount
+            $proSettings['updated_wallet_amount'] = 0;//updated amount
+        }
         //get mode type free or pro of logged in user
         $getSettings = YpBusinessUsers::select("advertise_mode")->where("id",$bUserId)->first(); 
 
@@ -36,9 +41,11 @@ trait BusinessUserProSettingsTrait {
         	$proSettings['advertise_mode'] = $getSettings['advertise_mode'];
         }
         
-        $currentMonth = date('m');
-        $currentYear = date('Y');
+        
 
+        $proSettings['month'] = $currentMonth.'-'.$currentYear;
+        $proSettings['m'] = $currentMonth;
+        $proSettings['y'] = $currentYear;
         //get count of Quotes requests with phone,total of amount deduction for bids of Quotes requests with phone for current month
 
         $calculationsQuoteWithPh = YpBusinessUserTransactions::select(DB::raw('count(id) as countOfBid, sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
@@ -49,6 +56,11 @@ trait BusinessUserProSettingsTrait {
         {
             $proSettings['countOfBidWithPh'] = $calculationsQuoteWithPh[0]['countOfBid'];
             $proSettings['sumOfbidWithPh'] = $calculationsQuoteWithPh[0]['sumOfbid'];
+        }
+        else
+        {
+            $proSettings['countOfBidWithPh'] = 0;
+            $proSettings['sumOfbidWithPh'] = 0;
         }
 
        
@@ -61,7 +73,11 @@ trait BusinessUserProSettingsTrait {
             $proSettings['countOfBidWithoutPh'] = $calculationsQuoteWithoutPh[0]['countOfBid'];
             $proSettings['sumOfbidWithoutPh'] = $calculationsQuoteWithoutPh[0]['sumOfbid'];
         }
-
+        else
+        {
+            $proSettings['countOfBidWithoutPh'] = 0;
+            $proSettings['countOfBidWithoutPh'] = 0;
+        }
         //get count of clicks of top ad,total of amount deduction for bids of clicks of top ad for current month
 
         $calculationsTopAd = YpBusinessUserTransactions::select(DB::raw('count(id) as countOfBid, sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",4)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
@@ -71,15 +87,37 @@ trait BusinessUserProSettingsTrait {
             $proSettings['countOfTopAd'] = $calculationsTopAd[0]['countOfBid'];
             $proSettings['sumOfTopAd'] = $calculationsTopAd[0]['sumOfbid'];
         }
+        else
+        {
+            $proSettings['countOfTopAd'] = 0;
+            $proSettings['sumOfTopAd'] = 0;
+        }
 
          //get total  month deduction for this month
 
         $calculationsTotalForMonth = YpBusinessUserTransactions::select(DB::raw('sum(amount) as sumOfbid'))->where("type",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
 
-        if(!empty($calculationsTotalForMonth))
+        if(!empty($calculationsTotalForMonth) && $calculationsTotalForMonth[0]['sumOfbid'])
         {
             $proSettings['totalSpent'] = $calculationsTotalForMonth[0]['sumOfbid'];
             
+        }
+        else
+        {
+            $proSettings['totalSpent'] =0;
+        }
+
+        //get deals that are closed for this month
+        $calculationsClosedDeals = YpBusinessUsersQuotes::select(DB::raw('count(id) as closedDeals'))->where("status",6)->where("business_id",$bUserId)->whereMonth('updated_at', $currentMonth)->whereYear('updated_at', $currentYear)->get();
+
+        if(!empty($calculationsClosedDeals) && $calculationsClosedDeals[0]['closedDeals'])
+        {
+            $proSettings['closedDeals'] = $calculationsClosedDeals[0]['closedDeals'];
+            
+        }
+        else
+        {
+            $proSettings['closedDeals'] =0;
         }
 
         return $proSettings;

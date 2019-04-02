@@ -17,6 +17,7 @@ use App\Models\YpBusinessUserHashtags;
 use App\Models\YpBusinessUsersQuotes;
 use App\Models\YpFormQuestions;
 use App\Models\YpBusinessSelectedServices;
+use App\Http\Traits\BusinessUserProSettingsTrait;
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -37,6 +38,7 @@ class BusinessUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use BusinessUserProSettingsTrait;
     public function index()
     {
         $b_id               = Auth::user()->id;
@@ -54,11 +56,17 @@ class BusinessUserController extends Controller
 
         $getPaymentModeOfBusinessUser = YpBusinessUsers::select('advertise_mode')->where('id',$b_id)->first();
 
+        //get pro settings
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        $getSettings = $this->getProSettings($currentMonth,$currentYear);
+
         if($completed_steps < 7){
             Auth::guard('business_user')->logout();
             return redirect('/business_user/register_'.$arr[$redirect_to_step].'/'.$business_user_id);
         }else{
-            return view('/business/business_dashboard')->with(array('quoteCount'=>$quoteCount,'paymentMode'=>$getPaymentModeOfBusinessUser));
+            return view('/business/business_dashboard')->with(array('quoteCount'=>$quoteCount,'paymentMode'=>$getPaymentModeOfBusinessUser,'monthlyBudget'=>$getSettings));
         }
     }
 

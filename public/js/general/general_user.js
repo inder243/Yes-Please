@@ -330,7 +330,7 @@ $(document).ready(function(){
       		var attr_status = 'simple';
       	}
       	
-      //	alert(attr_status);return false;
+      	alert(attr_status);return false;
 
 		var url_general = $('.action_general').val();
 		var website_url = $('.website_url').val();
@@ -381,12 +381,16 @@ $(document).ready(function(){
               	if(data.success == '2'){
               		$('#general_login').modal('hide');
               		$('#ask_quote').modal('show');
+              		$('#ask_quote').find('.static_ques_4').find('.mobl_phn').val('');
+              		$('#ask_quote').find('.static_ques_4').find('.mobl_phn').val(data.phone);
               	}
               	if(data.success == '3'){
               		$('#general_login').modal('hide');
               		$('#work_description').modal('show');
-                  	$('.describe_work').css('display','none');
-                  	$('.img_vid_popup').css('display','block');
+                  	$('#work_description').find('.describe_work').css('display','none');
+                  	$('#work_description').find('.img_vid_popup').css('display','block');
+                  	$('#work_description').find('.mobile_phone_pop').find('.mobl_phn').val('');
+                  	$('#work_description').find('.mobile_phone_pop').find('.mobl_phn').val(data.phone);
               	}
 
               	/*****login from single question******/
@@ -395,7 +399,9 @@ $(document).ready(function(){
               		$('#ask_question').modal('show');
                   	$('#ask_question').find('.descrptn_qus').css('display','none');
 					$('#ask_question').find('.similar_result_qus').css('display','none');
-					$('#ask_question').find('.Question_sent').css('display','block');
+					$('#ask_question').find('.mobile_phn_pop').css('display','block');
+					$('#ask_question').find('.mobile_phn_pop').find('.mobl_phn').val('');
+					$('#ask_question').find('.mobile_phn_pop').find('.mobl_phn').val(data.phone);
               	}
            	}
 

@@ -32,13 +32,45 @@ class BusinessQuotesController extends Controller
     /*********************************
 	Display quotes and questions pages
     *********************************/
-    public function showQuotesQuestions($quote_status = null, $quote_keyword = null){
+    public function showQuotesQuestions(Request $request){
         $b_id = Auth::id();
 
+        $month = isset($request->month)?$request->month:'';
+        $type = isset($request->type)?$request->type:'';
+        $quote_status = isset($request->quote_status)?$request->quote_status:null;
+        $quote_keyword = isset($request->quote_keyword)?$request->quote_keyword:null;
         if($quote_status == null && $quote_keyword == null){
 
             try{
-                $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
+                //code will work if redirection is from advertisement dashboard
+                if(!empty($month) && !empty($type))
+                {
+                    $monthdata = explode('-',$month);
+                    $currentMonth = $monthdata[0];
+                    $currentYear = $monthdata[1];
+
+                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+                   if($type==1)
+                    {
+                       $quotes = $quotes->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','!=','');
+                        });
+                    } 
+                    else if($type==2)
+                    {
+                        $quotes = $quotes->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','=',null);
+                        });
+                    } 
+                    
+                    $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                }
+                else
+                {
+                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
+                }
             }catch(\Exception $e){
                 return $e->getMessage();
             }
@@ -54,7 +86,38 @@ class BusinessQuotesController extends Controller
             if($quote_keyword !== null){
 
                 try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                    if(!empty($month) && !empty($type))
+                    {
+                        $monthdata = explode('-',$month);
+                        $currentMonth = $monthdata[0];
+                        $currentYear = $monthdata[1];
+
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+                        
+                       if($type==1)
+                        {
+                           $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','!=','');
+                            });
+                        } 
+                        else if($type==2)
+                        {
+                            $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','=',null);
+                            });
+                        } 
+                        
+                        $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                        //code will work if redirection is from advertisement dashboard
+                    }
+                    else
+                    {
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
+                    }
+                    
                 }catch(\Exception $e){
                     return $e->getMessage();
                 }
@@ -62,7 +125,40 @@ class BusinessQuotesController extends Controller
             }else{
 
                 try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                    if(!empty($month) && !empty($type))
+                    {
+                        $monthdata = explode('-',$month);
+                        $currentMonth = $monthdata[0];
+                        $currentYear = $monthdata[1];
+
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+                        
+                       if($type==1)
+                        {
+                           $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','!=','');
+                            });
+                        } 
+                        else if($type==2)
+                        {
+                            $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','=',null);
+                            });
+                        } 
+                        
+                        $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                        //code will work if redirection is from advertisement dashboard
+                    }
+                    else
+                    {
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
+                    }
+                    
+
+
                 }catch(\Exception $e){
                     return $e->getMessage();
                 }
@@ -76,7 +172,38 @@ class BusinessQuotesController extends Controller
             if($quote_keyword !== null){
 
                 try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                    if(!empty($month) && !empty($type))
+                    {
+                        $monthdata = explode('-',$month);
+                        $currentMonth = $monthdata[0];
+                        $currentYear = $monthdata[1];
+
+                         $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+                       if($type==1)
+                        {
+                           $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','!=','');
+                            });
+                        } 
+                        else if($type==2)
+                        {
+                            $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','=',null);
+                            });
+                        } 
+                        
+                        $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                        //code will work if redirection is from advertisement dashboard
+                    }
+                    else
+                    {
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
+                    }
+                    
+
                 }catch(\Exception $e){
                     return $e->getMessage();
                 }
@@ -84,7 +211,39 @@ class BusinessQuotesController extends Controller
             }else{
 
                 try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                    if(!empty($month) && !empty($type))
+                    {
+                        $monthdata = explode('-',$month);
+                        $currentMonth = $monthdata[0];
+                        $currentYear = $monthdata[1];
+
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+
+                       if($type==1)
+                        {
+                           $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','!=','');
+                            });
+                        } 
+                        else if($type==2)
+                        {
+                            $quotes = $quotes->whereHas('get_quotes', function($q) {
+                            $q->where('phone_number','=',null);
+                            });
+                        } 
+                        
+                        $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                        //code will work if redirection is from advertisement dashboard
+                    }
+                    else
+                    {
+                        $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
+
+                    }
+                    
                 }catch(\Exception $e){
                     return $e->getMessage();
                 }
@@ -96,7 +255,38 @@ class BusinessQuotesController extends Controller
         }else{
 
             try{
-                $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
+
+                if(!empty($month) && !empty($type))
+                {
+                    $monthdata = explode('-',$month);
+                    $currentMonth = $monthdata[0];
+                    $currentYear = $monthdata[1];
+
+                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+
+                    if($type==1)
+                    {
+                       $quotes = $quotes->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','!=','');
+                        });
+                    } 
+                    else if($type==2)
+                    {
+                        $quotes = $quotes->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','=',null);
+                        });
+                    } 
+                    
+                    $quotes = $quotes->orderBy('id','desc')->get()->toArray();
+
+                    //code will work if redirection is from advertisement dashboard
+                }
+                else
+                {
+                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
+                }
+                
+
             }catch(\Exception $e){
                 return $e->getMessage();
             }
@@ -105,7 +295,7 @@ class BusinessQuotesController extends Controller
             
         }
         
-    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting]);
+    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting,'month'=>$month,'type'=>$type]);
     }
 
     /********************

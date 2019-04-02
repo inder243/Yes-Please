@@ -48,7 +48,7 @@
                   <a href="javascript:;"><img src="{{ asset('img/inactive_star.png') }}"/></a>
                   <div class="rating_btns">
                     <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
-                    <a href="javascript:;" data-toggle="modal" data-target="#ask_question">Ask question</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#ask_question" data-backdrop="static" data-keyboard="false">Ask question</a>
                     <a href="javascript:;">Schedule appointment</a>
                   </div>
                 </span>

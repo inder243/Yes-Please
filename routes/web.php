@@ -149,6 +149,7 @@ Route::prefix('business_user')->group(function() {
     Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
     /**********Quotes and Questions*********/
+    
     Route::get('/quotes_questions/{status?}/{keyword?}',
    'business_user\BusinessQuotesController@showQuotesQuestions')->name('business_user.quotes');
     Route::get('/quotes_request/{quote_id}',
@@ -163,9 +164,13 @@ Route::prefix('business_user')->group(function() {
     Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
     Route::post('/quote_template_delete', 'business_user\BusinessQuotesController@deleteQuoteTemplates')->name('business_user.deletequote_template');
     Route::post('/add_selected_service', 'Auth\RegisterBusinessUserController@addSelectedService')->name('business_user.add_selected_service');
-    Route::get('/advertisement_free_mode', 'business_user\AdvertisementController@index');
+
+    /**********************Advertisement******************/
+    Route::get('/advertisement_dashboard', 'business_user\AdvertisementController@index');
+    Route::post('/advertisement_dashboard', 'business_user\AdvertisementController@index');
     Route::get('/advertisement_pro_mode', 'business_user\AdvertisementController@proMode');
     Route::post('/save_pro_mode_settings', 'business_user\AdvertisementController@saveProModeSettings')->name('business_user.saveProModeSettings');
+    Route::post('/testPayment', 'business_user\AdvertisementController@testPayment');
 
   });
 

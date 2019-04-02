@@ -7,11 +7,24 @@ $(document).ready(function(){
 		var home_url = $('#home_url').val();
 		var quote_status = $(this).find(":selected").val();
 		var quote_keyword = $(this).find('.bus_quote_keyword').val();
+		var monthval = getParameterByName('month'); // "month"
+		var typeval = getParameterByName('type'); // "type"
+
+		home_url = home_url+'business_user/quotes_questions';
+
+		if(monthval!='' && monthval!=undefined && typeval!='' && typeval!=undefined)
+		{
+			home_url = home_url+'?month='+monthval+'&type='+typeval+'&';
+		}
+		else
+		{
+			home_url = home_url+'/business_user/quotes_questions?';
+		}
 
 		if(quote_keyword == ''){
-	      location.href = home_url+'business_user/quotes_questions/'+quote_status;
+	      location.href = home_url+'quote_status='+quote_status;
 	    }else{
-	      location.href = home_url+'business_user/quotes_questions/'+quote_status+'/'+quote_keyword;
+	      location.href = home_url+'quote_status='+quote_status+'&quote_keyword='+quote_keyword;
 	    }
 
 	});/***search submit ends***/
@@ -266,4 +279,14 @@ function remove_errorrmsg(data){
     	$(data).removeClass('error_border');
 	}
 
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

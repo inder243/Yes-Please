@@ -280,7 +280,7 @@
 
                         
 
-                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
                           <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
                         <div class="form-group col-md-12 col-12 padding_none">
                           <label for="email">Email</label>
@@ -316,7 +316,7 @@
                   <form id="forgot_password_business" method="POST" action="">
                         <?php echo e(csrf_field()); ?>                       
 
-                           <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
+                          <input type="hidden" class="action_business" value="https://yesplease.iapptechnologies.com/business_user/login">
                           <input type="hidden" class="website_url_b" value="https://yesplease.iapptechnologies.com">
                         <div class="form-group col-md-12 col-12 padding_none">
                           <label for="email">Email</label>
@@ -673,10 +673,41 @@
                 </div>
                 <div class="for_next_btn">
                   <!-- <a href="javascript:;" class="descr_ques" data-toggle="modal" data-target="#similiar_result"> -->
-                    <a href="javascript:;" class="descr_ques">Next ></a>
+                  <a href="javascript:;" class="descr_ques">Next ></a>
                 </div>
               </div>
             </div>
+
+            <!--------popup for image video------->
+            <div class="img_vid_popup" style="display:none;">
+              <div class="registrationform">
+                <div class="description_optional row">
+
+                </div>
+                <div class="D_main">
+                  <h1>Add photos, videos or documents that can help the business understand your needs.</h1>
+                  <div class="drag_option_main">
+                    <div class="select_upload">
+                      <div class="upload_file_section">
+                        <div class="file_to_upload gen_single_quote_upload">
+                          <div class="upload-btn-wrapper">
+                            <button class="btn">Select files to upload</button>
+                            <input type="file" id="single_ques_imgs" name="myfile[]" multiple class="select_single_ques_img" accept="image/x-png,image/gif,image/jpeg"/>
+                            <span id="msg"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="P_N_btn">
+                <a href="javascript:;" class="btn_for_skip skip_btn_imgs">Skip</a>
+              </div>
+            </div>
+            <!-----------upload image video popup ends----------->
+
             <div class="similar_result_section similar_result_qus" style="display:none;">
               <h1>We found similar results</h1>
               <p>Try to found answer to your question</p>
@@ -727,6 +758,37 @@
                 </div>
               </div>
             </div>
+
+
+            <!----------popup for mobile phone------------>
+            <div class="not_all_business mobile_phn_pop" style="display:none;">
+              <h1>Not all businesses reply to quote requests
+              without phone. Enter your phone number
+              to get more offers.
+              </h1>
+              <div class="ph_detail">
+                <div class="form-group ">
+                  <label for="inputEmail4">Phone number</label>
+                  <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="<?php if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)): ?><?php echo e(Auth::guard('general_user')->user()->phone_number); ?><?php endif; ?>" onkeyup="remove_errmsg(this)">
+                  <span class="fill_fields" role="alert"></span>
+
+                  <div id="example2"></div>
+                   <div id="recaptcha" value="" hidden="hidden"></div>
+                  <span class="fill_fields recaptcha_error" role="alert" style="display:none;"></span>
+
+                </div>
+
+                <div class="all_business_ph">
+                  <div class="ele_pre"><input type="submit" name="validate" value="Validate" class="mobile_validate_submit SubmitSingleQues"></div>
+                  <div class="ele_next"><input type="submit" name="dont_want" class="mobile_dont_want SubmitSingleQues" value="Don’t want"></div>
+                </div>
+                <div class="t_detail mb-4">
+                  <p><img src="<?php echo e(asset('img/info.png')); ?>">Add phone number.</p>
+                </div>
+              </div>
+            </div>
+            <!---------Mobile phone popup ends----------->
+
             <div class="describe_question Question_sent" style="display:none;">
               <h1>Question sent</h1>
               <div class="descibe_question_steps">
@@ -735,8 +797,8 @@
                   <h1>You can go to questions page to view your questions.</h1>
                 </div>
                 <div class="for_next_btn seequestion_close">
-                    <a href="javascript:;" >See questions</a>
-                  <a href="javascript:;">Close</a>
+                  <a href="javascript:;" >See questions</a>
+                  <a href="javascript:;" class="close_single_questions">Close</a>
                 </div>
               </div>
             </div>
@@ -747,75 +809,6 @@
     </div>
   </div>
   <!-- ask question Modal end-->
-
-<!-- Similar  Modal start-->
-
-<div class="modal fade" id="similiar_result" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-<div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
-  <div class="modal-content login_model">
-    <div class="modal-header">
-
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body ">
-      <div class="similar_result_section">
-        <h1>We found similar results</h1>
-        <p>Try to found answer to your question</p>
-        <div class="questin_total_ans">
-          <ul>
-            <li>
-              <div class="Question_main_div">
-                <h1>How long it takes to design paper for office?</h1>
-                <p>(5 answers)</p>
-              </div>
-            </li>
-            <li>
-              <div class="Question_main_div">
-                <h1>How long is A4 Page?</h1>
-                <p>(2 answers)</p>
-              </div>
-            </li>
-            <li>
-              <div class="Question_main_div">
-                <h1>Curabitur sit amet justo vel est dictum tincidunt. Maecenas egestas, libero vitae iaculis
-                    mollis, erat risus tempus est, non vehicula mauris nibh ac magna?</h1>
-                <p>(17 answers)</p>
-              </div>
-            </li>
-            <li>
-              <div class="Question_main_div">
-                <h1>Nullam rhoncus vel ipsum non consectetur?</h1>
-                <p>(3 answers)</p>
-              </div>
-            </li>
-            <li>
-              <div class="Question_main_div">
-                <h1>Donec at ultricies est, a varius leo?</h1>
-                <p>(14 answers)</p>
-              </div>
-            </li>
-            <li>
-              <div class="Question_main_div">
-                <h1>Vestibulum vel sagittis mi, non aliquam enim. Curabitur sed tellus aliquet, rhoncus nibh id, gravida nulla?</h1>
-                <p>(3 answers)</p>
-              </div>
-            </li>
-          </ul>
-          <div class="send_to_business">
-            <a href="javascript:;" data-toggle="modal" data-target="#exampleModalCenter_login">No, send question to businesses</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-</div>
-<!-- Similar  Modal end-->
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -839,6 +832,7 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     
     <!--autocomplete address-->
     <script>
@@ -1434,6 +1428,22 @@
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()
   });
+
+  var verifyCallback = function(response) {
+    $("#recaptcha").html(response);
+  };
+
+  var widgetId2;
+  var onloadCallback = function() {
+
+  
+    widgetId2 = grecaptcha.render(document.getElementById('example2'), {
+        'sitekey': '6Ld0TZsUAAAAAODQp0M1xRBK2M8jrKw0mZ4efGXB',
+        'callback': verifyCallback,
+    });
+
+  };
+
     </script>
 
 

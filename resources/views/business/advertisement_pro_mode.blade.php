@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb advertisment_breadcrumb">
-           <div><a href="JavaScript:;">Dashboard</a>/<a href="JavaScript:;">Advertisement</a>/<span class="q_breadcrumb">Start pro mode</span></div>
+           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<a href="JavaScript:;">Advertisement</a>/<span class="q_breadcrumb">Start pro mode</span></div>
            <div class="setup_things"><a href="javascript:;">How to set things up?</a></p></div>
          </div>
       </section>
@@ -98,6 +98,7 @@
                                 @if(isset($getSelectedCats) && !empty($getSelectedCats))
                                   @foreach($getSelectedCats as $getSelectedCat)
                                   <li class="home_imp_list">
+                                    <h1>{{$getSelectedCat['buser_cat']['category_name']}}</h1>
                                     <div class="text-input">
                                     <input type="number" value="@if($getSelectedCat['quote_with_ph']!=0){{$getSelectedCat['quote_with_ph']}}@else{{$getSelectedCat['buser_cat']['quote_with_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
                                     <span>5 NIS minimum</span>
@@ -119,7 +120,7 @@
                                 @if(isset($getSelectedCats) && !empty($getSelectedCats))
                                   @foreach($getSelectedCats as $getSelectedCat)
                                   <li class="home_imp_list">
-                                    <h1>Home improvement</h1>
+                                    <h1>{{$getSelectedCat['buser_cat']['category_name']}}</h1>
                                     <div class="text-input">
                                     <input type="number" value="@if($getSelectedCat['quote_without_ph']!=0){{$getSelectedCat['quote_without_ph']}}@else{{$getSelectedCat['buser_cat']['quote_without_ph']}}@endif" name="{{$getSelectedCat['category_id']}}[]" required>
                                     <span>1 NIS minimum</span>
@@ -139,6 +140,7 @@
                                  @if(isset($getSelectedCats) && !empty($getSelectedCats))
                                   @foreach($getSelectedCats as $getSelectedCat)
                                     <li class="home_imp_list1">
+                                      <h1>{{$getSelectedCat['buser_cat']['category_name']}}</h1>
                                       <div class="text-input">
                                         <div class="text-input">
                                           <div class="formcheck forcheckbox">
@@ -253,4 +255,14 @@
           </div>
         </div>
       </section>
+      <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="{{ asset('img/cookie_close.png') }}"/></span> -->@include('cookieConsent::index')</div>
+          </div>
+        </div>
+      </div>
+    </section>
 @endsection

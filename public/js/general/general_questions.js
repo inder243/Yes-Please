@@ -47,7 +47,41 @@ $(document).ready(function(){
 		}
 
 		$('#ask_question').find('.descrptn_qus').css('display','none');
+		$('#ask_question').find('.img_vid_popup').css('display','block');
+		//$('#ask_question').find('.similar_result_qus').css('display','block');
+
+
+		/******display images on select image*****/
+		$('#ask_question .select_single_ques_img').change(function(e){
+			e.preventDefault();
+
+			var images = e.target.files;
+			//$('.reg_img_msg').text('');
+			var name='';
+			var count = 0;
+			$.each( images, function( key, value ) {
+				if(count > 0){
+					name += value.name+', ';
+				}else{
+					name = value.name+', ';
+				}
+				count++;
+				$('#ask_question .registrationform .drag_option_main').find('#msg').append(value.name+', ');
+
+				if(count > 0){
+					$('#ask_question .img_vid_popup .P_N_btn a.skip_btn_imgs').text('Next');
+				}
+			});
+
+		});/*******display images code ends here*******/
+	});
+
+
+	$('.skip_btn_imgs').click(function(e){
+		e.preventDefault();
+		$('#ask_question').find('.img_vid_popup').css('display','none');
 		$('#ask_question').find('.similar_result_qus').css('display','block');
+
 	});
 
 
@@ -66,22 +100,22 @@ $(document).ready(function(){
 		    }
 		});
 
-		//var home_url = $('#home_url').val();
+		var home_url = $('#home_url').val();
 		var ask_qus_url 			= $('#ask_question').find('.ask_qus_url').val();
 		
 		var question_title 			= $('#ask_question').find('.descrptn_qus').find('.question_title').val();
 		var question_description 	= $('#ask_question').find('.descrptn_qus').find('.question_description').val();
 		var hidden_cat_name 		= $('#ask_question').find('.hidden_cat_name').val();
 		var hidden_cat_id 			= $('#ask_question').find('.hidden_cat_id').val();
-
+		
 		data = new FormData();
 		data.append('question_title',question_title);
 		data.append('question_description',question_description);
 		data.append('hidden_cat_name',hidden_cat_name);
 		data.append('hidden_cat_id',hidden_cat_id);
-
+		
 		jQuery('.pre_loader').css('display','block');
-
+		
 		/*****Check if user is logged in or not****/
 		$.ajax({
 			type:'POST',
@@ -90,30 +124,12 @@ $(document).ready(function(){
 			success:function(data){
 				jQuery('.pre_loader').css('display','none');
 				if(data.success == '1'){
-					
+
 					/***user logged in****ajax to submit question data****/
-					$.ajax({
-						type:'POST',
-			           	url:ask_qus_url,
-			           	data:data,
-			           	contentType: false,
-						cache: false,
-						processData:false,
-			           	success:function(data){
-			           		jQuery('.pre_loader').css('display','none');
-			           		if(data.success == 1){
-			           			$('#ask_question').find('.descrptn_qus').css('display','none');
-								$('#ask_question').find('.similar_result_qus').css('display','none');
-								$('#ask_question').find('.Question_sent').css('display','block');
-			           		}
-
-			           		if(data.success == 0){
-			           			alert(data.message);
-			           		}
-
-			           	}
-
-					});/****ajax ends to submit question data****/
+					$('#ask_question').find('.descrptn_qus').css('display','none');
+					$('#ask_question').find('.similar_result_qus').css('display','none');
+					$('#ask_question').find('.mobile_phn_pop').css('display','block');
+					
 				}
 
 				if(data.success == '0'){
@@ -129,6 +145,123 @@ $(document).ready(function(){
 
         /***** end code for Check if user is logged in or not****/
 
+
+	});
+
+	/********Submit on validate/dont_want mobile*******/
+	$('.SubmitSingleQues').click(function(e){
+		e.preventDefault();
+
+		$.ajaxSetup({
+		    headers: {
+		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    }
+		});
+
+		if (grecaptcha.getResponse() == ''){
+			alert('Please verify Recaptcha');
+			// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').css('display','block');
+			// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').text('Please verify Recaptcha');
+			return false;
+		}
+
+
+		var validate_mob_check 		= $(this).attr('name');
+
+		var ask_qus_url 			= $('#ask_question').find('.ask_qus_url').val();
+		
+		var question_title 			= $('#ask_question').find('.descrptn_qus').find('.question_title').val();
+		var question_description 	= $('#ask_question').find('.descrptn_qus').find('.question_description').val();
+		var hidden_cat_name 		= $('#ask_question').find('.hidden_cat_name').val();
+		var hidden_cat_id 			= $('#ask_question').find('.hidden_cat_id').val();
+		var phone_number            = $('#ask_question').find('.mobile_phn_pop').find('.mobl_phn').val();
+
+
+		var multipleBusiness = [];
+		var question_type = '';
+
+		if(window.location.href.indexOf("dashboard/catid") > -1) {
+
+			/*****code to get selected business users****/
+			var listItems = $(".all_bus_by_cat li");
+	      	
+			listItems.each(function(idx, li) {
+		    
+			   selectedli = $(li).find('.select_this');
+			   selectedChk = $(selectedli).find('input[type=checkbox]');
+			   chkBoxId = $(selectedChk).attr('id');
+
+			   if($('#' + chkBoxId).is(":checked")){
+			   		multipleBusiness.push($('#' + chkBoxId).attr('data-title'));
+			   }
+			  	    	
+			});
+			/*****code ends here to get selected business users*****/
+			question_type = 'multiple';
+
+		}else{
+			multipleBusiness = [];
+			question_type    = 'single';
+		}
+		
+		//console.log(multipleBusiness);return false;
+
+		data = new FormData();
+		data.append('question_title',question_title);
+		data.append('question_description',question_description);
+		data.append('hidden_cat_name',hidden_cat_name);
+		data.append('hidden_cat_id',hidden_cat_id);
+		data.append('validate_mob_check',validate_mob_check);
+		data.append('phone_number',phone_number);
+		data.append('question_type',question_type);
+		data.append('multipleBusiness',multipleBusiness);
+
+		jQuery('.pre_loader').css('display','block');
+
+		/*****append images****/
+		error='';
+			
+		var files = $('#single_ques_imgs')[0].files;
+		for(var count = 0; count<files.length; count++){
+
+			var name = files[count].name;
+			var extension = name.split('.').pop().toLowerCase();
+
+			if(jQuery.inArray(extension, ['gif','png','jpg','jpeg']) == -1){
+				error += "Invalid " + count + " Image File"
+			}else{
+				data.append("files[]", files[count]);
+			}
+		}
+
+
+
+		jQuery('.pre_loader').css('display','block');
+
+		/******ajax starts*****/
+		$.ajax({
+			type:'POST',
+           	url:ask_qus_url,
+           	data:data,
+           	contentType: false,
+			cache: false,
+			processData:false,
+           	success:function(data){
+           		jQuery('.pre_loader').css('display','none');
+           		if(data.success == 1){
+           			$('#ask_question').find('.descrptn_qus').css('display','none');
+					$('#ask_question').find('.similar_result_qus').css('display','none');
+					$('#ask_question').find('.mobile_phn_pop').css('display','none');
+					$('#ask_question').find('.Question_sent').css('display','block');
+           		}
+
+           		if(data.success == 0){
+           			alert(data.message);
+           		}
+
+           	}
+
+		});/****ajax ends to submit question data****/
 
 	});
 });

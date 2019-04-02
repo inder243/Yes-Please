@@ -599,7 +599,7 @@
                       <a href="javascript:;">Set appointment</a>
                     </div>
                     <div class="ask_for_q">
-                      <a href="javascript:;">Ask question</a>
+                      <a href="javascript:;" class="ask_question_catpage" data-toggle="modal" data-target="#ask_question" data-backdrop="static" data-keyboard="false">Ask question</a>
                     </div>
                   </div>
                 </div>

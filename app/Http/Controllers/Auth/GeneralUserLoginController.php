@@ -133,7 +133,7 @@ class GeneralUserLoginController extends Controller
     
                     $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
                 //echo "<pre>";print_r($results);die;
-                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1));
+                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId));
 
                 }catch(\Exception $e){
                     return response()->json(['success'=>'0','message'=>$e->getMessage()]);  
@@ -238,7 +238,7 @@ class GeneralUserLoginController extends Controller
     
                     $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
                 //echo "<pre>";print_r($results);die;
-                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1));
+                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId));
                 
             }catch(Exception $e){
                 $errorMsg =  $e->getMessage();
@@ -276,9 +276,10 @@ class GeneralUserLoginController extends Controller
         //return view('/user/user_dashboard');
         // return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/general_user/dashboard/catid/1']);
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'2','message'=>'Login Successfull']);
+            $phone_number = Auth::guard('general_user')->user()->phone_number;
+            return response()->json(['success'=>'2','message'=>'Login Successfull','phone'=>$phone_number]);
           }else{
-              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+            return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
 
@@ -292,23 +293,26 @@ class GeneralUserLoginController extends Controller
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
       
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'2','message'=>'Login Successfull']);
+            $phone_number = Auth::guard('general_user')->user()->phone_number;
+            return response()->json(['success'=>'2','message'=>'Login Successfull','phone'=>$phone_number]);
           }else{
-              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+            return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
 
         }
        
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
+        
       }else if($request->attr_status == 'quotessingle'){
   
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
        
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'3','message'=>'Login Successfull']);
+            $phone_number = Auth::guard('general_user')->user()->phone_number;
+            return response()->json(['success'=>'3','message'=>'Login Successfull','phone'=>$phone_number]);
           }else{
-              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+            return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
 
@@ -321,9 +325,10 @@ class GeneralUserLoginController extends Controller
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
        
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'4','message'=>'Login Successfull']);
+            $phone_number = Auth::guard('general_user')->user()->phone_number;
+            return response()->json(['success'=>'4','message'=>'Login Successfull','phone'=>$phone_number]);
           }else{
-              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+            return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
 
@@ -345,20 +350,19 @@ class GeneralUserLoginController extends Controller
         }
        
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
-      }
-      else{
+
+      }else{
 
         if (Auth::guard('general_user')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         
           if(Auth::guard('general_user')->user()->admin_approve == '1'){
-              return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/']);
+            return response()->json(['success'=>'1','message'=>'Login Successfull', 'url'=>'/']);
           }else{
-              return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
+            return response()->json(['success'=>'0','message'=>'Account is not Approved by admin !']);
           }
 
-
         }
-      
+
         return response()->json(['success'=>'0','message'=>'Credentials do not match!']);
       }
 

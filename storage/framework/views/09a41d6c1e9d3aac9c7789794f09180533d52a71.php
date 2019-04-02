@@ -200,6 +200,7 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/wow.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/dropzone.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/bu_advertisement.js')); ?>"></script>
     
     <script>
         wow = new WOW({
