@@ -130,7 +130,7 @@ class GeneralQuestionsController extends Controller
                         $YpBusinessUsersQuestions->business_id  = $b_id;
                         $YpBusinessUsersQuestions->general_id   = $g_id;
                         $YpBusinessUsersQuestions->question_id  = $YpGeneralUsersQuestions->id;
-                        $YpBusinessUsersQuestions->status       = 1;
+                        $YpBusinessUsersQuestions->status_bus   = 1;
                         $YpBusinessUsersQuestions->save();
 
                         /*****send email to business users*****/
@@ -153,12 +153,13 @@ class GeneralQuestionsController extends Controller
 
                                 });
                             }
-                        }
-                        /*****send email ends here*****/
+                        }/*****send email ends here*****/
+
                     }else{
                         return response()->json(['success'=>'0','message'=>'No business user found']);
                         exit;
                     }
+                    
                 }else{
                     return response()->json(['success'=>'0','message'=>'No business user found']);
                         exit;
@@ -179,7 +180,7 @@ class GeneralQuestionsController extends Controller
                         $YpBusinessUsersQuestions->business_id  = $businessUser;
                         $YpBusinessUsersQuestions->general_id   = $g_id;
                         $YpBusinessUsersQuestions->question_id  = $YpGeneralUsersQuestions->id;
-                        $YpBusinessUsersQuestions->status       = 1;
+                        $YpBusinessUsersQuestions->status_bus       = 1;
                         $YpBusinessUsersQuestions->save();
 
                     }/** end foreach**/
@@ -202,7 +203,7 @@ class GeneralQuestionsController extends Controller
 
                                     $message->to($emails)->subject('Yes Please Question Request');
 
-                            });/**mail ends**/
+                            });/**Mail ends**/
                         }
                     }/** end if $getEmails**/
 
@@ -220,5 +221,59 @@ class GeneralQuestionsController extends Controller
         }
 
     }/****fn ends to ask questions***/
+
+    /*****
+    **fn to see question replies
+    ****/
+    public function questionReplies($question_id = null){
+
+        if(!is_numeric($question_id)){
+            return abort(404);
+        }
+
+        $allquestions = YpGeneralUsersQuestions::where('id',$question_id)->first();
+        if(empty($allquestions)){
+            
+            return abort(404);
+
+        }else{
+
+            $g_id = Auth::id();
+
+            if($allquestions->status_gen == '1'){
+
+                /***update status to read ***/
+                YpGeneralUsersQuestions::where(array('id'=>$question_id))->update(['status_gen'=>2]);
+            }
+
+            $question_data = YpBusinessUsersQuestions::with('get_gen_user','get_bus_user','get_ques')->where(['general_id'=>$g_id,'question_id'=>$question_id])->where('status_bus','!=',0)->where('status_bus','=','3')->where('business_answer','!=','')->get()->toArray();
+
+            return view('user.quotes_questions.question_reply')->with(['g_id'=>$g_id,'allquestions'=>$allquestions,'all_data'=>$question_data]);
+        }
+        
+    }/***question reply fn ends here***/
+
+    /***
+    **Mark as answered fn
+    ***/
+    public function markAnswered(Request $request){
+
+        $business_id    = $request->business_id;
+        $question_id    = $request->question_id;
+        $g_id           = Auth::id();
+
+        YpGeneralUsersQuestions::where(array('id'=>$question_id))->update(['status_gen'=>3]);
+
+        YpBusinessUsersQuestions::where(array('question_id'=>$question_id,'general_id'=>$g_id))->update(['mark_answered'=>0]);
+
+        $mark_answered = YpBusinessUsersQuestions::where(array('business_id'=>$business_id,'question_id'=>$question_id,'general_id'=>$g_id))->update(['mark_answered'=>1]);
+
+        if($mark_answered == 1){
+            return response()->json(['success'=>'1','message'=>'Marked as Answered']);
+        }else{
+            return response()->json(['success'=>'0','message'=>'Please try again!']);
+        }
+
+    }/**mark answered fn ends here**/
 
 }

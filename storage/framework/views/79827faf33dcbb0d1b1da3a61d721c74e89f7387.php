@@ -2,7 +2,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?> </span>/<span class="q_breadcrumb">Review <?php if($quote_data[0]['get_gen_user']): ?><?php echo e($quote_data[0]['get_gen_user']['first_name']); ?> <?php echo e($quote_data[0]['get_gen_user']['last_name']); ?><?php endif; ?></span></div>
+           <div><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?><a href="<?php echo e(url('/business_user/advertisement_dashboard')); ?>"> Advertisement </a>/<?php endif; ?><span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?> </span>/<span class="q_breadcrumb">Review <?php if($quote_data[0]['get_gen_user']): ?><?php echo e($quote_data[0]['get_gen_user']['first_name']); ?> <?php echo e($quote_data[0]['get_gen_user']['last_name']); ?><?php endif; ?></span></div>
 
          </div>
       </section>
@@ -114,6 +114,8 @@
                      <input type="hidden" name="review_quote_id" value="<?php echo e($quote_data[0]['quote_id']); ?>">
                      <input type="hidden" name="review_bus_id" value="<?php echo e($quote_data[0]['business_id']); ?>">
                      <input type="hidden" name="review_type" value="business">
+                     <input type="hidden" name="month" value="<?php if(!empty(app('request')->input('month'))): ?><?php echo e(app('request')->input('month')); ?><?php endif; ?>">
+                     <input type="hidden" name="type" value="<?php if(!empty(app('request')->input('type'))): ?><?php echo e(app('request')->input('type')); ?><?php endif; ?>">
                  <div class="write_reviews">
                    <p>Write your review<span><img src="<?php echo e(asset('img/question_img.png')); ?>"/></span></p>
                    <div class="write_sec">
@@ -132,7 +134,11 @@
                    </ul>
                    <input type="hidden" name="star_active" class="hidden_star_active" value="">
                    <div class="review_later">
-                     <a href ="<?php echo e(url('business_user/quotes_questions')); ?>" class="review_later1">Review later</a>
+                      <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                      <a href ="<?php echo e(url('business_user/quotes_questions?month='.app('request')->input('month').'&type='.app('request')->input('type').'')); ?>" class="review_later1">Review later</a>
+                      <?php else: ?>
+                      <a href ="<?php echo e(url('business_user/quotes_questions')); ?>" class="review_later1">Review later</a>
+                      <?php endif; ?>
                      <a href ="JavaScript:;" class="submit_reviewr"><input type="submit" value="Submit review"></a>
                    </div>
                   </div>

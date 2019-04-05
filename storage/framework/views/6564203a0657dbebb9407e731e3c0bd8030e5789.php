@@ -1,7 +1,7 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard</a>/<?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?><a href="<?php echo e(url('/business_user/advertisement_dashboard')); ?>"> Advertisement </a>/<?php endif; ?><a href="<?php echo e(url('/business_user/quotes_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb"> <?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -201,7 +201,9 @@
             	<form class="dropzone" id="dropzone_form" data-page="quoterequest" method="POST" action="<?php echo e(route('business_user.quotes_request.submit')); ?>" enctype="multipart/form-data">
             	<?php echo csrf_field(); ?> 
 
-            	<input type="hidden" name="quote_id" value="<?php echo e($quote_id); ?>">	
+              <input type="hidden" name="quote_id" value="<?php echo e($quote_id); ?>"> 
+              <input type="hidden" name="month" value="<?php if(!empty(app('request')->input('month'))): ?><?php echo e(app('request')->input('month')); ?><?php endif; ?>"> 
+            	<input type="hidden" name="type" value="<?php if(!empty(app('request')->input('type'))): ?><?php echo e(app('request')->input('type')); ?><?php endif; ?>">	
                <div class="reply_quote_main">
                   <h1>Reply to quote</h1>
                   <p>Provide the user with maximum details about your offer</p>

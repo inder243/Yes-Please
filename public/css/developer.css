@@ -8,13 +8,17 @@
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
     -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
     width: 100px;
-		display: inline-block;
-		text-align: center;
-		border-radius: 3px;
-        cursor: pointer;
-  padding: 5px 0 5px 0;
-  transition: .5s all;
-  border: none;
+    display: inline-block;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 5px 0 5px 0;
+    transition: .5s all;
+    border: none;
+}
+.switch_top a:hover {
+    background-color: #d20b61;
+    text-decoration: none;
 }
 .cookies {
     padding-bottom: 30px;
@@ -635,4 +639,19 @@ input[type=number] {
 #single_ques_title:focus {
     box-shadow: none;
     border: 1px solid #d8d3d3;
+}
+.ans_img img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border: 1px solid #ececec;
+    border-radius: 50%;
+}
+.Q_detail_heading1{
+    color: #999999 !important;
+    display: inline-block;
+}
+a.business_answer {
+    padding: 0;
+    margin: 0;
 }

@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
         <section>
           <div class="quote_req_main">
@@ -263,9 +263,21 @@
               @if(!empty($quote_data[0]['get_review']))
                 @if(array_search('general', array_column($quote_data[0]['get_review'], 'user_type')) > -1)
                   @if(array_search('business', array_column($quote_data[0]['get_review'], 'user_type')) > -1)
+
+                    @if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))
+                    <a href="{{ url('/business_user/quotes_questions?month='.app('request')->input('month').'&type='.app('request')->input('type').'') }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Job Completed</a>
+                    @else 
                     <a href="{{ url('/business_user/quotes_questions') }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Job Completed</a>
+                    @endif
+                    
+
                   @else
-                    <a href="{{ url('/business_user/user_quotereviews/'.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+
+                     @if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))
+                      <a href="{{ url('/business_user/user_quotereviews?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Job Completed</a>
+                      @else 
+                      <a href="{{ url('/business_user/user_quotereviews?quote_id='.$quote_data[0]['quote_id']) }}" data-quoteid="{{$quote_data[0]['quote_id']}}" class="finish_job_quotes">Finish job</a>
+                      @endif
                   @endif
                 @endif
               

@@ -22,7 +22,8 @@ class YpBusinessUsersQuestions extends Migration
             $table->integer('question_id')->unsigned()->index();
             $table->foreign('question_id')->references('id')->on('yp_general_users_questions')->onDelete('cascade');
             $table->text('business_answer')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status_bus')->default(1)->comment('1=>new, 2=>Read, 3=>Answered');
+            $table->tinyInteger('mark_answered')->default(0)->comment('1=>mark as answered');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP')); 
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

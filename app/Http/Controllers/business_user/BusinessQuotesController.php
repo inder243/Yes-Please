@@ -11,6 +11,7 @@ use App\Models\YpBusinessUsersQuotesReply;
 use App\Models\YpUserReviews;
 use App\Models\YpBusinessUserQuoteTemplates;
 use App\Models\YpGeneralUsersQuotes;
+use App\Models\YpBusinessUsersQuestions;
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -35,10 +36,22 @@ class BusinessQuotesController extends Controller
     public function showQuotesQuestions(Request $request){
         $b_id = Auth::id();
 
-        $month = isset($request->month)?$request->month:'';
-        $type = isset($request->type)?$request->type:'';
-        $quote_status = isset($request->quote_status)?$request->quote_status:null;
-        $quote_keyword = isset($request->quote_keyword)?$request->quote_keyword:null;
+        $month          = isset($request->month)?$request->month:'';
+        $type           = isset($request->type)?$request->type:'';
+        $quote_status   = isset($request->quote_status)?$request->quote_status:null;
+        $quote_keyword  = isset($request->quote_keyword)?$request->quote_keyword:null;
+        $ques_status    = isset($request->ques_status)?$request->ques_status:null;
+        $ques_keyword   = isset($request->ques_keyword)?$request->ques_keyword:null;
+        $tab            = isset($request->tab)?$request->tab:null;
+
+
+        if($tab == null){
+            $tab = 'quotes';
+        }else{
+            $tab = 'ques';
+        }
+        
+        /*****Quotes******/
         if($quote_status == null && $quote_keyword == null){
 
             try{
@@ -293,16 +306,87 @@ class BusinessQuotesController extends Controller
 
             $hide_sorting = '0';
             
-        }
+        }/*****Quotes ends****/
+
+        /*******Questions******/
+        if($ques_status == null && $ques_keyword == null){
+
+            try{
+                $questions = YpBusinessUsersQuestions::with('get_ques')->where('business_id',$b_id)->orderby('id','desc')->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
+
+        }else if($ques_status != null && $ques_status == 'all'){
+
+            if($ques_keyword !== null){
+
+                try{
+                    $questions = YpBusinessUsersQuestions::with('get_ques')->where('business_id',$b_id)->orderby('id','desc')->whereHas('get_ques', function($q)use($ques_keyword) {$q->where('q_description', 'like', '%'.$ques_keyword.'%');})->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+
+            }else{
+
+                try{
+
+                    $questions = YpBusinessUsersQuestions::with('get_ques')->where('business_id',$b_id)->orderby('id','desc')->get()->groupBy('question_id')->toArray();
+
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+
+            }
+
+        }else if($ques_status !== 'all' && $ques_status !== null){
+
+            if($ques_keyword !== null){
+
+                try{
+
+                    $questions = YpBusinessUsersQuestions::with('get_ques')->where(['business_id'=>$b_id, 'status_bus'=>$ques_status])->whereHas('get_ques', function($q)use($ques_keyword) {$q->where('q_description', 'like', '%'.$ques_keyword.'%');})->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+
+            }else{
+
+                try{
+
+                    $questions = YpBusinessUsersQuestions::with('get_ques')->where(['business_id'=>$b_id, 'status_bus'=>$ques_status])->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+   
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+
+            }
+
+        }else{
+
+            try{
+
+                $questions = YpBusinessUsersQuestions::with('get_ques')->where('business_id',$b_id)->orderby('id','desc')->get()->groupBy('question_id')->toArray();
+
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
+
+        }/*****Question ends*****/
         
-    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting,'month'=>$month,'type'=>$type]);
+        
+    	return view('business.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting,'month'=>$month,'type'=>$type,'questions'=>$questions,'tab'=>$tab,'ques_status'=>$ques_status,'ques_keyword'=>$ques_keyword]);
     }
 
     /********************
     Show quote request page
     **********************/
-    public function showQuotesRequest($quote_id){
+    public function showQuotesRequest(Request $request){
 
+        $quote_id = isset($request->quote_id)?$request->quote_id:'';
         if(!is_numeric($quote_id)){
             return abort(404);
         }
@@ -331,6 +415,8 @@ class BusinessQuotesController extends Controller
     public function quotesRequestSubmit(Request $request){
 
         $business_user_id = Auth::user()->business_userid;
+        $month = isset($_POST['month'])?$_POST['month']:'';
+        $type = isset($_POST['type'])?$_POST['type']:'';
         $b_id = Auth::user()->id;
         $quote_id = $_POST['quote_id']; 
 
@@ -339,9 +425,17 @@ class BusinessQuotesController extends Controller
                 'quote_details' => ['string', 'min:30','max:10000'],
             ]);
 
-        if($validator->fails()) {
-           
-            return Redirect::to('/business_user/quotes_request/'.$quote_id)->withInput()->withErrors($validator);
+        if($validator->fails()) 
+        {
+           if($month!='' && $type!='')
+            {
+                return Redirect::to('business_user/quotes_request?month='.$month.'&type='.$type.'&quote_id='.$quote_id.'')->withInput()->withErrors($validator);
+            }
+            else
+            {
+                return Redirect::to('/business_user/quotes_request?quote_id='.$quote_id)->withInput()->withErrors($validator);
+            }
+            
             
         }else{
 
@@ -425,7 +519,15 @@ class BusinessQuotesController extends Controller
             YpBusinessUsersQuotes::where(['business_id'=>$b_id,'quote_id'=>$quote_id])->update(['status'=>'3']);
 
            // return redirect()->intended('business_user/quotes_questions');
-            return redirect('business_user/quotes_questions');
+            if($month!='' && $type!='')
+            {
+                return redirect('business_user/quotes_questions?month='.$month.'&type='.$type.'');
+            }
+            else
+            {
+                return redirect('business_user/quotes_questions');
+            }
+            
         }
 
 
@@ -470,8 +572,11 @@ class BusinessQuotesController extends Controller
     /*******************************
     fn to display quote accepted page
     *******************************/
-    public function showQuoteAccepted($quote_id,$quote_status){
+    public function showQuoteAccepted(Request $request){
 
+        $quote_id = isset($request->quote_id)?$request->quote_id:'';
+        $quote_status = isset($request->quote_status)?$request->quote_status:'';
+        
         if(!is_numeric($quote_id) || !is_numeric($quote_status)){
             return abort(404);
         }
@@ -511,8 +616,9 @@ class BusinessQuotesController extends Controller
     /********************
     show user review page
     **********************/
-    public function showUserQuoteReview($quote_id){
+    public function showUserQuoteReview(Request $request){
 
+        $quote_id = isset($request->quote_id)?$request->quote_id:'';
         if(!is_numeric($quote_id)){
             return abort(404);
         }
@@ -540,6 +646,10 @@ class BusinessQuotesController extends Controller
     fn to submit business reviews
     **************************/
     public function submitUserQuoteReview(){
+
+        $month = isset($_POST['month'])?$_POST['month']:'';
+
+        $type = isset($_POST['type'])?$_POST['type']:'';
 
         if(isset($_POST)){
             $quoteReview = YpUserReviews::where(['business_id'=> $_POST['review_bus_id'],'quote_id'=>$_POST['review_quote_id'],'general_id'=>$_POST['review_gen_id'],'user_type'=>'business'])->first();
@@ -575,7 +685,15 @@ class BusinessQuotesController extends Controller
             
 
            // return redirect()->intended('business_user/quotes_questions');
-            return redirect('business_user/quotes_questions');
+            if($month!='' && $type!='')
+            {
+                
+                return redirect('business_user/quotes_questions?month='.$month.'&type='.$type.'');
+            }
+            else
+            {
+                return redirect('business_user/quotes_questions');
+            }
         }/**isset ends***/
         
     }/*******fn ends here*******/

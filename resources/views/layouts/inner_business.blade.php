@@ -101,7 +101,7 @@
                             <img src="{{ asset('img/user_placeholder.png') }}"/>
                             @endif
 
-                            <p>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                            <p>{{ Auth::guard('business_user')->user()->first_name }} {{ Auth::guard('business_user')->user()->last_name }}</p>
                             @else
                             <p>Firstname Lastname</p>
                             @endif
@@ -325,6 +325,7 @@
     <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business/business_user.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business/business_quotes.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/business/business_question.js') }}"></script>
     <script src="{{ URL::asset('js/swiper.js') }}" type="text/javascript"></script>
 
      <script>

@@ -64,8 +64,8 @@
 	}
 	function removeOptionsdiv(el) 
 	{
-		alert($(el).parent().attr('id'));
-		//$(el).parent().remove();
+		//alert($(el).parent().attr('id'));
+		$(el).parent().remove();
 
 	}
 	

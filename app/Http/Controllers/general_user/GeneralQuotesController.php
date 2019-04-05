@@ -11,6 +11,7 @@ use App\Models\YpUserReviews;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsers;
 use App\Models\YpFormQuestions;
+use App\Models\YpBusinessUsersQuestions;
 use Mail;
 use File;
 Use Redirect;
@@ -154,7 +155,19 @@ class GeneralQuotesController extends Controller
     /***
     *get all quotes and questions
     ***/
-    public function showQuoteQuestions($quote_status = null, $quote_keyword = null){
+    public function showQuoteQuestions(Request $request){
+
+        $quote_status   = isset($request->quote_status)?$request->quote_status:null;
+        $quote_keyword  = isset($request->quote_keyword)?$request->quote_keyword:null;
+        $ques_keyword   = isset($request->ques_keyword)?$request->ques_keyword:null;
+        $tab            = isset($request->tab)?$request->tab:null;
+
+        if($tab == null){
+            $tab = 'quotes';
+        }else{
+            $tab = 'ques';
+        }
+
     	$g_id = Auth::id();
 
         if($quote_status == null && $quote_keyword == null){
@@ -217,8 +230,30 @@ class GeneralQuotesController extends Controller
         }catch(\Exception $e){
             return $e->getMessage();
         }
-        //echo '<pre>';print_r($quotes); echo '</pre>';die;
-    	return view('user.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'quotes_ignored'=>$quotes_ignored,'hide_sorting'=>$hide_sorting]);
+
+
+        /*******questions******/
+        if($ques_keyword !== null){
+
+            try{
+                $questions = YpBusinessUsersQuestions::with('get_ques')->where('general_id',$g_id)->whereHas('get_ques', function($q)use($ques_keyword) {$q->where('q_title', 'like', '%' . $ques_keyword . '%');})->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
+
+        }else{
+            try{
+                $questions = YpBusinessUsersQuestions::with('get_ques')->where('general_id',$g_id)->orderBy('id','desc')->get()->groupBy('question_id')->toArray();
+
+            }catch(\Exception $e){
+                return $e->getMessage();
+            }
+        }
+
+        /*******questions ends******/
+        //echo '<pre>';print_r($questions); echo '</pre>';die;
+    	return view('user.quotes_questions.quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'quotes_ignored'=>$quotes_ignored,'hide_sorting'=>$hide_sorting,'questions'=>$questions,'tab'=>$tab,'ques_keyword'=>$ques_keyword]);
     }/*****fn ends here****/
 
     /****

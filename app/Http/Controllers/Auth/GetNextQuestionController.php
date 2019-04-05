@@ -562,9 +562,95 @@ class GetNextQuestionController extends Controller
                     //get minimum bidamount of category set by admin
                     
                     $countOfmembersToSendBid = 5;
+                    $countTotalOfmembersToSendBid = 5;
+
+                    //get 5 pro members which have wallet amount equal to or greater than category bid amount given by them and they have checked option for request accept for every bid
+
+                    
+
+                    $businessUserIds = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_user_categories.business_userid) order by rand() SEPARATOR ','), ',',5) as businessUserIds FROM `yp_business_user_categories`
+                    inner join yp_business_user_cc_details on yp_business_user_categories.business_userid = yp_business_user_cc_details.b_id
+                    inner join yp_business_selected_services on yp_business_user_categories.business_userid = yp_business_selected_services.business_id
+                    where yp_business_user_categories.category_id=".$request->hiddencatId." and yp_business_user_categories.".$columNameForBid.">0 and yp_business_user_cc_details.updated_wallet_amount>=yp_business_user_categories.".$columNameForBid." and accept_request=1 and yp_business_selected_services.cat_id=".$request->hiddencatId." and yp_business_selected_services.service_text in (".$dataToFilterQuotes.")"));
+
+                    $businessUserIds = $businessUserIds[0]->businessUserIds;
+
+
+
+                    if(!empty($businessUserIds))
+                    {
+                        $buserids = explode(',',$businessUserIds);
+                        $countOfProMembers = count($buserids);
+                        $countOfmembersToSendBid = $countOfmembersToSendBid-$countOfProMembers;
+                           //if from above calculations members are less than 5 then get remaining  pro members which have wallet amount equal to or greater than category bid amount given by them and they have unchecked option for request accept for every bid
+
+                        if($countOfmembersToSendBid>0)
+                        {
+                           
+                            $businessUserIdsUncheked = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_user_categories.business_userid) order by rand() SEPARATOR ','), ',',".$countOfmembersToSendBid.") as buids FROM `yp_business_user_categories`
+                        inner join yp_business_user_cc_details on yp_business_user_categories.business_userid = yp_business_user_cc_details.b_id
+                        inner join yp_business_selected_services on yp_business_user_categories.business_userid = yp_business_selected_services.business_id
+                        where yp_business_user_categories.category_id=".$request->hiddencatId." and yp_business_user_categories.".$columNameForBid.">0 and yp_business_user_cc_details.updated_wallet_amount>=yp_business_user_categories.".$columNameForBid." and accept_request=0 and yp_business_selected_services.cat_id=".$request->hiddencatId." and yp_business_selected_services.service_text in (".$dataToFilterQuotes.")"));
+
+                           
+
+                            //merge both pro and free members
+                            if(!empty($businessUserIdsUncheked[0]->buids))
+                            {
+                                $buserids = array_merge($buserids,explode(',',$businessUserIdsUncheked[0]->buids));
+                            }
+                        }
+
+                        
+                        if(count($buserids)<5)
+                        {
+                            $countTotalOfmembersToSendBid = $countTotalOfmembersToSendBid-count($buserids);
+
+                            $businessUserIdsFree = DB::select(DB::raw("SELECT DISTINCT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) ORDER BY RAND() SEPARATOR ','), ',',".$countTotalOfmembersToSendBid.") as buids FROM yp_business_selected_services 
+                            inner join yp_business_users on yp_business_selected_services.business_id = yp_business_users.id
+                            where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId." and  yp_business_users.advertise_mode=0"));
+
+                            //merge both pro and free members
+                            if(!empty($businessUserIdsFree[0]->buids))
+                            {
+                                $buserids = array_merge($buserids,explode(',',$businessUserIdsFree[0]->buids));
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        $businessUserIds = DB::select(DB::raw("SELECT DISTINCT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) ORDER BY RAND() SEPARATOR ','), ',',5) as buids FROM yp_business_selected_services 
+                            inner join yp_business_users on yp_business_selected_services.business_id = yp_business_users.id
+                        where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId." and  yp_business_users.advertise_mode=0"));
+
+                            if(!empty($businessUserIds[0]->buids))
+                            {
+                                $buserids = explode(',',$businessUserIds[0]->buids);
+                            }
+                    }
+
+                    if(!empty($buserids))
+                    {
+                        $deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
+
+                        foreach($buserids as $businessUser)
+                        {
+
+                            $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
+                            $YpBusinessUsersQuotes->business_id = $businessUser;
+                            $YpBusinessUsersQuotes->general_id = $g_id;
+                            $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
+                            $YpBusinessUsersQuotes->status = 1;
+                            $YpBusinessUsersQuotes->save();
+
+                            $buseridsToSendEmail[] = $businessUser;
+                        }
+                    }
+
 
                     //get 5 pro members which have wallet amount equal to or greater than category bid amount given by admin 
-                    $businessUserIds = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',5) as businessUserIds FROM yp_business_selected_services inner join yp_business_user_cc_details on yp_business_selected_services.business_id = yp_business_user_cc_details.b_id 
+                    /*$businessUserIds = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_selected_services.business_id) SEPARATOR ','), ',',5) as businessUserIds FROM yp_business_selected_services inner join yp_business_user_cc_details on yp_business_selected_services.business_id = yp_business_user_cc_details.b_id 
                         where yp_business_selected_services.service_text in (".$dataToFilterQuotes.") and yp_business_selected_services.cat_id=".$request->hiddencatId." and  yp_business_user_cc_details.updated_wallet_amount>=".$bidAmount." ORDER BY RAND()"));
                    
 
@@ -623,26 +709,14 @@ class GetNextQuestionController extends Controller
                    }
 
                 
-
-                   $deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
-
-                    if(!empty($buserids))
-                    {
-                        foreach($buserids as $businessUser)
-                        {
-
-                            $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
-                            $YpBusinessUsersQuotes->business_id = $businessUser;
-                            $YpBusinessUsersQuotes->general_id = $g_id;
-                            $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
-                            $YpBusinessUsersQuotes->status = 1;
-                            $YpBusinessUsersQuotes->save();
-
-                            $buseridsToSendEmail[] = $businessUser;
-                        }
-                    }
+                    */
 
                    //deduct amount from wallet 
+                   if(empty($buseridsToSendEmail))
+                   {
+                        return response()->json(['success'=>2,'message'=>'Sorry No Business Found For Selected Service.'],200);
+                   }
+                  
 
                     //send email to 5 random business users
                    $getEmails =  DB::select(DB::raw("select group_concat(email) as emails from yp_business_users where id in (".implode(',',$buseridsToSendEmail).")"));
@@ -672,7 +746,7 @@ class GetNextQuestionController extends Controller
                    }
                }
 
-                return response()->json(['success'=>1,'message'=>'Data saved successfully.'],200);
+                return response()->json(['success'=>1,'message'=>'Data saved successfully.','emails'=>$getEmails[0]->emails],200);
             }
             // else if($request->phone=='')
             // {

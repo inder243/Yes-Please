@@ -4,7 +4,7 @@
 
  <section class="register_step_1">
    <div class="breadcrumb register_breadcrumb advertisment_breadcrumb">
-     <div><a href="JavaScript:;">Dashboard</a>/<span class="q_breadcrumb">Advertisement</span></div>
+     <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<span class="q_breadcrumb">Advertisement</span></div>
    </div>
 </section>
 <section class="advertisment_section">

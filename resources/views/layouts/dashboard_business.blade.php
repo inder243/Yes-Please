@@ -15,6 +15,16 @@
     <!-- <link href="{{ URL::asset('css/style.css') }}" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ URL::asset('css/root_size.css') }}" type="text/css">
+    <?php  if (strpos($_SERVER['REQUEST_URI'], "advertisement_top_ads") !== false){
+        $page_type ='top_ads';
+    }?>
+    @if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads'))
+    <link rel="stylesheet" href="{{ URL::asset('css/jquery.ui.css') }}" type="text/css">
+    @endif
+  <!--    <link rel="stylesheet" href="{{ URL::asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css"> -->
+    
+   
+    <!-- <link rel="stylesheet" href="{{ URL::asset('css/dataTables.min.css') }}" type="text/css"> -->
     
    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
  -->
@@ -200,7 +210,32 @@
     <script type="text/javascript" src="{{ URL::asset('js/dropzone.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business/business_user.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/business/bu_advertisement.js') }}"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css"> -->
+    <?php  if (strpos($_SERVER['REQUEST_URI'], "advertisement_top_ads") !== false){
+        $page_type ='top_ads';
+    }?>
+    @if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads'))
+    <!-- <link rel="stylesheet" href="{{ URL::asset('css/dataTables.min.css') }}" type="text/css"> -->
+    <script type="text/javascript" src="{{ URL::asset('js/business/dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('js/jquery.ui.js') }}"></script>
+   
+    <!-- <script type="text/javascript" src="{{ URL::asset('js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script> -->
+    @endif
     
+   
+    
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        if(window.location.href.indexOf("advertisement_top_ads") > -1) {
+
+           $('#comp_table').dataTable({searching: false, paging: false, info: false});
+           $('#clicks_table').dataTable({searching: false, paging: false, info: false});
+        }
+    });
+    </script>
     <script>
         wow = new WOW({
             animateClass: 'animated',

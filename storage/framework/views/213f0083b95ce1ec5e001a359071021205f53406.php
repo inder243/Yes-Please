@@ -64,6 +64,34 @@
                         <li>
                           <a href="<?php echo e(route('general_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
                         </li>
+                        <?php elseif(Auth::guard('business_user')->check()): ?>
+                        <li>
+                            <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(url('/business_user/business_dashboard')); ?>"><img src="<?php echo e(asset('img/dashboard.png')); ?>" />Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(url('/business_user/quotes_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/ratings.png')); ?>" />Ratings</a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="<?php echo e(asset('img/share.png')); ?>" />Share</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(route('business_user.profile_setting')); ?>"><img src="<?php echo e(asset('img/profile.png')); ?>" />Profile and Settings</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(route('business_user.logout')); ?>" class="logout"><img src="<?php echo e(asset('img/logout.png')); ?>" />Logout</a>
+                        </li>
                         <?php else: ?>
                         <li>
                           <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/home.png')); ?>" />Home</a>
@@ -127,6 +155,27 @@
                         <p><?php echo e(Auth::guard('general_user')->user()->first_name); ?> <?php echo e(Auth::guard('general_user')->user()->last_name); ?></p>
                         
                      </a>
+                  </div>
+                  <?php elseif(Auth::guard('business_user')->check()): ?>
+                  <div class="user_profile">
+                      <a href="javascript:;">
+                          <?php if(Auth::guard('business_user')->check()): ?>
+                          <?php
+                          $bus_user_id = Auth::guard('business_user')->user()->business_userid;
+                          $img_url = Auth::guard('business_user')->user()->image_name;
+                          ?>
+
+                          <?php if($img_url): ?>
+                          <img src="<?php echo e(url('/images/business_profile/'.$bus_user_id.'/'.$img_url)); ?>">
+                          <?php else: ?>
+                          <img src="<?php echo e(asset('img/user_placeholder.png')); ?>"/>
+                          <?php endif; ?>
+
+                          <p><?php echo e(Auth::guard('business_user')->user()->first_name); ?> <?php echo e(Auth::guard('business_user')->user()->last_name); ?></p>
+                          <?php else: ?>
+                          <p>Firstname Lastname</p>
+                          <?php endif; ?>
+                      </a>
                   </div>
                   <?php else: ?>
                   <div class="second_header_links">
@@ -540,7 +589,7 @@
         <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
             <div class="modal-content login_model">
                 <div class="modal-header">
-                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close_popup close_single_questions" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -657,7 +706,7 @@
             </div>
             <div class="describe_question descrptn_qus" style="display:none;">
               <h1>Describe your question</h1>
-              <p>(2000 letters)</p>
+              <p>(0/2000 letters)</p>
               <div class="descibe_question_steps">
                 <div class="title_des">
                   <div class="form-group des_ques col-12">
@@ -797,7 +846,7 @@
                   <h1>You can go to questions page to view your questions.</h1>
                 </div>
                 <div class="for_next_btn seequestion_close">
-                  <a href="javascript:;" >See questions</a>
+                  <a href="<?php echo e(url('general_user/quote_questions?tab=ques')); ?>" >See questions</a>
                   <a href="javascript:;" class="close_single_questions">Close</a>
                 </div>
               </div>

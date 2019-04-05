@@ -87,15 +87,15 @@
           </div>
           <div class="col-md-3 col-6 padding_lt">
             <div class="dashboard_box">
-                <a href="javascript:;" class="interactions_today_bg">
+                <a href="{{url('/business_user/advertisement_top_ads')}}" class="interactions_today_bg">
                   <div class="box_heading">
                     <h2>Clicks on top ad</h2>
                     <h1>Clicks on top ad</h1>
                   </div>
                   <div class="total_number">
-                    <h1>28</h1>
+                    <h1>@if(isset($monthlyBudget['countOfTopAd'])){{$monthlyBudget['countOfTopAd']}}@endif</h1>
                   </div>
-                    <div class="Qlink-nis"><p>28 NIS</p>
+                    <div class="Qlink-nis"><p>@if(isset($monthlyBudget['sumOfTopAd'])){{$monthlyBudget['sumOfTopAd']}}@endif NIS</p>
                       <span>Start campaign</span>
                     </div>
                   <div class="quote_req_img"><img src="{{ asset('img/tap-addicon.png') }}"/></div>

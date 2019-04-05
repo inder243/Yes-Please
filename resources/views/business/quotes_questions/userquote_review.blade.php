@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif </span>/<span class="q_breadcrumb">Review @if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</span></div>
+           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif </span>/<span class="q_breadcrumb">Review @if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</span></div>
 
          </div>
       </section>
@@ -116,6 +116,8 @@
                      <input type="hidden" name="review_quote_id" value="{{$quote_data[0]['quote_id']}}">
                      <input type="hidden" name="review_bus_id" value="{{$quote_data[0]['business_id']}}">
                      <input type="hidden" name="review_type" value="business">
+                     <input type="hidden" name="month" value="@if(!empty(app('request')->input('month'))){{app('request')->input('month')}}@endif">
+                     <input type="hidden" name="type" value="@if(!empty(app('request')->input('type'))){{app('request')->input('type')}}@endif">
                  <div class="write_reviews">
                    <p>Write your review<span><img src="{{ asset('img/question_img.png') }}"/></span></p>
                    <div class="write_sec">
@@ -134,7 +136,11 @@
                    </ul>
                    <input type="hidden" name="star_active" class="hidden_star_active" value="">
                    <div class="review_later">
-                     <a href ="{{ url('business_user/quotes_questions') }}" class="review_later1">Review later</a>
+                      @if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))
+                      <a href ="{{ url('business_user/quotes_questions?month='.app('request')->input('month').'&type='.app('request')->input('type').'') }}" class="review_later1">Review later</a>
+                      @else
+                      <a href ="{{ url('business_user/quotes_questions') }}" class="review_later1">Review later</a>
+                      @endif
                      <a href ="JavaScript:;" class="submit_reviewr"><input type="submit" value="Submit review"></a>
                    </div>
                   </div>

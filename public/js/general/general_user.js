@@ -330,8 +330,6 @@ $(document).ready(function(){
       		var attr_status = 'simple';
       	}
       	
-      	alert(attr_status);return false;
-
 		var url_general = $('.action_general').val();
 		var website_url = $('.website_url').val();
 

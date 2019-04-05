@@ -101,7 +101,7 @@
                             <img src="<?php echo e(asset('img/user_placeholder.png')); ?>"/>
                             <?php endif; ?>
 
-                            <p><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></p>
+                            <p><?php echo e(Auth::guard('business_user')->user()->first_name); ?> <?php echo e(Auth::guard('business_user')->user()->last_name); ?></p>
                             <?php else: ?>
                             <p>Firstname Lastname</p>
                             <?php endif; ?>
@@ -326,6 +326,7 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/dropzone.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_user.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_quotes.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_question.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/swiper.js')); ?>" type="text/javascript"></script>
 
      <script>

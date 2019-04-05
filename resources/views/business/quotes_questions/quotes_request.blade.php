@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -203,7 +203,9 @@
             	<form class="dropzone" id="dropzone_form" data-page="quoterequest" method="POST" action="{{ route('business_user.quotes_request.submit')}}" enctype="multipart/form-data">
             	@csrf 
 
-            	<input type="hidden" name="quote_id" value="{{$quote_id}}">	
+              <input type="hidden" name="quote_id" value="{{$quote_id}}"> 
+              <input type="hidden" name="month" value="@if(!empty(app('request')->input('month'))){{app('request')->input('month')}}@endif"> 
+            	<input type="hidden" name="type" value="@if(!empty(app('request')->input('type'))){{app('request')->input('type')}}@endif">	
                <div class="reply_quote_main">
                   <h1>Reply to quote</h1>
                   <p>Provide the user with maximum details about your offer</p>

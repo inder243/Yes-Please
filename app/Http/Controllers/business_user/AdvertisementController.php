@@ -19,6 +19,10 @@ use App\Models\YpFormQuestions;
 use App\Models\YpBusinessSelectedServices;
 use App\Models\YpBusinessUserTransactions;
 use App\Models\YpBusinessUserCcDetails;
+use App\Models\YpCampaignCategory;
+use App\Models\YpCampaignDetail;
+use App\Models\YpCampaignImpression;
+use App\Models\YpCampaignClick;
 use App\Http\Traits\BusinessUserProSettingsTrait;
 
 use File;
@@ -128,8 +132,6 @@ class AdvertisementController extends Controller
                 return back()->withInput();  
             }
 
-            
-
             $monthlyBudget = isset($_POST['monthly_budget'])?$_POST['monthly_budget']:'';
             if($monthlyBudget=='')
             {
@@ -137,14 +139,54 @@ class AdvertisementController extends Controller
                 Session::flash('error_message', $error);
                 return back()->withInput();
             }
+            else if($monthlyBudget<=0)
+            {
+                $error = "Please provide monthly budget greater than zero.";
+                Session::flash('error_message', $error);
+                return back()->withInput();
+            }
+
+            $data = $_POST;
+
+            
+            foreach($data as $key=>$categoryData)
+            {
+                
+                //check if all categories amount is greater than zero or not
+                if($key!='monthly_budget' && $key!='_token')
+                {
+
+                    if(isset($categoryData[0]) && !empty($categoryData[0]))
+                    {
+                        $quoteWithPh = $categoryData[0];
+                    }
+                    
+
+                    if(isset($categoryData[1]) && !empty($categoryData[1]))
+                    {
+                        $quoteWithoutPh = $categoryData[1];
+                    }
+                    
+                    if($quoteWithPh<=0 || $quoteWithoutPh<=0)
+                    {
+                        
+                        $error = "Please provide quotes bid amount greater than zero.";
+                        Session::flash('error_message', $error);
+                        return back()->withInput();
+                    }
+                    
+                }
+                
+            }
+           
             if(!empty($_POST))
             {
                 $data = $_POST;
                 
-
+                //update bid amount of each category
                 foreach($data as $key=>$categoryData)
                 {
-                    if($key!='monthly_budget')
+                    if($key!='monthly_budget' && $key!='_token')
                     {
                         $categoryId = $key;
 
@@ -209,8 +251,13 @@ class AdvertisementController extends Controller
                 YpBusinessUsers::where("id",$bUserId)->update(array('advertise_mode'=>1));
 
                 $monthlyBudget = YpBusinessUserCcDetails::select("wallet_amount","updated_wallet_amount")->where("b_id",$bUserId)->first();
+
+                $currentMonth = date('m');
+                $currentYear = date('Y');
+                $getSettings = $this->getProSettings($currentMonth,$currentYear);
+
  
-                return view('/business/advertisement_dashboard')->with(array('monthlyBudget'=>$monthlyBudget));
+                return view('/business/advertisement_dashboard')->with(array('monthlyBudget'=>$getSettings));
                 
             }
             else
@@ -230,86 +277,150 @@ class AdvertisementController extends Controller
        
     }
 
-    /*********************************
-    Display quotes with phone/without phone
-    *********************************/
-    public function showQuotesQuestions($quote_status = null, $quote_keyword = null,$quote_month = null, $quote_type = null)
+    //get all top ads for current month
+    public function showTopads(Request $request)
     {
-        $b_id = Auth::id();
+        try
+        {
+            //get business user id from auth
+            $bUserId  = Auth::user()->id;
 
-        if($quote_status == null && $quote_keyword == null){
+            $currentMonth = date('m');
+            $currentYear = date('Y');
 
-            try{
-                $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
-            }catch(\Exception $e){
-                return $e->getMessage();
-            }
+            //get categories selected by business user
+            $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
 
-            if(empty($quotes)){
-                $hide_sorting = '1';
-            }else{
-                $hide_sorting = '0';
-            }
+            //get list of Campaigns,with impression count,click count,and sum of amount
+            $campaigns = YpCampaignDetail::whereMonth('created_at',$currentMonth)->whereYear('created_at',$currentYear)->withCount(['impressions'=>function($query){
+                $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+                $query->whereMonth('created_at', '=', date('m'));
+                $query->whereYear('created_at', '=', date('Y'));
+           },
+          'clicks'=>function($query){
+             $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+             $query->whereMonth('created_at', '=', date('m'));
+             $query->whereYear('created_at', '=', date('Y'));
+           },
+          'trans'=>function($query){
+             $query->select( DB::raw( "COALESCE(sum(amount),0)" ) );
+             $query->whereMonth('created_at', '=', date('m'));
+             $query->whereYear('created_at', '=', date('Y'));
+           }])->get();
 
-        }else if($quote_status != null && $quote_status == 'all'){
-
-            if($quote_keyword !== null){
-
-                try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
-                }catch(\Exception $e){
-                    return $e->getMessage();
-                }
-
-            }else{
-
-                try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
-                }catch(\Exception $e){
-                    return $e->getMessage();
-                }
-
-            }
-
-            $hide_sorting = '0';
-
-        }else if($quote_status !== 'all' && $quote_status !== null){
-
-            if($quote_keyword !== null){
-
-                try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->whereHas('get_quotes', function($q)use($quote_keyword) {$q->where('work_description', 'like', '%'.$quote_keyword.'%');})->orderBy("id",'desc')->get()->toArray();
-                }catch(\Exception $e){
-                    return $e->getMessage();
-                }
-
-            }else{
-
-                try{
-                    $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where(array('business_id'=>$b_id, 'status'=>$quote_status))->where('status','!=',0)->orderBy("id",'desc')->get()->toArray();
-                }catch(\Exception $e){
-                    return $e->getMessage();
-                }
-
-            }
-
-            $hide_sorting = '0';
-
-        }else{
-
-            try{
-                $quotes = YpBusinessUsersQuotes::with('get_gen_user','get_quotes')->where('business_id',$b_id)->where('status','!=',0)->orderBy('id','desc')->get()->toArray();
-            }catch(\Exception $e){
-                return $e->getMessage();
-            }
-
-            $hide_sorting = '0';
-            
+            //get list of clicks
+            $clicks = YpCampaignDetail::whereMonth('created_at',$currentMonth)->whereYear('created_at',$currentYear)->with(['clicks'=>function($query){
+             $query->whereMonth('created_at', '=', date('m'));
+             $query->whereYear('created_at', '=', date('Y'));
+           },
+          'trans'=>function($query){
+             $query->whereMonth('created_at', '=', date('m'));
+             $query->whereYear('created_at', '=', date('Y'));
+           }])->get();
+           
+           
+            return view('/business/advertisement_top_ads')->with(array('selectedcats'=>$getSelectedCats,'campaigns'=>$campaigns,'clicks'=>$clicks));
         }
-        
-        return view('business.advertisement_quotes_questions')->with(['quotes'=>$quotes,'quote_status'=>$quote_status,'quote_keyword'=>$quote_keyword,'hide_sorting'=>$hide_sorting]);
+        catch(Exception $e)
+        {
+            $error = $e->getMessage();
+            Session::flash('error_message', $error);
+            return back()->withInput();
+        }
     }
 
+    //function to save campaign
+    public function saveCampaign(Request $request)
+    {
+        try
+        {
+            
+            $campname = isset($_POST['campname'])?$_POST['campname']:'';
+            $selectedCats = isset($_POST['selected_cats'])?$_POST['selected_cats']:'';
+            $payperclick = isset($_POST['payperclick'])?$_POST['payperclick']:'';
+            $dbudget = isset($_POST['dbudget'])?$_POST['dbudget']:'';
+            $enddate = isset($_POST['enddate'])?$_POST['enddate']:'';
+
+            if($campname=='')
+            {
+                Session::flash('error_message', 'Please provide campaign name');
+                return back()->withInput();
+            }
+            else if(empty($selectedCats))
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message', 'Please choose atleast one category');
+                return back()->withInput();
+            }
+            else if($payperclick=='')
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message', 'Please provide pay per click amount');
+                return back()->withInput();
+            }
+            else if($payperclick<=0)
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message', 'Please provide valid pay per click amount');
+                return back()->withInput();
+            }
+            else if($dbudget=='')
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message', 'Please provide daily budget');
+                return back()->withInput();
+            }
+            else if($dbudget<=0)
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message', 'Please provide valid daily budget');
+                return back()->withInput();
+            }
+            else if($enddate=='')
+            {
+                $error = $e->getMessage();
+                Session::flash('error_message','Please provide campaign name');
+                return back()->withInput();
+            }
+            
+            //get business user id from auth
+            $bUserId  = Auth::user()->id;
+
+            //save campaign detail
+
+            $YpCampaignDetail = new YpCampaignDetail;
+            $YpCampaignDetail->name=$campname;
+            $YpCampaignDetail->pay_per_click=$payperclick;
+            $YpCampaignDetail->daily_budget=$dbudget;
+            $YpCampaignDetail->end_date=$enddate;
+            $YpCampaignDetail->b_id=$bUserId;
+            $YpCampaignDetail->status=1;
+            $YpCampaignDetail->save();
+
+            //save campaign for selected categories
+            if(!empty($selectedCats))
+            {
+                foreach($selectedCats as $selectedCat)
+                {
+                    $YpCampaignCategory = new YpCampaignCategory;
+                    $YpCampaignCategory->camp_id=$YpCampaignDetail->id;
+                    $YpCampaignCategory->cat_id=$selectedCat;
+                    $YpCampaignCategory->b_id=$bUserId;
+                    $YpCampaignCategory->save();
+                }
+            }
+
+            $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
+
+            return view('/business/advertisement_top_ads')->with(array('selectedcats'=>$getSelectedCats));
+        }
+        catch(Exception $e)
+        {
+            $error = $e->getMessage();
+            Session::flash('error_message', $error);
+            return back()->withInput();
+        }
+    }
    
     public function testPayment()
     {

@@ -2804,10 +2804,267 @@ margin-top: 5px;
     font-size: 15px;
     color: #12aa57;
 }
+
+.t-detail span {
+    color: #ed0c6e;
+}
 /*********************************** Advertisement page end *********************************/
 
+/*********************************** Top-ad page start *********************************/
+.adv-add a {
+    background-color: #ed0c6e;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 4px 35px;
+    display: inline-block;
+		box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+		-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+}
+.advtisment_main h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.campagin_table table {
+    width: 100%;
+}
+.campagin_table {
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+-webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+border-radius:5px;
+max-height: 450px;
+overflow: auto;
+}
+.table_heading th {
+    padding: 20px 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.table_heading {
+    border-bottom: 1px solid #cccccc;
+    background-color: #fff !important;
+}
+.campagin_table table tr:nth-child(2n+1) {
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #e9e7e7;
+    border-top: 1px solid #e9e7e7;
+}
+.campagin_table table tr td {
+    padding: 15px 15px;
+}
+.running a {
+    color: #61b6fe;
+}
+.edit a {
+    color: #369;
+}
+.ended a {
+    color: #46cc83;
+}
+.ended-red a {
+    color: #c33;
+}
+.capaign_analysis {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    padding-top: 10px;
+    padding-bottom: 30px;
+}
+.total-campaign h1 {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    padding-left: 13px;
+}
+.total-campaign {
+    display: inline-block;
+    width: 24%;
+}
+.total-ins h1 {
+    font-size: 16px;
+    font-weight: 600;
+}
+.month-clicks h1 {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+.month-clicks {
+    margin-top: 35px;
+}
+.month-clicks > h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+.time-month {
+    margin-top: 35px;
+    text-align: left;
+}
+.clicks_ins {
+    display: flex;
+    justify-content: space-between;
+		margin-top: 10px;
+}
+.ad_header {
+    padding-top: 10px;
+    padding-bottom: 0;
+    border: none;
+}
+.name-field label {
+    color: #9698a1;
+    font-size: 14px;
+}
+.name-field input:focus {
+    box-shadow: none;
+    border: 1px solid #c0bfbf;
+}
+.ad-header-body {
+    padding: 10px 40px 20px 40px;
+}
+.categories-list label {
+    color: #9698a1;
+    font-size: 14px;
+		margin-bottom: 0;
+}
+.categorylist {
+    display: inline-block;
+    margin-top: 0px;
+    width: 100%;
+}
+.categorylist li {
+    list-style: none;
+    width: 48%;
+    margin-bottom: 0;
+    display: inline-block;
+}
+.categorylist p {
+    color: #000;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.categories-list {
+    margin-top: 10px;
+    display: inline-block;
+}
+.name-field {
+    margin-top: 15px;
+}
+.name-field span {
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+    font-size: 13px;
+    color: #989898;
+}
+.start-btn {
+    text-align: center;
+    margin-top: 15px;
+    display: inline-block;
+    width: 100%;
+}
+.start-btn input {
+
+    background-color: #ed0c6e;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    padding: 5px 40px;
+    border-radius: 3px;
+		  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+cursor: pointer;
+}
+.start-btn input:hover {
+    background-color: #d80762;
+}
+.adv-add a:hover {
+    background-color: #d80762;
+}
+
+/*
+	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	*/
+	@media
+	  only screen
+    and (max-width: 760px), (min-device-width: 768px)
+    and (max-device-width: 1024px)  {
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		.campagin_table table thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
 
 
+
+
+		.campagin_table table tr td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding-left: 50%;
+		}
+
+		.campagin_table table tr td:before {
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 15px;
+			left:14px;
+			width: 45%;
+			padding-right: 10px;
+			white-space: nowrap;
+		}
+
+		/*
+		Label the data
+    You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+		*/
+		.campagin_table table tr td:first-child {
+	    padding-left: 15px;
+	    text-align: left;
+	    background-color: #fff;
+	    font-weight: 600;
+	}
+.campagin_table table tr td:before { content: attr(data-Name); }
+.campagin_table table tr:nth-child(2n+1) {
+    border-top: none;
+}
+.campagin_table{
+	max-height:inherit;
+}
+.campagin_table table tr:nth-child(even){
+	background-color: #f6f6f6;
+}
+.total-campaign {
+    display: inline-block;
+    width: auto;
+}
+.capaign_analysis {
+    justify-content: space-between;
+}
+.time-month table tr td:first-child {
+    padding-left:50%;
+
+}
+
+}
+
+/*********************************** Top-ad page end *********************************/
 /*********************************** Media query start *********************************/
 
 @media (max-width: 1520px) {

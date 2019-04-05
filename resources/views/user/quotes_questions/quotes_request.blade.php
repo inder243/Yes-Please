@@ -228,20 +228,20 @@
 
                           @php $details = mb_strimwidth($get_user_data['details'], 0, 30, "..."); @endphp
 
-                        @if($get_user_data['price_type'] == 2)
-                        @php $price_type = '/hour'; @endphp
-                        @else
-                        @php $price_type = ''; @endphp
-                        @endif
+                          @if($get_user_data['price_type'] == 2)
+                          @php $price_type = '/hour'; @endphp
+                          @else
+                          @php $price_type = ''; @endphp
+                          @endif
 
                           <div class="rate_hours"><h2>${{$get_user_data['price_quotes']}}</h2><p class="complete_detail"></p>{{$price_type}}</div>
 
                         </div>
                             <div class="chat_call_sec star-sec">
 
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->avg('rating');
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$get_user_data['business_id']])->avg('rating');
 
-                        $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->where('review','!=','')->count('review');
+                        $get_total_reviews = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$get_user_data['business_id']])->where('review','!=','')->count('review');
                         
                         $total_rating = round($get_total_rating);
                         ?>

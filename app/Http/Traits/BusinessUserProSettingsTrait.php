@@ -10,6 +10,8 @@ use App\Models\YpBusinessUserCategories;
 use App\Models\YpBusinessCategories;
 use App\Models\YpBusinessUserTransactions;
 use App\Models\YpBusinessUsersQuotes;
+use App\Models\YpCampaignImpression;
+use App\Models\YpCampaignClick;
 
 
 
@@ -47,49 +49,82 @@ trait BusinessUserProSettingsTrait {
         $proSettings['m'] = $currentMonth;
         $proSettings['y'] = $currentYear;
         //get count of Quotes requests with phone,total of amount deduction for bids of Quotes requests with phone for current month
+        //get_quotes
 
-        $calculationsQuoteWithPh = YpBusinessUserTransactions::select(DB::raw('count(id) as countOfBid, sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
+        $calculationsQuoteWithPh = YpBusinessUserTransactions::select(DB::raw('sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
 
-        
+        $calculationsQuoteWithPhCount = YpBusinessUsersQuotes::select(DB::raw('count(id) as countOfBid'))->where('status','!=',0)->where("business_id",$bUserId)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
 
-        if(!empty($calculationsQuoteWithPh))
+        $calculationsQuoteWithPhCount = $calculationsQuoteWithPhCount->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','!=','');
+                        })->get();
+
+        if(!empty($calculationsQuoteWithPhCount))
         {
-            $proSettings['countOfBidWithPh'] = $calculationsQuoteWithPh[0]['countOfBid'];
-            $proSettings['sumOfbidWithPh'] = $calculationsQuoteWithPh[0]['sumOfbid'];
+            $proSettings['countOfBidWithPh'] = $calculationsQuoteWithPhCount[0]['countOfBid'];
+            
         }
         else
         {
             $proSettings['countOfBidWithPh'] = 0;
+            
+        }
+
+        if(!empty($calculationsQuoteWithPh))
+        {
+            
+            $proSettings['sumOfbidWithPh'] = $calculationsQuoteWithPh[0]['sumOfbid'];
+        }
+        else
+        {
+            
             $proSettings['sumOfbidWithPh'] = 0;
         }
 
        
         //get count of Quotes requests without phone,total of amount deduction for bids of Quotes requests without phone for current month
 
-        $calculationsQuoteWithoutPh = YpBusinessUserTransactions::select(DB::raw('count(id) as countOfBid, sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",2)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
+        $calculationsQuoteWithoutPh = YpBusinessUserTransactions::select(DB::raw('sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",2)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
 
         if(!empty($calculationsQuoteWithoutPh))
         {
-            $proSettings['countOfBidWithoutPh'] = $calculationsQuoteWithoutPh[0]['countOfBid'];
+            
             $proSettings['sumOfbidWithoutPh'] = $calculationsQuoteWithoutPh[0]['sumOfbid'];
         }
         else
         {
-            $proSettings['countOfBidWithoutPh'] = 0;
-            $proSettings['countOfBidWithoutPh'] = 0;
+            $proSettings['sumOfbidWithoutPh'] = 0;
+            
         }
+
+        $calculationsQuoteWithoutPhCount = YpBusinessUsersQuotes::select(DB::raw('count(id) as countOfBid'))->where('status','!=',0)->where("business_id",$bUserId)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear);
+        
+        $calculationsQuoteWithoutPhCount = $calculationsQuoteWithoutPhCount->whereHas('get_quotes', function($q) {
+                        $q->where('phone_number','=',null);
+                        })->get();
+
+        if(!empty($calculationsQuoteWithoutPhCount))
+        {
+            $proSettings['countOfBidWithoutPh'] = $calculationsQuoteWithoutPhCount[0]['countOfBid'];
+            
+        }
+        else
+        {
+            $proSettings['countOfBidWithoutPh'] = 0;
+            
+        }
+
+
         //get count of clicks of top ad,total of amount deduction for bids of clicks of top ad for current month
 
-        $calculationsTopAd = YpBusinessUserTransactions::select(DB::raw('count(id) as countOfBid, sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",4)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
+        $calculationsTopAd = YpBusinessUserTransactions::select(DB::raw('sum(amount) as sumOfbid'))->where("type",1)->where("reason_of_deduction",4)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
 
         if(!empty($calculationsTopAd))
         {
-            $proSettings['countOfTopAd'] = $calculationsTopAd[0]['countOfBid'];
             $proSettings['sumOfTopAd'] = $calculationsTopAd[0]['sumOfbid'];
         }
         else
         {
-            $proSettings['countOfTopAd'] = 0;
             $proSettings['sumOfTopAd'] = 0;
         }
 
@@ -110,14 +145,17 @@ trait BusinessUserProSettingsTrait {
         //get deals that are closed for this month
         $calculationsClosedDeals = YpBusinessUsersQuotes::select(DB::raw('count(id) as closedDeals'))->where("status",6)->where("business_id",$bUserId)->whereMonth('updated_at', $currentMonth)->whereYear('updated_at', $currentYear)->get();
 
-        if(!empty($calculationsClosedDeals) && $calculationsClosedDeals[0]['closedDeals'])
+        //get count of clicks top ads
+        $calculationsClicksTopAds = YpCampaignClick::select(DB::raw('count(id) as clicks'))->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear)->get();
+
+        if(!empty($calculationsClicksTopAds) && $calculationsClicksTopAds[0]['clicks'])
         {
-            $proSettings['closedDeals'] = $calculationsClosedDeals[0]['closedDeals'];
+            $proSettings['countOfTopAd'] = $calculationsClicksTopAds[0]['clicks'];
             
         }
         else
         {
-            $proSettings['closedDeals'] =0;
+            $proSettings['countOfTopAd'] =0;
         }
 
         return $proSettings;

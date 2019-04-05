@@ -148,17 +148,17 @@ Route::prefix('business_user')->group(function() {
     //Adding services from categories
     Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
-    /**********Quotes and Questions*********/
+    /**********Quotes*********/
     
     Route::get('/quotes_questions/{status?}/{keyword?}',
    'business_user\BusinessQuotesController@showQuotesQuestions')->name('business_user.quotes');
-    Route::get('/quotes_request/{quote_id}',
+    Route::get('/quotes_request/{quote_id?}',
    'business_user\BusinessQuotesController@showQuotesRequest')->name('business_user.quotes_request');
     Route::post('/quotes_request_submit', 'business_user\BusinessQuotesController@quotesRequestSubmit')->name('business_user.quotes_request.submit');
     Route::post('/uploadmultiple_quoterequest', 'business_user\BusinessQuotesController@uploadUserMultipleFilesQuotes')->name('business_user.quote_request.submit');
     Route::post('/removeimg_quoterequest', 'business_user\BusinessQuotesController@removeImagesQuote')->name('business_user.remove_quotes');
-    Route::get('/quoted_accepted/{quote_id}/{quote_status}', 'business_user\BusinessQuotesController@showQuoteAccepted')->name('business_user.quote_accepted');
-    Route::get('/user_quotereviews/{quote_id}', 'business_user\BusinessQuotesController@showUserQuoteReview')->name('business_user.quote_review');
+    Route::get('/quoted_accepted/{quote_id?}/{quote_status?}', 'business_user\BusinessQuotesController@showQuoteAccepted')->name('business_user.quote_accepted');
+    Route::get('/user_quotereviews/{quote_id?}', 'business_user\BusinessQuotesController@showUserQuoteReview')->name('business_user.quote_review');
     Route::post('/user_quotereviews', 'business_user\BusinessQuotesController@submitUserQuoteReview')->name('business_user.quote_review_submit');
     Route::post('/get_all_templates', 'business_user\BusinessQuotesController@getAllQuoteTemplates')->name('business_user.get_all_templates');
     Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
@@ -171,6 +171,14 @@ Route::prefix('business_user')->group(function() {
     Route::get('/advertisement_pro_mode', 'business_user\AdvertisementController@proMode');
     Route::post('/save_pro_mode_settings', 'business_user\AdvertisementController@saveProModeSettings')->name('business_user.saveProModeSettings');
     Route::post('/testPayment', 'business_user\AdvertisementController@testPayment');
+    Route::get('/advertisement_top_ads', 'business_user\AdvertisementController@showTopads')->name('business_user.showTopads');
+    Route::post('/save_campaign', 'business_user\AdvertisementController@saveCampaign')->name('business_user.save_campaign');
+    
+
+    /**********Questions**********/
+    Route::get('/question_detail/{question_id}',
+   'business_user\BusinessQuestionsController@showQuestionDetail')->name('business_user.question_detail');
+    Route::post('/question_ans_submit', 'business_user\BusinessQuestionsController@questionAnswerSubmit')->name('business_user.quotes_ans_submit');
 
   });
 
@@ -201,7 +209,7 @@ Route::prefix('general_user')->group(function() {
     Route::get('/callbackfb', 'Auth\GeneralUserLoginController@callbackfb');
 
     /**********quotes**********/
-    Route::get('/quote_questions/{status?}/{keyword?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
+    Route::get('/quote_questions/{status?}/{keyword?}/{tab?}', 'general_user\GeneralQuotesController@showQuoteQuestions');
     Route::get('/quotesrply/{quote_id}', 'general_user\GeneralQuotesController@quoteReplies');
     Route::get('/quoteaccepted/{quote_id}', 'general_user\GeneralQuotesController@quoteAccepted');
     Route::get('/quotecompleted/{quote_id}', 'general_user\GeneralQuotesController@quoteCompleted');
@@ -234,6 +242,8 @@ Route::prefix('general_user')->group(function() {
 
     /*******questions********/
     Route::post('/questionsend/{b_id?}', 'general_user\GeneralQuestionsController@sendQuestions')->name('general_user.send_questions');
+    Route::get('/qusreply/{question_id}', 'general_user\GeneralQuestionsController@questionReplies');
+    Route::post('/markanswered', 'general_user\GeneralQuestionsController@markAnswered')->name('general_user.mark_answered');
     /*******question ends********/
     
   });

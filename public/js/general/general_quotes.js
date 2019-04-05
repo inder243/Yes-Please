@@ -19,9 +19,9 @@ $(document).ready(function(){
     var quote_keyword = $(this).find('.gen_quote_keyword').val();
 
     if(quote_keyword == ''){
-      location.href = home_url+'general_user/quote_questions/'+quote_status;
+      location.href = home_url+'general_user/quote_questions?quote_status='+quote_status;
     }else{
-      location.href = home_url+'general_user/quote_questions/'+quote_status+'/'+quote_keyword;
+      location.href = home_url+'general_user/quote_questions?quote_status='+quote_status+'&quote_keyword='+quote_keyword;
     }
 
 		

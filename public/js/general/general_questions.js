@@ -7,6 +7,74 @@ $(document).ready(function(){
 		$('#ask_question').find('.descrptn_qus').css('display','block');
 	});
 
+
+	/*****code for search in questions page******/
+	$('#search_questions').submit(function(e){
+		e.preventDefault();
+
+		var home_url = $('#home_url').val();
+	    var ques_keyword = $(this).find('.gen_ques_keyword').val();
+
+	    location.href = home_url+'general_user/quote_questions?ques_keyword='+ques_keyword+'&tab=ques';
+		
+	});/***search submit ends***/
+
+	/****on click of mark as answered button*****/
+	$('.mark_asnwered').click(function(e){
+		e.preventDefault();
+		var home_url = $('#home_url').val();
+
+		var star_checked = '0';
+		/****make all star inactive*****/
+		$('.all_answers_bus li').each(function(){
+
+			var status = $(this).find('.chat_call_sec').find('.rate_this').attr('data-status');
+
+			if(status == 'active'){
+				var business_id = $(this).find('.chat_call_sec').find('.rate_this').attr('data-business_id');
+				var question_id = $(this).find('.chat_call_sec').find('.rate_this').attr('data-question_id');
+
+				star_checked = '1';
+
+
+				$.ajaxSetup({
+				    headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    }
+		  		});
+
+		  		if (confirm('Are you sure you mark this as Answered')) {
+		  		  $.ajax({
+		         	type:'POST',
+		         	url:home_url+'general_user/markanswered',
+		         	data:{business_id:business_id, question_id:question_id},
+		         	success:function(data){
+		         		if(data.success == '1'){
+		         			location.href = home_url+'general_user/quote_questions?tab=ques';
+		         		}
+			          	if(data.success == '2'){
+			          		alert(data.message);
+			          	}
+			          	if(data.success == '0'){
+			          		alert(data.message);
+			          	}
+		         	}
+
+		        });/****ajax ends here****/
+
+		      }/***confirm ends***/
+
+			}/****if status active ends****/
+
+		});	
+
+		if(star_checked == '0'){
+			alert('Star the correct answer and the question will be marked as answered');
+		}
+	});
+	/****on click of mark as answered button ends*****/
+
+
 	$('.descr_ques').click(function(e){
 		e.preventDefault();
 
@@ -18,10 +86,10 @@ $(document).ready(function(){
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').css('display','block');
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Please add title');
 	        return false;
-		}else if((question_title).length < 10 || (question_title).length > 100){
+		}else if((question_title).length < 10 || (question_title).length > 30){
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').addClass('error_border');
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').css('display','block');
-	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Title must be between 10 and 100 digits.');
+	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Title must be between 10 and 30 digits.');
 	        return false;
 		}else{
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').removeClass('error_border');
@@ -36,10 +104,10 @@ $(document).ready(function(){
 	        $('#ask_question').find('.descrptn_qus').find('.question_description').next('.fill_fields').css('display','block');
 	        $('#ask_question').find('.descrptn_qus').find('.question_description').next('.fill_fields').text('Please add decsription');
 	        return false;
-		}else if((question_description).length < 100 || (question_description).length > 1000){
+		}else if((question_description).length < 100 || (question_description).length > 2000){
 	        $('#ask_question').find('.descrptn_qus').find('.question_description').addClass('error_border');
 	        $('#ask_question').find('.descrptn_qus').find('.question_description').next('.fill_fields').css('display','block');
-	        $('#ask_question').find('.descrptn_qus').find('.question_description').next('.fill_fields').text('Description must be between 100 and 1000 digits.');
+	        $('#ask_question').find('.descrptn_qus').find('.question_description').next('.fill_fields').text('Description must be between 100 and 2000 digits.');
 	        return false;
 		}else{
 	        $('#ask_question').find('.descrptn_qus').find('.question_description').removeClass('error_border');
@@ -74,7 +142,7 @@ $(document).ready(function(){
 			});
 
 		});/*******display images code ends here*******/
-	});
+	});/****descr_ques click ends****/
 
 
 	$('.skip_btn_imgs').click(function(e){
@@ -279,8 +347,47 @@ function removeErrmsgs(data){
 
 	}else if(current_id == "single_ques_desc"){
 
+		var total_length = value_field.length;
+		$('#ask_question').find('.descrptn_qus p').text();
+		$('#ask_question').find('.descrptn_qus p').text('('+total_length+'/2000 letters)');
 		$(data).removeClass('error_border');
 		$(data).next('.fill_fields').css('display','none');
 
 	}
-}
+}/****remove error msg ends here***/
+
+/***fn to mark as answered from star click***/
+function markAnswered(data){
+
+	var home_url = $('#home_url').val();
+
+	/****make all star inactive*****/
+	$('.all_answers_bus li').each(function(){
+
+		$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','');
+		$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','inactive');
+		$(this).find('.chat_call_sec').find('.rate_this').html('');
+		$(this).find('.chat_call_sec').find('.rate_this').html('<img src="'+home_url+'img/best.png">');
+
+	});
+
+	var status = $(data).attr('data-status');
+
+	if(status == 'inactive'){
+
+		$(data).attr('data-status','');
+		$(data).attr('data-status','active');
+		$(data).html('');
+		$(data).html('<img src="'+home_url+'img/active_star.png">');
+
+	}else{
+
+		$(data).attr('data-status','');
+		$(data).attr('data-status','inactive');
+		$(data).html('');
+		$(data).html('<img src="'+home_url+'img/best.png">');
+
+	}
+	
+}/**fn ends star asnwered**/
+

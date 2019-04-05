@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 	/*****code for search in quote page******/
-	$('#search_quotes').submit(function(e){
+	$('#bus_search_quotes').submit(function(e){
 		e.preventDefault();
 
 		var home_url = $('#home_url').val();
@@ -18,7 +18,7 @@ $(document).ready(function(){
 		}
 		else
 		{
-			home_url = home_url+'/business_user/quotes_questions?';
+			home_url = home_url+'?';
 		}
 
 		if(quote_keyword == ''){

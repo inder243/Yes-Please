@@ -559,7 +559,7 @@ function getOnlyStaticQuestions()
 	           
 				if(response.success==1)
 				{
-					//alert(response.message);
+					alert(response.emails);
 					jQuery('.pre_loader').css('display','none');
 					$('.dynmic_quoteform .form-ques').hide();
 			    	$('.dynmic_quoteform .static_ques').hide();

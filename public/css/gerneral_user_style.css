@@ -2890,6 +2890,7 @@ width: 155px;
     border: 1px solid #ced4da;
     border-radius: 5px;
     min-height: 200px;
+    padding: .375rem .75rem;
 }
 .similar_result_section h1 {
 	font-size: 18px;
@@ -2929,7 +2930,7 @@ color: #1b2137;
 }
 .questin_total_ans ul {
 
-    max-height: 470px;
+    max-height: 400px;
     overflow: auto;
 
 }

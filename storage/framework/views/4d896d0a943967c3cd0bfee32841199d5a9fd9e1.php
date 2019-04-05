@@ -1,7 +1,9 @@
 <?php $__env->startSection('content'); ?>
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<span class="q_breadcrumb"> Quotes and questions</span></div>
+
+         <div class="breadcrumb register_breadcrumb"><a href="<?php echo e(url('/business_user/business_dashboard')); ?>">Dashboard </a>/<?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?><a href="<?php echo e(url('/business_user/advertisement_dashboard')); ?>"> Advertisement </a>/<?php endif; ?><span class="q_breadcrumb"> Quotes and questions</span></div>
+
       </section>
       <section>
          <div class="container">
@@ -10,17 +12,17 @@
                <div class="questions_tabs_main">
                   <div class="quote_question">
                      <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                           <a class="nav-link active" data-toggle="tab" href="#Quotes">Quotes</a>
+                        <li class="nav-item quotes_li">
+                           <a class="nav-link quotes_tabb <?php if($tab == 'quotes'): ?>active <?php endif; ?>" data-toggle="tab" href="#Quotes">Quotes</a>
                         </li>
-                        <li class="nav-item">
-                           <a class="nav-link" data-toggle="tab" href="#Questions">Questions</a>
+                        <li class="nav-item question_li">
+                           <a class="nav-link question_tabb <?php if($tab == 'ques'): ?>active <?php endif; ?>" data-toggle="tab" href="#Questions">Questions</a>
                         </li>
                      </ul>
                      <!-- Tab panes -->
                      <div class="tab-content">
-                        <div class="tab-pane container active" id="Quotes">
-                           <form id="search_quotes" action="" method="POST">
+                        <div class="tab-pane container <?php if($tab == 'quotes'): ?>active <?php endif; ?>" id="Quotes">
+                           <form id="bus_search_quotes" action="" method="POST">
                               <div class="search_filter">
                                  <h1>Search filter</h1>
                                  <div class="row searchf_input">
@@ -56,21 +58,45 @@
                               $quote_id = $quote['quote_id'];
                               ?>
                               <?php if($quote['status'] == 1): ?>
-                              <a href="<?php echo e(url('/business_user/quotes_request/'.$quote_id)); ?>" class="new_quote">
+                                 <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                                 <a href="<?php echo e(url('/business_user/quotes_request?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_id)); ?>" class="new_quote">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/quotes_request?quote_id='.$quote_id)); ?>" class="new_quote">
+                                 <?php endif; ?>
                               <?php elseif($quote['status'] == 2): ?>
-                              <a href="<?php echo e(url('/business_user/quotes_request/'.$quote_id)); ?>" class="new_quote q_quoted">
+                                 <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                                 <a href="<?php echo e(url('/business_user/quotes_request?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_id)); ?>" class="new_quote q_quoted">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/quotes_request?quote_id='.$quote_id)); ?>" class="new_quote q_quoted">
+                                 <?php endif; ?>
+                              
                               <?php elseif($quote['status'] == 3): ?>
-                              <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/3')); ?>" class="new_quote q_quoted">
+                                 <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_id.'&quote_status=3')); ?>" class="new_quote q_quoted">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?quote_id='.$quote_id.'&quote_status=3')); ?>" class="new_quote q_quoted">
+                                 <?php endif; ?>
+                             
                               <?php elseif($quote['status'] == 4): ?>
-                              <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/4')); ?>" class="new_quote q_accepted">
+                                 <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_id.'&quote_status=4')); ?>" class="new_quote q_accepted">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?quote_id='.$quote_id.'&quote_status=4')); ?>" class="new_quote q_accepted">
+                                 <?php endif; ?>
+                             
                               <?php elseif($quote['status'] == 6): ?>
-                              <a href="<?php echo e(url('/business_user/quoted_accepted/'.$quote_id.'/6')); ?>" class="new_quote">
+                                 <?php if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type'))): ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?month='.app('request')->input('month').'&type='.app('request')->input('type').'&quote_id='.$quote_id.'&quote_status=6')); ?>" class="new_quote">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/quoted_accepted?quote_id='.$quote_id.'&quote_status=6')); ?>" class="new_quote">
+                                 <?php endif; ?>
                               <?php else: ?>
                               <a href="" class="new_quote">
                               <?php endif; ?>
                               
                                  <div class="quote_detail">
-                                    <h1>Quote id : <?php echo e($quote['get_quotes']['quote_id']); ?></h1>
+
+                                    <h1><?php echo e($quote['get_quotes']['cat_name']); ?> Quotes : <?php echo e($quote['get_quotes']['quote_id']); ?></h1>
                                     <div class="created_date_for_mobile">
                                        <?php $datetime = $quote['get_quotes']['created_at'];
                                             $splitTimeStamp = explode(" ",$datetime);
@@ -156,119 +182,104 @@
                            </div>
                            <!-- <div class="load_more"><a href="JavaScript:;">Load more</a></div> -->
                         </div>
-                        <div class="tab-pane container fade" id="Questions">
-                           <div class="search_filter">
-                              <h1>Search filter</h1>
-                              <div class="row  searchf_input">
-                                 <div class="form-group custom_errow col-md-6 col-12">
-                                    <label for="inputPassword4">Status</label>
-                                    <select class="form-control " id="exampleSelect1">
-                                       <option>New and Answered</option>
-                                       <option>2</option>
-                                       <option>3</option>
-                                       <option>4</option>
-                                       <option>5</option>
-                                    </select>
-                                    <span class="select_arrow"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                        <div class="tab-pane container  <?php if($tab == 'ques'): ?>active <?php else: ?> fade <?php endif; ?>" id="Questions">
+                           <form method="POST" name="ques_keyword_form" id="bus_search_questions" action="">
+                              <div class="search_filter">
+                                 <h1>Search filter</h1>
+                                 <div class="row  searchf_input">
+                                    <div class="form-group custom_errow col-md-6 col-12">
+                                       <label for="inputPassword4">Status</label>
+                                       <select class="form-control" id="exampleSelect1">
+                                          <option value="all" <?php if($ques_status == 'all'): ?> selected <?php endif; ?>>All</option>
+                                          <option value="1" <?php if($ques_status == 1): ?> selected <?php endif; ?>>New</option>
+                                          <option value="2" <?php if($ques_status == 2): ?> selected <?php endif; ?>>Read</option>
+                                          <option value="2" <?php if($ques_status == 3): ?> selected <?php endif; ?>>Answered</option>
+                                       </select>
+                                       <span class="select_arrow"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                                    </div>
+                                    <div class="form-group col-md-6 col-12">
+                                       <label for="inputPassword4">Keyword</label>
+                                       <input type="text" class="form-control bus_ques_keyword" value="<?php if(!empty($ques_keyword)): ?><?php echo e($ques_keyword); ?><?php endif; ?>" id="inputPassword4">
+                                    </div>
                                  </div>
-                                 <div class="form-group col-md-6 col-12">
-                                    <label for="inputPassword4">Keyword</label>
-                                    <input type="text" class="form-control" id="inputPassword4" required="">
-                                 </div>
+                                 <div class="search_btn">
+                                    <input type="submit" value="Search">
+                                 </div> 
                               </div>
-                              <div class="search_btn">
-                                 <input type="submit" value="Search">
-                              </div> 
-                           </div>
-                           <div class="quote_section">
-                              <a href="question_detail.html" class="new_quote">
-                                 <div class="quote_detail">
-                                    <h1>Home improvement quote</h1>
-                                    <div class="created_date_for_mobile">
-                                       <span class="c_time">17:40</span>
-                                       <span class="c_date">14/07/2018</span>
-                                    </div>
-                                    <div class="Q_tag">
-                                       <div class="new_lable">NEW</div>
-                                       <div class="created_date">14/07/2018</div>
-                                    </div>
-                                    <div class="quote_basic_detail">
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">House type:</span>
-                                          <span>Private land</span>
+                           </form>
+
+                           <?php if(!empty($questions)): ?>
+                              <?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $all_qus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <div class="quote_section">
+                                 <?php $question_id = $all_qus[0]['question_id']; ?>
+
+                                 <?php $answerdSts = ''; ?>
+                                 <?php $newSts = ''; ?>
+                                 <?php $readSts = ''; ?>
+
+                                 <?php $__currentLoopData = $all_qus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sQuote): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($sQuote['status_bus']==3): ?>
+                                       <?php $answerdSts = 1; ?>
+                                    <?php endif; ?>
+                                    <?php if($sQuote['status_bus']==1): ?>
+                                       <?php $newSts = 1; ?>
+                                    <?php endif; ?>
+                                    <?php if($sQuote['status_bus']==2): ?>
+                                       <?php $readSts = 1; ?>
+                                    <?php endif; ?>
+                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                 <?php if(isset($answerdSts) && $answerdSts==1): ?>
+                                 <a href="<?php echo e(url('/business_user/question_detail/'.$question_id)); ?>" class="new_quote q_accepted">
+                                 <?php elseif(isset($readSts) && $readSts==1): ?>
+                                 <a href="<?php echo e(url('/business_user/question_detail/'.$question_id)); ?>" class="new_quote q_quoted">
+                                 <?php elseif(isset($newSts) && $newSts==1): ?>
+                                 <a href="<?php echo e(url('/business_user/question_detail/'.$question_id)); ?>" class="new_quote">
+                                 <?php else: ?>
+                                 <a href="<?php echo e(url('/business_user/question_detail/'.$question_id)); ?>" class="new_quote">
+                                 <?php endif; ?>
+                                    <div class="quote_detail">
+                                       <h1><?php echo e($all_qus[0]['get_ques']['cat_name']); ?> Question</h1>
+                                       <?php $datetim = $all_qus[0]['get_ques']['created_at'];
+                                          $splitTimeStmp = explode(" ",$datetim);
+                                           
+                                          $date = date('d/m/Y',strtotime($splitTimeStmp[0]));
+                                          $time = date('H:i',strtotime($splitTimeStmp[1]));
+                                         ?>
+                                       <div class="created_date_for_mobile">
+                                          <span class="c_time"><?php echo e($time); ?></span>
+                                          <span class="c_date"><?php echo e($date); ?></span>
                                        </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Required task:</span>
-                                          <span>Design house</span>
+                                       <div class="Q_tag">
+                                          <?php if(isset($answerdSts) && $answerdSts==1): ?>
+                                           <div class="new_lable q_accepted_table gen_accepted">ANSWER</div>
+                                           <?php elseif(isset($readSts) && $readSts==1): ?>
+                                           <div class="new_lable q_quoted_table gen_new">READ</div>
+                                           <?php elseif(isset($newSts) && $newSts==1): ?>
+                                           <div class="new_lable gen_new">NEW</div>
+                                           <?php endif; ?>
+                                           
+                                          <div class="created_date"><?php echo e($date); ?></div>
                                        </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Design type: </span>
-                                          <span>Modern</span>
+                                       <div class="quote_basic_detail">
+                                          <div class="Q_detail">
+                                             <span class="Q_detail_heading1">Question : </span>
+                                             <span><?php echo e($all_qus[0]['get_ques']['q_title']); ?></span>
+                                          </div>
                                        </div>
-                                    </div>
-                                    <div class="Q_description">
-                                       <p>Hello my name is Moshe and i'm looking for design of a new house</p>
-                                    </div>
-                                 </div>
-                              </a>
-                           </div>
-                           <div class="quote_section">
-                              <a href="javascript:;" class="new_quote q_accepted">
-                                 <div class="quote_detail">
-                                    <h1>Home improvement quote</h1>
-                                    <div class="Q_tag">
-                                       <div class="new_lable q_accepted_table">ANSWER</div>
-                                       <div class="created_date">14/07/2018</div>
-                                    </div>
-                                    <div class="quote_basic_detail">
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">House type:</span>
-                                          <span>Private land</span>
-                                       </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Required task:</span>
-                                          <span>Design house</span>
-                                       </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Design type: </span>
-                                          <span>Modern</span>
-                                       </div>
-                                    </div>
-                                    <div class="Q_description">
-                                       <p>Hello my name is Moshe and i'm looking for design of a new house</p>
-                                    </div>
-                                 </div>
-                              </a>
-                           </div>
-                           <div class="quote_section">
-                              <a href="javascript:;" class="new_quote q_accepted">
-                                 <div class="quote_detail">
-                                    <h1>Home improvement quote</h1>
-                                    <div class="Q_tag">
-                                       <div class="new_lable q_accepted_table">ANSWER</div>
-                                       <div class="created_date">14/07/2018</div>
-                                    </div>
-                                    <div class="quote_basic_detail">
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">House type:</span>
-                                          <span>Private land</span>
-                                       </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Required task:</span>
-                                          <span>Design house</span>
-                                       </div>
-                                       <div class="Q_detail">
-                                          <span class="Q_detail_heading">Design type: </span>
-                                          <span>Modern</span>
+                                       <div class="Q_description">
+                                          <?php $q_descriptn = mb_strimwidth($all_qus[0]['get_ques']['q_description'], 0, 150, "..."); ?>
+                                          <p><?php echo e($q_descriptn); ?></p>
                                        </div>
                                     </div>
-                                    <div class="Q_description">
-                                       <p>Hello my name is Moshe and i'm looking for design of a new house</p>
-                                    </div>
-                                 </div>
-                              </a>
-                           </div>
-                           <div class="load_more"><a href="JavaScript:;">Load more</a></div>
+                                 </a>
+                              </div>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                           <?php else: ?>
+                           <div class="no_result_quotes">No Results Found!</div>
+                           <?php endif; ?>
+                           
+                           <!-- <div class="load_more"><a href="JavaScript:;">Load more</a></div> -->
                         </div>
                      </div>
                   </div>

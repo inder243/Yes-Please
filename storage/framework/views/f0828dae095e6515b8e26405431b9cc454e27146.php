@@ -46,8 +46,8 @@
                                     <?php echo e(csrf_field()); ?>
 
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Super Category</label></div>
-                                        <div class="col-12 col-md-9"> 
+                                        <div class="col col-md-4"><label for="hf-email" class=" form-control-label">Super Category</label></div>
+                                        <div class="col-12 col-md-8"> 
                                             <select name="superCategory" required>
                                                         <option value="">Select Parent Category</option>
                                                      <?php $__currentLoopData = $Supercategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -60,22 +60,22 @@
                                    
 
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Category</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col col-md-4"><label for="hf-email" class=" form-control-label">Category</label></div>
+                                        <div class="col-12 col-md-8">
                                             <input type="text" id="hf-email" name="category" placeholder="Enter category..." class="form-control" maxlength="30" value="<?php echo e(old('category')); ?>" required>
                                            
                                         </div>
                                     </div>
 
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="q_with_ph" class=" form-control-label">Enter quote with phone number</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col col-md-4"><label for="q_with_ph" class=" form-control-label">Enter quote with phone number</label></div>
+                                        <div class="col-12 col-md-8">
                                             <input id="q_with_ph" name="q_with_ph" placeholder="Quote with phone number" class="form-control" maxlength="30" value="" required="" type="number">
                                         </div>                                                                              
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="q_without_ph" class=" form-control-label">Enter quote without phone number</label></div>
-                                        <div class="col-12 col-md-9">
+                                        <div class="col col-md-4"><label for="q_without_ph" class=" form-control-label">Enter quote without phone number</label></div>
+                                        <div class="col-12 col-md-8">
                                             <input id="q_without_ph" name="q_without_ph" placeholder="Quote without phone number" class="form-control" maxlength="30" value="" required="" type="number">
                                         </div>                                                                              
                                     </div>
