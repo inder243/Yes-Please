@@ -281,11 +281,6 @@ padding: 19px 30px 19px 30px;
 	background-color: #fff;
 
 }
-.second_header_logo {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-}
 
 .second_header_logo img {
 	width: 150px;
@@ -357,7 +352,7 @@ padding: 19px 30px 19px 30px;
 
 .second_header_logo img {
 	width: 150px;
-
+	margin-right: 50px;
 }
 
 .product_detail {
@@ -967,7 +962,6 @@ width: 100%;
 }
 
 /*********************************** Register page start *********************************/
-
 .register_breadcrumb {
     background-color: transparent;
     margin: 0 0 0 0;
@@ -1008,11 +1002,11 @@ width: 100%;
 
 }
 .registration_filed p {
+
     text-align: center;
     font-size: 16px;
     margin-top: 7px;
-		overflow: hidden;
-    text-overflow: ellipsis;
+
 }
 .registrationform {
     padding-top: 25px;
@@ -1233,7 +1227,7 @@ width: 100%;
     height: 42px;
 		margin-bottom: 10px;
 }
-.category_list > ul {
+.category_list ul {
     margin: 0;
     max-height: 345px;
     overflow: auto;
@@ -1298,7 +1292,7 @@ width: 100%;
 .delete_cat {
     position: absolute;
 }
-.added_category > ul {
+.added_category ul {
     margin: 0;
     max-height: 400px;
     overflow: auto;
@@ -1487,7 +1481,7 @@ text-decoration: none;
 		margin-top: 20px;
 }
 .drag_file {
-    width: 46%;
+    width: 45%;
 		display: flex;
 }
 .add_photo_video p {
@@ -1531,14 +1525,19 @@ text-decoration: none;
     height: 20px;
     border: none;
     background-color: transparent;
-    left: -2px;
-    top: -2px;
+    left: -1px;
+    top: -1px;
     border-radius: 3px !important;
 }
 .forcheckbox input:checked ~ p {
     font-weight: normal;
 }
-
+.forcheckbox p {
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .week-section {
     display: flex;
     justify-content: space-between;
@@ -1712,7 +1711,7 @@ text-decoration: none;
     font-size: 30px;
 }
 .error {
-    border: 1px solid red !important;
+    border: 1px solid red;
 }
 .fill_fields {
     text-align: right;
@@ -1764,11 +1763,6 @@ text-decoration: none;
 }
 
 @media (max-width: 767px) {
-	input {
-
-    font-size: 16px !important;
-
-}
 	.login_fields::before {
     position: absolute;
     content: '';
@@ -1798,7 +1792,6 @@ text-decoration: none;
 }
 .login_section {
     display: inline-block;
-		width: 100%;
 }
 .googlelogin{
 	margin-top: 20px;
@@ -1846,12 +1839,14 @@ right: 10px;
 	padding: 20px 10px 20px 10px;
 }
 	header {
-		padding:20px 15px 15px;
+		padding: 15px;
 	}
 	.header_menu_toggle img {
 		width: 32px;
 	}
-
+	.register {
+		display: none;
+	}
 	.header_links a {
 		padding: 6px 19px;
 	}
@@ -2010,15 +2005,3 @@ right: 10px;
 
 
 /*********************************** Media query end *********************************/
-.cross-button {
-	position: absolute;
-	content: "";
-	right: -10px;
-	top: -11px;
-	background: #ed0c6e;
-	width: 25px;
-	height: 25px;
-	color: #fff;
-	border-radius: 50%;
-	line-height: 21px;
-}

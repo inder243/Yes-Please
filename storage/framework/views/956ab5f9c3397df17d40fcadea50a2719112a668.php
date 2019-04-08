@@ -42,7 +42,7 @@
                             <a href="<?php echo e(url('/general_user/quote_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                            <a href="<?php echo e(url('/general_user/quote_questions?tab=ques')); ?>"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>

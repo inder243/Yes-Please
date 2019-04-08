@@ -79,11 +79,6 @@ class AdvertisementController extends Controller
                 return view('/business/advertisement_free_mode');
             }
         }
-        
-
-        
-        
-     
     }
 
     //function thet will render advertisement pro page
@@ -108,8 +103,6 @@ class AdvertisementController extends Controller
             return view('/business/advertisement_pro_mode')->with(array('getSelectedCats'=>$getSelectedCats,'monthlyBudget'=>$getSettings));
         }
 
-        
-       
     }
 
     //save pro mode settings set by business user
@@ -285,14 +278,28 @@ class AdvertisementController extends Controller
             //get business user id from auth
             $bUserId  = Auth::user()->id;
 
-            $currentMonth = date('m');
-            $currentYear = date('Y');
+            if($request->ajax())
+            {
+                $fulldate = $request->post('day');
+                $dateForCliks = $request->post('day');
+                $currentYear = date('Y', strtotime($fulldate));
+                $currentMonth = date('m', strtotime($fulldate));
+                $currentDay = date('d', strtotime($fulldate));
+            }
+            else
+            {
+                $currentMonth = date('m');
+                $currentYear = date('Y');
+                $currentDay = date('d');
+                $fulldate = date('Y-m-d');
+            }
+            
 
             //get categories selected by business user
             $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
 
             //get list of Campaigns,with impression count,click count,and sum of amount
-            $campaigns = YpCampaignDetail::whereMonth('created_at',$currentMonth)->whereYear('created_at',$currentYear)->withCount(['impressions'=>function($query){
+            $campaigns = YpCampaignDetail::where('b_id',$bUserId)->whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->withCount(['impressions'=>function($query){
                 $query->select( DB::raw( "COALESCE(count(id),0)" ) );
                 $query->whereMonth('created_at', '=', date('m'));
                 $query->whereYear('created_at', '=', date('Y'));
@@ -308,18 +315,39 @@ class AdvertisementController extends Controller
              $query->whereYear('created_at', '=', date('Y'));
            }])->get();
 
-            //get list of clicks
-            $clicks = YpCampaignDetail::whereMonth('created_at',$currentMonth)->whereYear('created_at',$currentYear)->with(['clicks'=>function($query){
-             $query->whereMonth('created_at', '=', date('m'));
-             $query->whereYear('created_at', '=', date('Y'));
+
+          /* $campaigns = YpCampaignDetail::where('b_id',$bUserId)->withCount(['impressions'=>function($query){
+                $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+                
+           },
+          'clicks'=>function($query){
+             $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+             
            },
           'trans'=>function($query){
-             $query->whereMonth('created_at', '=', date('m'));
-             $query->whereYear('created_at', '=', date('Y'));
-           }])->get();
+             $query->select( DB::raw( "COALESCE(sum(amount),0)" ) );
+            
+           }])->get();*/
+
+           //get list of clicks
+           $clicks = YpCampaignClick::where('yp_campaign_click.b_id',$bUserId)->whereMonth('yp_campaign_click.created_at',$currentMonth)->whereYear('yp_campaign_click.created_at',$currentYear)->whereDay('yp_campaign_click.created_at',$currentDay)->with([
+          'camp_det_click'=>function($query){
+           },
+           'cat_det_click'=>function($query){
+           }])->leftJoin('yp_business_user_transactions', 'yp_campaign_click.id', '=', 'yp_business_user_transactions.click_id')
+           ->get();
+
+           if($request->ajax())
+            {
+                 return view('/business/advertisement_top_ads_monthly_clicks')->with(array('selectedcats'=>$getSelectedCats,'campaigns'=>$campaigns,'clicks'=>$clicks,'currentMonth'=>$currentMonth,'currentYear'=>$currentYear,'currentDay'=>$currentDay,'fulldate'=>$fulldate));
+                
+            }
+            else
+            {
+                return view('/business/advertisement_top_ads')->with(array('selectedcats'=>$getSelectedCats,'campaigns'=>$campaigns,'clicks'=>$clicks,'currentMonth'=>$currentMonth,'currentYear'=>$currentYear,'currentDay'=>$currentDay,'fulldate'=>$fulldate));
+            }
+
            
-           
-            return view('/business/advertisement_top_ads')->with(array('selectedcats'=>$getSelectedCats,'campaigns'=>$campaigns,'clicks'=>$clicks));
         }
         catch(Exception $e)
         {
@@ -334,7 +362,6 @@ class AdvertisementController extends Controller
     {
         try
         {
-            
             $campname = isset($_POST['campname'])?$_POST['campname']:'';
             $selectedCats = isset($_POST['selected_cats'])?$_POST['selected_cats']:'';
             $payperclick = isset($_POST['payperclick'])?$_POST['payperclick']:'';
@@ -474,6 +501,211 @@ class AdvertisementController extends Controller
         echo "<pre>";
         print_r($response_array);
         die();
+    }
+
+    //edit budget function
+    public function editBudget(Request $request)
+    {
+        try
+        {
+            //get business user id from auth
+            $bUserId  = Auth::user()->id;
+
+            if(!empty($_POST))
+            {
+                //get settings from BusinessUserProSettingsTrait
+                $monthlyBudget = isset($_POST['monthly_budget'])?$_POST['monthly_budget']:'';
+                if($monthlyBudget=='')
+                {
+                    $error ="Please provide monthly budget.";
+                    Session::flash('error_message', $error);
+                    return back()->withInput();
+                }
+                else if($monthlyBudget<=0)
+                {
+                    $error = "Please provide monthly budget greater than zero.";
+                    Session::flash('error_message', $error);
+                    return back()->withInput();
+                }
+
+                $data = $_POST;
+
+                //echo "<pre>";
+                //print_r($_POST);
+               /* foreach($data as $key=>$categoryData)
+                {
+                    if($key!='monthly_budget' && $key!='_token')
+                    {
+                        if(isset($categoryData[1]) && !empty($categoryData[1]))
+                        {
+                            echo $quoteWithoutPh = $categoryData[1];
+                        }
+                    }
+                }
+                die();*/
+                foreach($data as $key=>$categoryData)
+                {
+
+                    $quoteWithoutPh=0;
+                    $quoteWithPh=0;
+                    //check if all categories amount is greater than zero or not
+                    if($key!='monthly_budget' && $key!='_token')
+                    {
+
+                        if(isset($categoryData[0]) && !empty($categoryData[0]))
+                        {
+                            $quoteWithPh = $categoryData[0];
+                        }
+                        
+
+                        if(isset($categoryData[1]) && !empty($categoryData[1]))
+                        {
+                             $quoteWithoutPh = $categoryData[1];
+                        }
+                        
+                        if($quoteWithPh<=0 || $quoteWithoutPh<=0)
+                        {
+                            
+                            $error = "Please provide quotes bid amount greater than zero.";
+                            Session::flash('error_message', $error);
+                            return back()->withInput();
+                        }
+
+                        if($quoteWithPh<5)
+                        {
+                            
+                            $error = "Please provide quotes with phone bid amount greater or equal to 5.";
+                            Session::flash('error_message', $error);
+                            return back()->withInput();
+                        }
+
+                      
+                        
+                    }
+                    
+                }
+               
+                if(!empty($_POST))
+                {
+                    $data = $_POST;
+                    
+                    //update bid amount of each category
+                    foreach($data as $key=>$categoryData)
+                    {
+                        if($key!='monthly_budget' && $key!='_token')
+                        {
+                            $categoryId = $key;
+
+                            if(isset($categoryData[0]) && !empty($categoryData[0]))
+                            {
+                                $quoteWithPh = $categoryData[0];
+                            }
+                            else
+                            {
+                                $quoteWithPh = 0;
+                            }
+
+                            if(isset($categoryData[1]) && !empty($categoryData[1]))
+                            {
+                                $quoteWithoutPh = $categoryData[1];
+                            }
+                            else
+                            {
+                                $quoteWithoutPh = 0;
+                            }
+
+                            if(isset($categoryData[2]) && !empty($categoryData[2]) && ($categoryData[2]=="on" || $categoryData[2]==1))
+                            {
+                                $activeQuote = 1;
+                            }
+                            else
+                            {
+                                $activeQuote = 0;
+                            }
+                            
+                            YpBusinessUsercategories::where("category_id",$categoryId)->where("business_userid",$bUserId)->update(array('quote_with_ph'=>$quoteWithPh,'quote_without_ph'=>$quoteWithoutPh,'accept_request'=>$activeQuote)); 
+                        }
+                        
+                    }
+
+
+                    //update monthly budget in cc detail table and save transaction in transactions table.
+
+                   $existingdet = YpBusinessUserCcDetails::where("b_id",$bUserId)->first(); 
+                   $updatedExistBudget = $existingdet['updated_wallet_amount'];
+                   $monthExistBudget = $existingdet['wallet_amount'];
+
+                   if($monthlyBudget>$monthExistBudget)
+                   {
+                        $diff = $monthlyBudget-$monthExistBudget;
+                        $updatedExistBudget = $updatedExistBudget+$diff;
+
+                        YpBusinessUserCcDetails::where("b_id",$bUserId)->update(array('wallet_amount'=>$monthlyBudget,'updated_wallet_amount'=>$updatedExistBudget)); 
+
+                        $YpBusinessUserCcDetails = new YpBusinessUserCcDetails;
+                        $YpBusinessUserCcDetails->b_id=$bUserId;
+                        $YpBusinessUserTransactions = new YpBusinessUserTransactions;
+                        $YpBusinessUserTransactions->trans_id=time();
+                        $YpBusinessUserTransactions->b_id=$bUserId;
+                        $YpBusinessUserTransactions->cat_id=0;
+                        $YpBusinessUserTransactions->transaction_made_on=date('Y-m-d');
+                        $YpBusinessUserTransactions->amount=$diff;
+                        $YpBusinessUserTransactions->status=1;
+                        $YpBusinessUserTransactions->save();
+                   }
+                   else if($monthlyBudget<$monthExistBudget)
+                   {
+                        $diff = $monthExistBudget-$monthlyBudget;
+                        $updatedExistBudget = $updatedExistBudget-$diff;
+
+                        YpBusinessUserCcDetails::where("b_id",$bUserId)->update(array('wallet_amount'=>$monthlyBudget,'updated_wallet_amount'=>$updatedExistBudget)); 
+
+                        
+                   }
+
+
+                    //update user pro_mode
+                    YpBusinessUsers::where("id",$bUserId)->update(array('advertise_mode'=>1));
+
+                    $currentMonth = date('m');
+                    $currentYear = date('Y');
+                    $getSettings = $this->getProSettings($currentMonth,$currentYear);
+
+                    $error ="Settings updated successfully.";
+                    Session::flash('success_message', $error);
+     
+                    $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
+                
+                    return view('/business/advertisement_edit_budget')->with(array('getSelectedCats'=>$getSelectedCats,'monthlyBudget'=>$getSettings));
+                    
+                    
+                }
+                else
+                {
+                    $error ="Somethng went wrong,Please try again.";
+                    Session::flash('error_message', $error);
+                    return back()->withInput();
+                }
+            }
+            else
+            {
+                $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
+                $currentMonth = date('m');
+                $currentYear = date('Y');
+                $getSettings = $this->getProSettings($currentMonth,$currentYear);
+                
+                return view('/business/advertisement_edit_budget')->with(array('getSelectedCats'=>$getSelectedCats,'monthlyBudget'=>$getSettings));
+            }
+            
+
+        }
+        catch(Exception $e)
+        {
+            $error = $e->getMessage();
+            Session::flash('error_message', $error);
+            return back()->withInput();
+        }
+       
     }
   
 }

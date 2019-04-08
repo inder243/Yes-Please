@@ -70,6 +70,9 @@ $(document).ready(function(){
 
 		if(star_checked == '0'){
 			alert('Star the correct answer and the question will be marked as answered');
+			$('html, body').animate({
+		        scrollTop: $(".show_quote").offset().top
+		    }, 2000);
 		}
 	});
 	/****on click of mark as answered button ends*****/
@@ -360,20 +363,21 @@ function removeErrmsgs(data){
 function markAnswered(data){
 
 	var home_url = $('#home_url').val();
-
-	/****make all star inactive*****/
-	$('.all_answers_bus li').each(function(){
-
-		$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','');
-		$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','inactive');
-		$(this).find('.chat_call_sec').find('.rate_this').html('');
-		$(this).find('.chat_call_sec').find('.rate_this').html('<img src="'+home_url+'img/best.png">');
-
-	});
-
+	
 	var status = $(data).attr('data-status');
 
 	if(status == 'inactive'){
+
+		/****make all star inactive*****/
+		$('.all_answers_bus li').each(function(){
+
+			$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','');
+			$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','inactive');
+			$(this).find('.chat_call_sec').find('.rate_this').html('');
+			$(this).find('.chat_call_sec').find('.rate_this').html('<img src="'+home_url+'img/best.png">');
+
+		});
+
 
 		$(data).attr('data-status','');
 		$(data).attr('data-status','active');
@@ -381,6 +385,17 @@ function markAnswered(data){
 		$(data).html('<img src="'+home_url+'img/active_star.png">');
 
 	}else{
+
+		/****make all star inactive*****/
+		$('.all_answers_bus li').each(function(){
+
+			$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','');
+			$(this).find('.chat_call_sec').find('.rate_this').attr('data-status','inactive');
+			$(this).find('.chat_call_sec').find('.rate_this').html('');
+			$(this).find('.chat_call_sec').find('.rate_this').html('<img src="'+home_url+'img/best.png">');
+
+		});
+
 
 		$(data).attr('data-status','');
 		$(data).attr('data-status','inactive');

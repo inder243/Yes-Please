@@ -71,7 +71,7 @@ class BusinessQuestionsController extends Controller
         $ques_answer = $request->get_answer;
 
         if($ques_answer != ''){
-            $update_status = YpBusinessUsersQuestions::where(['question_id'=>$question_id,'business_id'=>$business_id])->update(['status'=>3,'business_answer'=>$ques_answer]);
+            $update_status = YpBusinessUsersQuestions::where(['question_id'=>$question_id,'business_id'=>$business_id])->update(['status_bus'=>3,'business_answer'=>$ques_answer]);
 
             if($update_status == '1'){
                 return response()->json(['success'=>'1','message'=>'Answer Sent','url'=>'business_user/quotes_questions?tab=ques']);

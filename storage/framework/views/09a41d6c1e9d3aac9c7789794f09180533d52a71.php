@@ -216,7 +216,7 @@
         $page_type ='top_ads';
     }?>
     <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads')): ?>
-    <!-- <link rel="stylesheet" href="<?php echo e(URL::asset('css/dataTables.min.css')); ?>" type="text/css"> -->
+     <link rel="stylesheet" href="<?php echo e(URL::asset('css/dataTables.min.css')); ?>" type="text/css">
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/jquery.ui.js')); ?>"></script>
    

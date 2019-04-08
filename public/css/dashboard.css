@@ -80,7 +80,9 @@ a:focus {
 input:invalid {
 	box-shadow: none;
 }
-
+button:focus {
+    outline: none;
+}
 .banner {
 	background-image: url(../img/banner.jpg);
 	background-size: cover;
@@ -822,7 +824,7 @@ input:invalid {
 	border: 2px solid #336699;
 	width: 100%;
 	display: inline-block;
-	border-radius: 10px;
+	border-radius: 6px;
 	padding: 22px;
 }
 
@@ -924,6 +926,33 @@ input:invalid {
     right: -4px;
 }
 .bus_read::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #ed0c6e;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_new::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: rgb(51, 102, 153);
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_accepted::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #339933;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_read::before {
     content: '';
     width: 7px;
     height: 32px;
@@ -1059,7 +1088,7 @@ input:invalid {
 
 .user_quote_second_section {
 	display: table-cell;
-	width: 67%;
+	width: 70%;
 	padding: 30px;
 }
 
@@ -1149,6 +1178,7 @@ input:invalid {
 	font-size: 13px;
 	padding-top: 10px;
 	color: #999999;
+	text-align: justify;
 }
 
 .user_quote_second_section p span {
@@ -2808,6 +2838,30 @@ margin-top: 5px;
 .t-detail span {
     color: #ed0c6e;
 }
+.edit_budget_main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.edit-switch_pro input:hover {
+    background-color: #d20b61;
+}
+.edit-switch_pro input {
+    background-color: #ed0c6e;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit- box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 5px 40px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: .5s all;
+}
+.edit-switch_pro {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
 /*********************************** Advertisement page end *********************************/
 
 /*********************************** Top-ad page start *********************************/
@@ -2986,6 +3040,28 @@ cursor: pointer;
 }
 .adv-add a:hover {
     background-color: #d80762;
+}
+.test-campign img {
+    width: 12px;
+    margin-right: 10px;
+}
+.pause_btn  img{
+	width: 9px;
+}
+.test-campign a {
+    background-color: #ed0c6e;
+    border-radius: 3px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 15px 5px 15px;
+    display: inline-block;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+		-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+}
+
+.test-campign a:hover {
+    background-color: #cf065e;
 }
 
 /*

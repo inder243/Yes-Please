@@ -3154,7 +3154,7 @@ color: #1b2137;
 	border: 2px solid #336699;
 	width: 100%;
 	display: inline-block;
-	border-radius: 10px;
+	border-radius: 6px;
 	padding: 22px;
 }
 
@@ -3253,6 +3253,15 @@ color: #1b2137;
     width: 7px;
     height: 32px;
     background-color: #336699;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
+.gen_read::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #ed0c6e;
     position: absolute;
     top: 0;
     right: -4px;
@@ -3459,7 +3468,7 @@ color: #1b2137;
 
 .user_quote_second_section {
 	display: table-cell;
-	width: 67%;
+	width: 70%;
 	padding: 30px;
 
 }
@@ -3550,6 +3559,7 @@ color: #1b2137;
 	font-size: 13px;
 	padding-top: 10px;
 	color: #999999;
+	text-align: justify;
 }
 
 .user_quote_second_section p span {
@@ -3799,6 +3809,7 @@ padding-bottom: 12px;
 }
 .complete_detail {
     padding-top: 10px;
+    text-align: justify;
 }
 .chat_call_sec > a {
     margin-right: 20px;

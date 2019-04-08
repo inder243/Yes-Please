@@ -110,10 +110,34 @@
 					$date = date('d/m/Y',strtotime($splitTimeStamp[0]));
 					$time = date('H:i',strtotime($splitTimeStamp[1]));
 				?>
-	          	<div class="created_dated">{{$date}}</div>
+	          	<div class="created_dated date_bu_qus">{{$date}}</div>
           		<div class="Q_description">
              		<p>{{ $allquestions['q_description']}}</p>
           		</div>
+          		<div class="uploaded_content">
+                     <div class="swiper-container swiper-wrapper_p">
+                        <div class="swiper-wrapper ">
+                           <?php 
+                              $uploads = json_decode($allquestions['uploaded_files'],true);
+                            ?>
+
+                          @if(!empty($uploads))
+                            @foreach($uploads['pic'] as $img)
+                            <?php $img_name = explode( '.', $img );?>
+                            <div class="swiper-slide">
+                              <div class="uploaded_img" data-image="{{url('/images/general_questions/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;">
+                                 <img src="{{url('/images/general_questions/'.$general_id.'/'.$img)}}"/>
+                              </div>
+                           </div>
+                            @endforeach
+                            
+                          @endif
+                        </div>
+                        <!-- Add Arrows -->
+                        <div class="swiper-button-next for_next_arrow"></div>
+                        <div class="swiper-button-prev for_back_arrow"></div>
+                     </div>
+                  </div>
        		</div>
        		@endif
     	</div>

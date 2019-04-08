@@ -655,3 +655,40 @@ a.business_answer {
     padding: 0;
     margin: 0;
 }
+
+.no-data {
+    margin-bottom: 19px;
+    border-bottom: 1px solid #dad0d0;
+    padding-bottom: 20px;
+}
+
+.no-data h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #8a8a8a;
+}
+
+.add_c_btn {
+    text-align: center;
+    margin-top: 20px;
+}
+.no-data_month {
+     margin-bottom: 19px;
+   
+    padding-bottom: 20px;
+}
+.no-data_month h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #8a8a8a;
+}
+.business_detals{
+    display: flex;
+    justify-content: space-between;
+}
+.call_icon_bu{
+    margin-right: 0 !important;
+}
+.date_bu_qus{
+    right: 30px !important;
+}

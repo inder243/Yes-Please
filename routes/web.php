@@ -172,7 +172,10 @@ Route::prefix('business_user')->group(function() {
     Route::post('/save_pro_mode_settings', 'business_user\AdvertisementController@saveProModeSettings')->name('business_user.saveProModeSettings');
     Route::post('/testPayment', 'business_user\AdvertisementController@testPayment');
     Route::get('/advertisement_top_ads', 'business_user\AdvertisementController@showTopads')->name('business_user.showTopads');
+    Route::post('/advertisement_top_ads', 'business_user\AdvertisementController@showTopads')->name('business_user.showTopads');
     Route::post('/save_campaign', 'business_user\AdvertisementController@saveCampaign')->name('business_user.save_campaign');
+    Route::post('/edit_budget', 'business_user\AdvertisementController@editBudget')->name('business_user.editBudget');
+     Route::get('/edit_budget', 'business_user\AdvertisementController@editBudget')->name('business_user.editBudget');
     
 
     /**********Questions**********/

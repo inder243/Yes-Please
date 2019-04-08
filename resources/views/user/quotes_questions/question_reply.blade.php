@@ -4,7 +4,9 @@
 <section class="register_step_1">
 	<div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
 		<div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions?tab=ques') }}"> Quotes and questions </a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquestions->cat_id) }}">@if(isset($allquestions)) {{$allquestions->cat_name}}@endif</a>/<span class="q_breadcrumb">Question</span></div>
+		@if(!empty($all_data))
 		<div class="cancel_quote mark_answred"><a href="javascript:;" class="mark_asnwered">Mark as answered</a></div>
+		@endif
 	</div>
 </section>
 <section>
@@ -118,11 +120,37 @@
 				<div class="Q_description">
 					<p>{{ $allquestions['q_description']}}</p>
 				</div>
+				<div class="uploaded_content">
+                     <div class="swiper-container swiper-wrapper_p">
+                        <div class="swiper-wrapper ">
+                           <?php 
+                              $uploads = json_decode($allquestions['uploaded_files'],true);
+                            ?>
+
+                          @if(!empty($uploads))
+                            @foreach($uploads['pic'] as $img)
+                            <?php $img_name = explode( '.', $img );?>
+                            <div class="swiper-slide">
+                              <div class="uploaded_img" data-image="{{url('/images/general_questions/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;">
+                                 <img src="{{url('/images/general_questions/'.$general_id.'/'.$img)}}"/>
+                              </div>
+                           </div>
+                            @endforeach
+                            
+                          @endif
+                        </div>
+                        <!-- Add Arrows -->
+                        <div class="swiper-button-next for_next_arrow1"></div>
+                        <div class="swiper-button-prev for_back_arrow1"></div>
+                     </div>
+                  </div>
 			</div>
 			@endif
 
 		</div>
+		@if(!empty($all_data))
 		<div class="cancel_quote cancel_for_mobile mark_ans_width"><a href="javascript:;">Mark as answered</a></div>
+		@endif
 		<div class="list_quotes">
 			@if(!empty($all_data))
 			<h1>Answers</h1>
@@ -155,11 +183,9 @@
 									</div>
 									<div class="main_ans_sec_detail">
 										<div class="heading_dec">
+											<div class="business_detals">
 											<a class="business_answer" href="{{ url('general_user/public_profile/'.$ques_data['business_id'].'/'.$ques_data['get_ques']['cat_id']) }}" target="_blank"><h1>{{$ques_data['get_bus_user']['business_name']}}</h1></a>
-											<p class="complete_detail">{{$ques_data['business_answer']}}</p>
-										</div>
-
-										<div class="chat_call_sec">
+											<div class="chat_call_sec">
 											@if($ques_data['mark_answered'] == 1)
 											<a href="javascript:;" data-business_id="{{$ques_data['business_id']}}" data-question_id="{{$ques_data['question_id']}}" data-status="active" class="rate_this" onclick="markAnswered(this);">
 												<img src="{{ asset('img/active_star.png') }}">
@@ -173,10 +199,15 @@
 											<a href="javascript:;" class="chat_this">
 												<img src="{{ asset('img/text.png') }}">
 											</a>
-											<a href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ $ques_data['get_bus_user']['phone_number']}}" data-original-title="{{ $ques_data['get_bus_user']['phone_number']}}" class="call_this">
+											<a href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ $ques_data['get_bus_user']['phone_number']}}" data-original-title="{{ $ques_data['get_bus_user']['phone_number']}}" class="call_this call_icon_bu">
 												<img src="{{ asset('img/call.png') }}"/>
 											</a>
 			                            </div>
+			                        </div>
+											<p class="complete_detail">{{$ques_data['business_answer']}}</p>
+										</div>
+
+										
 									</div>
 								</div>
 							</div>

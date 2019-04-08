@@ -1,4 +1,4 @@
-//this function will be used when info of previous month,next month will be fetched
+//this function will be used when advertisment dashboard info of previous month,next month will be fetched
 function getOtherMonthData(month,year)
 {
   jQuery('.pre_loader').css('display','block');
@@ -108,3 +108,29 @@ $('#form_add_topad_submit').click(function(e){
   $('#form_add_topad').submit();
 
 });
+
+
+//this function will be used when info of clicks for previous month,next month will be fetched
+function getOtherMonthClicks(day)
+{
+  jQuery('.pre_loader').css('display','block');
+  var home_url = $('#home_url').val();
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+        type:'POST',
+        url:home_url+'business_user/advertisement_top_ads',
+        data:{day:day},
+        success:function(result){
+          
+            $(".month-clicks").html(result);
+          
+            jQuery('.pre_loader').css('display','none');
+        }
+
+    });
+}

@@ -8,7 +8,7 @@
       <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/<span class="q_breadcrumb">Advertisement</span></div>
       <div class="edit_budgets">
       <h1> @if(isset($monthlyBudget['updated_wallet_amount'])){{$monthlyBudget['updated_wallet_amount']}}@endif NIS left</h1>
-      <a href="javascript:;">Edit budget</a>
+      <a href="{{ url('/business_user/edit_budget') }}">Edit budget</a>
       </div>
     </div>
   </section>

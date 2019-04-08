@@ -256,7 +256,7 @@
                                           @if(isset($answerdSts) && $answerdSts==1)
                                            <div class="new_lable q_accepted_table gen_accepted">ANSWER</div>
                                            @elseif(isset($readSts) && $readSts==1)
-                                           <div class="new_lable q_quoted_table gen_new">READ</div>
+                                           <div class="new_lable q_quoted_table gen_read">READ</div>
                                            @elseif(isset($newSts) && $newSts==1)
                                            <div class="new_lable gen_new">NEW</div>
                                            @endif
