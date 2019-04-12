@@ -8,7 +8,7 @@ class YpCampaignDetail  extends Model
 {
     protected $table = 'yp_campaign_detail';
     protected $fillable = [
-       'id','name','pay_per_click','daily_budget','status','end_date','b_id'
+       'id','name','pay_per_click','daily_budget','status','end_date','b_id','to_show'
     ];
     protected $hidden = [
        // 'remember_token',

@@ -3,7 +3,7 @@
 @section('content')
 <section class="register_step_1">
 	<div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-		<div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions?tab=ques') }}"> Quotes and questions </a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquestions->cat_id) }}">@if(isset($allquestions)) {{$allquestions->cat_name}}@endif</a>/<span class="q_breadcrumb">Question</span></div>
+		<div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquestions->cat_id) }}">@if(isset($allquestions)) {{$allquestions->cat_name}}@endif</a>/<a href="{{ url('/general_user/quote_questions?tab=ques') }}"> Quotes and questions </a>/<span class="q_breadcrumb">Question</span></div>
 		@if(!empty($all_data))
 		<div class="cancel_quote mark_answred"><a href="javascript:;" class="mark_asnwered">Mark as answered</a></div>
 		@endif
@@ -131,7 +131,7 @@
                             @foreach($uploads['pic'] as $img)
                             <?php $img_name = explode( '.', $img );?>
                             <div class="swiper-slide">
-                              <div class="uploaded_img" data-image="{{url('/images/general_questions/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImage(this);return false;">
+                              <div class="uploaded_img" data-image="{{url('/images/general_questions/'.$general_id.'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;">
                                  <img src="{{url('/images/general_questions/'.$general_id.'/'.$img)}}"/>
                               </div>
                            </div>
@@ -223,29 +223,48 @@
 	</div>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-12">
-				<div class="related_q"><p>Related questions</p></div>
-			</div>
-			<div class="col-lg-6 col-12">
-				<div class="related_q_main">
-					<div class="heading_and_time">
-						<h1>Home improvement question</h1>
-						<span class="imp_time">17/07/2018</span>
-					</div>
-					<span class="t_ans">Answers <b>5</b></span>
-					<p>Fusce vel ipsum a nisi sagittis fringilla in in odio. Aenean tempus at risus sit amet pulvinar. Mauris nec gravida eros, et dapibus est. Suspendisse eleifend imperdiet lectus vitae dignissim. Ut ornare sollicitudin lacus in tempus.</p>
+			
+			@if(!empty($related_question))
+
+				<div class="col-12">
+					<div class="related_q"><p>Related questions</p></div>
 				</div>
-			</div>
-			<div class="col-lg-6 col-12">
-				<div class="related_q_main">
-					<div class="heading_and_time">
-						<h1>Home improvement question</h1>
-						<span class="imp_time">17/07/2018</span>
-					</div>
-					<span class="t_ans">Answers <b>5</b></span>
-					<p>Fusce vel ipsum a nisi sagittis fringilla in in odio. Aenean tempus at risus sit amet pulvinar. Mauris nec gravida eros, et dapibus est. Suspendisse eleifend imperdiet lectus vitae dignissim. Ut ornare sollicitudin lacus in tempus.</p>
-				</div>
-			</div>
+
+				@foreach($related_question as $ques_key => $qus_data)
+
+					@if($qus_data['id'] != $question_id)
+
+						@if(isset($qus_data['avg_answer']) && !empty($qus_data['avg_answer']))
+		                    @php $avg_answer = $qus_data['avg_answer'][0]['total_answer']; @endphp 
+		                @else
+		                    @php $avg_answer = 0; @endphp   
+		                @endif
+
+		                @php $datetime = $qus_data['created_at']; @endphp
+		                @php $splitTimeStamp = explode(" ",$datetime); @endphp
+		                @php $date = date('d/m/Y',strtotime($splitTimeStamp[0])); @endphp
+
+		                @if($avg_answer != 0)
+		                	
+		                	<div class="col-lg-6 col-12">
+								<div class="related_q_main">
+									<div class="heading_and_time">
+										<a href="javascript:;" onclick="openBusinessRepliesModal(this);" data-cat_id="{{$qus_data['cat_id']}}" data-question_id="{{$qus_data['id']}}">
+											<h1>{{$qus_data["q_title"]}}</h1>
+										</a>
+										<span class="imp_time">{{$date}}</span>
+									</div>
+									<span class="t_ans">Answers <b>{{$avg_answer}}</b></span>
+									<p>{{$qus_data["q_description"]}}</p>
+								</div>
+							</div>
+		                @endif
+	                @endif
+				@endforeach
+
+			@endif
+
+
 		</div>
 	</div>
 </section>

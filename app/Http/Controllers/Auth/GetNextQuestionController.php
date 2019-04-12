@@ -10,7 +10,14 @@ use App\Models\YpQuesJumps;
 use App\Models\YpGeneralUsersQuotes;
 use App\Models\YpBusinessUsersQuotes;
 use App\Models\YpBusinessCategories;
+use App\Models\YpCampaignClick;
+use App\Models\YpCampaignDetail;
+use App\Models\YpBusinessUserCcDetails;
+
+use App\Models\YpBusinessUserTransactions;
+
 use App\Http\Traits\BusinessUserProSettingsTrait;
+
 use Mail;
 
 
@@ -785,6 +792,75 @@ class GetNextQuestionController extends Controller
     }/***fn ends here***/
 
     
-  
+    //function to save click of campaign
+    public function saveClickOnCampaign(Request $request)
+    {
+        if($request->catId!='' && $request->buId!='' && $request->campId!='')
+        {
+
+            //get pay per click and daily budget
+            $getBidAmount = YpCampaignDetail::select("pay_per_click","daily_budget")->where('id',$request->campId)->first();
+
+            $payPerClick = $getBidAmount['pay_per_click'];
+            $dailyBudget = $getBidAmount['daily_budget'];
+
+             //get sum of amount of clicks for this category camp 
+            $todaybudget = YpBusinessUserTransactions::where('camp_id',$request->campId)->where('b_id',$request->buId)->where('cat_id',$request->catId)->whereDate('transaction_made_on', DB::raw('CURDATE()'))->sum('amount');
+
+            if($todaybudget<$dailyBudget) 
+            {
+               //$update = YpCampaignDetail::where("id",$request->campId)->update(['to_show' =>1]);
+               $getccDet = YpBusinessUserCcDetails::where('b_id',$request->buId)->first();
+
+               $updatedWalletAmount = $getccDet['updated_wallet_amount'];
+               
+               if($updatedWalletAmount!=0)
+               {
+                    $updatedWalletAmount = $updatedWalletAmount-$payPerClick;
+                    if($updatedWalletAmount<0)
+                    {
+                        $updateWalletAmount = YpBusinessUserCcDetails::where("b_id",$request->buId)->update(['updated_wallet_amount' =>0]);
+                    }
+                    else
+                    {
+                        $updateWalletAmount = YpBusinessUserCcDetails::where("b_id",$request->buId)->update(['updated_wallet_amount' =>$updatedWalletAmount]);
+                    }
+
+                    //save click
+                    $YpCampaignClick = new YpCampaignClick;
+                    $YpCampaignClick->cat_id = $request->catId;
+                    $YpCampaignClick->camp_id = $request->campId;
+                    $YpCampaignClick->b_id = $request->buId;
+                    $YpCampaignClick->save();
+
+                    //save transaction
+                    $YpBusinessUserTransactions = new YpBusinessUserTransactions;
+                    $YpBusinessUserTransactions->trans_id  = time();
+                    $YpBusinessUserTransactions->b_id = $request->buId;
+                    $YpBusinessUserTransactions->cat_id = $request->catId;
+                    $YpBusinessUserTransactions->camp_id = $request->campId;
+                    $YpBusinessUserTransactions->click_id = $YpCampaignClick->id;
+                    $YpBusinessUserTransactions->type = 1;
+                    $YpBusinessUserTransactions->reason_of_deduction = 4;
+                    $YpBusinessUserTransactions->status = 1;
+                    $YpBusinessUserTransactions->amount = $payPerClick;
+                    $YpBusinessUserTransactions->transaction_made_on = date('Y-m-d');
+                    $YpBusinessUserTransactions->save();
+               }
+               
+            }
+            /*else
+            {
+                $update = YpCampaignDetail::where("id",$request->campId)->update(['to_show' =>2]);
+            }*/
+           
+
+            return response()->json(['success'=>1,'message'=>'data saved'],200);
+        }
+        else
+        {
+            return response()->json(['success'=>0,'message'=>'please try again.'],200);
+        }
+    }
 
 }

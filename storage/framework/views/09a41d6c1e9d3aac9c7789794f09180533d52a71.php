@@ -214,8 +214,12 @@
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css"> -->
     <?php  if (strpos($_SERVER['REQUEST_URI'], "advertisement_top_ads") !== false){
         $page_type ='top_ads';
-    }?>
-    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads')): ?>
+    }
+    if (strpos($_SERVER['REQUEST_URI'], "camp_detail") !== false){
+        $page_type ='camp_detail';
+    }
+    ?>
+    <?php if(isset($page_type) && ($page_type == 'top_ads' || $page_type == 'camp_detail')): ?>
      <link rel="stylesheet" href="<?php echo e(URL::asset('css/dataTables.min.css')); ?>" type="text/css">
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/jquery.ui.js')); ?>"></script>
@@ -234,6 +238,12 @@
 
            $('#comp_table').dataTable({searching: false, paging: false, info: false});
            $('#clicks_table').dataTable({searching: false, paging: false, info: false});
+           
+        }
+        if(window.location.href.indexOf("camp_detail") > -1) {
+
+           
+           $('#single_click_table').dataTable({searching: false, paging: false, info: false});
         }
     });
     </script>

@@ -439,7 +439,7 @@ class AdvertisementController extends Controller
 
             $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
 
-            return view('/business/advertisement_top_ads')->with(array('selectedcats'=>$getSelectedCats));
+            return redirect('business_user/advertisement_top_ads');
         }
         catch(Exception $e)
         {
@@ -706,6 +706,127 @@ class AdvertisementController extends Controller
             return back()->withInput();
         }
        
+    }
+
+    public function getCampaignDetail($compid)
+    {
+        //get list of Campaigns,with impression count,click count,and sum of amount
+        $campaigns = YpCampaignDetail::where('id',$compid)->withCount(['impressions'=>function($query){
+            $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+       },
+      'clicks'=>function($query){
+         $query->select( DB::raw( "COALESCE(count(id),0)" ) );
+         
+       },
+      'trans'=>function($query){
+         $query->select( DB::raw( "COALESCE(sum(amount),0)" ) );
+       }])->get();
+
+      
+
+
+       //get list of clicks
+       $clicks = YpCampaignClick::where('yp_campaign_click.camp_id',$compid)->with([
+      'camp_det_click'=>function($query){
+       },
+       'cat_det_click'=>function($query){
+       }])->leftJoin('yp_business_user_transactions', 'yp_campaign_click.id', '=', 'yp_business_user_transactions.click_id')
+       ->get();
+        return view('/business/advertisement_single_campaign')->with(array('campaigns'=>$campaigns,'clicks'=>$clicks));
+    }
+
+    public function startCamp(Request $request)
+    {
+       
+        $compid= $request->campId;
+       
+
+        if($compid!='')
+        {
+            $getDetail = YpCampaignDetail::where('id',$compid)->first();
+            if(!empty($getDetail))
+            {
+                if($getDetail['status']==1)
+                {
+                    return response()->json(['success'=>'0','message'=>'Campaign already running.']);
+                }
+                else
+                {
+                    YpCampaignDetail::where("id",$compid)->update(array('status'=>1));
+                    return response()->json(['success'=>'1','message'=>'Campaign started successfully.']);
+                }
+            }
+            else
+            {
+                return response()->json(['success'=>'0','message'=>'Campaign does not exist.']);
+            }
+            
+        }
+        else
+        {
+            return response()->json(['success'=>'0','message'=>'Please try again later!']);
+        }
+    }
+
+    public function pauseCamp(Request $request)
+    {
+        $compid= $request->campId;
+        if($compid!='')
+        {
+            $getDetail = YpCampaignDetail::where('id',$compid)->first();
+            if(!empty($getDetail))
+            {
+                if($getDetail['status']==2)
+                {
+                    return response()->json(['success'=>'0','message'=>'Campaign already paused.']);
+                }
+                else
+                {
+                    YpCampaignDetail::where("id",$compid)->update(array('status'=>2));
+                    return response()->json(['success'=>'1','message'=>'Campaign paused successfully.']);
+                }
+            }
+            else
+            {
+                return response()->json(['success'=>'0','message'=>'Campaign does not exist.']);
+            }
+            
+        }
+        else
+        {
+            return response()->json(['success'=>'0','message'=>'Please try again later!']);
+        }
+    }
+
+    public function endCamp(Request $request)
+    {
+        $compid= $request->campId;
+        if($compid!='')
+        {
+            $getDetail = YpCampaignDetail::where('id',$compid)->first();
+            if(!empty($getDetail))
+            {
+                $today = date('Y-m-d');
+                if($getDetail['status']==3 || ($today>$getDetail['end_date']))
+                {
+                    return response()->json(['success'=>'0','message'=>'Campaign already ended.']);
+                }
+                else
+                {
+                    YpCampaignDetail::where("id",$compid)->update(array('status'=>3));
+                    return response()->json(['success'=>'1','message'=>'Campaign ended successfully.']);
+                }
+            }
+            else
+            {
+                return response()->json(['success'=>'0','message'=>'Campaign does not exist.']);
+            }
+            
+        }
+        else
+        {
+            return response()->json(['success'=>'0','message'=>'Please try again later!']);
+        }
     }
   
 }

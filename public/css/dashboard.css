@@ -879,6 +879,7 @@ button:focus {
 	padding: 4px 25px 4px 30px;
 	position: relative;
 	right: 5px;
+	font-weight: bold;
 }
 .bus_quoted::before {
     content: '';

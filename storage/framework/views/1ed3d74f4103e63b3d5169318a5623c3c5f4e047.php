@@ -2,7 +2,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div> <a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes->cat_id)); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></a>/<span class="q_breadcrumb">  Quote request</span></div>
+           <div> <a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes->cat_id)); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote request</span></div>
 
            <div class="for_accepted_quote">
             <div class="finish_quote">
@@ -226,20 +226,20 @@
 
                           <?php $details = mb_strimwidth($get_user_data['details'], 0, 30, "..."); ?>
 
-                        <?php if($get_user_data['price_type'] == 2): ?>
-                        <?php $price_type = '/hour'; ?>
-                        <?php else: ?>
-                        <?php $price_type = ''; ?>
-                        <?php endif; ?>
+                          <?php if($get_user_data['price_type'] == 2): ?>
+                          <?php $price_type = '/hour'; ?>
+                          <?php else: ?>
+                          <?php $price_type = ''; ?>
+                          <?php endif; ?>
 
                           <div class="rate_hours"><h2>$<?php echo e($get_user_data['price_quotes']); ?></h2><p class="complete_detail"></p><?php echo e($price_type); ?></div>
 
                         </div>
                             <div class="chat_call_sec star-sec">
 
-                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->avg('rating');
+                        <?php $get_total_rating = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$get_user_data['business_id']])->avg('rating');
 
-                        $get_total_reviews = DB::table('yp_user_reviews')->where(['general_id'=>Auth::user()->id,'user_type'=>'general','business_id'=>$get_user_data['business_id']])->where('review','!=','')->count('review');
+                        $get_total_reviews = DB::table('yp_user_reviews')->where(['user_type'=>'general','business_id'=>$get_user_data['business_id']])->where('review','!=','')->count('review');
                         
                         $total_rating = round($get_total_rating);
                         ?>

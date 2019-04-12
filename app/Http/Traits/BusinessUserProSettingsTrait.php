@@ -146,7 +146,7 @@ trait BusinessUserProSettingsTrait {
         $calculationsClosedDeals = YpBusinessUsersQuotes::select(DB::raw('count(id) as closedDeals'))->where("status",6)->where("business_id",$bUserId)->whereMonth('updated_at', $currentMonth)->whereYear('updated_at', $currentYear)->get();
 
         //get count of clicks top ads
-        $calculationsClicksTopAds = YpCampaignClick::select(DB::raw('count(id) as clicks'))->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear)->get();
+        $calculationsClicksTopAds = YpCampaignClick::select(DB::raw('count(id) as clicks'))->where('b_id',$bUserId)->whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear)->get();
 
         if(!empty($calculationsClicksTopAds) && $calculationsClicksTopAds[0]['clicks'])
         {

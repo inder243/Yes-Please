@@ -2890,7 +2890,7 @@ width: 155px;
     border: 1px solid #ced4da;
     border-radius: 5px;
     min-height: 200px;
-    padding: .375rem .75rem;
+		 padding: .375rem .75rem;
 }
 .similar_result_section h1 {
 	font-size: 18px;
@@ -3257,6 +3257,15 @@ color: #1b2137;
     top: 0;
     right: -4px;
 }
+.bus_rejected::before {
+    content: '';
+    width: 7px;
+    height: 32px;
+    background-color: #336699;
+    position: absolute;
+    top: 0;
+    right: -4px;
+}
 .gen_read::before {
     content: '';
     width: 7px;
@@ -3468,7 +3477,7 @@ color: #1b2137;
 
 .user_quote_second_section {
 	display: table-cell;
-	width: 70%;
+	width: 69%;
 	padding: 30px;
 
 }
@@ -3559,7 +3568,6 @@ color: #1b2137;
 	font-size: 13px;
 	padding-top: 10px;
 	color: #999999;
-	text-align: justify;
 }
 
 .user_quote_second_section p span {
@@ -3809,7 +3817,7 @@ padding-bottom: 12px;
 }
 .complete_detail {
     padding-top: 10px;
-    text-align: justify;
+		text-align: justify;
 }
 .chat_call_sec > a {
     margin-right: 20px;
@@ -3860,6 +3868,7 @@ margin-bottom: 25px;
     padding-top: 20px;
     font-size: 14px;
     color: #aaabb0;
+    word-wrap: break-word;
 }
 .t_ans {
     padding-top: 10px;
@@ -4457,6 +4466,83 @@ margin-bottom: 10px;
 .star-sec p {
     margin-right: 10px;
     color: #a8a7a7;
+}
+.questionanswer_body {
+    padding: 0;
+}
+.askans_question_main h1 {
+    font-size: 18px;
+    text-align: center;
+    color: #1b2137;
+}
+.askans_question_main p {
+    text-align: center;
+    margin-top: 0;
+    color: #b1aeae;
+    font-size: 14px;
+}
+.answer_question {
+    margin-top: 20px;
+}
+.answer_question ul {
+
+    max-height: 450px;
+    overflow: auto;
+}
+.answer_question ul li {
+    list-style: none;
+    padding: 15px 25px 15px 24px;
+}
+.main_list {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.main_list_icon {
+    margin-left: auto;
+}
+.main_list_img img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.main_list_content {
+    padding-left: 20px;
+    width: 100%;
+}
+.main-heading_div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.main_list_content span {
+    font-size: 12px;
+    color: #b1aeae;
+}
+.main_list_content h1 {
+    text-align: left;
+    font-weight: 600;
+    font-size: 17px;
+    padding-top: 7px;
+}
+.main_list_content p {
+    padding-top: 5px;
+    color: #000;
+    text-align: left;
+    word-wrap: break-word;
+}
+.main_list_icon a img {
+    width: 23px;
+}
+.main_list_icon a {
+    margin-right: 15px;
+}
+.main_list_icon a:last-child {
+    margin-right: 0;
+}
+.bg-color {
+    background-color: #f7f7f8;
 }
 /*********************************** Quote request end ***********************************/
 /*********************************** Media query start ******************************/

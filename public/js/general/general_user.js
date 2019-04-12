@@ -32,7 +32,7 @@ $(document).ready(function(){
             listItems.each(function(idx, li) {
                 var product = $(li);
 
-                $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+                $(li).find('.select_this').find('.check_bus').click(function() {
                   
                     if($(this).is(':checked')){
                         $(li).addClass('border_color');
@@ -41,11 +41,11 @@ $(document).ready(function(){
                     }
 
                     var countCheckedCheckboxes = listItems.find('.check_bus').filter(':checked').length;
-                  if(countCheckedCheckboxes > 5){
-                    alert('You can not select more than 5 business !');
-                    $(li).removeClass('border_color');
-                    return false;
-                  }
+					if(countCheckedCheckboxes > 5){
+						alert('You can not select more than 5 business !');
+						$(li).removeClass('border_color');
+						return false;
+					}
                 });
 
                 // and the rest of your code
@@ -274,7 +274,7 @@ $(document).ready(function(){
 	listItems.each(function(idx, li) {
 	    var product = $(li);
 
-	    $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+	    $(li).find('.select_this').find('..check_bus').click(function() {
 	    	
 	        if($(this).is(':checked')){
 	            $(li).addClass('border_color');
@@ -900,8 +900,7 @@ function showPosition(position) {
 			listItems.each(function(idx, li) {
 			    var product = $(li);
 
-			    $(li).find('.select_this').find('#hmm_'+idx).click(function() {
-			    	
+			    $(li).find('.select_this').find('.check_bus').click(function() {
 			        if($(this).is(':checked')){
 			            $(li).addClass('border_color');
 			        } else{
@@ -1038,7 +1037,7 @@ function showPosition(position) {
 	                listItems.each(function(idx, li) {
 	                    var product = $(li);
 
-	                    $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+	                    $(li).find('.select_this').find('.check_bus').click(function() {
 	                      
 	                        if($(this).is(':checked')){
 	                            $(li).addClass('border_color');

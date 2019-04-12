@@ -175,14 +175,18 @@ Route::prefix('business_user')->group(function() {
     Route::post('/advertisement_top_ads', 'business_user\AdvertisementController@showTopads')->name('business_user.showTopads');
     Route::post('/save_campaign', 'business_user\AdvertisementController@saveCampaign')->name('business_user.save_campaign');
     Route::post('/edit_budget', 'business_user\AdvertisementController@editBudget')->name('business_user.editBudget');
-     Route::get('/edit_budget', 'business_user\AdvertisementController@editBudget')->name('business_user.editBudget');
+    Route::get('/edit_budget', 'business_user\AdvertisementController@editBudget')->name('business_user.editBudget');
+    Route::get('/camp_detail/{id?}', 'business_user\AdvertisementController@getCampaignDetail')->name('business_user.getCampaignDetail');
+    Route::post('/start_camp', 'business_user\AdvertisementController@startCamp')->name('business_user.getCampaignDetail');
+    Route::post('/end_camp', 'business_user\AdvertisementController@endCamp')->name('business_user.getCampaignDetail');
+    Route::post('/pause_camp', 'business_user\AdvertisementController@pauseCamp')->name('business_user.getCampaignDetail');
     
 
     /**********Questions**********/
     Route::get('/question_detail/{question_id}',
    'business_user\BusinessQuestionsController@showQuestionDetail')->name('business_user.question_detail');
     Route::post('/question_ans_submit', 'business_user\BusinessQuestionsController@questionAnswerSubmit')->name('business_user.quotes_ans_submit');
-
+    
   });
 
 Route::prefix('general_user')->group(function() {
@@ -247,7 +251,13 @@ Route::prefix('general_user')->group(function() {
     Route::post('/questionsend/{b_id?}', 'general_user\GeneralQuestionsController@sendQuestions')->name('general_user.send_questions');
     Route::get('/qusreply/{question_id}', 'general_user\GeneralQuestionsController@questionReplies');
     Route::post('/markanswered', 'general_user\GeneralQuestionsController@markAnswered')->name('general_user.mark_answered');
+    Route::get('/similar_questions',
+   'Auth\GeneralUserLoginController@getSimilarQuestions')->name('general_user.similarques');
+    Route::get('/similar_ques_reply',
+   'Auth\GeneralUserLoginController@getBusinessReplies')->name('general_user.similarquesrply');
     /*******question ends********/
+
+    Route::post('/save_click', 'Auth\GetNextQuestionController@saveClickOnCampaign');
     
   });
 

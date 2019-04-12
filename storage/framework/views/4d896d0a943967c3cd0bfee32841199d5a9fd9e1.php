@@ -252,7 +252,7 @@
                                        </div>
                                        <div class="Q_tag">
                                           <?php if(isset($answerdSts) && $answerdSts==1): ?>
-                                           <div class="new_lable q_accepted_table gen_accepted">ANSWER</div>
+                                           <div class="new_lable q_accepted_table gen_accepted">ANSWERED</div>
                                            <?php elseif(isset($readSts) && $readSts==1): ?>
                                            <div class="new_lable q_quoted_table gen_read">READ</div>
                                            <?php elseif(isset($newSts) && $newSts==1): ?>

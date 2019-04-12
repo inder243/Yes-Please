@@ -1,4 +1,36 @@
+//get click of campaign
+function countClickOfAd(catId,buId,campId)
+{
+	
+	var site_url = $('#site_url').text();
 
+	window.location.href = site_url+"/general_user/public_profile/"+buId+"/"+catId;
+
+	if(catId!='' && buId!='' && campId!='')
+	{
+		$.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $.ajax({
+          url: site_url+"/general_user/save_click",        
+          type:'POST',
+          data: {'catId':catId,'buId':buId,'campId':campId},	
+          success:function(response){  
+           
+           
+			if(response.success==1)
+			{
+				
+				console.log(response);
+			}
+			
+          }
+        });
+	}
+}
 $(document).on('click','.dynamicradio_button', function () {
 
 	var site_url = $('#site_url').text();

@@ -14,13 +14,15 @@
     <div class="container pro-module-feature">
       <div class="row">
         <div class="col-12">
-          @if(count($campaigns)<=0))
+          @if(!isset($campaigns))
+          @if(count($campaigns)<=0)
           <div class="no-data">
             <h2>You don't have any Campaigns yet, please add Campaign</h2>
             <div class="add_c_btn adv-add">
              <a href="javascript:;" data-toggle="modal" data-target="#topad">Add</a>
             </div>
           </div>
+          @endif
           @endif
           @if(isset($campaigns) && (!empty($campaigns)) && (count($campaigns)>0))
           <div class="campagin_table">
@@ -48,18 +50,42 @@
                   <td data-Name="Budget spent" role="cell">{{$campaign['trans_count']}}</td>
                   <td data-Name="Impressions" role="cell">{{$campaign['impressions_count']}}</td>
                   <td data-Name="Clicks" role="cell">{{$campaign['clicks_count']}}</td>
-                  @if($campaign['status']==1) 
+                  @php $today = date('Y-m-d'); @endphp
+                  @php $todayc = strtotime($today); @endphp
+                  @php $end = strtotime($campaign['end_date']); @endphp
+
+                  @if($campaign['status']==1 ) 
                   @php $status="running"; @endphp
-                  @elseif($campaign['status']==2) 
+                  @elseif($campaign['status']==2 ) 
                   @php $status="paused"; @endphp
                   @elseif($campaign['status']==3) 
                   @php $status="ended"; @endphp
                   @endif
-                  <td data-Name="Status" role="cell" class="{{$status}}"><a href="javascript:;">{{$status}}</a></td>
-                  @if($campaign['status']==1 || $campaign['status']==2) 
-                  <td data-Name="Actions" class="edit"><a href="javascript:;">Edit</a></td>
-                  @elseif($campaign['status']==3) 
+                 
+                 <?php if($today > $campaign['end_date'] || $campaign['status']==3)
+                 {
+                    $status="ended";
+                  echo '<td data-Name="Status" role="cell" class="ended"><a href="javascript:;">ended</a></td>';
+                 }
+                 else if($campaign['status']==1)
+                 {
+                  $status="running";
+                  echo '<td data-Name="Status" role="cell" class="running"><a href="javascript:;">running</a></td>';
+                 }
+                 else if($campaign['status']==2)
+                 {
+                  $status="paused";
+                  echo '<td data-Name="Status" role="cell" class="paused"><a href="javascript:;">paused</a></td>';
+                 }
+                  
+                 ?>
+                  
+                  @if($status=="ended") 
                   <td data-Name="Actions" class="ended-red"><a href="javascript:;">Ended</a></td>
+                  @elseif($status=="running" || $status=="paused") 
+                  <td dd="{{$todayc}}" ddd="{{$end}}" data-Name="Actions" class="edit"><a href="{{url('/business_user/camp_detail/'.$campaign['id'].'') }}">Edit</a></td>
+
+                 
                   @endif
                   
                 </tr>
@@ -162,7 +188,7 @@
             <div class="name-field">
               <div class="form-group ">
                   <label for="inputEmail4">Name</label>
-                  <input type="text" class="form-control" id="inputEmail4" required="" name="campname">
+                  <input type="text" class="form-control" id="inputEmail4" required="" name="campname" maxlength="50">
                 </div>
             </div>
             <div class="categories-list">
@@ -201,7 +227,7 @@
             <div class="name-field">
               <div class="form-group ">
                   <label for="edate">End date</label>
-                  <input type="text" class="form-control" id="edate" required="" name="enddate">
+                  <input type="text" readonly='true' class="form-control" id="edate" required="" name="enddate">
                   
                 </div>
             </div>

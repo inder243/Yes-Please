@@ -239,6 +239,8 @@ $(document).ready(function(){
                 if(data.success == '0'){
                   $('#work_description').modal('hide');
                   $('#general_login').find('#sign_in_general').attr('data-checkstatus','quotessingle');
+                  $('#general_login').find('.login_body_main h1').text('');
+                  $('#general_login').find('.login_body_main h1').text('Please login or register to get upto 5 quotes');
                   $('#general_login').modal('show');
                   return false;
                 }

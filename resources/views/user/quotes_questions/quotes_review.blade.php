@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/quote_questions') }}">Quotes and Questions</a>/<a href="{{ url('/general_user/dashboard/catid/'.$quote_data['get_quotes']['cat_id']) }}">@if(isset($quote_data)) {{$quote_data['get_quotes']['cat_name']}}@endif</a>/<span class="q_breadcrumb">Review {{$quote_data['get_bus_user']['business_name']}}</span></div>
+           <div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/dashboard/catid/'.$quote_data['get_quotes']['cat_id']) }}">@if(isset($quote_data)) {{$quote_data['get_quotes']['cat_name']}}@endif</a>/<a href="{{ url('/general_user/quote_questions') }}">Quotes and Questions</a>/<span class="q_breadcrumb">Review {{$quote_data['get_bus_user']['business_name']}}</span></div>
 
          </div>
       </section>
@@ -55,8 +55,9 @@
                   </div>
                   <div class="contact_user">
                     @if(isset($quote_data))
+                    <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
                      <a href="javascript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="{{ $quote_data['get_bus_user']['phone_number']}}" data-original-title="{{ $quote_data['get_bus_user']['phone_number']}}"><img src="{{ asset('img/call.png') }}"/></a>
-                     <a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
+                     
                      @endif
                   </div>
                   <div class="review_section">

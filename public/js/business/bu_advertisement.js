@@ -134,3 +134,84 @@ function getOtherMonthClicks(day)
 
     });
 }
+
+function startCampaign(campId)
+{
+
+  jQuery('.pre_loader').css('display','block');
+  var home_url = $('#home_url').val();
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+        type:'POST',
+        url:home_url+'business_user/start_camp',
+        data:{campId:campId},
+        success:function(result){
+
+            alert(result.message);
+           if(result.success==1)
+            {
+              location.reload();
+            }
+
+            jQuery('.pre_loader').css('display','none');
+        }
+
+    });
+}
+function endCampaign(campId)
+{
+  jQuery('.pre_loader').css('display','block');
+  var home_url = $('#home_url').val();
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+        type:'POST',
+        url:home_url+'business_user/end_camp',
+        data:{campId:campId},
+        success:function(result){
+           alert(result.message);
+            if(result.success==1)
+            {
+              location.reload();
+            }
+            jQuery('.pre_loader').css('display','none');
+        }
+
+    });
+}
+function pauseCampaign(campId)
+{
+  jQuery('.pre_loader').css('display','block');
+  var home_url = $('#home_url').val();
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+        type:'POST',
+        url:home_url+'business_user/pause_camp',
+        data:{campId:campId},
+        success:function(result){
+           alert(result.message);
+          
+            if(result.success==1)
+            {
+              location.reload();
+            }
+            
+            jQuery('.pre_loader').css('display','none');
+        }
+
+    });
+}

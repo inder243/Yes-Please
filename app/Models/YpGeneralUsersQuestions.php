@@ -12,4 +12,14 @@ class YpGeneralUsersQuestions extends Model
     protected $hidden = [
        // 'remember_token',
     ];
+
+    public function ques_answers(){
+    	return $this->hasMany('App\Models\YpBusinessUsersQuestions','question_id','id');
+    }
+
+    public function avgAnswer(){
+        return $this->ques_answers()
+          ->selectRaw('count(business_answer) as total_answer, question_id')
+          ->groupBy('question_id');
+    }
 }

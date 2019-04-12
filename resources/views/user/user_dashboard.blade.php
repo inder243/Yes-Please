@@ -615,6 +615,79 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
+                      @if(isset($adsToShow) && !empty($adsToShow))
+                        <ul class="all_bus_by_cat" id="all_busBy_cat_ads">
+
+                            @foreach($adsToShow as $key=>$adToShow)
+                              <li class="all_business_bycat_li"  style="border-color: #ffcb08 !important;">
+                                <input type="hidden" class="hidden_longitude" value="{{ $adToShow['logitude']}}">
+                                <input type="hidden" class="hidden_latitude" value="{{ $adToShow['latitude']}}">
+                                <input type="hidden" class="hidden_address" value="{{ $adToShow['full_address']}}">
+                                <input type="hidden" class="hidden_buname" value="{{ $adToShow['business_name']}}">
+                              <div class="business_sec">
+                                 <div class="b-detail">
+                                    <span class="business_img">
+
+                                      @if($adToShow['image_name'])
+                                      @php
+                                      $bus_user_id = $adToShow['business_userid'];
+                                      $img_url = $adToShow['image_name'];
+                                      @endphp
+                                      <img src="{{url('/images/business_profile/'.$bus_user_id.'/'.$img_url)}}"/>
+                                      @else
+                                      <img src="{{ asset('img/img_placeholder.png') }}"/>
+                                      @endif
+
+                                    </span>
+                                    <div class="sec_t">
+                                       <span class="addtoshowspan" onclick="countClickOfAd('{{$categoryId}}','{{$adToShow['buid']}}','{{$adToShow['campid']}}')"><h1 datacamp="{{$adToShow['campid']}}">{{$adToShow['business_name']}}<span><img src="{{ asset('img/verified.png') }}"/></span></h1></span>
+                                       <p>{{$adToShow['category_name']}}</p>
+                                    </div>
+                                 </div>
+                                 <div class="select_this">
+                                    <div class="formcheck forcheckbox langcheck">
+                                       <label>
+                                          <input type="checkbox" class="radio-inline check_bus" id="addtoshow_{{$key}}" name="radios" value="" data-title="{{$adToShow['id']}}">
+                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
+                                          <p></p>
+                                       </label>
+                                    </div>
+                                 </div>
+                              </div>
+                              <p class="des">{{ $adToShow['full_address']}}</p>
+                              <div class="distance_rating">
+                                 <div class="rate_review">
+                                  @php $new_num = number_format($adToShow['distance'], 1, '.', ''); @endphp
+                                    <a href="javascript:;" class="distance">Distance <span>{{ $new_num}}km</span></a>
+
+
+                                    @if(!empty($adToShow['tot_rating']))
+
+                                    @php
+                                      $rating_num = number_format($adToShow['tot_rating'], 1, '.', '');
+
+                                    @endphp
+
+                                    @else
+
+                                    @php $rating_num = 0;@endphp
+
+                                    @endif
+
+                                    <a href="javascript:;" class="rating">Rating <span>{{$rating_num}}/5</span></a>
+                                    <a href="javascript:;" class="review">Reviews <span>@if(!empty($adToShow['tot_review'])) {{$adToShow['tot_review']}} @else 0 @endif</span></a>
+                                 </div>
+                                 <div class="call_chat">
+                                    <a href="javascript:;" class="text"><img/src="{{ asset('img/text.png') }}"/></a>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="{{ $adToShow['phone_number']}}" data-original-title="{{ $adToShow['phone_number']}}"><img/src="{{ asset('img/call.png') }}"/>
+                                    </a>
+                                 </div>
+                              </div>
+                           </li>    
+                            @endforeach
+
+                        </ul>
+                        @endif
                       @if(isset($all_business) && !empty($all_business))
                         <ul class="all_bus_by_cat" id="all_busBy_cat">
                             @foreach($all_business as $key=>$allbus)
@@ -925,7 +998,7 @@
         <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
             <div class="modal-content login_model">
                 <div class="modal-header">
-                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close_popup ask_quote_close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

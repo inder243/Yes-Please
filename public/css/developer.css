@@ -692,3 +692,20 @@ a.business_answer {
 .date_bu_qus{
     right: 30px !important;
 }
+#example2 {
+    margin-top: 20px;
+}
+.complete_detail {
+    word-break: break-all;
+}
+.sec_t > span > h1 > span {
+    margin-left: 10px;
+}
+.addtoshowspan{
+    cursor: pointer;
+    color: #007bff;
+}
+.addtoshowspan:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

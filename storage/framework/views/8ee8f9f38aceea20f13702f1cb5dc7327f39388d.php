@@ -2,7 +2,7 @@
 
   <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes->cat_id)); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></a>/<span class="q_breadcrumb">  Quote</span></div>
+           <div><a href="<?php echo e(url('/')); ?>">Home</a>/<a href="<?php echo e(url('/general_user/dashboard/catid/'.$allquotes->cat_id)); ?>"><?php if(isset($allquotes)): ?> <?php echo e($allquotes->cat_name); ?><?php endif; ?></a>/<a href="<?php echo e(url('/general_user/quote_questions')); ?>"> Quotes and questions </a>/<span class="q_breadcrumb">  Quote</span></div>
          <div class="cancel_quote"><a href="<?php echo e(url('general_user/quote_questions')); ?>">Cancel</a></div>
          </div>
       </section>

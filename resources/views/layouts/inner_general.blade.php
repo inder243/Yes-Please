@@ -707,12 +707,12 @@
               <div class="descibe_question_steps">
                 <div class="title_des">
                   <div class="form-group des_ques col-12">
-                <label for="inputPassword4">Title</label>
+                <label for="inputPassword4">Title (min 10 letters required)</label>
                 <input type="text" class="form-control question_title" id="single_ques_title" onkeyup="removeErrmsgs(this)">
                 <span class="fill_fields" role="alert" style="display:none;"></span>
                   </div>
                   <div class="form-group des_ques col-12">
-                    <label for="inputPassword4">Description</label>
+                    <label for="inputPassword4">Description (min 100 letters required)</label>
                     <textarea class="question_description" id="single_ques_desc" onkeyup="removeErrmsgs(this)"></textarea>
                     <span class="fill_fields" role="alert" style="display:none;"></span>
                   </div>
@@ -758,6 +758,7 @@
               <h1>We found similar results</h1>
               <p>Try to found answer to your question</p>
               <div class="questin_total_ans">
+                <div class="questin_total_ans_div">
                 <ul>
                   <li>
                     <div class="Question_main_div">
@@ -797,6 +798,7 @@
                     </div>
                   </li>
                 </ul>
+              </div>
                 <div class="send_to_business">
                   <!-- <a href="javascript:;" data-toggle="modal" data-target="#exampleModalCenter_login"> -->
 
@@ -804,7 +806,6 @@
                 </div>
               </div>
             </div>
-
 
             <!----------popup for mobile phone------------>
             <div class="not_all_business mobile_phn_pop" style="display:none;">
@@ -816,7 +817,7 @@
                 <div class="form-group ">
                   <label for="inputEmail4">Phone number</label>
                   <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="@if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)){{Auth::guard('general_user')->user()->phone_number}}@endif" onkeyup="remove_errmsg(this)">
-                  <span class="fill_fields" role="alert"></span>
+                  <span class="fill_fields" role="alert" style="display:none;"></span>
 
                   <div id="example2"></div>
                    <div id="recaptcha" value="" hidden="hidden"></div>
@@ -855,6 +856,94 @@
     </div>
   </div>
   <!-- ask question Modal end-->
+
+  <div class="modal fade" id="design_paper" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header question_header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body questionanswer_body">
+              <div class="askans_question_main">
+               <div class="how_to_ask" id="business_replies_modal">
+                  <h1>How long it takes to design paper for office?</a></h1>
+                  <p>Read the following answer and help others by staring the best answer</p>
+                  <div class="answer_question" id="business_detail_answer">
+                    <ul>
+                      <li>
+                        <div class="main_list">
+                          <div class="main_list_img"><img src="img/starbucks_corporation.png"/></div>
+                          <div class="main_list_content">
+                            <span>17/05/2018</span>
+                            <h1>Moshe LTD</h1>
+                            <p>Usually it takes 3-4 days</p>
+                          </div>
+                          <div class="main_list_icon">
+                            <a href="#"><img src="img/best.png"/></a>
+                            <a href="#"><img src="img/text.png"/></a>
+                              <a href="#"><img src="img/call.png"/></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="bg-color">
+                        <div class="main_list">
+                          <div class="main_list_img"><img src="img/starbucks_corporation.png"/></div>
+                          <div class="main_list_content">
+                            <span>17/05/2018</span>
+                            <h1>Moshe LTD</h1>
+                            <p>Usually it takes 3-4 days</p>
+                          </div>
+                          <div class="main_list_icon">
+                            <a href="#"><img src="img/best.png"/></a>
+                            <a href="#"><img src="img/text.png"/></a>
+                            <a href="#"><img src="img/call.png"/></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="main_list">
+                          <div class="main_list_img"><img src="img/starbucks_corporation.png"/></div>
+                          <div class="main_list_content">
+                            <span>17/05/2018</span>
+                            <h1>Moshe LTD</h1>
+                            <p>Usually it takes 3-4 days</p>
+                          </div>
+                          <div class="main_list_icon">
+                            <a href="#"><img src="img/best.png"/></a>
+                            <a href="#"><img src="img/text.png"/></a>
+                              <a href="#"><img src="img/call.png"/></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="bg-color">
+                        <div class="main_list">
+                          <div class="main_list_img"><img src="img/starbucks_corporation.png"/></div>
+                          <div class="main_list_content">
+                            <span>17/05/2018</span>
+                            <h1>Moshe LTD</h1>
+                            <p>Usually it takes 3-4 days</p>
+                          </div>
+                          <div class="main_list_icon">
+                            <a href="#"><img src="img/best.png"/></a>
+                            <a href="#"><img src="img/text.png"/></a>
+                              <a href="#"><img src="img/call.png"/></a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+
+                  </div>
+                </div>
+                
+               
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -952,7 +1041,7 @@
           listItems.each(function(idx, li) {
               var product = $(li);
 
-              $(li).find('.select_this').find('#hmm_'+idx).click(function() {
+              $(li).find('.select_this').find('.check_bus').click(function() {
                 
                   if($(this).is(':checked')){
                       $(li).addClass('border_color');
@@ -1065,8 +1154,8 @@
                     listItems.each(function(idx, li) {
                         var product = $(li);
 
-                        $(li).find('.select_this').find('#hmm_'+idx).click(function() {
-                          
+                        $(li).find('.select_this').find('.check_bus').click(function() {
+                         
                             if($(this).is(':checked')){
                                 $(li).addClass('border_color');
                             } else{
@@ -1470,6 +1559,7 @@
   $("#imgInp").change(function() {
     readURL(this);
   });
+
 
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()

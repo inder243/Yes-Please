@@ -613,6 +613,79 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <div class="business_name_sec">
+                      <?php if(isset($adsToShow) && !empty($adsToShow)): ?>
+                        <ul class="all_bus_by_cat" id="all_busBy_cat_ads">
+
+                            <?php $__currentLoopData = $adsToShow; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$adToShow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <li class="all_business_bycat_li"  style="border-color: #ffcb08 !important;">
+                                <input type="hidden" class="hidden_longitude" value="<?php echo e($adToShow['logitude']); ?>">
+                                <input type="hidden" class="hidden_latitude" value="<?php echo e($adToShow['latitude']); ?>">
+                                <input type="hidden" class="hidden_address" value="<?php echo e($adToShow['full_address']); ?>">
+                                <input type="hidden" class="hidden_buname" value="<?php echo e($adToShow['business_name']); ?>">
+                              <div class="business_sec">
+                                 <div class="b-detail">
+                                    <span class="business_img">
+
+                                      <?php if($adToShow['image_name']): ?>
+                                      <?php
+                                      $bus_user_id = $adToShow['business_userid'];
+                                      $img_url = $adToShow['image_name'];
+                                      ?>
+                                      <img src="<?php echo e(url('/images/business_profile/'.$bus_user_id.'/'.$img_url)); ?>"/>
+                                      <?php else: ?>
+                                      <img src="<?php echo e(asset('img/img_placeholder.png')); ?>"/>
+                                      <?php endif; ?>
+
+                                    </span>
+                                    <div class="sec_t">
+                                       <span class="addtoshowspan" onclick="countClickOfAd('<?php echo e($categoryId); ?>','<?php echo e($adToShow['buid']); ?>','<?php echo e($adToShow['campid']); ?>')"><h1 datacamp="<?php echo e($adToShow['campid']); ?>"><?php echo e($adToShow['business_name']); ?><span><img src="<?php echo e(asset('img/verified.png')); ?>"/></span></h1></span>
+                                       <p><?php echo e($adToShow['category_name']); ?></p>
+                                    </div>
+                                 </div>
+                                 <div class="select_this">
+                                    <div class="formcheck forcheckbox langcheck">
+                                       <label>
+                                          <input type="checkbox" class="radio-inline check_bus" id="addtoshow_<?php echo e($key); ?>" name="radios" value="" data-title="<?php echo e($adToShow['id']); ?>">
+                                          <span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span>
+                                          <p></p>
+                                       </label>
+                                    </div>
+                                 </div>
+                              </div>
+                              <p class="des"><?php echo e($adToShow['full_address']); ?></p>
+                              <div class="distance_rating">
+                                 <div class="rate_review">
+                                  <?php $new_num = number_format($adToShow['distance'], 1, '.', ''); ?>
+                                    <a href="javascript:;" class="distance">Distance <span><?php echo e($new_num); ?>km</span></a>
+
+
+                                    <?php if(!empty($adToShow['tot_rating'])): ?>
+
+                                    <?php
+                                      $rating_num = number_format($adToShow['tot_rating'], 1, '.', '');
+
+                                    ?>
+
+                                    <?php else: ?>
+
+                                    <?php $rating_num = 0;?>
+
+                                    <?php endif; ?>
+
+                                    <a href="javascript:;" class="rating">Rating <span><?php echo e($rating_num); ?>/5</span></a>
+                                    <a href="javascript:;" class="review">Reviews <span><?php if(!empty($adToShow['tot_review'])): ?> <?php echo e($adToShow['tot_review']); ?> <?php else: ?> 0 <?php endif; ?></span></a>
+                                 </div>
+                                 <div class="call_chat">
+                                    <a href="javascript:;" class="text"><img/src="<?php echo e(asset('img/text.png')); ?>"/></a>
+                                    <a href="javascript:;" class="call" data-toggle="tooltip" data-placement="top" title="<?php echo e($adToShow['phone_number']); ?>" data-original-title="<?php echo e($adToShow['phone_number']); ?>"><img/src="<?php echo e(asset('img/call.png')); ?>"/>
+                                    </a>
+                                 </div>
+                              </div>
+                           </li>    
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                        </ul>
+                        <?php endif; ?>
                       <?php if(isset($all_business) && !empty($all_business)): ?>
                         <ul class="all_bus_by_cat" id="all_busBy_cat">
                             <?php $__currentLoopData = $all_business; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$allbus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -923,7 +996,7 @@
         <div class="modal-dialog custom_model_width modal-dialog-centered" role="document">
             <div class="modal-content login_model">
                 <div class="modal-header">
-                    <button type="button" class="close close_popup" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close close_popup ask_quote_close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

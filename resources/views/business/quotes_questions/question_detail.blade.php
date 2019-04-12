@@ -40,8 +40,9 @@
 					@endif
 	          	</div>
 	          	<div class="contact_user">
+	          		<a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
 	             	<a href="JavaScript:;" class="user_call" data-toggle="tooltip" data-placement="top" title="{{ $question_data['get_gen_user']['phone_number']}}" data-original-title="{{ $question_data['get_gen_user']['phone_number']}}"><img src="{{ asset('img/call.png') }}"/></a>
-	             	<a href="JavaScript:;" class="user_text"><img src="{{ asset('img/text.png') }}"/></a>
+	             	
 	          	</div>
 	          	<div class="review_section">
 	             	<ul>
