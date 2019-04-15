@@ -29,6 +29,7 @@ class YpBusinessUsers extends Migration
             $table->string('remember_token')->nullable();
             $table->string('completed_steps')->nullable();
             $table->tinyInteger('admin_approve')->default(0);
+            $table->integer('points')->default(1)->comment('user get points when give answer to any question.');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP')); 
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

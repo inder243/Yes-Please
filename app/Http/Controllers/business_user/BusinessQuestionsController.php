@@ -69,9 +69,19 @@ class BusinessQuestionsController extends Controller
         $question_id = $request->question_id;
         $business_id = $request->business_id;
         $ques_answer = $request->get_answer;
+        $answer_type = $request->answer_type;
 
         if($ques_answer != ''){
             $update_status = YpBusinessUsersQuestions::where(['question_id'=>$question_id,'business_id'=>$business_id])->update(['status_bus'=>3,'business_answer'=>$ques_answer]);
+
+            /*****give point to this user*****/
+            if($answer_type == "add"){
+                $get_points_bu      = YpBusinessUsers::select('points')->where('id','=',$business_id)->first();
+                $bu_point           = $get_points_bu->points;
+                $increamented_point = $bu_point+1;
+                YpBusinessUsers::where('id','=',$business_id)->update(['points'=>$increamented_point]);
+            }
+            
 
             if($update_status == '1'){
                 return response()->json(['success'=>'1','message'=>'Answer Sent','url'=>'business_user/quotes_questions?tab=ques']);

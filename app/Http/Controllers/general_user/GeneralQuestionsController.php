@@ -211,12 +211,18 @@ class GeneralQuestionsController extends Controller
                 }else{
 
                     //Here :: code to send questions for random 20 business users
+        
+                    //$get_business_ids = YpBusinessUserCategories::select('business_userid')->where('category_id','=',$request->hidden_cat_id)->orderby()->take(20)->get()->toArray();
 
-                    //$get_business_ids = YpBusinessUserCategories::select('business_userid')->where('category_id','=',$request->hidden_cat_id)->inRandomOrder()->take(20)->get()->toArray();
+                    //  echo "<pre>";print_r($get_business_ids);die;
+                   // $businessUserIdss = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_user_categories.business_userid) order by rand() SEPARATOR ','), ',',20) as businessUserIds FROM `yp_business_user_categories` where yp_business_user_categories.category_id=".$request->hidden_cat_id));
 
-                    $businessUserIdss = DB::select(DB::raw("SELECT SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT(yp_business_user_categories.business_userid) order by rand() SEPARATOR ','), ',',20) as businessUserIds FROM `yp_business_user_categories` 
-                    where yp_business_user_categories.category_id=".$request->hidden_cat_id));
 
+                   // $businessUserIdss = DB::select(DB::raw("SELECT yp_business_user_categories.business_userid as businessUserIds,yp_business_users.points FROM `yp_business_user_categories` INNER JOIN  yp_business_users on yp_business_user_categories.business_userid = yp_business_users.id where yp_business_user_categories.category_id=".$request->hidden_cat_id." ORDER BY yp_business_users.points DESC"));
+
+                  
+                    $businessUserIdss = DB::select(DB::raw("select GROUP_CONCAT(businesspoints.business_userid) as businessUserIds FROM (SELECT yp_business_user_categories.business_userid ,yp_business_users.points FROM `yp_business_user_categories` INNER JOIN  yp_business_users on yp_business_user_categories.business_userid = yp_business_users.id where yp_business_user_categories.category_id=".$request->hidden_cat_id." ORDER BY yp_business_users.points DESC LIMIT 20 )as businesspoints"));
+                    
                     $businessUserId = $businessUserIdss[0]->businessUserIds;
 
                     $businessUserIdsStrng = explode(',',$businessUserId);

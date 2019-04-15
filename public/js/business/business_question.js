@@ -55,6 +55,7 @@ function submitQuestionAnswer(data){
 
 	var question_id = $(data).attr('data-question_id');
 	var business_id = $(data).attr('data-business_id');
+	var answer_type = $(data).attr('data-answr_type');
 	
 	var home_url = $('#home_url').val();
 
@@ -69,7 +70,7 @@ function submitQuestionAnswer(data){
 	$.ajax({
        	type:'POST',
        	url:home_url+'business_user/question_ans_submit',
-       	data:{question_id:question_id, business_id:business_id,get_answer:get_answer},
+       	data:{question_id:question_id, business_id:business_id,get_answer:get_answer,answer_type:answer_type},
        	success:function(data){
 
        		jQuery('.pre_loader').css('display','none');

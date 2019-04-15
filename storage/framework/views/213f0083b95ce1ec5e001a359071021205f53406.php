@@ -761,6 +761,7 @@
               <h1>We found similar results</h1>
               <p>Try to found answer to your question</p>
               <div class="questin_total_ans">
+                <div class="questin_total_ans_div">
                 <ul>
                   <li>
                     <div class="Question_main_div">
@@ -800,6 +801,7 @@
                     </div>
                   </li>
                 </ul>
+              </div>
                 <div class="send_to_business">
                   <!-- <a href="javascript:;" data-toggle="modal" data-target="#exampleModalCenter_login"> -->
 

@@ -151,7 +151,7 @@
 	          		<span class="fill_fields" role="alert" style="display:none;"></span>
 	       		</div>
 	       		<div class="finish_job ans_btn">
-	          		<a href="javascript:;" data-question_id="{{$question_data['question_id']}}" data-business_id="{{$question_data['business_id']}}" onclick="submitQuestionAnswer(this)">Answer</a>
+	          		<a href="javascript:;" data-answer_type="add" data-question_id="{{$question_data['question_id']}}" data-business_id="{{$question_data['business_id']}}" onclick="submitQuestionAnswer(this)">Answer</a>
 	       		</div>
 	    	</div>
 	    	@else
@@ -162,7 +162,7 @@
 	          		<span class="fill_fields" role="alert" style="display:none;"></span>
 	       		</div>
 	       		<div class="finish_job ans_btn">
-	          		<a href="javascript:;" data-question_id="{{$question_data['question_id']}}" data-business_id="{{$question_data['business_id']}}" onclick="submitQuestionAnswer(this)">Edit Answer</a>
+	          		<a href="javascript:;" data-answer_type="edit" data-question_id="{{$question_data['question_id']}}" data-business_id="{{$question_data['business_id']}}" onclick="submitQuestionAnswer(this)">Edit Answer</a>
 	       		</div>
 	    	</div>
 	    	@endif

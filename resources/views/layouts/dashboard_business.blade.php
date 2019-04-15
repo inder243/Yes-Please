@@ -52,7 +52,7 @@
                     <a href="{{ url('/business_user/quotes_questions') }}"><img src="{{ asset('img/quotes.png') }}" />Quotes</a>
                 </li>
                 <li>
-                    <a href="#"><img src="{{ asset('img/question.png') }}" />Questions</a>
+                    <a href="{{ url('/business_user/quotes_questions?tab=ques') }}"><img src="{{ asset('img/question.png') }}" />Questions</a>
                 </li>
                 <li>
                     <a href="#"><img src="{{ asset('img/messages.png') }}" />Messages <span class="total_message">12</span></a>
