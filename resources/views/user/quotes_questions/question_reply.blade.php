@@ -3,7 +3,7 @@
 @section('content')
 <section class="register_step_1">
 	<div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-		<div><a href="{{ url('/') }}">Home</a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquestions->cat_id) }}">@if(isset($allquestions)) {{$allquestions->cat_name}}@endif</a>/<a href="{{ url('/general_user/quote_questions?tab=ques') }}"> Quotes and questions </a>/<span class="q_breadcrumb">Question</span></div>
+		<div><a href="{{ url('/') }}">Home </a>/<a href="{{ url('/general_user/dashboard/catid/'.$allquestions->cat_id) }}">@if(isset($allquestions)) {{$allquestions->cat_name}} @endif</a>/<a href="{{ url('/general_user/quote_questions?tab=ques') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> Question</span></div>
 		@if(!empty($all_data))
 		<div class="cancel_quote mark_answred"><a href="javascript:;" class="mark_asnwered">Mark as answered</a></div>
 		@endif

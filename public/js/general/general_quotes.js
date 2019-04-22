@@ -226,6 +226,18 @@ $(document).ready(function(){
               data:{chk_login:'1'},
               success:function(data){
 
+                if(data.success == '9'){
+                  var r = confirm("You are logged in as a Business User. Press Ok to logout and login as a General user.");
+                  if (r == true) {
+                    $('#work_description').modal('hide');
+                    $('#general_login').find('#sign_in_general').attr('data-checkstatus','quotessingle');
+                    $('#general_login').find('.login_body_main h1').text('');
+                    $('#general_login').find('.login_body_main h1').text('Please login or register to get upto 5 quotes');
+                    $('#general_login').modal('show');
+                    return false;
+                  } 
+                }
+
                 if(data.success == '1'){
                   $('#work_description').modal('show');
                   $('.describe_work').css('display','none');

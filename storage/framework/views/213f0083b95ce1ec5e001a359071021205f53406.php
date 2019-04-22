@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-   <link href="<?php echo e(URL::asset('css/style.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(URL::asset('css/style.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(URL::asset('css/gerneral_user_style.css')); ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/animate.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/developer.css')); ?>" type="text/css">
@@ -19,7 +19,40 @@
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/bootstrap-datetimepicker.min.css')); ?>" type="text/css">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
          rel = "stylesheet">
-    
+
+     <!-- <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+     <script>
+
+      // var verifyCallback = function(response) {
+      //   $("#recaptcha").html(response);
+      // };
+
+      // var widgetId2;
+      // var onloadCallback = function() {
+
+      
+      //   widgetId2 = grecaptcha.render(document.getElementById('example2'), {
+      //       'sitekey': '6Ld0TZsUAAAAAODQp0M1xRBK2M8jrKw0mZ4efGXB',
+      //       'callback': verifyCallback,
+      //   });
+
+      // };
+
+  </script> -->
+
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdJKJ8UAAAAAIK5ad3ZNBVGffHD5_GWfxHlFkz4"></script>
+<script>
+    grecaptcha.ready(function() {
+    // do request for recaptcha token
+    // response is promise with passed token
+        grecaptcha.execute('6LdJKJ8UAAAAAIK5ad3ZNBVGffHD5_GWfxHlFkz4', {action:'validate_captcha'})
+                  .then(function(token) {
+            // add token value to form
+            document.getElementById('g-recaptcha-response').value = token;
+        });
+    });
+</script>
+
     
 </head>
 
@@ -75,7 +108,7 @@
                             <a href="<?php echo e(url('/business_user/quotes_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                            <a href="<?php echo e(url('/business_user/quotes_questions?tab=ques')); ?>"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>
@@ -193,9 +226,20 @@
       <input type="hidden" id="home_url" value="<?php echo e(URL::asset('')); ?>">
       <div id="site_url" style="display:none"><?php echo e(url('/')); ?></div>
 
-    <div class="content">
+    <div class="content content-fix_header">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
+
+     <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer">
         <div class=" position-relative">
           <div class="row">
@@ -538,8 +582,7 @@
                 <!-----------upload image video popup ends----------->
                 <!----------popup for mobile phone------------>
                 <div class="not_all_business mobile_phone_pop" style="display:none;">
-                        <h1>Not all businesses reply to quote requests
-                           without phone. Enter your phone number
+                        <h1>You can add your phone number to increase answer ratio. Enter your phone number
                            to get more offers.
                         </h1>
                         <div class="ph_detail">
@@ -547,7 +590,7 @@
                               <label for="inputEmail4">Phone number</label>
                               
                               <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="<?php if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)): ?><?php echo e(Auth::guard('general_user')->user()->phone_number); ?><?php endif; ?>" onkeyup="remove_errmsg(this)">
-                              <span class="fill_fields" role="alert"></span>
+                              <span class="fill_fields" role="alert" style="display:none;"></span>
                            </div>
                            <div class="all_business_ph">
                               <div class="ele_pre"><input type="submit" name="validate" value="Validate" class="mobile_validate_submit mobileValidateSubmit"></div>
@@ -777,8 +820,7 @@
                   </li>
                   <li>
                     <div class="Question_main_div">
-                      <h1>Curabitur sit amet justo vel est dictum tincidunt. Maecenas egestas, libero vitae iaculis
-                          mollis, erat risus tempus est, non vehicula mauris nibh ac magna?</h1>
+                      <h1>Curabitur sit amet justo vel est dictum tincidunt. Maecenas egestas, libero vitae iaculis mollis, erat risus tempus est, non vehicula mauris nibh ac magna?</h1>
                       <p>(17 answers)</p>
                     </div>
                   </li>
@@ -812,18 +854,21 @@
 
             <!----------popup for mobile phone------------>
             <div class="not_all_business mobile_phn_pop" style="display:none;">
-              <h1>Not all businesses reply to quote requests
-              without phone. Enter your phone number
+              <h1>You can add your phone number to increase answer ratio. Enter your phone number
               to get more offers.
               </h1>
               <div class="ph_detail">
                 <div class="form-group ">
                   <label for="inputEmail4">Phone number</label>
-                  <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="mobile_phone" class="form-control mobl_phn" id="mobile_phone" value="<?php if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)): ?><?php echo e(Auth::guard('general_user')->user()->phone_number); ?><?php endif; ?>" onkeyup="remove_errmsg(this)">
+                  <input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" name="g-recaptcha-response" class="form-control mobl_phn" id="g-recaptcha-response" value="<?php if(Auth::guard('general_user')->check() && !empty(Auth::guard('general_user')->user()->phone_number)): ?><?php echo e(Auth::guard('general_user')->user()->phone_number); ?><?php endif; ?>" onkeyup="remove_errmsg(this)">
                   <span class="fill_fields" role="alert" style="display:none;"></span>
-
-                  <div id="example2"></div>
-                   <div id="recaptcha" value="" hidden="hidden"></div>
+                  <!-- <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> -->
+                  <input type="hidden" name="action" value="validate_captcha">
+                 <!--  <div id="example2"
+                  <div class="g-recaptcha" data-sitekey="6Ld0TZsUAAAAAODQp0M1xRBK2M8jrKw0mZ4efGXB"></div>
+                </div> -->
+                 <!--  <div id="example2"></div>
+                   <div id="recaptcha" value="" hidden="hidden"></div> -->
                   <span class="fill_fields recaptcha_error" role="alert" style="display:none;"></span>
 
                 </div>
@@ -970,7 +1015,9 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script> -->
+
+
     
     <!--autocomplete address-->
     <script>
@@ -1025,13 +1072,14 @@
       $.ajax({
         url: home_url+'general_user/dashboard/catid/'+cat_id+"/location",
         type: 'GET',
+        async: "false",
         data:{address:address},
         dataType:'html',
         success:function(response){
         
           $('.content').html(response);
 
-
+          countImpression();
           var longi = $('.user_dashbord_cat').find('.hidden_default_longitude').val();
           var lati = $('.user_dashbord_cat').find('.hidden_default_latitude').val();
           // if(response.success == '2'){
@@ -1261,8 +1309,50 @@
 
     }
 
+    function countImpression()
+    {
+      
+      var impressions = [];
+        
+      $('#all_busBy_cat_ads li').each(function(i)
+      {
+        var impression = {};
+         impression['catid'] = $(this).attr('data-cat-id'); 
+         impression['campid'] = $(this).attr('data-camp-id'); 
+         impressions.push(impression);
+      });
+        
+      if(impressions.length>0)
+      {
+        
+        dtatosend = JSON.stringify(impressions);
+          $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+        
+        var home_url = $('#home_url').val();
+
+        /*****ajax starts*****/
+        console.log(dtatosend);
+        $.ajax({
+          url: home_url+"general_user/save_impressions",
+          type: 'POST',
+          async: "false",
+          data:{impressions:dtatosend,dd:1},
+          success:function(response){
+          
+           console.log(response);
+        
+          }
+        });/***ajax ends here***/
+      }
+        
+    }
+
     function geolocate_dash() {
-//alert($('.autocomplete_dash').val());
+      //alert($('.autocomplete_dash').val());
       
        var initialCall = true;
          if(initialCall){
@@ -1568,20 +1658,23 @@
     $('[data-toggle="tooltip"]').tooltip()
   });
 
-  var verifyCallback = function(response) {
-    $("#recaptcha").html(response);
-  };
+  // var verifyCallback = function(response) {
+  //   $("#recaptcha").html(response);
+  // };
 
-  var widgetId2;
-  var onloadCallback = function() {
+  // var widgetId2;
+  // var onloadCallback = function() {
 
   
-    widgetId2 = grecaptcha.render(document.getElementById('example2'), {
-        'sitekey': '6Ld0TZsUAAAAAODQp0M1xRBK2M8jrKw0mZ4efGXB',
-        'callback': verifyCallback,
-    });
+  //   widgetId2 = grecaptcha.render(document.getElementById('example2'), {
+  //       'sitekey': '6Ld0TZsUAAAAAODQp0M1xRBK2M8jrKw0mZ4efGXB',
+  //       'callback': verifyCallback,
+  //   });
 
-  };
+  // };
+
+
+ 
 
     </script>
 

@@ -299,7 +299,7 @@ class AdvertisementController extends Controller
             $getSelectedCats = YpBusinessUsercategories::with("buser_cat")->where("yp_business_user_categories.business_userid",$bUserId)->get();
 
             //get list of Campaigns,with impression count,click count,and sum of amount
-            $campaigns = YpCampaignDetail::where('b_id',$bUserId)->whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->withCount(['impressions'=>function($query){
+            $campaigns = YpCampaignDetail::where('b_id',$bUserId)->whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->orderBy('yp_campaign_detail.id', 'DESC')->withCount(['impressions'=>function($query){
                 $query->select( DB::raw( "COALESCE(count(id),0)" ) );
                 $query->whereMonth('created_at', '=', date('m'));
                 $query->whereYear('created_at', '=', date('Y'));
@@ -330,7 +330,7 @@ class AdvertisementController extends Controller
            }])->get();*/
 
            //get list of clicks
-           $clicks = YpCampaignClick::where('yp_campaign_click.b_id',$bUserId)->whereMonth('yp_campaign_click.created_at',$currentMonth)->whereYear('yp_campaign_click.created_at',$currentYear)->whereDay('yp_campaign_click.created_at',$currentDay)->with([
+           $clicks = YpCampaignClick::where('yp_campaign_click.b_id',$bUserId)->whereMonth('yp_campaign_click.created_at',$currentMonth)->whereYear('yp_campaign_click.created_at',$currentYear)->whereDay('yp_campaign_click.created_at',$currentDay)->orderBy('yp_campaign_click.id', 'DESC')->with([
           'camp_det_click'=>function($query){
            },
            'cat_det_click'=>function($query){
@@ -632,10 +632,41 @@ class AdvertisementController extends Controller
                     //update monthly budget in cc detail table and save transaction in transactions table.
 
                    $existingdet = YpBusinessUserCcDetails::where("b_id",$bUserId)->first(); 
-                   $updatedExistBudget = $existingdet['updated_wallet_amount'];
-                   $monthExistBudget = $existingdet['wallet_amount'];
+                  // $updatedExistBudget = $existingdet['updated_wallet_amount'];
+                  // $monthExistBudget = $existingdet['wallet_amount'];
 
-                   if($monthlyBudget>$monthExistBudget)
+                    $currentMonth = date('m');
+                    $currentYear = date('Y');
+
+                   $getsumOfTrans = YpBusinessUserTransactions::select(DB::raw('COALESCE(SUM(amount),0) as sumOfTrans'))->where("type",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
+
+                   $getLeft = $monthlyBudget-$getsumOfTrans[0]['sumOfTrans'];
+
+                    if($getLeft<=0)
+                    {
+                        $toupdatemonthlyBudget = 0;
+                    }
+                    else
+                    {
+                        $toupdatemonthlyBudget = $getLeft;
+                    }
+
+                    YpBusinessUserCcDetails::where("b_id",$bUserId)->update(array('wallet_amount'=>$monthlyBudget,'updated_wallet_amount'=>$toupdatemonthlyBudget)); 
+
+
+
+                    $YpBusinessUserCcDetails = new YpBusinessUserCcDetails;
+                    $YpBusinessUserCcDetails->b_id=$bUserId;
+                    $YpBusinessUserTransactions = new YpBusinessUserTransactions;
+                    $YpBusinessUserTransactions->trans_id=time();
+                    $YpBusinessUserTransactions->b_id=$bUserId;
+                    $YpBusinessUserTransactions->cat_id=0;
+                    $YpBusinessUserTransactions->transaction_made_on=date('Y-m-d');
+                    $YpBusinessUserTransactions->amount=$monthlyBudget;
+                    $YpBusinessUserTransactions->status=1;
+                    $YpBusinessUserTransactions->save();
+
+                   /*if($monthlyBudget>$monthExistBudget)
                    {
                         $diff = $monthlyBudget-$monthExistBudget;
                         $updatedExistBudget = $updatedExistBudget+$diff;
@@ -658,10 +689,15 @@ class AdvertisementController extends Controller
                         $diff = $monthExistBudget-$monthlyBudget;
                         $updatedExistBudget = $updatedExistBudget-$diff;
 
+                        if($updatedExistBudget<=0)
+                        {
+                            $updatedExistBudget=0;
+                        }
+
                         YpBusinessUserCcDetails::where("b_id",$bUserId)->update(array('wallet_amount'=>$monthlyBudget,'updated_wallet_amount'=>$updatedExistBudget)); 
 
                         
-                   }
+                   }*/
 
 
                     //update user pro_mode
@@ -743,10 +779,15 @@ class AdvertisementController extends Controller
 
         if($compid!='')
         {
+            $today = date('Y-m-d');
             $getDetail = YpCampaignDetail::where('id',$compid)->first();
             if(!empty($getDetail))
             {
-                if($getDetail['status']==1)
+                if($today>$getDetail['end_date'])
+                {
+                    return response()->json(['success'=>'0','message'=>"Campaign is ended.It cant't started again."]);
+                }
+                else if($getDetail['status']==1)
                 {
                     return response()->json(['success'=>'0','message'=>'Campaign already running.']);
                 }

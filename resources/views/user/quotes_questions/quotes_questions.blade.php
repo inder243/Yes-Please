@@ -211,8 +211,9 @@
                                       </div>
                                       <div class="content_image">
                                         <div class="userPic"><img src="{{ asset('img/user_placeholder.png') }}"/></div>
+                                        
                                         <div class="contect_detail">
-                                          <h1>{{ $ignored_quote['get_bus_user']['business_name']}}, Quote id : {{ $ignored_quote['get_quotes']['quote_id']}}</h1>
+                                          <a href="{{ url('/general_user/quotesrequest/'.$ignored_quote['get_quotes']['id'].'/'.$ignored_quote['get_bus_user']['id'])}}"><h1>{{ $ignored_quote['get_bus_user']['business_name']}}, Quote id : {{ $ignored_quote['get_quotes']['quote_id']}}</h1></a>
 
                                           @php $details = mb_strimwidth($ignored_quote['quote_reply']['details'], 0, 30, "..."); @endphp
 
@@ -224,6 +225,7 @@
 
                                           <p><span>$ {{ $ignored_quote['quote_reply']['price_quotes'].$price_type}}</span>for {{$details}}</p>
                                         </div>
+                                      
                                       </div>
                                     </div>
                                   </div>

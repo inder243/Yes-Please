@@ -42,7 +42,7 @@
                 <a href="<?php echo e(url('/business_user/quotes_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
             </li>
             <li>
-                <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                <a href="<?php echo e(url('/business_user/quotes_questions?tab=ques')); ?>"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
             </li>
             <li>
                 <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>
@@ -115,9 +115,20 @@
 
 <input type="hidden" id="home_url" value="<?php echo e(URL::asset('')); ?>">
 <input type="hidden" id="business_user_id" value="<?php echo e(Auth::guard('business_user')->user()->business_userid); ?>">
-    <div class="content">
+    <div class="content content-fix_header">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
+    
+    <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer footer_for_dash">
         <div class="footer_logo for_dashboard_footer"><img src="<?php echo e(asset('img/footer_logo.pn')); ?>g" class="img-fluid" /></div>
         <div class="footer_link footer_dash_ul">
@@ -313,6 +324,124 @@
         </div>
     </div>  
     <!---modal to open big image endshere --->
+
+<!-----modal to add products------>
+    <div class="modal fade" id="topad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom_model_width" role="document">
+    <div class="modal-content">
+      <div class="modal-header ad_header">
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ad-header-body">
+        <div class="p-heading"><h1>Add product</h1></div>
+        <div class="upper-catergory">
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="form-group ">
+                <label for="inputEmail4">Name</label>
+                <input type="text" class="form-control" id="inputEmail4" required="">
+              </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="form-group custom_errow ">
+                        <label for="inputPassword4">Product category</label>
+                        <select class="form-control " id="exampleSelect1">
+                           <option>Choose category1</option>
+                           <option>Choose category2</option>
+                           <option>Choose category3</option>
+                           <option>Choose category4</option>
+                           <option>Choose category5</option>
+                        </select>
+                        <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+              </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="fix-price-range">
+              <label for="inputPassword4">Price type</label>
+              <div class="formcheck">
+                    <label>
+                      <input type="radio" class="radio-inline" name="radios" value="">
+                      <span class="outside"><span class="inside"></span></span><p>Fix</p>
+                    </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="fix-price-range">
+              <label for="inputPassword4"></label>
+              <div class="formcheck product-label">
+                    <label>
+                      <input type="radio" class="radio-inline" name="radios" value="">
+                      <span class="outside"><span class="inside"></span></span><p>Range</p>
+                    </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="price-range-from form-group ">
+              <label>Price</label>
+              <input type="text" class="form-control" id="inputEmail4" required="">
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <div class="range-price">
+              <div class="price-from form-group ">
+                <label>Price from </label>
+                <input type="text" class="form-control" id="inputEmail4" required="">
+              </div>
+              <span class="devider">-</span>
+              <div class="price-to form-group ">
+                <label>Price to</label>
+                <input type="text" class="form-control" id="inputEmail4" required="">
+              </div>
+              <div class="perhr form-group custom_errow">
+                <label>Per</label>
+                <select class="form-control " id="exampleSelect1">
+                   <option>hour</option>
+                   <option>Choose category2</option>
+                   <option>Choose category3</option>
+                   <option>Choose category4</option>
+                   <option>Choose category5</option>
+                </select>
+                <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+
+
+          <div class="name-field description_optional">
+            <div class="form-group ">
+                <label for="inputEmail4">Description</label>
+              <textarea></textarea>
+              </div>
+          </div>
+
+          <div class="add_photo_video product-photo">
+                    <p>Add photos</p>
+                    <div class="upload_file_section">
+                      <div class="drag_file">
+                      <a href="javascript:;">Drag and drop files here to upload</a>
+                      </div>
+                      <span>OR</span>
+                      <div class="file_to_upload">
+                        <div class="upload-btn-wrapper">
+                        <button class="btn">Select files to upload</button>
+                        <input type="file" name="myfile">
+                      </div>
+                      </div>
+                    </div>
+            </div>
+          <div class="start-btn"><input type="submit" value="Add"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

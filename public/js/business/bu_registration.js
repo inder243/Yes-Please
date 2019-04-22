@@ -18,24 +18,33 @@ $(document).ready(function(){
     });
 
 	$('.reg_step7_submit').click(function(){
+
+		var empty = 'false';
+		$('#register_schedule .total_weekdays .form-control').each(function(){
+			if($(this).val() != ''){
+				empty = 'true';
+			}
+		});
+		if(!$('#register_schedule #available').is(':checked') && empty == 'false'){
+			$('#register_schedule .bu_error_hours').html('Please select any option from following');
+			$('html, body').animate({
+		        scrollTop: $(".registration_steps").offset().top
+		    }, 500);
+			return false;
+		}else{
+			$('#register_schedule .bu_error_hours').html('');
+		}
+
 		if (!$('#register_schedule #agree').is(':checked')) {
 			$('#register_schedule #agree').siblings('.outside_checkbox').attr('style','border:2px solid red'); 
 			$('#register_schedule .bu_error_terms').html('Please agree with terms');
 			return false;
 		}else{
-			var empty = 'false';
-			$('#register_schedule .total_weekdays .form-control').each(function(){
-				if($(this).val() != ''){
-					empty = 'true';
-				}
-			});
-			if(!$('#register_schedule #available').is(':checked') && empty == 'false'){
-				$('#register_schedule .bu_error_hours').html('Please select any option from following');
-				return false;
-			}			
+		
 			$('#register_schedule').submit();
 		}		
 	});
+
 	$('.category_search').keyup(function(){
 		var input_text = $(this).val();
 		//if(input_text != ''){
@@ -136,13 +145,13 @@ function categoriesselect(data){
 			
 			if(data['success']==1)
 			{
-				$('#openPopUpForQuestion').find('.modal-body').html('');
-				$('#openPopUpForQuestion').find('.modal-body').html(data['html']);
-				$('#openPopUpForQuestion').find('.modal-body').addClass('text-center');
-				$('#openPopUpForQuestion').find('.modal-body').prepend('<span class="text-error"></span>');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html('');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html(data['html']);
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').addClass('text-center');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').prepend('<span class="text-error"></span>');
 				$('#openPopUpForQuestion').modal('show');
-				$('#openPopUpForQuestion .modal-body .ele_next1').attr('data-userid',user_id);
-				$('#openPopUpForQuestion .modal-body .ele_next1').attr('data-categoryid',category_id);
+				$('#openPopUpForQuestion .modal-body .cat_html_dataa .ele_next1 .ele_next1').attr('data-userid',user_id);
+				$('#openPopUpForQuestion .modal-body .cat_html_dataa .ele_next1 .ele_next1').attr('data-categoryid',category_id);
 			}
 
 		},error: function() { alert("Error posting feed."); }

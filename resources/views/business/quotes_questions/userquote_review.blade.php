@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
          <div class="breadcrumb register_breadcrumb g_quote_breadcrumb">
-           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif </span>/<span class="q_breadcrumb">Review @if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</span></div>
+           <div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}} @endif </span>/<span class="q_breadcrumb"> Review @if($quote_data[0]['get_gen_user']){{$quote_data[0]['get_gen_user']['first_name']}} {{$quote_data[0]['get_gen_user']['last_name']}}@endif</span></div>
 
          </div>
       </section>

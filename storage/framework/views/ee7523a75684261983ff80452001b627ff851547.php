@@ -5,8 +5,8 @@
   <input type="hidden" class="publicprofile_status" value="<?php echo $status;?>">
 <?php } ?>
          <div class="breadcrumb register_breadcrumb category_breadcrumb">
-            <div class="breadcrumb_header"><a href="<?php echo e(url('/')); ?>">Home</a>/<span><?php if(!empty($user_details)): ?><?php echo e($user_details['business_name']); ?><?php endif; ?></span></div>
-            <div class="share_fb"><a href="javascript:;"/><img src="<?php echo e(asset('img/icon_F.png')); ?>"/>Share</a></div>
+            <div class="breadcrumb_header"><a href="<?php echo e(url('/')); ?>">Home </a>/<span><?php if(!empty($user_details)): ?> <?php echo e($user_details['business_name']); ?> <?php endif; ?></span></div>
+            <div class="share_fb"><a href="javascript:;"/><img src="<?php echo e(asset('img/icon_F.png')); ?>"/> Share</a></div>
          </div>
       </section>
       <div class="container-fluid">
@@ -133,11 +133,15 @@
                     <h1>Hashtags:</h1>
                     <ul>
                       <?php if(!empty($user_details)): ?>
-                      <?php if(isset($user_details['hash_tags'])): ?>
-                      <?php $__currentLoopData = $user_details['hash_tags']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$hashtags): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                      <li><a href="javascript:;" tag_id="<?php echo e($hashtags['tag_id']); ?>"/>#<?php echo e($hashtags['bus_hashtags']['hashtag_name']); ?></a></li>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php endif; ?>
+                        <?php if(isset($user_details['hash_tags'])): ?>
+                          <?php if(!empty($user_details['hash_tags'])): ?>
+                            <?php $__currentLoopData = $user_details['hash_tags']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$hashtags): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><a href="javascript:;" tag_id="<?php echo e($hashtags['tag_id']); ?>"/>#<?php echo e($hashtags['bus_hashtags']['hashtag_name']); ?></a></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          <?php else: ?>
+                          No Hashtag Found!
+                          <?php endif; ?>
+                        <?php endif; ?>
                       <?php endif; ?>
                       
                     </ul>
@@ -151,117 +155,121 @@
                     <?php endif; ?>
                     <?php endif; ?>
 
-                    <?php if(isset($userSchedule->available)): ?>
-                    <?php echo "available 24 hours 7 days a week";?>
-                    <?php else: ?>
-                    
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Sunday</div>
-                        <?php if(isset($userSchedule->sunday_from)){ 
-                          $value = $userSchedule->sunday_from;}else{$value = '';}
-                        if(isset($userSchedule->sunday_to)){ 
-                            $value_to = $userSchedule->sunday_to;}else{$value_to = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                    <?php if(!empty($userSchedule)): ?>
+                      <?php if(isset($userSchedule->available)): ?>
+                      <?php echo "available 24 hours 7 days a week";?>
+                      <?php else: ?>
+                      
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Sunday</div>
+                          <?php if(isset($userSchedule->sunday_from)){ 
+                            $value = $userSchedule->sunday_from;}else{$value = '';}
+                          if(isset($userSchedule->sunday_to)){ 
+                              $value_to = $userSchedule->sunday_to;}else{$value_to = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Thursday</div>
+                          <?php if(isset($userSchedule->thursday_from)){ 
+                            $value = $userSchedule->thursday_from;}else{$value = '';}
+                          if(isset($userSchedule->thursday_to)){ 
+                              $value_to = $userSchedule->thursday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
                       </div>
+                      <div class="row">
+                        <!-- <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Sunday</div>
+                          <div class="weekdaytime">09:00 - 18:00</div>
+                        </div>
+                        </div> -->
+                        <!-- <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Thursday</div>
+                          <?php if(isset($userSchedule->thursday_from)){ 
+                            $value = $userSchedule->thursday_from;}else{$value = '';}
+                          if(isset($userSchedule->thursday_to)){ 
+                              $value_to = $userSchedule->thursday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div> -->
                       </div>
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Thursday</div>
-                        <?php if(isset($userSchedule->thursday_from)){ 
-                          $value = $userSchedule->thursday_from;}else{$value = '';}
-                        if(isset($userSchedule->thursday_to)){ 
-                            $value_to = $userSchedule->thursday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <!-- <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Sunday</div>
-                        <div class="weekdaytime">09:00 - 18:00</div>
-                      </div>
-                      </div> -->
-                      <!-- <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Thursday</div>
-                        <?php if(isset($userSchedule->thursday_from)){ 
-                          $value = $userSchedule->thursday_from;}else{$value = '';}
-                        if(isset($userSchedule->thursday_to)){ 
-                            $value_to = $userSchedule->thursday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div> -->
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Monday</div>
-                        <?php if(isset($userSchedule->monday_from)){ 
-                          $value = $userSchedule->monday_from;}else{$value = '';}
-                        if(isset($userSchedule->monday_to)){ 
-                            $value_to = $userSchedule->monday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div>
-                      <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Monday</div>
+                          <?php if(isset($userSchedule->monday_from)){ 
+                            $value = $userSchedule->monday_from;}else{$value = '';}
+                          if(isset($userSchedule->monday_to)){ 
+                              $value_to = $userSchedule->monday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
 
+                        </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Tuesday</div>
-                        <?php if(isset($userSchedule->tuesday_from)){ 
-                          $value = $userSchedule->tuesday_from;}else{$value = '';}
-                        if(isset($userSchedule->tuesday_to)){ 
-                            $value_to = $userSchedule->tuesday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Tuesday</div>
+                          <?php if(isset($userSchedule->tuesday_from)){ 
+                            $value = $userSchedule->tuesday_from;}else{$value = '';}
+                          if(isset($userSchedule->tuesday_to)){ 
+                              $value_to = $userSchedule->tuesday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Friday</div>
+                          <?php if(isset($userSchedule->friday_from)){ 
+                            $value = $userSchedule->friday_from;}else{$value = '';}
+                          if(isset($userSchedule->friday_to)){ 
+                              $value_to = $userSchedule->friday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
                       </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Wednesday</div>
+                          <?php if(isset($userSchedule->wednesday_from)){ 
+                            $value = $userSchedule->wednesday_from;}else{$value = '';}
+                          if(isset($userSchedule->wednesday_to)){ 
+                              $value_to = $userSchedule->wednesday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="weekand_time">
+                          <div class="weekday">Saturday</div>
+                          <?php if(isset($userSchedule->saturday_from)){ 
+                            $value = $userSchedule->saturday_from;}else{$value = '';}
+                          if(isset($userSchedule->saturday_to)){ 
+                              $value_to = $userSchedule->saturday_to;}else{$value = '';}
+                          ?>
+                          <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
+                        </div>
+                        </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Friday</div>
-                        <?php if(isset($userSchedule->friday_from)){ 
-                          $value = $userSchedule->friday_from;}else{$value = '';}
-                        if(isset($userSchedule->friday_to)){ 
-                            $value_to = $userSchedule->friday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Wednesday</div>
-                        <?php if(isset($userSchedule->wednesday_from)){ 
-                          $value = $userSchedule->wednesday_from;}else{$value = '';}
-                        if(isset($userSchedule->wednesday_to)){ 
-                            $value_to = $userSchedule->wednesday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="weekand_time">
-                        <div class="weekday">Saturday</div>
-                        <?php if(isset($userSchedule->saturday_from)){ 
-                          $value = $userSchedule->saturday_from;}else{$value = '';}
-                        if(isset($userSchedule->saturday_to)){ 
-                            $value_to = $userSchedule->saturday_to;}else{$value = '';}
-                        ?>
-                        <div class="weekdaytime"><?php echo e($value); ?> - <?php echo e($value_to); ?></div>
-                      </div>
-                      </div>
-                    </div>
+                      <?php endif; ?>
+                    <?php else: ?>
+                    No working hour selected.
                     <?php endif; ?>
                   </div>
                   </div>

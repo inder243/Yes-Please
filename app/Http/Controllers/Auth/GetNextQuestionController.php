@@ -13,6 +13,7 @@ use App\Models\YpBusinessCategories;
 use App\Models\YpCampaignClick;
 use App\Models\YpCampaignDetail;
 use App\Models\YpBusinessUserCcDetails;
+use App\Models\YpCampaignImpression;
 
 use App\Models\YpBusinessUserTransactions;
 
@@ -505,6 +506,10 @@ class GetNextQuestionController extends Controller
 
                 //save business user ids and general user id.
 
+
+
+              $request->multipleBusiness = implode(',',array_unique(explode(',', $request->multipleBusiness)));
+
                if(!empty($request->multipleBusiness))
                {
                     $businessUserIds = $request->multipleBusiness;
@@ -624,6 +629,24 @@ class GetNextQuestionController extends Controller
                             }
 
                         }
+
+                        if(!empty($buserids))
+                        {
+                            $deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
+
+                            foreach($buserids as $businessUser)
+                            {
+
+                                $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
+                                $YpBusinessUsersQuotes->business_id = $businessUser;
+                                $YpBusinessUsersQuotes->general_id = $g_id;
+                                $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
+                                $YpBusinessUsersQuotes->status = 1;
+                                $YpBusinessUsersQuotes->save();
+
+                                $buseridsToSendEmail[] = $businessUser;
+                            }
+                        }
                     }
                     else
                     {
@@ -635,25 +658,27 @@ class GetNextQuestionController extends Controller
                             {
                                 $buserids = explode(',',$businessUserIds[0]->buids);
                             }
+
+                            if(!empty($buserids))
+                            {
+                                //$deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
+
+                                foreach($buserids as $businessUser)
+                                {
+
+                                    $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
+                                    $YpBusinessUsersQuotes->business_id = $businessUser;
+                                    $YpBusinessUsersQuotes->general_id = $g_id;
+                                    $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
+                                    $YpBusinessUsersQuotes->status = 1;
+                                    $YpBusinessUsersQuotes->save();
+
+                                    $buseridsToSendEmail[] = $businessUser;
+                                }
+                            }
                     }
 
-                    if(!empty($buserids))
-                    {
-                        $deductAmountFromWallet = $this->deductAmountFromWallet($buserids,$request->hiddencatId,$columNameForBid);
-
-                        foreach($buserids as $businessUser)
-                        {
-
-                            $YpBusinessUsersQuotes = new YpBusinessUsersQuotes;
-                            $YpBusinessUsersQuotes->business_id = $businessUser;
-                            $YpBusinessUsersQuotes->general_id = $g_id;
-                            $YpBusinessUsersQuotes->quote_id = $YpGeneralUsersQuotes->id;
-                            $YpBusinessUsersQuotes->status = 1;
-                            $YpBusinessUsersQuotes->save();
-
-                            $buseridsToSendEmail[] = $businessUser;
-                        }
-                    }
+                    
 
 
                     //get 5 pro members which have wallet amount equal to or greater than category bid amount given by admin 
@@ -784,7 +809,9 @@ class GetNextQuestionController extends Controller
     ***/
     public function checkLogin(Request $request){
        
-        if(\Auth::guard('general_user')->check()){
+        if(\Auth::guard('business_user')->check()){
+            return response()->json(['success'=>9,'message'=>'business login'],200);
+        }elseif(\Auth::guard('general_user')->check()){
             return response()->json(['success'=>1,'message'=>'login'],200);
         }else{
             return response()->json(['success'=>0,'message'=>'logout'],200);
@@ -804,10 +831,16 @@ class GetNextQuestionController extends Controller
             $payPerClick = $getBidAmount['pay_per_click'];
             $dailyBudget = $getBidAmount['daily_budget'];
 
-             //get sum of amount of clicks for this category camp 
-            $todaybudget = YpBusinessUserTransactions::where('camp_id',$request->campId)->where('b_id',$request->buId)->where('cat_id',$request->catId)->whereDate('transaction_made_on', DB::raw('CURDATE()'))->sum('amount');
+            $alreadyClick = YpCampaignClick::where('camp_id',$request->campId)->whereDate('created_at', DB::raw('CURDATE()'))->count();
 
-            if($todaybudget<$dailyBudget) 
+            $todayClicksLimit = floor($dailyBudget/$payPerClick);
+
+            //get sum of amount of clicks for this category camp 
+            $todaybudget = YpBusinessUserTransactions::where('type',1)->where('reason_of_deduction',4)->where('camp_id',$request->campId)->where('b_id',$request->buId)->where('cat_id',$request->catId)->whereDate('transaction_made_on', DB::raw('CURDATE()'))->sum('amount');
+
+            $todaybudgetFinal = $todaybudget+$getBidAmount['pay_per_click'];
+
+            if($todaybudget<$dailyBudget && $todaybudgetFinal<=$dailyBudget && $alreadyClick<$todayClicksLimit) 
             {
                //$update = YpCampaignDetail::where("id",$request->campId)->update(['to_show' =>1]);
                $getccDet = YpBusinessUserCcDetails::where('b_id',$request->buId)->first();
@@ -861,6 +894,37 @@ class GetNextQuestionController extends Controller
         {
             return response()->json(['success'=>0,'message'=>'please try again.'],200);
         }
+    }
+
+    public function saveImpressions(Request $request)
+    {
+        $impressions = json_decode($request->impressions);
+        if(!empty($impressions))
+        {
+            foreach($impressions as $impression)
+            {
+                //save impression
+                $YpCampaignImpression = new YpCampaignImpression([       
+                'cat_id'       => $impression->catid,
+                'camp_id'       => $impression->campid
+                ]);
+                $YpCampaignImpression->save(); 
+            }
+        }
+        return response()->json(['success'=>1,'message'=>'data saved'],200);
+    }
+
+    public function getFirstQues(Request $request)
+    {
+         //get first question of form for given category
+         if($request->ajax())
+         {
+            $categoryId = $request->catId;
+            $getFirstQuestion = YpFormQuestions::where(array('cat_id'=>$categoryId))->first();
+            $data = $getFirstQuestion;
+            return view('/user/ask_quote_inner')->with(array('data'=>$data));
+         }
+        
     }
 
 }

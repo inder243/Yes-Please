@@ -144,7 +144,7 @@ Route::prefix('business_user')->group(function() {
     //Remove categories
     Route::post('/remove_business_user_category_auth', 'business_user\BusinessUserController@removeBusinessUserCategory');
     /* get forms data on register screen using category id*/
-    Route::post('/get_forms_data_auth/{id}', 'business_user\BusinessUserController@getFormsData')->name('business_user.getFormsData');
+    Route::post('/get_forms_data_auth/{id}', 'business_user\BusinessUserController@getFormData')->name('business_user.getFormData');
     //Adding services from categories
     Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
@@ -186,6 +186,10 @@ Route::prefix('business_user')->group(function() {
     Route::get('/question_detail/{question_id}',
    'business_user\BusinessQuestionsController@showQuestionDetail')->name('business_user.question_detail');
     Route::post('/question_ans_submit', 'business_user\BusinessQuestionsController@questionAnswerSubmit')->name('business_user.quotes_ans_submit');
+
+    /******Products*******/
+    Route::get('/products',
+   'business_user\BusinessProductsController@showProducts')->name('business_user.products');
     
   });
 
@@ -245,6 +249,9 @@ Route::prefix('general_user')->group(function() {
     //get answers for dynamic form builder
     Route::post('/savedynamicdata', 'general_user\GetNextQuestionController@saveDynamicData');
     Route::post('/savequotedata', 'Auth\GetNextQuestionController@saveQuoteData');
+    Route::post('/save_impressions', 'Auth\GetNextQuestionController@saveImpressions');
+    Route::post('/get_first_ques', 'Auth\GetNextQuestionController@getFirstQues');
+
 
 
     /*******questions********/
@@ -264,6 +271,8 @@ Route::prefix('general_user')->group(function() {
 //Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('captcha/', 'Auth\GeneralUserLoginController@captcha');
 /*
 Auth::routes();
 

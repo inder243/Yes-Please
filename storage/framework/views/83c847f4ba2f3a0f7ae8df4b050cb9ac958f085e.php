@@ -137,15 +137,5 @@
 
     </section>
 
-    <section class="cookies">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-
-            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
-          </div>
-        </div>
-      </div>
-    </section>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.ypapp', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>

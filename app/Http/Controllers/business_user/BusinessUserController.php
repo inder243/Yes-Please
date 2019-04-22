@@ -678,7 +678,7 @@ class BusinessUserController extends Controller
 
     }/****fn ends here****/
 
-    public function getFormsData($id,Request $request)
+    public function getFormData($id,Request $request)
     {
         $user_id = $request->user_id;
         $category_id = $request->category_id;

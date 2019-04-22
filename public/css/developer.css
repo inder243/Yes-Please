@@ -709,3 +709,37 @@ a.business_answer {
     color: #0056b3;
     text-decoration: underline;
 }
+.select_fileUpload{
+    padding: 12px 0 12px 0 !important;
+    margin-top: 5px !important;
+}
+.selectQuotImg{
+    height: 54px !important;
+}
+.content-fix_header {
+    padding-top: 80px;
+}
+.second_tabbar {
+   
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+.total_number_budget h1 {
+    font-size: 45px !important;
+}
+.login_body_main h1 {
+    text-align: center;
+    font-size: 20px;
+}
+
+.Question_sent h1 {
+    font-size: 18px;
+    text-align: center;
+    color: #1b2137;
+}
+.question_sent_mail h1 {
+    font-size: 18px;
+    padding-bottom: 15px;
+    font-family: 'GOTHICB0';
+}

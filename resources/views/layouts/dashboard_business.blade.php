@@ -124,9 +124,20 @@
 
 
     <input type="hidden" id="home_url" value="{{ URL::asset('') }}">
-    <div class="content">
+    <div class="content content-fix_header">
     @yield('content')
     </div>
+    
+    <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="{{ asset('img/cookie_close.png') }}"/></span> -->@include('cookieConsent::index')</div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer footer_for_dash">
         <div class="footer_logo for_dashboard_footer"><img src="{{ asset('img/footer_logo.pn') }}g" class="img-fluid" /></div>
         <div class="footer_link footer_dash_ul">

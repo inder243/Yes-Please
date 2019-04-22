@@ -42,10 +42,10 @@ function submitQuestionAnswer(data){
 		$('.question_answer').find('.question_answer_text').next('.fill_fields').css('display','block');
 		$('.question_answer').find('.question_answer_text').next('.fill_fields').text('Please add any text');
 		return false;
-	}else if(get_answer.length < 100 || get_answer.length > 2000){
+	}else if(get_answer.length < 50 || get_answer.length > 2000){
 		$('.question_answer').find('.question_answer_text').addClass('error_border');
 		$('.question_answer').find('.question_answer_text').next('.fill_fields').css('display','block');
-		$('.question_answer').find('.question_answer_text').next('.fill_fields').text('Please add text of minimum 100 and maximum 2000 letters');
+		$('.question_answer').find('.question_answer_text').next('.fill_fields').text('Please add text of minimum 50 and maximum 2000 letters');
 		return false;
 	}else{
 		$('.question_answer').find('.question_answer_text').removeClass('error_border');

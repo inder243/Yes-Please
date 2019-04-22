@@ -128,13 +128,4 @@
     </div>
     </div>
   </section>
-  <section class="cookies">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-
-            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="{{ asset('img/cookie_close.png') }}"/></span> -->@include('cookieConsent::index')</div>
-          </div>
-        </div>
-      </div>
-    </section>
+ 

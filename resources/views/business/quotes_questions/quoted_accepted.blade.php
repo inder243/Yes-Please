@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions</a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
         <section>
           <div class="quote_req_main">

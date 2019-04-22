@@ -48,8 +48,8 @@
                   <h2>Budget left</h2>
                   <h1>Budget left</h1>
                 </div>
-                <div class="total_number">
-                  <h1>$ @if(isset($monthlyBudget['updated_wallet_amount'])){{$monthlyBudget['updated_wallet_amount']}}@endif</h1>
+                <div class="total_number total_number_budget">
+                  <h1>NIS @if(isset($monthlyBudget['updated_wallet_amount'])){{$monthlyBudget['updated_wallet_amount']}}@endif</h1>
                 </div>
                 <div class="Qlink"><p>Manage</p></div>
                 <div class="quote_req_img"><img src="{{ asset('img/budget_left.png') }}"/></div>

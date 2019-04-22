@@ -1,3 +1,16 @@
+
+if(performance.navigation.type == 2){
+   location.reload(true);
+}
+jQuery( document ).ready(function( $ ) {
+
+   //Use this inside your document ready jQuery 
+   $(window).on('popstate', function() {
+      location.reload(true);
+   });
+
+});
+
 //get click of campaign
 function countClickOfAd(catId,buId,campId)
 {
@@ -128,6 +141,8 @@ function getOnlyStaticQuestions()
 
 //event will be called each time next button is clicked
 	function getNextQuesButton(){
+
+		//alert('flgofjgoifgh');
 
 		/*****code to check how many business users are checked****/
 		var listItems = $(".all_bus_by_cat li");
@@ -591,7 +606,7 @@ function getOnlyStaticQuestions()
 	           
 				if(response.success==1)
 				{
-					alert(response.emails);
+					//alert(response.emails);
 					jQuery('.pre_loader').css('display','none');
 					$('.dynmic_quoteform .form-ques').hide();
 			    	$('.dynmic_quoteform .static_ques').hide();
@@ -672,6 +687,7 @@ function getOnlyStaticQuestions()
             	alert('Please select no of quotes you want to receive.');
             	return false;
             }
+
     	}
 
     	if(data_nxt_id == 'static_ques_3'){
@@ -696,7 +712,6 @@ function getOnlyStaticQuestions()
 			
     	}
 
-    	
     	if(current_btn_id == 'dynamicquote_chk_login'){
     		$.ajaxSetup({
 		        headers: {
@@ -711,33 +726,48 @@ function getOnlyStaticQuestions()
 	            url:home_url+'general_user/check_login',
 	            data:{chk_login:'1'},
 	            success:function(data){
+
+	            	if(data.success == '9'){
 	            	
-	              if(data.success == '1'){
-			    	//$('.'+toShowQues).show();
-			    	$('.dynmic_quoteform .form-ques').hide();
-			    	$('.dynmic_quoteform .static_ques').hide();
-			    	$('.dynmic_quoteform .'+toShowQues).show();
-	              }
-	              if(data.success == '2'){
-	                alert(data.message);
-	              }
-	              if(data.success == '0'){
-	              	
-	              	$('#ask_quote').modal('hide');
-	              	$('#general_login1').modal('show');
-	              	$('#ask_quote').modal('hide');
-	              	$('#ask_quote').modal('hide');
-	              	$('#ask_quote').modal('hide');
-	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
-	              	$('#general_login1').find('#sign_in_general1').attr('data-checkstatus-nxtques',toShowQues);
-	                
-	              }
+						var r = confirm("You are logged in as a Business User. Press Ok to logout and login as a General user.");
+						if (r == true) {
+							$('#ask_quote').modal('hide');
+							$('#general_login1').modal('show');
+							$('#ask_quote').modal('hide');
+							$('#ask_quote').modal('hide');
+							$('#ask_quote').modal('hide');
+							$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
+							$('#general_login1').find('#sign_in_general1').attr('data-checkstatus-nxtques',toShowQues);
+							return false;
+						} 
+	                }
+	            	
+					if(data.success == '1'){
+						//$('.'+toShowQues).show();
+						$('.dynmic_quoteform .form-ques').hide();
+						$('.dynmic_quoteform .static_ques').hide();
+						$('.dynmic_quoteform .'+toShowQues).show();
+					}
+					if(data.success == '2'){
+						alert(data.message);
+					}
+					if(data.success == '0'){
+
+						$('#ask_quote').modal('hide');
+						$('#general_login1').modal('show');
+						$('#ask_quote').modal('hide');
+						$('#ask_quote').modal('hide');
+						$('#ask_quote').modal('hide');
+						$('#general_login1').find('#sign_in_general1').attr('data-checkstatus','quotes_login');
+						$('#general_login1').find('#sign_in_general1').attr('data-checkstatus-nxtques',toShowQues);
+
+					}
 	            }
 
 	        });/****ajax ends here****/
     	}
-    	else
-    	{
+    	else{
+    		
     		var toShowQues = $(ele).attr('data_nxt_id');
 	    	$('.dynmic_quoteform .form-ques').hide();
 	    	$('.dynmic_quoteform .static_ques').hide();
@@ -774,7 +804,7 @@ function getOnlyStaticQuestions()
     {
     	$('#ask_quote').modal('hide');
    		//$('.dynmic_quoteform').trigger("reset");
-    	location.reload();
+    	//location.reload();
     }
 
   function testsubmit(ele)
@@ -872,12 +902,44 @@ function getOnlyStaticQuestions()
   }
 
 
+  	function show_ask_quote()
+  	{
+  		
+  		var catid = $("#hidden_catId").val();
+    	var site_url = $('#site_url').text();
+    	$.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
 
-  $(document).on("click",".ask_quote_close",function() {
+        $.ajax({
+          url: site_url+"/general_user/get_first_ques",        
+          type:'POST',
+          data: {'catId':catid},	
+          success:function(response){  
+           
+           $('#ask_quote .quote_body').html(response);
+           
+          }
+        });
+        $('#ask_quote').modal('show');
+  	}
+	 /*$(document).on('show.bs.modal','#ask_quote', function () {
+
+    	
+	});*/
+
+ /* $(document).on("click",".ask_quote_close",function() {
 
   	
   	location.reload();
-  });
+  });*/
+
+  /*$('body').on('hidden.bs.modal', '#ask_quote', function () {
+        $(this).removeData('bs.modal');
+        hiddencatId
+      });*/
 /*
     $(document).on('hide.bs.modal','#ask_quote', function () {
 

@@ -18,22 +18,54 @@ use App\Models\YpCampaignClick;
 trait BusinessUserProSettingsTrait {
     public function getProSettings($currentMonth,$currentYear) 
     {
+
+
     	//get business user id from auth
         $bUserId  = Auth::user()->id;
 
     	$proSettings = array();
 
+        $proSettings['month'] = $currentMonth.'-'.$currentYear;
+        $proSettings['m'] = $currentMonth;
+        $proSettings['y'] = $currentYear;
+
         //get monthly budget of logged in business user
-        $monthlyBudget = YpBusinessUserCcDetails::select("wallet_amount","updated_wallet_amount")->where("b_id",$bUserId)->first();
+         $monthlyBudget = YpBusinessUserCcDetails::select("wallet_amount","updated_wallet_amount")->where("b_id",$bUserId)->first();
+
         if(!empty($monthlyBudget))
         {
-        	$proSettings['wallet_amount'] = $monthlyBudget['wallet_amount']; //total amount
-        	$proSettings['updated_wallet_amount'] = $monthlyBudget['updated_wallet_amount'];//updated amount
+            $proSettings['wallet_amount'] = $monthlyBudget['wallet_amount']; //total amount
+            //$proSettings['updated_wallet_amount'] = $monthlyBudget['updated_wallet_amount'];//updated amount
         }
         else
         {
             $proSettings['wallet_amount'] = 0; //total amount
-            $proSettings['updated_wallet_amount'] = 0;//updated amount
+          //  $proSettings['updated_wallet_amount'] = 0;//updated amount
+        }
+
+       
+        $getsumOfTrans = YpBusinessUserTransactions::select(DB::raw('sum(amount) as sumOfTrans'))->where("type",1)->where("b_id",$bUserId)->whereMonth('transaction_made_on', $currentMonth)->whereYear('transaction_made_on', $currentYear)->get();
+
+        if(!empty($getsumOfTrans))
+        {
+            
+            $proSettings['updated_wallet_amount'] = $getsumOfTrans[0]['sumOfTrans'];
+        }
+        else
+        {
+            
+            $proSettings['updated_wallet_amount'] = 0;
+        }
+
+        $getLeft = $proSettings['wallet_amount']-$proSettings['updated_wallet_amount'];
+
+        if($getLeft<=0)
+        {
+            $proSettings['updated_wallet_amount'] = 0;
+        }
+        else
+        {
+            $proSettings['updated_wallet_amount'] =$getLeft;
         }
         //get mode type free or pro of logged in user
         $getSettings = YpBusinessUsers::select("advertise_mode")->where("id",$bUserId)->first(); 
@@ -45,9 +77,7 @@ trait BusinessUserProSettingsTrait {
         
         
 
-        $proSettings['month'] = $currentMonth.'-'.$currentYear;
-        $proSettings['m'] = $currentMonth;
-        $proSettings['y'] = $currentYear;
+       
         //get count of Quotes requests with phone,total of amount deduction for bids of Quotes requests with phone for current month
         //get_quotes
 
@@ -139,7 +169,7 @@ trait BusinessUserProSettingsTrait {
         }
         else
         {
-            $proSettings['totalSpent'] =0;
+            $proSettings['totalSpent'] = 0;
         }
 
         //get deals that are closed for this month
@@ -215,6 +245,7 @@ trait BusinessUserProSettingsTrait {
                                 $YpBusinessUserTransactions->reason_of_deduction=$reasonOfDeduction;
 
                                 $YpBusinessUserTransactions->save(); 
+                                $updateWalletAmount = YpBusinessUserCcDetails::where("b_id",$businessUser)->update(['updated_wallet_amount' => 0]);
                             }
                             else
                             {

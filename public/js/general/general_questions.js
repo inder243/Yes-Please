@@ -195,10 +195,10 @@ $(document).ready(function(){
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').css('display','block');
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Please add title');
 	        return false;
-		}else if((question_title).length < 10 || (question_title).length > 30){
+		}else if((question_title).length < 10 || (question_title).length > 50){
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').addClass('error_border');
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').css('display','block');
-	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Title must be between 10 and 30 digits.');
+	        $('#ask_question').find('.descrptn_qus').find('.question_title').next('.fill_fields').text('Title must be between 10 and 50 digits.');
 	        return false;
 		}else{
 	        $('#ask_question').find('.descrptn_qus').find('.question_title').removeClass('error_border');
@@ -276,6 +276,14 @@ $(document).ready(function(){
 					$('#ask_question').find('.similar_result_qus').css('display','block');
 					$('#ask_question').find('.similar_result_qus').find('.questin_total_ans_div').html('');
 					$('#ask_question').find('.similar_result_qus').find('.questin_total_ans_div').html(data.similar_questions);
+
+					if(data.get_questions == '0'){
+						$('#ask_question').find('.similar_result_qus h1').remove();
+						$('#ask_question').find('.similar_result_qus p').remove();
+						$('#ask_question').find('.similar_result_qus').find('.questin_total_ans').find('.send_to_business a').text('');
+						$('#ask_question').find('.similar_result_qus').find('.questin_total_ans').find('.send_to_business a').text('Send question to business');
+
+					}
       //    			if(data.get_questions == '1'){
       //    				$('#ask_question').find('.img_vid_popup').css('display','none');
 						// $('#ask_question').find('.similar_result_qus').css('display','block');
@@ -305,7 +313,23 @@ $(document).ready(function(){
 	/*********close popup on cross********/
     $('.close_single_questions').click(function(e){
       e.preventDefault();
-      location.reload();
+      //alert('34343434');
+     // grecaptcha.reset();
+      $('#single_ques_title').val('');
+      $('#single_ques_desc').val('');
+      $('#single_ques_imgs').val('');
+      $('.descrptn_qus p').text('(0/2000 letters)');
+      $('.img_vid_popup #msg').text('');
+      $('.img_vid_popup #msg').html('');
+      $('.img_vid_popup #msg').val('');
+      $('#ask_question .how_to_ask').show();
+      $('#ask_question .descrptn_qus').hide();
+      $('#ask_question .img_vid_popup').hide();
+      $('#ask_question .similar_result_qus').hide();
+      $('#ask_question .mobile_phn_pop').hide();
+      $('#ask_question .Question_sent').hide();
+      $('#ask_question').modal('hide');
+      //location.reload();
     });
 	
 	$('.no_send_ques').click(function(e){
@@ -340,6 +364,19 @@ $(document).ready(function(){
 			data:{chk_login:'1'},
 			success:function(data){
 				jQuery('.pre_loader').css('display','none');
+
+				if(data.success == '9'){
+					var r = confirm("You are logged in as a Business User. Press Ok to logout and login as a General user.");
+					if (r == true) {
+					  	$('#ask_question').modal('hide');
+						$('#general_login').find('#sign_in_general').attr('data-checkstatus','questionsingle');
+						$('#general_login').find('.login_body_main h1').text('');
+						$('#general_login').find('.login_body_main h1').text('Please login or register to ask question');
+						$('#general_login').modal('show');
+						return false;
+					} 
+				}
+
 				if(data.success == '1'){
 
 					/***user logged in****ajax to submit question data****/
@@ -406,12 +443,12 @@ $(document).ready(function(){
 			}
 		}
 
-		if (grecaptcha.getResponse() == ''){
-			alert('Please verify Recaptcha');
-			// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').css('display','block');
-			// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').text('Please verify Recaptcha');
-			return false;
-		}
+		// if (grecaptcha.getResponse() == ''){
+		// 	alert('Please verify Recaptcha');
+		// 	// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').css('display','block');
+		// 	// $('#ask_question').find('.mobile_phn_pop').find('.recaptcha_error').text('Please verify Recaptcha');
+		// 	return false;
+		// }
 
 
 		var multipleBusiness = [];

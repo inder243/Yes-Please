@@ -46,8 +46,8 @@
                   <h2>Budget left</h2>
                   <h1>Budget left</h1>
                 </div>
-                <div class="total_number">
-                  <h1>$ <?php if(isset($monthlyBudget['updated_wallet_amount'])): ?><?php echo e($monthlyBudget['updated_wallet_amount']); ?><?php endif; ?></h1>
+                <div class="total_number total_number_budget">
+                  <h1>NIS <?php if(isset($monthlyBudget['updated_wallet_amount'])): ?><?php echo e($monthlyBudget['updated_wallet_amount']); ?><?php endif; ?></h1>
                 </div>
                 <div class="Qlink"><p>Manage</p></div>
                 <div class="quote_req_img"><img src="<?php echo e(asset('img/budget_left.png')); ?>"/></div>

@@ -108,10 +108,21 @@
                 </div>
             </section>
 
-    <div class="content">
+    <div class="content content-fix_header">
     <input type="hidden" id="home_url" value="<?php echo e(URL::asset('')); ?>">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
+    
+    <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer">
         <div class="footer_logo"><a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('img/footer_logo.png')); ?>" class="img-fluid" /></a></div>
         <div class="footer_link">

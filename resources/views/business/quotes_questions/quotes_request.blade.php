@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="register_step_1">
-         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a>/@if(!empty(app('request')->input('month'))  && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
+         <div class="breadcrumb register_breadcrumb"><a href="{{ url('/business_user/business_dashboard') }}">Dashboard </a>/@if(!empty(app('request')->input('month')) && !empty(app('request')->input('type')))<a href="{{ url('/business_user/advertisement_dashboard') }}"> Advertisement </a>/@endif<a href="{{ url('/business_user/quotes_questions') }}"> Quotes and questions </a>/<span class="q_breadcrumb"> @if(isset($allquotes)) {{$allquotes->cat_name}}@endif</span></div>
       </section>
       <section>
          <div class="quote_req_main">
@@ -259,6 +259,7 @@
                   <div class="add_photo_video">
                      <p>Add photos / Videos (optional)</p>
                      <div class="upload_file_section">
+
                         <div class="drag_file" id="drag_div">
                         	<div class="fallback">
               					<input name="file" class="disp_none" type="file" multiple style="width:1px;border:0px" />
@@ -267,18 +268,20 @@
                            <a href="javascript:;">Drag and drop files here to upload</a>
                         </div>
                         <span>OR</span>
+
                         <div class="file_to_upload">
                            <div class="upload-btn-wrapper">
-                              <button class="btn">Select files to upload</button>
-                              <input type="file" name="myfile[]" multiple class="select_quote_rply_img" accept="image/x-png,image/gif,image/jpeg"/>
+                              <button class="btn select_fileUpload" >Select files to upload</button>
+                              <input type="file" name="myfile[]" multiple class="select_quote_rply_img selectQuotImg" accept="image/x-png,image/gif,image/jpeg"/>
 
                 				      <span id="msg" class="BusQuoteRply"></span>
                            </div>
-                           <div class="choose_from_pre">
-                              <a href="javascript:;">Choose from previous</a>
-                           </div>
+                           
                         </div>
                      </div>
+                     <div class="choose_from_pre">
+                              <a href="javascript:;">Choose from previous</a>
+                           </div>
                   </div>
                   </div>
                </div>

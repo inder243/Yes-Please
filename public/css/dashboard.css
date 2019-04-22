@@ -94,7 +94,7 @@ button:focus {
 .sidenav {
 	height: 100%;
 	position: fixed;
-	z-index: 1;
+	z-index: 9;
 	top: 0;
 	left: 0;
 	background-color: #ffffff;
@@ -161,6 +161,8 @@ button:focus {
 	box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.12);
 	-webkit-box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.12);
 	background-color: #fff;
+	position: fixed;
+width: 100%;
 }
 
 .second_header_logo img {
@@ -879,7 +881,6 @@ button:focus {
 	padding: 4px 25px 4px 30px;
 	position: relative;
 	right: 5px;
-	font-weight: bold;
 }
 .bus_quoted::before {
     content: '';
@@ -936,31 +937,31 @@ button:focus {
     right: -4px;
 }
 .gen_new::before {
-    content: '';
-    width: 7px;
-    height: 32px;
-    background-color: rgb(51, 102, 153);
-    position: absolute;
-    top: 0;
-    right: -4px;
+	 content: '';
+	 width: 7px;
+	 height: 32px;
+	 background-color: rgb(51, 102, 153);
+	 position: absolute;
+	 top: 0;
+	 right: -4px;
 }
 .gen_accepted::before {
-    content: '';
-    width: 7px;
-    height: 32px;
-    background-color: #339933;
-    position: absolute;
-    top: 0;
-    right: -4px;
+	 content: '';
+	 width: 7px;
+	 height: 32px;
+	 background-color: #339933;
+	 position: absolute;
+	 top: 0;
+	 right: -4px;
 }
 .gen_read::before {
-    content: '';
-    width: 7px;
-    height: 32px;
-    background-color: #ed0c6e;
-    position: absolute;
-    top: 0;
-    right: -4px;
+	 content: '';
+	 width: 7px;
+	 height: 32px;
+	 background-color: #ed0c6e;
+	 position: absolute;
+	 top: 0;
+	 right: -4px;
 }
 .created_date {
 	font-size: 12px;
@@ -1089,7 +1090,7 @@ button:focus {
 
 .user_quote_second_section {
 	display: table-cell;
-	width: 70%;
+	width: 69%;
 	padding: 30px;
 }
 
@@ -1179,7 +1180,6 @@ button:focus {
 	font-size: 13px;
 	padding-top: 10px;
 	color: #999999;
-	text-align: justify;
 }
 
 .user_quote_second_section p span {
@@ -2367,6 +2367,7 @@ button:focus {
 .pro-module-feature {
     margin-top: 30px;
 		margin-bottom:30px;
+		min-height: 600px;
 }
 .pro_mode_feature h1 {
     font-size: 20px;
@@ -3074,7 +3075,25 @@ cursor: pointer;
     and (max-device-width: 1024px)  {
 
 		/* Force table to not be like tables anymore */
-		table, thead, tbody, th, td, tr {
+		.campagin_table  table {
+			display: block;
+		}
+		.campagin_table  table {
+			display: block;
+		}
+		.campagin_table  thead {
+			display: block;
+		}
+		.campagin_table  tbody {
+			display: block;
+		}
+		.campagin_table  th {
+			display: block;
+		}
+		.campagin_table  td {
+			display: block;
+		}
+		.campagin_table  tr {
 			display: block;
 		}
 
@@ -3142,6 +3161,152 @@ cursor: pointer;
 }
 
 /*********************************** Top-ad page end *********************************/
+
+/*********************************** My product start *********************************/
+.call-section {
+    padding-top: 80px;
+}
+.diff-icons-del img {
+    width: 20px;
+    margin-right: 10px;
+}
+.adde_btn {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
+.product-table{
+	max-height: 520px;
+}
+.campagin_table1 {
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0px 3px 6.3px 0.7px rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+    overflow: auto;
+}
+.campagin_table1 table {
+    width: 100%;
+}
+.campagin_table1 table tr:nth-child(2n+1) {
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #e9e7e7;
+    border-top: 1px solid #e9e7e7;
+}
+.table_heading th {
+    padding: 20px 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.campagin_table1 table tr td {
+    padding: 15px 15px;
+}
+.diff-icons-del {
+    display: flex;
+}
+.custom_model_width {
+    max-width: 700px;
+}
+.p-heading {
+    text-align: center;
+}
+.p-heading h1 {
+    font-size: 20px;
+}
+.select_arrow-new {
+    position: absolute;
+    right: 15px;
+    top: 36px;
+}
+.select_arrow-new img {
+    width: 14px;
+}
+.upper-catergory{
+	padding-top:25px;
+}
+.upper-catergory label {
+    color: #9698a1;
+    font-size: 14px;
+}
+.range-price {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+.price-from {
+    width: 170px;
+}
+.devider {
+    width: 40px;
+    text-align: center;
+    font-size: 20px;
+    padding-top: 10px;
+}
+.price-to {
+    width: 170px;
+}
+.perhr {
+    width: 150px;
+    margin-left: 12px;
+}
+.price-range-from {
+    margin-top: 15px;
+}
+.product-photo {
+    padding-left: 0;
+    padding-right: 0;
+}
+.suggestbid {
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+    color: #999;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.cal-img img {
+    width: 20px;
+}
+.cal-img {
+    position: absolute;
+    right: 8px;
+    top: 37px;
+}
+.promote-product p {
+    text-align: center;
+}
+.promote-product {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+/*********************************** My product end *********************************/
+/*********************************** Call section start *********************************/
+.call-section {
+    padding-top: 80px;
+}
+.add-sechdule {
+    color: #369;
+    font-size: 15px;
+}
+.add-sechdule:hover {
+    text-decoration: none;
+}
+.diff-icons img {
+    width: 19px;
+    margin-right: 15px;
+}
+.form-group input:focus {
+    box-shadow: none;
+    border: 1px solid #d7d5d5;
+}
+.form-group select:focus {
+    box-shadow: none;
+      border: 1px solid #d7d5d5;
+}
+.product-label {
+    padding-top: 8px;
+}
+
+/*********************************** Call section end *********************************/
 /*********************************** Media query start *********************************/
 
 @media (max-width: 1520px) {

@@ -144,7 +144,11 @@
                  
               </div>
               <div class="modal-body">
-                  
+                  <div class="login_body_main">
+                    <h1>Choose the category filters as main title</h1></br>
+                  </div>
+                  <div class="cat_html_dataa">
+                  </div>
               </div>
               
             </div>

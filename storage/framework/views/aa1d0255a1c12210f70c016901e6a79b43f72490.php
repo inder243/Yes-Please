@@ -209,8 +209,9 @@
                                       </div>
                                       <div class="content_image">
                                         <div class="userPic"><img src="<?php echo e(asset('img/user_placeholder.png')); ?>"/></div>
+                                        
                                         <div class="contect_detail">
-                                          <h1><?php echo e($ignored_quote['get_bus_user']['business_name']); ?>, Quote id : <?php echo e($ignored_quote['get_quotes']['quote_id']); ?></h1>
+                                          <a href="<?php echo e(url('/general_user/quotesrequest/'.$ignored_quote['get_quotes']['id'].'/'.$ignored_quote['get_bus_user']['id'])); ?>"><h1><?php echo e($ignored_quote['get_bus_user']['business_name']); ?>, Quote id : <?php echo e($ignored_quote['get_quotes']['quote_id']); ?></h1></a>
 
                                           <?php $details = mb_strimwidth($ignored_quote['quote_reply']['details'], 0, 30, "..."); ?>
 
@@ -222,6 +223,7 @@
 
                                           <p><span>$ <?php echo e($ignored_quote['quote_reply']['price_quotes'].$price_type); ?></span>for <?php echo e($details); ?></p>
                                         </div>
+                                      
                                       </div>
                                     </div>
                                   </div>

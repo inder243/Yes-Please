@@ -30,7 +30,11 @@ class GeneralUserLoginController extends Controller
 
     public function __construct()
     {
-      $this->middleware('guest:general_user', ['except' => ['logout','index','showPublicProfile','getSimilarQuestions','getBusinessReplies']]);
+      $this->middleware('guest:general_user', ['except' => ['logout','index','showPublicProfile','getSimilarQuestions','getBusinessReplies','captcha']]);
+    }
+
+     public function captcha(){
+        return view('captcha');
     }
 
     /******
@@ -39,9 +43,9 @@ class GeneralUserLoginController extends Controller
     public function index(Request $request,$catid = null, $location = null){
 
         $adsToShow = array();
-      if(!is_numeric($catid)){
-        return abort(404);
-      }
+        if(!is_numeric($catid)){
+            return abort(404);
+        }
 
       $check_id_exist_db = YpBusinessCategories::where('id',$catid)->get()->toArray();
 
@@ -141,7 +145,8 @@ class GeneralUserLoginController extends Controller
                         INNER JOIN yp_business_users as user ON buc.business_userid = user.id 
                         INNER JOIN yp_campaign_detail  ON user.id = yp_campaign_detail.b_id 
                         INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious.' order by pay_per_click desc') );
-                       
+                   /*  echo "<pre>";
+                     print_r($resultsads);*/
                     foreach($resultsads as $result)
                     {
                         $adsTo =array();
@@ -156,8 +161,10 @@ class GeneralUserLoginController extends Controller
                               FROM yp_business_user_transactions where yp_business_user_transactions.transaction_made_on=CURDATE()  and yp_business_user_transactions.b_id='.$buid.' and yp_business_user_transactions.reason_of_deduction=4
                               GROUP BY yp_business_user_transactions.camp_id
                             ) s ON (yp_campaign_detail.id = s.camp_id) 
-                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.')   group by yp_campaign_detail.id order by pay_per_click desc'));
+                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.')   group by yp_campaign_detail.id order by pay_per_click desc,yp_campaign_detail.id asc'));
 
+                      /* echo "<pre>";
+                     print_r($validAds);*/
                         if(!empty($validAds))
                         {
                             foreach($validAds as $validAd)
@@ -187,10 +194,10 @@ class GeneralUserLoginController extends Controller
                                     $adsToShow[] = $adsTo;
 
                                     //save impression
-                                    $YpCampaignImpression = new YpCampaignImpression;
+                                    /*$YpCampaignImpression = new YpCampaignImpression;
                                     $YpCampaignImpression->cat_id = $result->cid;
                                     $YpCampaignImpression->camp_id = $validAd->campid;
-                                    $YpCampaignImpression->save();
+                                    $YpCampaignImpression->save();*/
 
                                     break;
                                 }
@@ -314,7 +321,8 @@ class GeneralUserLoginController extends Controller
                         INNER JOIN yp_business_users as user ON buc.business_userid = user.id 
                         INNER JOIN yp_campaign_detail  ON user.id = yp_campaign_detail.b_id 
                         INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious.' order by pay_per_click desc') );
-                       
+                     /*echo "<pre>";
+                     print_r($resultsads);*/
                     foreach($resultsads as $result)
                     {
                         $adsTo =array();
@@ -329,8 +337,10 @@ class GeneralUserLoginController extends Controller
                               FROM yp_business_user_transactions where yp_business_user_transactions.transaction_made_on=CURDATE()  and yp_business_user_transactions.b_id='.$buid.' and yp_business_user_transactions.reason_of_deduction=4
                               GROUP BY yp_business_user_transactions.camp_id
                             ) s ON (yp_campaign_detail.id = s.camp_id) 
-                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.')   group by yp_campaign_detail.id order by pay_per_click desc'));
+                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.')   group by yp_campaign_detail.id order by pay_per_click desc,yp_campaign_detail.id asc'));
 
+                       /* echo "<pre>";
+                     print_r($validAds);*/
                         if(!empty($validAds))
                         {
                             foreach($validAds as $validAd)
@@ -360,10 +370,10 @@ class GeneralUserLoginController extends Controller
                                     $adsToShow[] = $adsTo;
 
                                     //save impression
-                                    $YpCampaignImpression = new YpCampaignImpression;
+                                    /*$YpCampaignImpression = new YpCampaignImpression;
                                     $YpCampaignImpression->cat_id = $result->cid;
                                     $YpCampaignImpression->camp_id = $validAd->campid;
-                                    $YpCampaignImpression->save();
+                                    $YpCampaignImpression->save();*/
 
                                     break;
                                 }

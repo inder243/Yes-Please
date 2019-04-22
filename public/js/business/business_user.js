@@ -444,13 +444,13 @@ function categoriesselect(data){
 			
 			if(data['success']==1)
 			{
-				$('#openPopUpForQuestion').find('.modal-body').html('');
-				$('#openPopUpForQuestion').find('.modal-body').html(data['html']);
-				$('#openPopUpForQuestion').find('.modal-body').addClass('text-center');
-				$('#openPopUpForQuestion').find('.modal-body').prepend('<span class="text-error"></span>');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html('');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html(data['html']);
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').addClass('text-center');
+				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').prepend('<span class="text-error"></span>');
 				$('#openPopUpForQuestion').modal('show');
-				$('#openPopUpForQuestion .modal-body .ele_next1').attr('data-userid',user_id);
-				$('#openPopUpForQuestion .modal-body .ele_next1').attr('data-categoryid',category_id);
+				$('#openPopUpForQuestion .modal-body .cat_html_dataa .ele_next1').attr('data-userid',user_id);
+				$('#openPopUpForQuestion .modal-body .cat_html_dataa .ele_next1').attr('data-categoryid',category_id);
 			}
 
 		},error: function() { alert("Error posting feed."); }
@@ -468,7 +468,7 @@ function categoriesselect(data){
 		if(checkNoOfCategories_reg() <= 10){
 			var length = $('.added_category_list_heading .added_category ul').length;
 			//alert(length);
-			$('.added_category_list_heading .added_category ul.added_category_ul').append('<li><a href="javascript:;" id="'+category_id+'" data-cat="parent" class="categories">'+category_name+'</a><span class="cross_category_reg"><img src="'+home_url+'img/category_cancel.png" class="img-fluid"></span></li>');
+			$('.added_category_list_heading .added_category ul.added_category_ul').append('<li><a href="javascript:;" id="'+category_id+'" data-cat="parent" class="categories">'+category_name+'</a><span class="cross_category cross_category_reg"><img src="'+home_url+'img/category_cancel.png" class="img-fluid"></span></li>');
 			$('#no_categories').hide();
 			ajaxRequest_reg(user_id,category_id);
 			$(data).siblings('span.checked_category').attr('style','display: block;');

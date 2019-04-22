@@ -52,7 +52,7 @@
                     <a href="<?php echo e(url('/business_user/quotes_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                 </li>
                 <li>
-                    <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                    <a href="<?php echo e(url('/business_user/quotes_questions?tab=ques')); ?>"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
                 </li>
                 <li>
                     <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>
@@ -124,9 +124,20 @@
 
 
     <input type="hidden" id="home_url" value="<?php echo e(URL::asset('')); ?>">
-    <div class="content">
+    <div class="content content-fix_header">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
+    
+    <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer footer_for_dash">
         <div class="footer_logo for_dashboard_footer"><img src="<?php echo e(asset('img/footer_logo.pn')); ?>g" class="img-fluid" /></div>
         <div class="footer_link footer_dash_ul">

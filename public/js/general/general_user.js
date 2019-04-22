@@ -20,7 +20,7 @@ $(document).ready(function(){
           
             $('.content').html(response);
 
-
+            countImpression();
             
             // if(response.success == '2'){
             //  alert('hmm');
@@ -193,7 +193,9 @@ $(document).ready(function(){
 		// return false;
       if (navigator.geolocation) {
 	    navigator.geolocation.getCurrentPosition(showPosition);
+	     countImpression();
 	  } else { 
+	  	
 	    console.log('naa');
 	  }
 
@@ -242,6 +244,7 @@ $(document).ready(function(){
     	$('#work_description').find('.img_vid_popup').css('display','none');
     	$('#work_description').find('.describe_work').css('display','none');
     	$('#work_description').find('.final_ques_thanks').css('display','block');
+    	$('#work_description').find('.close_single_quote').css('display','none');
     	$('#work_description').modal('show');
     }
 
@@ -893,7 +896,7 @@ function showPosition(position) {
 			// if(response.success == '2'){
 			// 	alert('hmm');
 			// }
-
+			countImpression();
 			/******on select of business users ->change color and give limit******/
 			var listItems = $(".all_bus_by_cat li");
 
@@ -1217,11 +1220,12 @@ myDropzone.on("addedfile", function(file) {
 
 /****close modal on single profile page***/
 function closestaticmodal(){
-	$('#work_description').modal('hide');
-
+	
 	var current_url = window.location.href;
 	var new_url = current_url.slice(0, current_url.lastIndexOf('/'));
 	window.location.href = new_url;
+	$('#work_description').modal('hide');
+
 }
 
 function show_error(){
@@ -1255,4 +1259,21 @@ function searchFilter() {
 
 }
 /****search functionality code ends here****/
+
+function countImpression()
+{
+	var impressions = [];
+    
+    $('#all_busBy_cat_ads li').each(function(i)
+	{
+		var impression=[];
+	   impression['catid']=$(this).attr('data-cat-id'); 
+	   impression['campid']=$(this).attr('data-camp-id'); 
+	   impressions.push(impression);
+	});
+    alert('dkfnkdfk');
+	console.log(impressions);
+    
+}
+
 
