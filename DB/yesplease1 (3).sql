@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 22, 2019 at 01:43 PM
+-- Generation Time: Apr 23, 2019 at 01:21 PM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.15-0ubuntu0.18.04.2
 
@@ -249,13 +249,14 @@ INSERT INTO `yp_business_details` (`id`, `b_id`, `business_userid`, `website_url
 (31, 36, 194534501947, '    ', '    ', '{\"available\":\"available\"}', NULL, '', NULL, NULL, NULL, NULL, NULL, '2019-04-04 12:12:35', '2019-04-22 06:32:14', 0, 10, 0, 0),
 (32, 35, 9950141735095, '  ', '  ', '{\"available\":\"available\"}', NULL, '', NULL, NULL, NULL, NULL, NULL, '2019-04-04 12:12:38', '2019-04-12 06:42:10', 0, 10, 0, 0),
 (33, 37, 3551595594179, '  ', '  ', '{\"available\":\"available\"}', NULL, '', NULL, NULL, NULL, NULL, NULL, '2019-04-04 12:19:23', '2019-04-04 12:23:59', 0, 10, 0, 0),
-(34, 39, 6455933930418, '', '', '{\"available\":\"available\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-04 13:09:41', '2019-04-04 13:14:09', 0, 10, 0, 0),
+(34, 39, 6455933930418, '    ', '    ', '{\"available\":\"available\"}', NULL, '', NULL, NULL, NULL, NULL, NULL, '2019-04-04 13:09:41', '2019-04-23 06:54:36', 0, 10, 0, 0),
 (35, 38, 8183013534215, '', '', '{\"available\":\"available\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-04 13:12:36', '2019-04-04 13:14:46', 0, 10, 0, 0),
 (36, 40, 1712755105421, '  ', '  ', '{\"available\":\"available\"}', NULL, '', '{\"pic\":[\"751555047593.png\",\"0bfe1182dabb4464a6fd977c06f8d32e_1931918222.png\"]}', NULL, NULL, NULL, NULL, '2019-04-12 05:32:11', '2019-04-12 06:42:41', 0, 90, 0, 0),
 (37, 41, 9660943561555, '', '', '{\"available\":\"available\"}', NULL, NULL, '{\"pic\":[\"631555066959.png\",\"571555066959.jpeg\",\"501555066959.jpeg\",\"1001555066959.jpeg\",\"741555066959.jpeg\",\"301555066959.jpeg\",\"641555066959.jpeg\",\"991555066959.jpeg\",\"831555066959.jpeg\",\"411555066959.jpg\",\"991555066959.png\",\"561555066959.jpg\",\"611555066959.jpeg\",\"271555066959.png\",\"741555066959.jpg\",\"671555066959.png\",\"741555066959.jpg\",\"731555066959.png\",\"911555066959.jpg\",\"471555066959.jpg\"]}', NULL, NULL, NULL, NULL, '2019-04-12 10:55:59', '2019-04-12 11:02:51', 0, 10, 0, 0),
 (38, 42, 8391526033155, '  ', '  ', '{\"sunday_from\":\"17:41\",\"sunday_to\":\"17:41\",\"monday_from\":\"17:41\",\"monday_to\":\"17:41\",\"tuesday_from\":\"17:41\",\"tuesday_to\":\"17:41\",\"wednesday_from\":\"17:41\",\"wednesday_to\":\"17:41\",\"thursday_from\":\"17:41\",\"thursday_to\":\"17:41\",\"friday_from\":\"17:41\",\"friday_to\":\"17:41\",\"saturday_from\":\"13:41\",\"saturday_to\":\"20:41\"}', NULL, '', '{\"pic\":[\"961555339295.jpg\"]}', NULL, NULL, NULL, NULL, '2019-04-15 14:39:31', '2019-04-21 13:50:54', 1, 0, 0, 0),
 (39, 43, 8414535940385, '', '', '{\"available\":\"available\"}', NULL, 'this is description of the business profile.', NULL, NULL, NULL, NULL, NULL, '2019-04-17 09:47:22', '2019-04-19 10:55:33', 0, 10, 0, 0),
-(40, 44, 4685627587315, '', '', '{\"sunday_from\":\"\",\"sunday_to\":\"\",\"monday_from\":\"\",\"monday_to\":\"\",\"tuesday_from\":\"\",\"tuesday_to\":\"\",\"wednesday_from\":\"\",\"wednesday_to\":\"\",\"thursday_from\":\"\",\"thursday_to\":\"\",\"friday_from\":\"\",\"friday_to\":\"19:38\",\"saturday_from\":\"\",\"saturday_to\":\"\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-19 14:01:21', '2019-04-19 14:08:54', 0, 10, 0, 0);
+(40, 44, 4685627587315, '', '', '{\"sunday_from\":\"\",\"sunday_to\":\"\",\"monday_from\":\"\",\"monday_to\":\"\",\"tuesday_from\":\"\",\"tuesday_to\":\"\",\"wednesday_from\":\"\",\"wednesday_to\":\"\",\"thursday_from\":\"\",\"thursday_to\":\"\",\"friday_from\":\"\",\"friday_to\":\"19:38\",\"saturday_from\":\"\",\"saturday_to\":\"\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-19 14:01:21', '2019-04-19 14:08:54', 0, 10, 0, 0),
+(41, 45, 390652611153, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-23 09:11:45', '2019-04-23 09:11:45', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -265,11 +266,10 @@ INSERT INTO `yp_business_details` (`id`, `b_id`, `business_userid`, `website_url
 
 CREATE TABLE `yp_business_products` (
   `id` int(10) UNSIGNED NOT NULL,
-  `product_id` int(10) UNSIGNED NOT NULL,
+  `product_id` bigint(10) UNSIGNED NOT NULL,
   `business_id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
-  `sub_category_id` int(10) UNSIGNED NOT NULL,
   `price_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price_from` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -408,7 +408,7 @@ INSERT INTO `yp_business_selected_services` (`id`, `business_id`, `cat_id`, `ser
 (126, 37, 34, '84X', '2019-04-04 12:20:17', '2019-04-04 12:20:17'),
 (127, 37, 36, '84X', '2019-04-04 12:20:37', '2019-04-04 12:20:37'),
 (128, 37, 37, '64X', '2019-04-04 12:20:44', '2019-04-04 12:20:44'),
-(129, 39, 35, '64X', '2019-04-04 13:12:32', '2019-04-04 13:12:32'),
+(129, 39, 35, '64X', '2019-04-04 13:12:32', '2019-04-23 06:52:36'),
 (130, 38, 35, '64X', '2019-04-04 13:12:45', '2019-04-04 13:12:45'),
 (131, 39, 33, '84X', '2019-04-04 13:13:45', '2019-04-04 13:13:45'),
 (132, 39, 36, '84X', '2019-04-04 13:13:57', '2019-04-04 13:13:57'),
@@ -553,7 +553,7 @@ INSERT INTO `yp_business_users` (`id`, `business_userid`, `business_name`, `firs
 (18, 6563590248318, 'Cleaner 79', 'MJ', 'Dogra', 'amudasir355@aol.com', '$2y$10$wh20y9z4Vb8DL.rOkd.MWOAg4YHMW795qFY96UKTtAy6r/e3Eqs8i', '07412589630', 'Sector 69, Mohali, Punjab, India', '76.7206652', '30.692499', NULL, 's65nYqCBoGr4p2eZ4ACxYXE3F0SnhFjDH8jgJooxQWP7HyoQ8cVMR3wiq3rI', '7', 1, '', 0, 0, '2019-03-19 09:34:23', '2019-03-19 09:52:44'),
 (19, 3557529799891, 'asdas', 'ad', 'asd', 'asdasd@asdasd.fgh', '$2y$10$8hs84FiltxiYbit2HOrpR.siQqE1PVWDF3pooANdIIWUok694z4tG', '343434343434', 'Mohali Railway Station Road, Sector 62, Sahibzada Ajit Singh Nagar, Punjab, India', '76.72605039999999', '30.6949406', NULL, NULL, '1', 1, NULL, 0, 0, '2019-03-19 09:56:19', '2019-03-19 09:56:19'),
 (20, 7849952251215, 'Cricket', 'Ricky', 'Ponting', 'ricky@gmail.com', '$2y$10$NMlk6QdAqxV7ALn8Cn5f3OIatSf9FimBW2cVzt07mZpWarug/2672', '9896554556', 'Sydney NSW, Australia', '151.2092955', '-33.8688197', NULL, NULL, '4', 1, NULL, 0, 0, '2019-03-19 10:53:32', '2019-03-19 10:53:53'),
-(21, 7924731922545, 'Woodland', 'Sector_79', 'Mohali', 'dev1@iapptechnologies.com', '$2y$10$CMTlAfhvag/kXGaRRYO.zuNxsoQhC/1WIyYQByDrFFHzV.jckH60u', '7412589630', 'Aroma Chowk Sector 21/22, 22C, Sector 22, Chandigarh', '76.7736749', '30.7301055', '1554818456.jpeg', 'AsGi2jC3AK4ICJqe8nWJlZW7EdMyP8b7NjMwphhfiSKSDsg65HclcHyjsJTh', '7', 1, NULL, 1, 0, '2019-03-22 09:45:47', '2019-04-19 09:21:19'),
+(21, 7924731922545, 'Woodland', 'Sector_79', 'Mohali', 'dev1@iapptechnologies.com', '$2y$10$CMTlAfhvag/kXGaRRYO.zuNxsoQhC/1WIyYQByDrFFHzV.jckH60u', '7412589630', 'Aroma Chowk Sector 21/22, 22C, Sector 22, Chandigarh', '76.7736749', '30.7301055', '1554818456.jpeg', 'aakVXsHyolaS9bwJlwobdKYoBP9ejJrbTGaVhnhL43zrmcN9vXMqru4f8w2o', '7', 1, NULL, 1, 0, '2019-03-22 09:45:47', '2019-04-23 09:10:36'),
 (22, 5348205618641, 'Nike', 'Sector_66', 'Mohali', 'dev2@iapptechnologies.com', '$2y$10$mHErXvhMqU07mdi9/YqbDuhLD1kYnv8kr5BlRNXZHp8bIPCnqtrna', '7412589630', 'Sector 8, Chandigarh, India', '76.7985669', '30.7400589', NULL, 'HZaj1a67WHZsnC4anSi4ObmZKR6iCx2HVn0VPpxREA8fhZ5KkX5fnzmRswyp', '7', 1, NULL, 1, 0, '2019-03-22 09:49:24', '2019-04-11 09:30:52'),
 (23, 7555816243973, 'addidas', 'MJ_addidas', 'Dogra', 'dev3@iapptechnologies.com', '$2y$10$ZVhS.HnnrNgeX67Ue/f5rua2zasZyRwyf/FkNfKkFQ3zzmzcTQi1y', '7412589630', 'Bengaluru, Karnataka, India', '77.5945627', '12.9715987', NULL, 'cwQwkapM10iLKXNbancLMKdWMrJBvg4ClFZNaZ28sClwNPIZfwlmqK8qBQSy', '7', 1, NULL, 0, 0, '2019-03-22 10:09:27', '2019-03-28 05:16:25'),
 (24, 5751285447359, 'Caterpiller', 'Sector_66', 'Dogra', 'dev4@iapptechnologies.com', '$2y$10$bCt34uLGkkQ8Y768UL6XTO1pvjCUpeAozj0sUyC97bcTQSEEmnza6', '741258963', 'North Country Mall Road, Sector 117, Sahibzada Ajit Singh Nagar, Punjab, India', '76.6787822', '30.738992', NULL, '6Vy6MLgXF4kPcT1wSf7jnVyNIY3Ko95sLRkTusVxvd58vHTvwq9rQKG1oVny', '7', 1, NULL, 1, 0, '2019-03-22 10:15:58', '2019-04-18 12:26:48'),
@@ -571,12 +571,13 @@ INSERT INTO `yp_business_users` (`id`, `business_userid`, `business_name`, `firs
 (36, 194534501947, 'Samsung4', 'jkl', 'jkl', 'jkl@jkl.jkl', '$2y$10$pIZZN4AI.rrnFjwMALiwxubPVt4ViCz1ACX6jmE6d5ZIVWXmrI9OW', '7412589630', ' HaPalmach St 1, Jerusalem, Israel', '35.2136561', '31.7683417', '', 'AlE2QBqL9eDOAwRso6zQj5IsjVtgwSbc0r8B4sZyXEJKOtXYRsCfgjn7tIOE', '7', 1, NULL, 1, 0, '2019-04-04 12:12:24', '2019-04-22 10:08:53'),
 (37, 3551595594179, 'Samsung5', 'bnm', 'bnm', 'bnm@bnm.bnm', '$2y$10$o68GFWMDjr06Nu6hwEuc3OKZYKBUt0JU/QOG2PNTaCXsA2OB4N6c.', '6666666666', '67, Sector Road, Sector 67, Mohali, Punjab, India', '76.7242425', '30.679043', '1554380639.png', 'r23THBBnYC5J07ODO7BifDnmmYdKcZGqti0AoS7JpinbEVkYGpyn4kHAPrz3', '7', 1, NULL, 1, 0, '2019-04-04 12:13:15', '2019-04-11 14:12:00'),
 (38, 8183013534215, 'samsung7', 'cxz', 'cxz', 'cxz@cxz.cxz', '$2y$10$UQYj.FPKGvLbMmsFM1rdVOHwtuniCKnE9mQ2rj4RUbIiLcTsNJxka', '7894561231', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, NULL, '7', 1, NULL, 1, 0, '2019-04-04 13:08:30', '2019-04-04 13:22:10'),
-(39, 6455933930418, 'samsung6', 'zxc', 'zxc', 'zxc@zxc.zxc', '$2y$10$6xdBAOkmQqk3bRroAoD4X.lfk0vUKY87NN9rfQwAmEazQEfr0Uq8G', '1236547890', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'wNXAiswZrpsZFmG4Ptk38uby2aP4Q9HKTlkihYNyqxBdZ26JRAtkExGqTHmH', '7', 1, NULL, 1, 0, '2019-04-04 13:09:09', '2019-04-22 13:15:29'),
+(39, 6455933930418, 'samsung6', 'zxc', 'zxc', 'zxc@zxc.zxc', '$2y$10$6xdBAOkmQqk3bRroAoD4X.lfk0vUKY87NN9rfQwAmEazQEfr0Uq8G', '1236547890', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', '', 'wNXAiswZrpsZFmG4Ptk38uby2aP4Q9HKTlkihYNyqxBdZ26JRAtkExGqTHmH', '7', 1, NULL, 1, 0, '2019-04-04 13:09:09', '2019-04-23 06:54:36'),
 (40, 1712755105421, 'DaftPunk_dev8', 'daft', 'Punk', 'dev88@iapptechnologies.com', '$2y$10$0Gl8YSLuRMcmkivxWmWDxOwOR8a.sq3GuKEYEZYRdkIkgW55YxDie', '8558868399', 'Sector 66, Sahibzada Ajit Singh Nagar, Punjab, India', '76.7350951', '30.6742338', '1555051361.png', NULL, '7', 1, NULL, 1, 0, '2019-04-12 05:32:01', '2019-04-12 10:54:11'),
 (41, 9660943561555, 'Daft-Punk', 'Daft', 'Punk', 'dev8@iapptechnologies.com', '$2y$10$wWa3zchrnhWkp2lve6ZtwehmxEBH2FBp4awI7Uk0jqQJ130OZNrq.', '1234567895', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'Gjl0UFA5w7cjFUKxLcGFNudqNdb8BBySHjc7Xuu1Aj7D8GzYm2WQ1oFpOY8M', '7', 1, '', 1, 1, '2019-04-12 10:55:46', '2019-04-12 13:03:35'),
 (42, 8391526033155, 'yes please', 'roei', 'mizrahi', 'roei@yesplease.co.il', '$2y$10$iY8CFQgbzYB5K1fEpD63xOf872ImH1THPvGfQ70aHhVenUPqEBXVy', '0546612262', 'הדר 60, הרצליה, Israel', '34.8486294', '32.174949', '', 'aq90YiYpjE04siedRKS63p3SZTJO6EcoWYbwyTsf6A4eut1kw0456NR2qFha', '7', 1, NULL, 1, 0, '2019-04-15 14:39:22', '2019-04-21 14:11:42'),
 (43, 8414535940385, 'ewq', 'Common', 'BU', 'ewq@ewq.ewq', '$2y$10$xthsfefpMZjDRBWZEyncPO4N.TV9iGwJK4iLRBcM1pmqqGO1nUXKS', '3333666555', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'D76KEYGfz5tMObdXY4seGuBOfbaUFkAxO96duHWeLVYsxvvlUvZsIsn5pozu', '7', 1, NULL, 0, 0, '2019-04-17 09:47:13', '2019-04-19 12:58:51'),
-(44, 4685627587315, 'Clock', 'clo', 'clo', 'clo@clo.clo', '$2y$10$0y4WqKJ5UI5fBbbyq6lm6O4AqKi1Rhu93CQOETvH2dHDdrqHfe6dq', '324232323', 'Sector 67, Sahibzada Ajit Singh Nagar, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'JMWImCtQgQCeQJyOAr7TyJ22RvJFggb1BknUnVF4jDWAkYFv8hGcP8le7JdM', '7', 1, NULL, 0, 0, '2019-04-19 14:01:13', '2019-04-22 10:02:02');
+(44, 4685627587315, 'Clock', 'clo', 'clo', 'clo@clo.clo', '$2y$10$0y4WqKJ5UI5fBbbyq6lm6O4AqKi1Rhu93CQOETvH2dHDdrqHfe6dq', '324232323', 'Sector 67, Sahibzada Ajit Singh Nagar, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'JMWImCtQgQCeQJyOAr7TyJ22RvJFggb1BknUnVF4jDWAkYFv8hGcP8le7JdM', '7', 1, NULL, 0, 0, '2019-04-19 14:01:13', '2019-04-22 10:02:02'),
+(45, 390652611153, 'kapoor', 'kp', 'user', 'kapoor@yopmail.com', '$2y$10$hZTtJqXc/k4HzlcIdIcOoOGOvsLO4apcZ2qRTPt/2gg9P8EOok7xu', '62656546465', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, NULL, '2', 1, NULL, 0, 0, '2019-04-23 09:11:33', '2019-04-23 09:11:45');
 
 -- --------------------------------------------------------
 
@@ -873,7 +874,7 @@ INSERT INTO `yp_business_users_quotes` (`id`, `business_id`, `general_id`, `quot
 (153, 35, 5, 71, 1, '2019-04-04 13:23:07', '2019-04-04 13:23:07'),
 (154, 31, 5, 71, 1, '2019-04-04 13:23:07', '2019-04-04 13:23:07'),
 (155, 38, 5, 71, 1, '2019-04-04 13:23:07', '2019-04-04 13:23:07'),
-(156, 39, 5, 71, 2, '2019-04-04 13:23:07', '2019-04-19 14:23:47'),
+(156, 39, 5, 71, 3, '2019-04-04 13:23:07', '2019-04-23 07:39:56'),
 (157, 36, 5, 72, 1, '2019-04-04 13:29:12', '2019-04-04 13:29:12'),
 (158, 31, 5, 72, 1, '2019-04-04 13:29:12', '2019-04-04 13:29:12'),
 (159, 35, 5, 72, 1, '2019-04-04 13:29:12', '2019-04-04 13:29:12'),
@@ -1078,7 +1079,6 @@ INSERT INTO `yp_business_user_categories` (`id`, `business_userid`, `category_id
 (139, 37, 34, 40, 20, 0, '2019-04-04 12:20:14', '2019-04-04 12:24:09', NULL),
 (140, 37, 36, 200, 50, 0, '2019-04-04 12:20:35', '2019-04-04 12:24:09', NULL),
 (141, 37, 37, 500, 300, 0, '2019-04-04 12:20:42', '2019-04-04 12:24:09', NULL),
-(142, 39, 35, 60, 100, 0, '2019-04-04 13:12:29', '2019-04-04 13:16:07', NULL),
 (143, 38, 35, 60, 100, 0, '2019-04-04 13:12:42', '2019-04-04 13:22:10', NULL),
 (144, 39, 33, 70, 50, 0, '2019-04-04 13:13:43', '2019-04-04 13:16:07', NULL),
 (146, 38, 34, 40, 20, 0, '2019-04-04 13:14:22', '2019-04-04 13:22:10', NULL),
@@ -1117,7 +1117,9 @@ INSERT INTO `yp_business_user_categories` (`id`, `business_userid`, `category_id
 (194, 44, 27, 0, 0, 0, '2019-04-19 14:04:35', '2019-04-19 14:04:35', NULL),
 (197, 39, 7, 0, 0, 0, '2019-04-22 07:08:44', '2019-04-22 07:08:44', NULL),
 (198, 39, 8, 0, 0, 0, '2019-04-22 07:08:47', '2019-04-22 07:08:47', NULL),
-(205, 36, 16, 0, 0, 0, '2019-04-22 08:12:28', '2019-04-22 08:12:28', NULL);
+(205, 36, 16, 0, 0, 0, '2019-04-22 08:12:28', '2019-04-22 08:12:28', NULL),
+(206, 39, 35, 0, 0, 0, '2019-04-23 06:52:34', '2019-04-23 06:52:34', NULL),
+(270, 45, 35, 0, 0, 0, '2019-04-23 13:19:29', '2019-04-23 13:19:29', NULL);
 
 -- --------------------------------------------------------
 
@@ -1145,7 +1147,7 @@ CREATE TABLE `yp_business_user_cc_details` (
 
 INSERT INTO `yp_business_user_cc_details` (`id`, `b_id`, `customer_id`, `wallet_amount`, `updated_wallet_amount`, `lastdigit`, `expire_month`, `expire_year`, `card_added_on`, `created_at`, `updated_at`) VALUES
 (2, 21, 1553768231, 4000, 38, 4444, '10', '22', '2019-03-28', '2019-03-28 10:17:11', '2019-04-22 07:10:50'),
-(4, 15, 1553768232, 2000, 885, 4444, '10', '22', '2019-03-28', '2019-03-28 10:17:11', '2019-04-22 13:18:18'),
+(4, 15, 1553768232, 2000, 865, 4444, '10', '22', '2019-03-28', '2019-03-28 10:17:11', '2019-04-23 07:32:34'),
 (5, 16, 1553768239, 300, 59, 4444, '10', '22', '2019-03-28', '2019-03-28 10:17:11', '2019-04-22 11:23:31'),
 (6, 26, 1554285051, 2000, 1208, 4444, '10', '22', '2019-04-03', '2019-04-03 09:50:51', '2019-04-22 07:10:50'),
 (10, 33, 1554356751, 1000, 940, 4444, '10', '22', '2019-04-04', '2019-04-04 05:45:51', '2019-04-04 07:27:44'),
@@ -1183,7 +1185,10 @@ CREATE TABLE `yp_business_user_hashtags` (
 INSERT INTO `yp_business_user_hashtags` (`id`, `business_userid`, `tag_id`) VALUES
 (199, 42, 14),
 (200, 42, 15),
-(201, 42, 16);
+(201, 42, 16),
+(203, 39, 14),
+(204, 39, 15),
+(205, 39, 16);
 
 -- --------------------------------------------------------
 
@@ -1242,7 +1247,8 @@ INSERT INTO `yp_business_user_quotes_reply` (`id`, `business_id`, `quote_id`, `p
 (31, 33, 56, '5', '1', NULL, 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '{\"pic\":[\"631554357922.png\"]}', '2019-04-04 06:05:22', '2019-04-04 06:05:22'),
 (32, 31, 56, '5', '1', NULL, 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '{\"pic\":[\"631554357949.jpg\"]}', '2019-04-04 06:05:49', '2019-04-04 06:05:49'),
 (33, 34, 56, '6', '1', NULL, 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '{\"pic\":[\"651554357964.jpeg\"]}', '2019-04-04 06:06:04', '2019-04-04 06:06:04'),
-(34, 31, 57, '6000', '1', NULL, 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '{\"pic\":[\"821554361494.jpg\"]}', '2019-04-04 07:04:54', '2019-04-04 07:04:54');
+(34, 31, 57, '6000', '1', NULL, 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '{\"pic\":[\"821554361494.jpg\"]}', '2019-04-04 07:04:54', '2019-04-04 07:04:54'),
+(35, 39, 71, '3434343', '2', NULL, 'Marc chrome accessories complies with the highest standards of leading institutuions throughout and are been accepted by leading Architects and interiors, that testify the hallmark of quality.\r\n\r\nIt may be product for many but we take it as a challenge to', '{\"pic\":[\"721556005196.jpg\",\"be6cbd80b141486a901f0b4ce2bf14c1_1481651333.png\"]}', '2019-04-23 07:39:56', '2019-04-23 07:39:56');
 
 -- --------------------------------------------------------
 
@@ -1271,7 +1277,8 @@ INSERT INTO `yp_business_user_quote_templates` (`id`, `business_id`, `template_t
 (5, 26, 'T5', 'TnthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep ', '2019-04-01 09:47:26', '2019-04-01 09:47:26'),
 (7, 26, 'T', 'TnthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep ', '2019-04-01 09:48:23', '2019-04-01 09:48:23'),
 (8, 26, 'TnthetySundeep Saradhi Ka', 'TnthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep Saradhi KanthetySundeep ', '2019-04-01 09:48:50', '2019-04-01 09:48:50'),
-(9, 31, 'Temp1', 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '2019-04-04 07:04:37', '2019-04-04 07:04:37');
+(9, 31, 'Temp1', 'Partner App Program is an exclusive service for Samsung Health that allows users to discover engaging health and fitness apps. To enable data exchange between your app and Samsung Health, please apply for the Partner App Program. Approved partner apps are', '2019-04-04 07:04:37', '2019-04-04 07:04:37'),
+(10, 39, '', 'Marc chrome accessories complies with the highest standards of leading institutuions throughout and are been accepted by leading Architects and interiors, that testify the hallmark of quality.\n\nIt may be product for many but we take it as a challenge to i', '2019-04-23 07:38:18', '2019-04-23 07:38:18');
 
 -- --------------------------------------------------------
 
@@ -1845,7 +1852,9 @@ INSERT INTO `yp_business_user_transactions` (`id`, `trans_id`, `response`, `b_id
 (562, 1555939014, '', 15, 34, 97, 394, '2019-04-22', 1, 4, 50, 1, '2019-04-22 13:16:54', '2019-04-22 13:16:54'),
 (563, 1555939059, '', 15, 34, 97, 395, '2019-04-22', 1, 4, 50, 1, '2019-04-22 13:17:39', '2019-04-22 13:17:39'),
 (564, 1555939091, '', 15, 34, 93, 396, '2019-04-22', 1, 4, 10, 1, '2019-04-22 13:18:11', '2019-04-22 13:18:11'),
-(565, 1555939099, '', 15, 34, 93, 397, '2019-04-22', 1, 4, 10, 1, '2019-04-22 13:18:19', '2019-04-22 13:18:19');
+(565, 1555939099, '', 15, 34, 93, 397, '2019-04-22', 1, 4, 10, 1, '2019-04-22 13:18:19', '2019-04-22 13:18:19'),
+(566, 1556004716, '', 15, 37, 93, 398, '2019-04-23', 1, 4, 10, 1, '2019-04-23 07:31:56', '2019-04-23 07:31:56'),
+(567, 1556004754, '', 15, 35, 93, 399, '2019-04-23', 1, 4, 10, 1, '2019-04-23 07:32:34', '2019-04-23 07:32:34');
 
 -- --------------------------------------------------------
 
@@ -2468,7 +2477,9 @@ INSERT INTO `yp_campaign_click` (`id`, `cat_id`, `b_id`, `camp_id`, `general_id`
 (394, 34, 15, 97, 0, '2019-04-22 13:16:54', '2019-04-22 13:16:54'),
 (395, 34, 15, 97, 0, '2019-04-22 13:17:39', '2019-04-22 13:17:39'),
 (396, 34, 15, 93, 0, '2019-04-22 13:18:11', '2019-04-22 13:18:11'),
-(397, 34, 15, 93, 0, '2019-04-22 13:18:18', '2019-04-22 13:18:18');
+(397, 34, 15, 93, 0, '2019-04-22 13:18:18', '2019-04-22 13:18:18'),
+(398, 37, 15, 93, 0, '2019-04-23 07:31:56', '2019-04-23 07:31:56'),
+(399, 35, 15, 93, 0, '2019-04-23 07:32:34', '2019-04-23 07:32:34');
 
 -- --------------------------------------------------------
 
@@ -4935,7 +4946,21 @@ INSERT INTO `yp_campaign_impression` (`id`, `cat_id`, `camp_id`, `created_at`, `
 (2375, 34, 87, '2019-04-22 13:19:02', '2019-04-22 13:19:02'),
 (2376, 34, 88, '2019-04-22 13:19:02', '2019-04-22 13:19:02'),
 (2377, 34, 87, '2019-04-22 13:22:38', '2019-04-22 13:22:38'),
-(2378, 34, 88, '2019-04-22 13:22:38', '2019-04-22 13:22:38');
+(2378, 34, 88, '2019-04-22 13:22:38', '2019-04-22 13:22:38'),
+(2379, 33, 87, '2019-04-22 13:43:33', '2019-04-22 13:43:33'),
+(2380, 33, 88, '2019-04-22 13:43:33', '2019-04-22 13:43:33'),
+(2381, 35, 93, '2019-04-23 06:51:37', '2019-04-23 06:51:37'),
+(2382, 35, 87, '2019-04-23 06:51:37', '2019-04-23 06:51:37'),
+(2383, 35, 93, '2019-04-23 06:53:32', '2019-04-23 06:53:32'),
+(2384, 35, 87, '2019-04-23 06:53:32', '2019-04-23 06:53:32'),
+(2385, 37, 93, '2019-04-23 07:31:53', '2019-04-23 07:31:53'),
+(2386, 37, 87, '2019-04-23 07:31:53', '2019-04-23 07:31:53'),
+(2387, 37, 93, '2019-04-23 07:32:00', '2019-04-23 07:32:00'),
+(2388, 37, 87, '2019-04-23 07:32:00', '2019-04-23 07:32:00'),
+(2389, 37, 93, '2019-04-23 07:32:06', '2019-04-23 07:32:06'),
+(2390, 37, 87, '2019-04-23 07:32:06', '2019-04-23 07:32:06'),
+(2391, 35, 93, '2019-04-23 07:32:32', '2019-04-23 07:32:32'),
+(2392, 35, 87, '2019-04-23 07:32:32', '2019-04-23 07:32:32');
 
 -- --------------------------------------------------------
 
@@ -4997,11 +5022,11 @@ INSERT INTO `yp_form_questions` (`id`, `formid`, `cat_id`, `qid`, `type`, `requi
 (70, 'f_1554359104', 36, 'q_102822', 'radio', 0, 1, '[{\"option_name\":\"84X\",\"option_value\":\"1\"},{\"option_name\":\"64X\",\"option_value\":\"2\"}]', 'Enter you edition ?', NULL, NULL, NULL, NULL, '2019-04-04 06:25:04', '2019-04-04 06:25:04'),
 (71, 'f_1555855781', 37, 'q_102764', 'radio', 0, 1, '[{\"option_name\":\"84X\",\"option_value\":\"1\"},{\"option_name\":\"64X\",\"option_value\":\"2\"}]', 'Enter you edition ?', NULL, NULL, NULL, NULL, '2019-04-21 14:09:41', '2019-04-21 14:09:41'),
 (72, 'f_1555855781', 37, 'q_103038', 'textbox', 0, 0, NULL, 'textbox', NULL, NULL, NULL, NULL, '2019-04-21 14:09:41', '2019-04-21 14:09:41'),
-(97, 'f_1555930823', 35, 'q_109413', 'radio', 1, 1, '[{\"option_name\":\"84X\",\"option_value\":\"1\"},{\"option_name\":\"64X\",\"option_value\":\"2\"}]', 'Enter you edition ?', NULL, NULL, NULL, NULL, '2019-04-22 11:00:23', '2019-04-22 11:00:23'),
-(98, 'f_1555930823', 35, 'q_108974', 'textbox', 1, 0, NULL, 'textbox', 'place holder', 'this is the description', 0, 0, '2019-04-22 11:00:23', '2019-04-22 11:00:23'),
-(99, 'f_1555930823', 35, 'q_105295', 'radio', 0, 0, '{\"0\":{\"option_name\":\"aaa\",\"option_value\":\"1\"},\"2\":{\"option_name\":\"bbb\",\"option_value\":\"2\"},\"3\":{\"option_name\":\"ccc\",\"option_value\":\"3\"},\"4\":{\"option_name\":\"ddd\",\"option_value\":\"4\"}}', 'this is the radiobox title', NULL, NULL, NULL, NULL, '2019-04-22 11:00:23', '2019-04-22 11:00:23'),
-(100, 'f_1555930823', 35, 'q_108055', 'dropdown', 0, 0, '[{\"option_name\":\"bbb\",\"option_value\":\"2\"},{\"option_name\":\"aaa\",\"option_value\":\"1\"}]', 'what can i say', NULL, NULL, NULL, NULL, '2019-04-22 11:00:23', '2019-04-22 11:00:23'),
-(101, 'f_1555930823', 35, 'q_103525', 'checkbox', 0, 0, '[{\"option_name\":\"aaa\",\"option_value\":\"1\"},{\"option_name\":\"bbb\",\"option_value\":\"2\"}]', 'multiple', NULL, NULL, NULL, NULL, '2019-04-22 11:00:23', '2019-04-22 11:00:23');
+(118, 'f_1556022170', 35, 'q_108055', 'dropdown', 0, 1, '[{\"option_name\":\"bbb\",\"option_value\":\"2\"},{\"option_name\":\"aaa\",\"option_value\":\"1\"}]', 'what can i say', NULL, NULL, NULL, NULL, '2019-04-23 12:22:50', '2019-04-23 12:22:50'),
+(119, 'f_1556022170', 35, 'q_108690', 'checkbox', 0, 1, '[{\"option_name\":\"ch1\",\"option_value\":\"1\"},{\"option_name\":\"ch2\",\"option_value\":\"2\"},{\"option_name\":\"ch3\",\"option_value\":\"3\"},{\"option_name\":\"ch4\",\"option_value\":\"4\"}]', 'chk title', NULL, NULL, NULL, NULL, '2019-04-23 12:22:50', '2019-04-23 12:22:50'),
+(120, 'f_1556022170', 35, 'q_109413', 'radio', 1, 1, '[{\"option_name\":\"84X\",\"option_value\":\"1\"},{\"option_name\":\"64X\",\"option_value\":\"2\"}]', 'Enter you edition ?', NULL, NULL, NULL, NULL, '2019-04-23 12:22:50', '2019-04-23 12:22:50'),
+(121, 'f_1556022170', 35, 'q_108974', 'textbox', 1, 0, NULL, 'textbox', 'place holder', 'this is the description', NULL, NULL, '2019-04-23 12:22:50', '2019-04-23 12:22:50'),
+(122, 'f_1556022170', 35, 'q_105295', 'radio', 0, 1, '[{\"option_name\":\"aaa\",\"option_value\":\"1\"},{\"option_name\":\"bbb\",\"option_value\":\"2\"},{\"option_name\":\"ccc\",\"option_value\":\"3\"},{\"option_name\":\"ddd\",\"option_value\":\"4\"}]', 'this is the radiobox title', NULL, NULL, NULL, NULL, '2019-04-23 12:22:50', '2019-04-23 12:22:50');
 
 -- --------------------------------------------------------
 
@@ -5051,7 +5076,7 @@ INSERT INTO `yp_general_users` (`id`, `user_id`, `first_name`, `last_name`, `cit
 (7, 1855875535623, 'DJ', 'BABU', 'Mohali, Punjab, India', NULL, NULL, 'qazxs@q.asd', '$2y$10$j3NT5C0b4wJcuMPgpC3Kf.wFr/5ZY2BmR77Ja0o0/rQ0wIwlZIiOu', '1234567890', '1553585852.png', '76.71787259999999', '30.7046486', '95QvGEZhn2aTImlN9CHkbHuWfDC7GIGYz1Rb4stGR3qSVqe6uSHzRa35ouWj', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2019-03-26 07:37:33', '2019-03-26 07:39:27'),
 (8, 3540294558156, 'asd', 'asd', 'Chandigarh, India', NULL, NULL, 'qwe@ewq.qwe', '$2y$10$Ik0xGHn0WJGujRiW.OL1/OiCqvrZAsc2Kg3VnJJJHIMOkoDWo3hK.', '9876543210', '', '76.7794179', '30.7333148', 'lZtsdOl4jI0uKQP02cXdMdTxNzcRPj17fMLl20H9XFLMQjjfXivdAKGvm2T4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2019-03-26 07:41:32', '2019-03-26 07:42:05'),
 (9, 5549715501754, 'Gernal', 'Dogra!@#$%^^', 'Israel Museum/Ruppin, Jerusalem', NULL, NULL, 'dev11@iapptechnologies.com', '$2y$10$A/how6hJAs.8CW03wu2nr.W2sTuVRdFAllQpSSYFVPXAG3tY13u7W', '7895674567', '1554470575.jpeg', '35.204893', '31.77449499999999', '1NIXMq7Q6kAvkuv5OyS1mpPeFnDnfNWiOczH64btO9N1SZZhaPHUhcQI9hos', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2019-04-05 13:22:55', '2019-04-05 13:23:08'),
-(10, 594575859511, 'Manoj', 'Dogra', 'Sector 67, Sahibzada Ajit Singh Nagar, Punjab, India', NULL, NULL, 'z@z.z', '$2y$10$W4p7ExbAspDXJbRzRPaiEuIH1HHywtSVKPYgw3LJKEAdiNZI3LRlq', '7412589630', '1555590145.jpeg', '76.72932329999999', '30.67928239999999', 'ZijtFjHZydbmf1yVinHvpAxzEG76TotDfrQYtGZTPzJralAksgSsrEAXjRzA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2019-04-18 12:22:25', '2019-04-22 13:00:09');
+(10, 594575859511, 'Manoj', 'Dogra', 'Sector 67, Sahibzada Ajit Singh Nagar, Punjab, India', NULL, NULL, 'z@z.z', '$2y$10$W4p7ExbAspDXJbRzRPaiEuIH1HHywtSVKPYgw3LJKEAdiNZI3LRlq', '7412589630', '1555590145.jpeg', '76.72932329999999', '30.67928239999999', 'j5OEVL5tr7Q8dFCZ9jgqxHIYOITmGg5QPmxbMalANPpmWcfcxxnZk48yTlip', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2019-04-18 12:22:25', '2019-04-22 14:00:41');
 
 -- --------------------------------------------------------
 
@@ -5151,7 +5176,7 @@ INSERT INTO `yp_general_users_questions` (`id`, `question_id`, `general_id`, `q_
 (71, 7885107010655, 5, 'Need a cooking utensil', 'I need a cooking utensil from that i prepare my meals with more tastier as compare to Mc Donalds.\r\nI need a cooking utensil from that i prepare my meals with more tastier as compare to Mc Donalds.', 9, 'Chandigarh', '{\"pic\":[\"491555068100.png\",\"671555068100.png\",\"101555068100.png\"]}', '9876543210', 3, '2019-04-12 11:21:40', '2019-04-12 11:24:54'),
 (72, 9056556575011, 1, 'this is title', '$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness', 12, 'Electrician', '', '98765432213', 1, '2019-04-12 11:37:51', '2019-04-12 11:37:51'),
 (73, 5623802191455, 1, '$request->multipleBusiness', '$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness$request->multipleBusiness', 12, 'Electrician', '', '98765432213', 1, '2019-04-12 11:39:08', '2019-04-12 11:39:08'),
-(74, 7313161251655, 10, 'Test for best', 'The study found that people with the two eating habits had a four to five times higher likelihood of death, another heart attack, or angina (chest pain) within 30 days after hospital discharge for heart attack.\n\nThe study, published in the European Journal of Preventive Cardiology, is the first to evaluate these unhealthy behaviours in patients with acute coronary syndromes.', 35, 'Linux', '{\"pic\":[\"971555667113.jpg\"]}', '7412589630', 1, '2019-04-19 09:45:13', '2019-04-19 09:45:13'),
+(74, 7313161251655, 10, 'Test for best', 'The study found that people with the two eating habits had a four to five times higher likelihood of death, another heart attack, or angina (chest pain) within 30 days after hospital discharge for heart attack.\n\nThe study, published in the European Journal of Preventive Cardiology, is the first to evaluate these unhealthy behaviours in patients with acute coronary syndromes.', 35, 'Linux', '{\"pic\":[\"971555667113.jpg\"]}', '7412589630', 2, '2019-04-19 09:45:13', '2019-04-23 07:32:43'),
 (75, 1293121545585, 1, 'iapp-admin/', 'iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/', 12, 'Electrician', '', '98765432213', 1, '2019-04-22 11:22:21', '2019-04-22 11:22:21'),
 (76, 1533293591685, 1, 'iapp-admin/iapp-admin/', 'iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/', 12, 'Electrician', '', '98765432213', 1, '2019-04-22 11:23:06', '2019-04-22 11:23:06'),
 (77, 9255567123329, 1, 'iapp-admin/iapp-admin/', 'iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/iapp-admin/', 32, 'Motorola', '', '98765432213', 1, '2019-04-22 11:24:33', '2019-04-22 11:24:33'),
@@ -5536,8 +5561,7 @@ ALTER TABLE `yp_business_products`
   ADD PRIMARY KEY (`id`),
   ADD KEY `yp_business_products_product_id_index` (`product_id`),
   ADD KEY `yp_business_products_business_id_index` (`business_id`),
-  ADD KEY `yp_business_products_category_id_index` (`category_id`),
-  ADD KEY `yp_business_products_sub_category_id_index` (`sub_category_id`);
+  ADD KEY `yp_business_products_category_id_index` (`category_id`);
 
 --
 -- Indexes for table `yp_business_selected_services`
@@ -5769,12 +5793,12 @@ ALTER TABLE `yp_business_categories`
 -- AUTO_INCREMENT for table `yp_business_details`
 --
 ALTER TABLE `yp_business_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `yp_business_products`
 --
 ALTER TABLE `yp_business_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `yp_business_selected_services`
 --
@@ -5794,7 +5818,7 @@ ALTER TABLE `yp_business_super_categories`
 -- AUTO_INCREMENT for table `yp_business_users`
 --
 ALTER TABLE `yp_business_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT for table `yp_business_users_questions`
 --
@@ -5809,7 +5833,7 @@ ALTER TABLE `yp_business_users_quotes`
 -- AUTO_INCREMENT for table `yp_business_user_categories`
 --
 ALTER TABLE `yp_business_user_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
 --
 -- AUTO_INCREMENT for table `yp_business_user_cc_details`
 --
@@ -5819,22 +5843,22 @@ ALTER TABLE `yp_business_user_cc_details`
 -- AUTO_INCREMENT for table `yp_business_user_hashtags`
 --
 ALTER TABLE `yp_business_user_hashtags`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 --
 -- AUTO_INCREMENT for table `yp_business_user_quotes_reply`
 --
 ALTER TABLE `yp_business_user_quotes_reply`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `yp_business_user_quote_templates`
 --
 ALTER TABLE `yp_business_user_quote_templates`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `yp_business_user_transactions`
 --
 ALTER TABLE `yp_business_user_transactions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=566;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=568;
 --
 -- AUTO_INCREMENT for table `yp_campaign_category`
 --
@@ -5844,7 +5868,7 @@ ALTER TABLE `yp_campaign_category`
 -- AUTO_INCREMENT for table `yp_campaign_click`
 --
 ALTER TABLE `yp_campaign_click`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=398;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=400;
 --
 -- AUTO_INCREMENT for table `yp_campaign_detail`
 --
@@ -5854,12 +5878,12 @@ ALTER TABLE `yp_campaign_detail`
 -- AUTO_INCREMENT for table `yp_campaign_impression`
 --
 ALTER TABLE `yp_campaign_impression`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2379;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2393;
 --
 -- AUTO_INCREMENT for table `yp_form_questions`
 --
 ALTER TABLE `yp_form_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 --
 -- AUTO_INCREMENT for table `yp_general_users`
 --
@@ -5921,8 +5945,7 @@ ALTER TABLE `yp_business_details`
 --
 ALTER TABLE `yp_business_products`
   ADD CONSTRAINT `yp_business_products_business_id_foreign` FOREIGN KEY (`business_id`) REFERENCES `yp_business_users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `yp_business_products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `yp_business_categories` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `yp_business_products_sub_category_id_foreign` FOREIGN KEY (`sub_category_id`) REFERENCES `yp_business_sub_categories` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `yp_business_products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `yp_business_categories` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `yp_business_selected_services`

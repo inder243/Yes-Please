@@ -52,6 +52,16 @@ $(document).ready(function(){
 		});
 
     });
+
+    $('.select_product_img').change(function(e){
+		e.preventDefault();
+		var images = e.target.files;
+		$('.products_img_msg').text('');
+		$.each( images, function( key, value ) {
+		  	$('.products_img_msg').append(value.name+', ');
+		});
+
+    });
 	
 
     $('.save_agree').click(function(){

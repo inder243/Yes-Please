@@ -696,7 +696,6 @@ class BusinessUserController extends Controller
         if(!empty($getJumpQuestion) && $getJumpQuestion->filter==1)
         {
 
-
             $infoImg= url('/').'/img/info.png';
             $arrowImg= url('/').'/img/custom_arrow.png';
 
@@ -722,13 +721,16 @@ class BusinessUserController extends Controller
                     }
                 }
                $html.='</ul></div>';
+
                   
                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
                 {
 
                     $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
                 }
-                  $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+
+                $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                //$html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
                 
                 
             }
@@ -757,6 +759,7 @@ class BusinessUserController extends Controller
                 }
                 
                 $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                // $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
                
             }
             elseif($getJumpQuestion['type']=='checkbox')//check if question is of checkbox type
@@ -781,7 +784,7 @@ class BusinessUserController extends Controller
                     $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
                 }
                 
-                 $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+               $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
                  
             }
 

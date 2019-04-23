@@ -723,7 +723,7 @@ a.business_answer {
    
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 3;
 }
 .total_number_budget h1 {
     font-size: 45px !important;
@@ -742,4 +742,89 @@ a.business_answer {
     font-size: 18px;
     padding-bottom: 15px;
     font-family: 'GOTHICB0';
+}
+.q_nex_btns {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+.ele_pre a {
+    background-color: #ed0c6e;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    font-size: 15px;
+    text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
+    -webkit-text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    padding: 6px 0 6px 0;
+    transition: .5s all;
+    width: 175px;
+}
+.ele_next a:hover {
+    text-decoration: none;
+    background-color: #d50861;
+}
+.ele_next a {
+    background-color: #ed0c6e;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    font-size: 15px;
+    text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
+    -webkit-text-shadow: 0.819px 0.574px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    padding: 6px 0 6px 0;
+    transition: .5s all;
+    width: 175px;
+}
+.quote_body {
+    padding-bottom: 35px;
+}
+.quote_recieve h1 {
+    font-size: 18px;
+    text-align: center;
+    color: #1b2137;
+}
+.total_quote {
+    padding: 20px 50px 10px 50px;
+}
+.outside {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -10px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #434c65;
+    border-radius: 50%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: none;
+}
+.inside {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background: #434c65;
+    left: 3px;
+    top: 3px;
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+}
+.formcheck p {
+    margin: 0;
 }

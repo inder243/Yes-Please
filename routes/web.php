@@ -164,6 +164,7 @@ Route::prefix('business_user')->group(function() {
     Route::post('/quote_template', 'business_user\BusinessQuotesController@submitQuoteTemplates')->name('business_user.quote_template');
     Route::post('/quote_template_delete', 'business_user\BusinessQuotesController@deleteQuoteTemplates')->name('business_user.deletequote_template');
     Route::post('/add_selected_service', 'Auth\RegisterBusinessUserController@addSelectedService')->name('business_user.add_selected_service');
+    Route::post('/getdataforbu', 'Auth\RegisterBusinessUserController@getdata');
 
     /**********************Advertisement******************/
     Route::get('/advertisement_dashboard', 'business_user\AdvertisementController@index');
@@ -190,6 +191,18 @@ Route::prefix('business_user')->group(function() {
     /******Products*******/
     Route::get('/products',
    'business_user\BusinessProductsController@showProducts')->name('business_user.products');
+    Route::get('/get_categories',
+   'business_user\BusinessProductsController@getCategories')->name('business_user.catgories');
+    Route::post('/save_products',
+   'business_user\BusinessProductsController@saveProducts')->name('business_user.saveproducts');
+    Route::post('/removeimg_addProductPage', 'business_user\BusinessProductsController@removeImagesProducts')->name('business_user.remove_productimages');
+    Route::post('/uploadmultiple_addProductPage', 'business_user\BusinessProductsController@uploadUserMultipleFilesProducts')->name('business_user.uploadMultipleProductimgs');
+    Route::post('/get_product_Detail',
+   'business_user\BusinessProductsController@getProductDetail')->name('business_user.getproduct');
+    Route::post('/edit_products',
+   'business_user\BusinessProductsController@editProducts')->name('business_user.editproducts');
+    Route::post('/delete_product',
+   'business_user\BusinessProductsController@deleteProduct')->name('business_user.deleteProduct');
     
   });
 
@@ -246,6 +259,7 @@ Route::prefix('general_user')->group(function() {
 
     //get question for dynamic form builder
     Route::post('/getdata', 'Auth\GetNextQuestionController@getdata');
+    
     //get answers for dynamic form builder
     Route::post('/savedynamicdata', 'general_user\GetNextQuestionController@saveDynamicData');
     Route::post('/savequotedata', 'Auth\GetNextQuestionController@saveQuoteData');

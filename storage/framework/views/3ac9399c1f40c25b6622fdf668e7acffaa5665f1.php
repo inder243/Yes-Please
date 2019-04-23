@@ -326,123 +326,281 @@
     <!---modal to open big image endshere --->
 
 <!-----modal to add products------>
+<form class="dropzone addProductform" id="dropzone_form" data-page="addProductPage" method="POST" action="<?php echo e(route('business_user.saveproducts')); ?>" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?> 
     <div class="modal fade" id="topad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog custom_model_width" role="document">
-    <div class="modal-content">
-      <div class="modal-header ad_header">
+        <div class="modal-dialog custom_model_width" role="document">
+            <div class="modal-content">
+                <div class="modal-header ad_header">
 
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body ad-header-body">
-        <div class="p-heading"><h1>Add product</h1></div>
-        <div class="upper-catergory">
-        <div class="row">
-          <div class="col-md-6 col-12">
-            <div class="form-group ">
-                <label for="inputEmail4">Name</label>
-                <input type="text" class="form-control" id="inputEmail4" required="">
-              </div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="form-group custom_errow ">
-                        <label for="inputPassword4">Product category</label>
-                        <select class="form-control " id="exampleSelect1">
-                           <option>Choose category1</option>
-                           <option>Choose category2</option>
-                           <option>Choose category3</option>
-                           <option>Choose category4</option>
-                           <option>Choose category5</option>
-                        </select>
-                        <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
-              </div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="fix-price-range">
-              <label for="inputPassword4">Price type</label>
-              <div class="formcheck">
-                    <label>
-                      <input type="radio" class="radio-inline" name="radios" value="">
-                      <span class="outside"><span class="inside"></span></span><p>Fix</p>
-                    </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="fix-price-range">
-              <label for="inputPassword4"></label>
-              <div class="formcheck product-label">
-                    <label>
-                      <input type="radio" class="radio-inline" name="radios" value="">
-                      <span class="outside"><span class="inside"></span></span><p>Range</p>
-                    </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="price-range-from form-group ">
-              <label>Price</label>
-              <input type="text" class="form-control" id="inputEmail4" required="">
-            </div>
-          </div>
-          <div class="col-md-6 col-12">
-            <div class="range-price">
-              <div class="price-from form-group ">
-                <label>Price from </label>
-                <input type="text" class="form-control" id="inputEmail4" required="">
-              </div>
-              <span class="devider">-</span>
-              <div class="price-to form-group ">
-                <label>Price to</label>
-                <input type="text" class="form-control" id="inputEmail4" required="">
-              </div>
-              <div class="perhr form-group custom_errow">
-                <label>Per</label>
-                <select class="form-control " id="exampleSelect1">
-                   <option>hour</option>
-                   <option>Choose category2</option>
-                   <option>Choose category3</option>
-                   <option>Choose category4</option>
-                   <option>Choose category5</option>
-                </select>
-                <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-          </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body ad-header-body">
+                    <div class="p-heading"><h1>Add product</h1></div>
+                    <div class="upper-catergory">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group ">
+                                    <label for="inputEmail4">Name</label>
+                                    <input type="text" name="product_name" class="form-control product_name" id="product_name" value="" onkeyup="removeErrMessge(this);">
+                                    <span class="fill_fields product_name_error" role="alert" style="display:none;">
+                              </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group custom_errow ">
+                                    <label for="inputPassword4">Product category</label>
+                                    <select class="form-control allCategoryList" name="allCategoryList" id="allcategorylistprodct" onkeyup="removeErrMessge(this);">
+                                        <option value="1">Choose category1</option>
+                                        <option value="2">Choose category2</option>
+                                        <option value="3">Choose category3</option>
+                                        <option value="4">Choose category4</option>
+                                        <option value="5">Choose category5</option>
+                                    </select>
+                                    <span class="fill_fields product_category" role="alert" style="display:none;">
+                                    <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 fix_pricetype">
+                                <div class="fix-price-range">
+                                    <label for="inputPassword4">Price type</label>
 
-
-          <div class="name-field description_optional">
-            <div class="form-group ">
-                <label for="inputEmail4">Description</label>
-              <textarea></textarea>
-              </div>
-          </div>
-
-          <div class="add_photo_video product-photo">
-                    <p>Add photos</p>
-                    <div class="upload_file_section">
-                      <div class="drag_file">
-                      <a href="javascript:;">Drag and drop files here to upload</a>
-                      </div>
-                      <span>OR</span>
-                      <div class="file_to_upload">
-                        <div class="upload-btn-wrapper">
-                        <button class="btn">Select files to upload</button>
-                        <input type="file" name="myfile">
-                      </div>
-                      </div>
+                                    <div class="formcheck">
+                                        <label>
+                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" onclick="changeRadioPriceType(this);" checked="checked">
+                                            <span class="outside"><span class="inside"></span></span><p>Fix</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 range_pricetype">
+                                <div class="fix-price-range">
+                                    <label for="inputPassword4"></label>
+                                    <div class="formcheck product-label">
+                                        <label>
+                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" onclick="changeRadioPriceType(this);">
+                                        <span class="outside"><span class="inside"></span></span><p>Range</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 fix_pricefield">
+                                <div class="price-range-from form-group ">
+                                    <label>Price</label>
+                                    <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price" name="product_price" id="pro_price" value="" onkeyup="removeErrMessge(this);">
+                                    <span class="fill_fields product_price_error" role="alert" style="display:none;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 range_pricefield">
+                                <div class="range-price">
+                                    <div class="price-from form-group ">
+                                        <label>Price from </label>
+                                        <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price_from" name="product_price_from" id="pro_price_from" value="" disabled="" onkeyup="removeErrMessge(this);">
+                                    </div>
+                                    <span class="devider">-</span>
+                                    <div class="price-to form-group ">
+                                        <label>Price to</label>
+                                        <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price_to" name="product_price_to" id="pro_price_to" value="" disabled="" onkeyup="removeErrMessge(this);">
+                                    </div>
+                                    <div class="perhr form-group custom_errow">
+                                        <label>Per</label>
+                                        <select class="form-control product_price_per" name="product_price_per" id="exampleSelect1" disabled="" title="Choose Price per">
+                                            <option value="" selected disabled="" title="Choose Price per">Choose</option>
+                                            <option value="1">Hour</option>
+                                            <option value="2">Minute</option>
+                                            <option value="3">Second</option>
+                                            <option value="4">Day</option>
+                                        </select>
+                                        <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                                    </div>
+                                </div>
+                                <span class="fill_fields product_price_fromerror" role="alert" style="display:none;">
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="name-field description_optional">
+                        <div class="form-group ">
+                            <label for="inputEmail4">Description</label>
+                            <textarea class="product_description" id="pro_desc" name="product_description" onkeyup="removeErrMessge(this);"></textarea>
+                            <span class="fill_fields product_descerror" role="alert" style="display:none;">
+                        </div>
+                    </div>
+                    <div class="registrationform">
+                        <div class="description_optional row">
+                          
+                        </div>
+
+                        <div class="add_photo_video product-photo">
+                            <p>Add photos</p>
+                            <div class="upload_file_section">
+                                <div class="drag_file" id="drag_div">
+                                    <div class="fallback">
+                                        <input name="file" class="disp_none" type="file" multiple style="width:1px;border:0px" />
+                                    </div>
+                                    <a href="javascript:;">Drag and drop files here to upload</a>
+                                </div>
+                                <span>OR</span>
+                                <div class="file_to_upload">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="btn select_fileUpload_product">Select files to upload</button>
+                                        <input type="file" name="myfile[]" multiple class="select_product_img selectQuotImg" accept="image/x-png,image/gif,image/jpeg">
+                                        <span id="msgs" class="products_img_msg"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="start-btn"><input type="button" class="add_product" data-modal_type="addProductform" onclick="ProductValidation(this);" value="Add"></div>
+                </div>
+
             </div>
-          <div class="start-btn"><input type="submit" value="Add"></div>
-      </div>
-
+        </div>
     </div>
-  </div>
-</div>
+</form>
+<!------Add product modal ends here-------->
 
+<!-----modal to Edit products------>
+<form class="dropzone editProductform" id="dropzone_form" data-page="addProductPage" method="POST" action="<?php echo e(route('business_user.editproducts')); ?>" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?> 
+    <div class="modal fade" id="edittopad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom_model_width" role="document">
+            <div class="modal-content">
+                <div class="modal-header ad_header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body ad-header-body">
+                    <div class="p-heading"><h1>Edit product</h1></div>
+                    <input type="hidden" name="hidden_product_id" class="hidden_product_id" value="">
+                    <div class="upper-catergory">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group ">
+                                    <label for="inputEmail4">Name</label>
+                                    <input type="text" name="product_name" class="form-control product_name" id="product_name" value="" onkeyup="removeErrMessge(this);">
+                                    <span class="fill_fields product_name_error" role="alert" style="display:none;">
+                              </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group custom_errow ">
+                                    <label for="inputPassword4">Product category</label>
+                                    <select class="form-control allCategoryList" name="allCategoryList" id="allcategorylistprodct" onkeyup="removeErrMessge(this);">
+                                        <option value="1">Choose category1</option>
+                                        <option value="2">Choose category2</option>
+                                        <option value="3">Choose category3</option>
+                                        <option value="4">Choose category4</option>
+                                        <option value="5">Choose category5</option>
+                                    </select>
+                                    <span class="fill_fields product_category" role="alert" style="display:none;">
+                                    <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 fix_pricetype">
+                                <div class="fix-price-range">
+                                    <label for="inputPassword4">Price type</label>
+
+                                    <div class="formcheck">
+                                        <label>
+                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" onclick="changeRadioPriceType(this);" checked="checked">
+                                            <span class="outside"><span class="inside"></span></span><p>Fix</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 range_pricetype">
+                                <div class="fix-price-range">
+                                    <label for="inputPassword4"></label>
+                                    <div class="formcheck product-label">
+                                        <label>
+                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" onclick="changeRadioPriceType(this);">
+                                        <span class="outside"><span class="inside"></span></span><p>Range</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 fix_pricefield">
+                                <div class="price-range-from form-group ">
+                                    <label>Price</label>
+                                    <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price" name="product_price" id="pro_price" value="" onkeyup="removeErrMessge(this);">
+                                    <span class="fill_fields product_price_error" role="alert" style="display:none;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 range_pricefield">
+                                <div class="range-price">
+                                    <div class="price-from form-group ">
+                                        <label>Price from </label>
+                                        <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price_from" name="product_price_from" id="pro_price_from" value="" disabled="" onkeyup="removeErrMessge(this);">
+                                    </div>
+                                    <span class="devider">-</span>
+                                    <div class="price-to form-group ">
+                                        <label>Price to</label>
+                                        <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control product_price_to" name="product_price_to" id="pro_price_to" value="" disabled="" onkeyup="removeErrMessge(this);">
+                                    </div>
+                                    <div class="perhr form-group custom_errow">
+                                        <label>Per</label>
+                                        <select class="form-control product_price_per" name="product_price_per" id="exampleSelect1" disabled="" title="Choose Price per">
+                                            <option value="" selected disabled="" title="Choose Price per">Choose</option>
+                                            <option value="1">Hour</option>
+                                            <option value="2">Minute</option>
+                                            <option value="3">Second</option>
+                                            <option value="4">Day</option>
+                                        </select>
+                                        <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
+                                    </div>
+                                </div>
+                                <span class="fill_fields product_price_fromerror" role="alert" style="display:none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="name-field description_optional">
+                        <div class="form-group ">
+                            <label for="inputEmail4">Description</label>
+                            <textarea class="product_description" id="pro_desc" name="product_description" onkeyup="removeErrMessge(this);"></textarea>
+                            <span class="fill_fields product_descerror" role="alert" style="display:none;">
+                        </div>
+                    </div>
+                    <div class="registrationform">
+                        <div class="description_optional row">
+                          
+                        </div>
+
+                        <div class="add_photo_video product-photo">
+                            <p>Add photos</p>
+                            <div class="upload_file_section">
+                                <div class="drag_file" id="drag_div">
+                                    <div class="fallback">
+                                        <input name="file" class="disp_none" type="file" multiple style="width:1px;border:0px" />
+                                    </div>
+                                    <a href="javascript:;">Drag and drop files here to upload</a>
+                                </div>
+                                <span>OR</span>
+                                <div class="file_to_upload">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="btn select_fileUpload_product">Select files to upload</button>
+                                        <input type="file" name="myfile[]" multiple class="select_product_img selectQuotImg" accept="image/x-png,image/gif,image/jpeg">
+                                        <span id="msgs" class="products_img_msg"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="start-btn"><input type="button" class="add_product" data-modal_type="editProductform" onclick="ProductValidation(this);" value="Edit"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+<!------Edit product modal ends here-------->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -456,6 +614,7 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_user.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_quotes.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_question.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_products.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/swiper.js')); ?>" type="text/javascript"></script>
 
      <script>

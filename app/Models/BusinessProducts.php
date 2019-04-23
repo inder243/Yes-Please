@@ -13,4 +13,11 @@ class BusinessProducts extends Model
     protected $hidden = [
        // 'remember_token',
     ];
+
+    public function get_cat_name()
+    {
+    	//cat_id = sub_cat
+    	//id = cat
+        return $this->belongsTo('App\Models\YpBusinessCategories','category_id','id');
+    }
 }

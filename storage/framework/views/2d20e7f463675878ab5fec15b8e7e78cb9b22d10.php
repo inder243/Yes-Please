@@ -147,6 +147,11 @@
                   </div>
                   <div class="cat_html_dataa">
                   </div>
+                  <div class="ask_for_quote_section" style="display:none">
+                    <div class="next_btn" onclick="saveCategoryData();"><a href="javascript:;">Save Services</a></div>
+                    <input type="hidden" id="getBuid">
+                    <input type="hidden" id="getcatid">
+                  </div>
               </div>
               
             </div>

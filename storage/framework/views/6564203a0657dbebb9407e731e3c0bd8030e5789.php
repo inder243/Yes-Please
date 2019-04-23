@@ -253,9 +253,9 @@
                      </div>
                   </div>
                   <div class="registrationform">
-			        <div class="description_optional row">
-			          
-			        </div>
+    			        <div class="description_optional row">
+    			          
+    			        </div>
                   <div class="add_photo_video">
                      <p>Add photos / Videos (optional)</p>
                      <div class="upload_file_section">

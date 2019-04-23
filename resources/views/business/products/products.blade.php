@@ -6,7 +6,7 @@
 	<div class="breadcrumb register_breadcrumb advertisment_breadcrumb">
 		<div><a href="JavaScript:;">Dashboard</a>/<a href="JavaScript:;">Advertisement Dashboard</a>/ <span class="q_breadcrumb">My products</span></div>
 		<div class="setup_things test-campign">
-			<a href="JavaScript:;" class="adde_btn" data-toggle="modal" data-target="#topad">Add</a>
+			<a href="JavaScript:;" class="adde_btn" onclick="openAddProducts(this);return false;">Add</a>
 		</div>
 	</div>
 </section>
@@ -20,7 +20,7 @@
 			<div class="col-12">
 				<div class="call-table">
 					<div class="campagin_table1 table-responsive product-table">
-						<table role="table">
+						<table role="table" id="product_table">
 							<thead>
 								<tr  class="table_heading">
 									<th>Name</th>
@@ -33,62 +33,27 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Replacing iphone screen</td>
-									<td>Fixing phones</td>
-									<td>200</td>
-									<td>4</td>
-									<td><a href="javascript:;" class=add-sechdule data-toggle="modal" data-target="#promote-popup">Promote</a></td>
-									<td><a href="javascript:;" class=add-sechdule>Show</a></td>
-									<td>
-										<div class="diff-icons-del">
-											<a href="javascript:;"><img src="{{ asset('img/edit-green.png') }}"/></a>
-											<a href="javascript:;"><img src="{{ asset('img/line_cross.png') }}"/></a>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>Replacing iphone screen</td>
-									<td>Fixing phones</td>
-									<td>200</td>
-									<td>4</td>
-									<td><a href="javascript:;" class=add-sechdule>Promote</a></td>
-									<td><a href="javascript:;" class=add-sechdule>Show</a></td>
-									<td>
-										<div class="diff-icons-del">
-											<a href="javascript:;"><img src="{{ asset('img/edit-green.png') }}"/></a>
-											<a href="javascript:;"><img src="{{ asset('img/line_cross.png') }}"/></a>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>Replacing iphone screen</td>
-									<td>Fixing phones</td>
-									<td>200</td>
-									<td>4</td>
-									<td><a href="javascript:;" class=add-sechdule>Promote</a></td>
-									<td><a href="javascript:;" class=add-sechdule>Show</a></td>
-									<td>
-										<div class="diff-icons-del">
-											<a href="javascript:;"><img src="{{ asset('img/edit-green.png') }}"/></a>
-											<a href="javascript:;"><img src="{{ asset('img/line_cross.png') }}"/></a>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>Replacing iphone screen</td>
-									<td>Fixing phones</td>
-									<td>200</td>
-									<td>4</td>
-									<td><a href="javascript:;" class=add-sechdule>Promote</a></td>
-									<td><a href="javascript:;" class=add-sechdule>Show</a></td>
-									<td>
-										<div class="diff-icons-del">
-											<a href="javascript:;"><img src="{{ asset('img/edit-green.png') }}"/></a>
-											<a href="javascript:;"><img src="{{ asset('img/line_cross.png') }}"/></a>
-										</div>
-									</td>
-								</tr>
+								@if(!empty($all_products))
+									@foreach($all_products as $key=>$product)
+									<tr class="product_{{$key}}">
+										<td>{{$product['name']}}</td>
+										<td>{{$product['get_cat_name']['category_name']}}</td>
+										<td>{{$product['price']}}</td>
+										<td>{{$product['price_per']}}</td>
+										<td><a href="javascript:;" class=add-sechdule data-toggle="modal" data-target="#promote-popup">Promote</a></td>
+										<td><a href="javascript:;" class=add-sechdule>Show</a></td>
+										<td>
+											<div class="diff-icons-del">
+												<a href="javascript:;" data-product_id="{{$product['product_id']}}" onclick="openEditProductModal(this);"><img src="{{ asset('img/edit-green.png') }}"/></a>
+												<a href="javascript:;" data-product_num="{{$key}}" data-product_id="{{$product['product_id']}}" onclick="deleteProduct(this);"><img src="{{ asset('img/line_cross.png') }}"/></a>
+											</div>
+										</td>
+									</tr>
+									@endforeach
+								@else
+									<tr><td colspan="5">No product Found!</td></tr>
+								@endif
+								
 							</tbody>
 						</table>
 					</div>

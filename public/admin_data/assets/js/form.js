@@ -567,11 +567,11 @@
 				alert('Please make one question as filter');
 				return false;
 			}
-			if(totalfilter>1)
+			/*if(totalfilter>1)
 			{
 				alert('Only one question can be used as filter');
 				return false;
-			}
+			}*/
 			console.log(fields);
 			var site_url = $('#site_url').text();
 			

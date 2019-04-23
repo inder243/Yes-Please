@@ -15,7 +15,7 @@ class BusinessProducts extends Migration
     {
         Schema::create('yp_business_products', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id')->unsigned()->index();
+            $table->bigInteger('product_id')->unsigned()->index();
             $table->integer('business_id')->unsigned()->index();
             $table->foreign('business_id')->references('id')->on('yp_business_users')->onDelete('cascade');
             $table->string('name')->nullable(); 

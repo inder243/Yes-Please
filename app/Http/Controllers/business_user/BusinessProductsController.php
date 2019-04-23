@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Models\YpBusinessUsers;
 use App\Models\BusinessProducts;
+use App\Models\YpBusinessCategories;
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -25,16 +26,392 @@ class BusinessProductsController extends Controller
     }
 
 
-    /********************
-    Show quote request page
-    **********************/
+    /****
+    **Show quote request page
+    ****/
     public function showProducts(Request $request){
 
+            $b_id            = Auth::user()->id;
+
+            $get_allproducts = BusinessProducts::with('get_cat_name')->where('business_id',$b_id)->get()->toArray();
             
-            return view('business.products.products');
+            return view('business.products.products')->with(['all_products'=>$get_allproducts]);
 
     }/*****end of show quote request fn******/
 
-    
 
+    /***
+    **fn to get categories to display on add product popup
+    ****/
+    public function getCategories(){
+
+        $allCategories = YpBusinessCategories::get()->toArray();
+
+        /***make html for all category list***/
+        $cat_html = '<option value="" selected disabled>Choose Category</option>';
+
+        if(!empty($allCategories)){
+            foreach($allCategories as $cat_key=>$cat_value){
+                $cat_html .= '<option data-supercat_id ="'.$cat_value['super_cat_id'].'" data-cat_id = "'.$cat_value['category_id'].'" value="'.$cat_value['id'].'">'.$cat_value['category_name'].'</option>';
+            }
+
+            return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html]);
+
+        }else{
+            return response()->json(['success'=>'2','message'=>'No Category Found']);
+        }
+
+    }/**fn ends here to get catehories**/
+
+    /***************
+    remove images from quote request
+    ***************/
+    public function removeImagesProducts(){
+        $id = Auth::user()->business_userid;
+        if(isset($_POST['id'])){
+            $filename = $_POST['id'];
+            $image_path = public_path().'/images/business_products/'.$id.'/'.$filename;  // Value is not URL but directory file path
+            if(File::exists($image_path)) {
+                File::delete($image_path);
+                echo "yes";die;
+            }else{
+                echo "no";die;
+            }
+        }/****end of isset****/
+    }/******remove images fn ends*******/
+
+    /*******
+    function to upload multiple files for verify user
+    *******/
+    public function uploadUserMultipleFilesProducts(Request $request){
+        $id = Auth::user()->business_userid;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');             
+            $extension = $file->getClientOriginalExtension(); // getting image extension  
+            $originalName = $file->getClientOriginalName();
+            $name=explode('.',$originalName)[0];
+            $filename = $name.'_'.rand().'.'.$extension;
+            if($file->move(public_path().'/images/business_products/'.$id.'/', $filename)){
+                echo $filename;
+            }else{
+                echo 'false';
+            }
+        }
+    }
+
+    /****
+    **Fn to save products- add products
+    *****/
+    public function saveProducts(Request $request){
+
+        $business_user_id   = Auth::user()->business_userid;
+        $b_id               = Auth::user()->id;
+
+        if(isset($_POST)){
+
+            if(isset($request->product_name)){
+                $name = $request->product_name;
+            }else{
+                $name = '';
+            }
+
+            if(isset($request->allCategoryList)){
+                $category_id = $request->allCategoryList;
+            }else{
+                $category_id = '';
+            }
+
+            if(isset($request->radios)){
+                $price_type = $request->radios;
+            }else{
+                $price_type = '';
+            }
+
+            if(isset($request->product_price)){
+                $price = $request->product_price;
+            }else{
+                $price = '';
+            }
+
+            if(isset($request->product_price_from)){
+                $price_from = $request->product_price_from;
+            }else{
+                $price_from = '';
+            }
+
+            if(isset($request->product_price_to)){
+                $price_to = $request->product_price_to;
+            }else{
+                $price_to = '';
+            }
+
+            if(isset($request->product_price_per)){
+                $price_per = $request->product_price_per;
+            }else{
+                $price_per = '';
+            }
+
+            if(isset($request->product_description)){
+                $product_description = $request->product_description;
+            }else{
+                $product_description = '';
+            }
+
+            /***create product id***/
+            $product_id = str_shuffle(rand(1,1000).strtotime("now"));
+            $ypBusinessProducts = new BusinessProducts;
+
+            $ypBusinessProducts->product_id             = $product_id;
+            $ypBusinessProducts->business_id            = $b_id;
+            $ypBusinessProducts->name                   = $name;
+            $ypBusinessProducts->category_id            = $category_id;
+            $ypBusinessProducts->price_type             = $price_type;
+            $ypBusinessProducts->price                  = $price;
+            $ypBusinessProducts->price_from             = $price_from;
+            $ypBusinessProducts->price_to               = $price_to;
+            $ypBusinessProducts->price_per              = $price_per;
+            $ypBusinessProducts->product_description    = $product_description;
+            $ypBusinessProducts->save();
+
+            $pic_vid = BusinessProducts::select('product_images')->where('product_id', '=',  $product_id)->get()->toArray();
+
+            /****check selected files from button****/
+            if ($request->hasFile('myfile')) {
+                foreach($request->file('myfile') as $files){
+                    $file = $files;             
+                    $extension = $file->getClientOriginalExtension(); // getting image extension            
+                    $filename = rand(10,100).time().'.'.$extension;
+                    
+                    if($file->move(public_path().'/images/business_products/'.$business_user_id.'/', $filename)){                
+                        if(!empty($pic_vid[0]['product_images'])){
+                            $pic_vid_arr = json_decode($pic_vid[0]['product_images']);
+                            $pic_vid_arr->pic[] = $filename;
+                        }else{
+                            $pic_vid_arr['pic'][] = $filename;
+                        }
+                        
+                        
+                        
+                    }
+                }
+
+                $pic_vid_json = json_encode($pic_vid_arr);
+                $ypBusinessProducts->product_images = $pic_vid_json;
+                $ypBusinessProducts->save();
+                
+            }/*********code ends to upload selected files********/
+
+            
+
+            /*******check drag and drop files********/
+            if(isset($_POST['dropzone_file']) && !empty($_POST['dropzone_file'])){
+                foreach ($_POST['dropzone_file'] as $filenames) {
+
+                   $pic_vid1 = BusinessProducts::select('product_images')->where('product_id', '=',  $product_id)->get()->toArray();
+                    if(!empty($pic_vid1[0]['product_images'])){
+                        $pic_vid_arr = json_decode($pic_vid1[0]['product_images']);
+                        $pic_vid_arr->pic[] = $filenames;
+                    }else{
+                        $pic_vid_arr['pic'][] = $filenames;
+                    }
+
+                    $pic_vid_json = json_encode($pic_vid_arr);
+                    
+                    $ypBusinessProducts->product_images = $pic_vid_json;
+                    $ypBusinessProducts->save();
+                }
+
+                
+            }/*****drag and drop ends*****/
+
+            return redirect('business_user/products');
+        }/**isset post ends**/
+
+
+    }/***fn ends add products save products***/
+
+
+    /*****
+    **get product detail
+    *****/
+    public function getProductDetail(Request $request){
+
+        $product_id = $request->product_id;
+        $b_id       = Auth::user()->id;
+
+        $get_product_detail = BusinessProducts::where(['product_id'=>$product_id,'business_id'=>$b_id])->first();
+
+        $name = $get_product_detail->name;
+        $category_id = $get_product_detail->category_id;
+        $price_type = $get_product_detail->price_type;
+        $price = $get_product_detail->price;
+        $price_from = $get_product_detail->price_from;
+        $price_to = $get_product_detail->price_to;
+        $price_per = $get_product_detail->price_per;
+        $product_description = $get_product_detail->product_description;
+        $product_images = $get_product_detail->product_images;
+
+
+        $allCategories = YpBusinessCategories::get()->toArray();
+
+        /***make html for all category list***/
+        $cat_html = '<option value="" selected disabled>Choose Category</option>';
+
+        if(!empty($allCategories)){
+            foreach($allCategories as $cat_key=>$cat_value){
+                if($category_id == $cat_value['id']){
+                    $selected = 'selected';
+                }else{
+                    $selected = '';
+                }
+                $cat_html .= '<option data-supercat_id ="'.$cat_value['super_cat_id'].'" data-cat_id = "'.$cat_value['category_id'].'" value="'.$cat_value['id'].'" '.$selected.'>'.$cat_value['category_name'].'</option>';
+            }
+
+            return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html,'name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id]);
+
+        }else{
+            return response()->json(['success'=>'2','message'=>'No Category Found','name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id]);
+        }
+
+        //echo "<pre>";print_r(->id);die;
+    }/**end fn**/
+
+    /******
+    fn to edit products
+    ******/
+    public function editProducts(Request $request){
+        
+        if(isset($_POST)){
+            $product_id = $request->hidden_product_id;
+            $b_id       = Auth::user()->id;
+            $business_user_id   = Auth::user()->business_userid;
+
+            if(isset($request->product_name)){
+                $name = $request->product_name;
+            }else{
+                $name = '';
+            }
+
+            if(isset($request->allCategoryList)){
+                $category_id = $request->allCategoryList;
+            }else{
+                $category_id = '';
+            }
+
+            if(isset($request->radios)){
+                $price_type = $request->radios;
+            }else{
+                $price_type = '';
+            }
+
+            if(isset($request->product_price)){
+                $price = $request->product_price;
+            }else{
+                $price = '';
+            }
+
+            if(isset($request->product_price_from)){
+                $price_from = $request->product_price_from;
+            }else{
+                $price_from = '';
+            }
+
+            if(isset($request->product_price_to)){
+                $price_to = $request->product_price_to;
+            }else{
+                $price_to = '';
+            }
+
+            if(isset($request->product_price_per)){
+                $price_per = $request->product_price_per;
+            }else{
+                $price_per = '';
+            }
+
+            if(isset($request->product_description)){
+                $product_description = $request->product_description;
+            }else{
+                $product_description = '';
+            }
+
+            $update = array('name' => $name,'category_id' => $category_id,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description);
+            BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+
+
+            $pic_vid = BusinessProducts::select('product_images')->where('product_id', '=',  $product_id)->get()->toArray();
+
+            /****check selected files from button****/
+            if ($request->hasFile('myfile')) {
+                foreach($request->file('myfile') as $files){
+                    $file = $files;             
+                    $extension = $file->getClientOriginalExtension(); // getting image extension            
+                    $filename = rand(10,100).time().'.'.$extension;
+                    
+                    if($file->move(public_path().'/images/business_products/'.$business_user_id.'/', $filename)){                
+                        if(!empty($pic_vid[0]['product_images'])){
+                            $pic_vid_arr = json_decode($pic_vid[0]['product_images']);
+                            $pic_vid_arr->pic[] = $filename;
+                        }else{
+                            $pic_vid_arr['pic'][] = $filename;
+                        }
+                        
+                        
+                        
+                    }
+                }
+
+                $pic_vid_json = json_encode($pic_vid_arr);
+
+                $update = array('product_images' => $pic_vid_json);
+                BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+
+                
+            }/*********code ends to upload selected files********/
+
+            
+
+            /*******check drag and drop files********/
+            if(isset($_POST['dropzone_file']) && !empty($_POST['dropzone_file'])){
+                foreach ($_POST['dropzone_file'] as $filenames) {
+
+                   $pic_vid1 = BusinessProducts::select('product_images')->where('product_id', '=',  $product_id)->get()->toArray();
+                    if(!empty($pic_vid1[0]['product_images'])){
+                        $pic_vid_arr = json_decode($pic_vid1[0]['product_images']);
+                        $pic_vid_arr->pic[] = $filenames;
+                    }else{
+                        $pic_vid_arr['pic'][] = $filenames;
+                    }
+
+                    $pic_vid_json = json_encode($pic_vid_arr);
+                    
+                    $update = array('product_images' => $pic_vid_json);
+                    BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+                   
+                }
+
+                
+            }/*****drag and drop ends*****/
+
+            return redirect('business_user/products');
+        }
+    }/****fn ends***/
+
+    /********
+    **fn to delete products
+    ***********/
+    public function deleteProduct(Request $request){
+        $product_id = $request->product_id;
+
+        $check_product = BusinessProducts::where('product_id', $product_id)->get()->toArray();
+
+        if(!empty($check_product)){
+
+            $deletedRows = BusinessProducts::where('product_id', $product_id)->delete();
+            return response()->json(['success'=>'1','message'=>'Success']);
+
+        }else{
+            return response()->json(['success'=>'0','message'=>'Error']);
+        }
+        
+    }/***fn ends**/
 }

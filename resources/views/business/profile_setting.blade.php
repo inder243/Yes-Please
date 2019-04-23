@@ -737,25 +737,21 @@
 </form>
 </section>
 <div id="openPopUpForQuestion" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        
-            <div class="modal-content">
-              <div class="modal-header quote_header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                 
-              </div>
-              <div class="modal-body">
-                  <div class="login_body_main">
-                    <h1>Choose the category filters as main title</h1></br>
-                  </div>
-                  <div class="cat_html_dataa">
-                  </div>
-              </div>
-              
-            </div>
-        
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header quote_header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="login_body_main">
+            <h1>Choose the category filters as main title</h1></br>
+          </div>
+          <div class="cat_html_dataa">
+          </div>
+          
+        </div>
       </div>
-    </div>
+  </div>
+</div>
 @endsection
+
