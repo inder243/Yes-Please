@@ -62,7 +62,7 @@
         </ul>
     </div>
 
-    <section class="second_tabbar">
+    <section class="second_tabbar second_tabbar-fix_header">
         <div class="second_header">
             <div class="menu_search">
                 <div class="second_menu">
@@ -368,7 +368,7 @@
 
                                     <div class="formcheck">
                                         <label>
-                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" onclick="changeRadioPriceType(this);" checked="checked">
+                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" data-modal_type="addProductform" onclick="changeRadioPriceType(this);" checked="checked">
                                             <span class="outside"><span class="inside"></span></span><p>Fix</p>
                                         </label>
                                     </div>
@@ -379,7 +379,7 @@
                                     <label for="inputPassword4"></label>
                                     <div class="formcheck product-label">
                                         <label>
-                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" onclick="changeRadioPriceType(this);">
+                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" data-modal_type="addProductform" onclick="changeRadioPriceType(this);">
                                         <span class="outside"><span class="inside"></span></span><p>Range</p>
                                         </label>
                                     </div>
@@ -507,7 +507,7 @@
 
                                     <div class="formcheck">
                                         <label>
-                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" onclick="changeRadioPriceType(this);" checked="checked">
+                                            <input type="radio" class="radio-inline fix_radio" name="radios" value="fix" data-modal_type="editProductform" onclick="changeRadioPriceType(this);" checked="checked">
                                             <span class="outside"><span class="inside"></span></span><p>Fix</p>
                                         </label>
                                     </div>
@@ -518,7 +518,7 @@
                                     <label for="inputPassword4"></label>
                                     <div class="formcheck product-label">
                                         <label>
-                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" onclick="changeRadioPriceType(this);">
+                                        <input type="radio" class="radio-inline range_radio" name="radios" value="range" data-modal_type="editProductform" onclick="changeRadioPriceType(this);">
                                         <span class="outside"><span class="inside"></span></span><p>Range</p>
                                         </label>
                                     </div>
@@ -589,6 +589,12 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="photo_video_list">
+                            <ul class="product_img_ul">
+                             
+                          </ul>
                         </div>
                     </div>
 

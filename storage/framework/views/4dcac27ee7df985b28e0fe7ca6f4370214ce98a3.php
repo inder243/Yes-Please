@@ -39,7 +39,7 @@
                             <a href="<?php echo e(url('/general_user/quote_questions')); ?>"><img src="<?php echo e(asset('img/quotes.png')); ?>" />Quotes</a>
                         </li>
                         <li>
-                            <a href="#"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
+                            <a href="<?php echo e(url('/general_user/quote_questions?tab=ques')); ?>"><img src="<?php echo e(asset('img/question.png')); ?>" />Questions</a>
                         </li>
                         <li>
                             <a href="#"><img src="<?php echo e(asset('img/messages.png')); ?>" />Messages <span class="total_message">12</span></a>
@@ -83,6 +83,17 @@
     <div class="content">
     <?php echo $__env->yieldContent('content'); ?>
     </div>
+    
+    <section class="cookies">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="cookies_main"><!-- This website use cookies to provide better service. You can read about it in our <a href="javascript:;"> Privacy policy.</a> <span class="close_cookie"><img src="<?php echo e(asset('img/cookie_close.png')); ?>"/></span> --><?php echo $__env->make('cookieConsent::index', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="yes_please_footer">
         <div class=" position-relative">
           <div class="row">
@@ -248,7 +259,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/wow.min.js')); ?>"></script>
-    <script type="text/javascript" src="<?php echo e(URL::asset('js/general_user.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/general/general_user.js')); ?>"></script>
     <script>
         wow = new WOW({
             animateClass: 'animated',

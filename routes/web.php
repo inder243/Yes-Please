@@ -148,6 +148,8 @@ Route::prefix('business_user')->group(function() {
     //Adding services from categories
     Route::post('/add_selected_service_auth', 'business_user\BusinessUserController@addSelectedService')->name('business_user.add_selected_service'); 
 
+    Route::post('/getdataprofile', 'business_user\BusinessUserController@getdata');
+
     /**********Quotes*********/
     
     Route::get('/quotes_questions/{status?}/{keyword?}',
@@ -203,6 +205,7 @@ Route::prefix('business_user')->group(function() {
    'business_user\BusinessProductsController@editProducts')->name('business_user.editproducts');
     Route::post('/delete_product',
    'business_user\BusinessProductsController@deleteProduct')->name('business_user.deleteProduct');
+    Route::post('/removeproductimg', 'business_user\BusinessProductsController@removeProductelectedImages')->name('business_user.removeproductimg');
     
   });
 
@@ -265,6 +268,7 @@ Route::prefix('general_user')->group(function() {
     Route::post('/savequotedata', 'Auth\GetNextQuestionController@saveQuoteData');
     Route::post('/save_impressions', 'Auth\GetNextQuestionController@saveImpressions');
     Route::post('/get_first_ques', 'Auth\GetNextQuestionController@getFirstQues');
+    Route::get('/get_paycall_data', 'Auth\GetCallDataController@getdata');
 
 
 
@@ -291,3 +295,7 @@ Route::get('captcha/', 'Auth\GeneralUserLoginController@captcha');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');*/
+
+//calls//
+
+//calls//

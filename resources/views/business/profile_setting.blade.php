@@ -736,22 +736,32 @@
   <div class="save_agree"><a href="javascript:;"><input type="submit" id="profile_submit" name="profile_submit" value="Save"></a></div>
 </form>
 </section>
-<div id="openPopUpForQuestion" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header quote_header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="login_body_main">
-            <h1>Choose the category filters as main title</h1></br>
-          </div>
-          <div class="cat_html_dataa">
-          </div>
-          
-        </div>
+ <div id="openPopUpForQuestion" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        
+            <div class="modal-content">
+              <div class="modal-header quote_header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 
+              </div>
+              <div class="modal-body">
+                  <div class="login_body_main">
+                    <h1>Choose the category filters as main title</h1></br>
+                  </div>
+                  <div class="cat_html_dataa">
+                  </div>
+                  <div class="ask_for_quote_section" style="display:none">
+                    <div class="next_btn" onclick="saveCategoryData();"><a href="javascript:;">Save Services</a></div>
+                    <input type="hidden" id="getBuid">
+                    <input type="hidden" id="getcatid">
+                  </div>
+              </div>
+              
+            </div>
+        
       </div>
-  </div>
-</div>
+    </div>
 @endsection
 

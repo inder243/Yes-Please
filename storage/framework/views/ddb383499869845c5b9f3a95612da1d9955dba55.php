@@ -138,7 +138,7 @@
             <div class="dashboard_buttons">
               <div class="profile_setting"><a href="<?php echo e(route('business_user.profile_setting')); ?>">Profile and Settings</a></div>
               <div class="Pricelist"><a href="javascript:;">Pricelist</a></div>
-              <div class="Products"><a href="javascript:;">Products</a></div>
+              <div class="Products"><a href="<?php echo e(route('business_user.products')); ?>">Products</a></div>
             </div>
           </div>
         </div>

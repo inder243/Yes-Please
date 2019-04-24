@@ -101,15 +101,26 @@ function openEditProductModal(data){
 				$('#edittopad').modal('show');
 				$('#edittopad').find('.product_name').val('');
 				$('#edittopad').find('.product_name').val(data.name);
+				$('#edittopad').find('.photo_video_list ul').html('');
+				$('#edittopad').find('.photo_video_list ul').html(data.selectImgHtml);
 
 				if(data.price_type == 'fix'){
 					$('#edittopad').find('.fix_radio').attr('checked', true);
+					$('#edittopad').find('.range_pricefield').find('.product_price_from').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_to').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_per').prop( "disabled", true );
+					$('#edittopad').find('.fix_pricefield').find('.product_price').prop( "disabled", false );
 					$('#edittopad').find('.product_price').val(data.price);
 				}else if(data.price_type == 'range'){
 					$('#edittopad').find('.range_radio').attr('checked', true);
+					$('#edittopad').find('.fix_pricefield').find('.product_price').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_from').prop( "disabled", false );
+					$('#edittopad').find('.range_pricefield').find('.product_price_to').prop( "disabled", false );
+					$('#edittopad').find('.range_pricefield').find('.product_price_per').prop( "disabled", false );
 					$('#edittopad').find('.product_price_from').val(data.price_from);
 					$('#edittopad').find('.product_price_to').val(data.price_to);
 					$('#edittopad').find('.product_name').val(data.name);
+					$('#edittopad').find(".product_price_per option[value="+data.price_per+"]").attr('selected', 'selected');
 				}
 
 				$('#edittopad').find('.product_description').val('');
@@ -126,15 +137,26 @@ function openEditProductModal(data){
 				$('#edittopad').modal('show');
 				$('#edittopad').find('.product_name').val('');
 				$('#edittopad').find('.product_name').val(data.name);
+				$('#edittopad').find('.photo_video_list ul').html('');
+				$('#edittopad').find('.photo_video_list ul').html(data.selectImgHtml);
 
 				if(data.price_type == 'fix'){
 					$('#edittopad').find('.fix_radio').attr('checked', true);
+					$('#edittopad').find('.range_pricefield').find('.product_price_from').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_to').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_per').prop( "disabled", true );
+					$('#edittopad').find('.fix_pricefield').find('.product_price').prop( "disabled", false );
 					$('#edittopad').find('.product_price').val(data.price);
 				}else if(data.price_type == 'range'){
 					$('#edittopad').find('.range_radio').attr('checked', true);
+					$('#edittopad').find('.fix_pricefield').find('.product_price').prop( "disabled", true );
+					$('#edittopad').find('.range_pricefield').find('.product_price_from').prop( "disabled", false );
+					$('#edittopad').find('.range_pricefield').find('.product_price_to').prop( "disabled", false );
+					$('#edittopad').find('.range_pricefield').find('.product_price_per').prop( "disabled", false );
 					$('#edittopad').find('.product_price_from').val(data.price_from);
 					$('#edittopad').find('.product_price_to').val(data.price_to);
 					$('#edittopad').find('.product_name').val(data.name);
+					$('#edittopad').find(".product_price_per option[value="+data.price_per+"]").attr('selected', 'selected');
 				}
 				$('#edittopad').find('.product_description').val('');
 				$('#edittopad').find('.product_description').val(data.product_description);
@@ -176,7 +198,7 @@ function ProductValidation(data){
 		return false;
 	}
 
-	var price_type = $("input[name='radios']:checked").val();
+	var price_type = $('.'+modaltype).find("input[name='radios']:checked").val();
 
 	if(price_type == 'fix'){
 		
@@ -278,28 +300,30 @@ function ProductValidation(data){
 /***fn for radio button on add product***/
 function changeRadioPriceType(rval){
 	var price_type = $(rval).attr('value');
+	var modal_type = $(rval).attr('data-modal_type');
 	$(rval).attr('checked', true);
 	if(price_type == 'fix'){
 
-		$('.addProductform').find('.range_pricefield').find('.product_price_from').val('');
-		$('.addProductform').find('.range_pricefield').find('.product_price_to').val('');
-		$('.addProductform').find('.range_pricefield').find('.product_price_from').prop( "disabled", true );
-		$('.addProductform').find('.range_pricefield').find('.product_price_to').prop( "disabled", true );
-		$('.addProductform').find('.range_pricefield').find('.product_price_per').prop( "disabled", true );
-		$('.addProductform').find('.fix_pricefield').find('.product_price').prop( "disabled", false );
-		$('.addProductform').find('.range_pricefield').find('.product_price_from').removeClass('error_border');
-		$('.addProductform').find('.range_pricefield').find('.product_price_to').removeClass('error_border');
-		$('.addProductform').find('.range_pricefield').find('.product_price_fromerror').css('display','none');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_from').val('');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_to').val('');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_per').val('');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_from').prop( "disabled", true );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_to').prop( "disabled", true );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_per').prop( "disabled", true );
+		$('.'+modal_type).find('.fix_pricefield').find('.product_price').prop( "disabled", false );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_from').removeClass('error_border');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_to').removeClass('error_border');
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_fromerror').css('display','none');
 		
 	}else if(price_type == 'range'){
 
-		$('.addProductform').find('.fix_pricefield').find('.product_price').val('');
-		$('.addProductform').find('.fix_pricefield').find('.product_price').prop( "disabled", true );
-		$('.addProductform').find('.range_pricefield').find('.product_price_from').prop( "disabled", false );
-		$('.addProductform').find('.range_pricefield').find('.product_price_to').prop( "disabled", false );
-		$('.addProductform').find('.range_pricefield').find('.product_price_per').prop( "disabled", false );
-		$('.addProductform').find('.fix_pricefield').find('.product_price').removeClass('error_border');
-		$('.addProductform').find('.fix_pricefield').find('.product_price_error').css('display','none');
+		$('.'+modal_type).find('.fix_pricefield').find('.product_price').val('');
+		$('.'+modal_type).find('.fix_pricefield').find('.product_price').prop( "disabled", true );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_from').prop( "disabled", false );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_to').prop( "disabled", false );
+		$('.'+modal_type).find('.range_pricefield').find('.product_price_per').prop( "disabled", false );
+		$('.'+modal_type).find('.fix_pricefield').find('.product_price').removeClass('error_border');
+		$('.'+modal_type).find('.fix_pricefield').find('.product_price_error').css('display','none');
 		
 	}
 }
@@ -364,4 +388,32 @@ function deleteProduct(data){
 
 		},/***success ends here**/
 	});/***ajax ends here**/
-}
+}/****delete product ends here****/
+
+/****fn to delete product selected images****/
+function deleteProductSelectedImg(dimg){
+
+	var img_name = $(dimg).attr('data-img');
+	var product_id = $(dimg).attr('data-product_id');
+
+	$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+	$.ajax({
+		url: home_url+'business_user/removeproductimg',
+		type: 'POST',
+		data:{img_name:img_name,product_id:product_id},
+		success:function(response){
+
+			if(response.success == 1){
+
+				var image_name = img_name.split(".");
+				$('.photo_video_list ul').find('#img_'+image_name[0]).remove();
+			}
+			
+		}
+	});/**ajax ends here**/	
+}/****delete selected img fn ends here***/

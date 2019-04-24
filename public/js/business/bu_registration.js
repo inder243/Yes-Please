@@ -136,6 +136,9 @@ function categoriesselect(data){
 			
 			if(data['success']==1)
 			{
+				$('.login_body_main').show();
+				$('.cat_html_dataa').show();
+				$('.ask_for_quote_section').hide();
 				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html('');
 				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').html(data['html']);
 				$('#openPopUpForQuestion').find('.modal-body').find('.cat_html_dataa').addClass('text-center');

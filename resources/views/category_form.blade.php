@@ -236,8 +236,8 @@
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
-                                                </div>
-                                                @elseif($quesData['type']=='datepicker')
+                                                    </div>
+                                                    @elseif($quesData['type']=='datepicker')
                                                     <div class="for_datepicker field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="datepicker">
                                                         <h5 class="mb-3">Datepicker</h5>
                                                         <div class="form-group">
@@ -257,8 +257,8 @@
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
-                                                </div>
-                                                @elseif($quesData['type']=='timepicker')
+                                                    </div>
+                                                    @elseif($quesData['type']=='timepicker')
                                                     <div class="for_timepicker field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="timepicker">
                                                         <h5 class="mb-3">Timepicker</h5>
                                                         <div class="form-group">
@@ -278,39 +278,39 @@
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
-                                                </div>
-                                                @elseif($quesData['type']=='textarea')
+                                                    </div>
+                                                    @elseif($quesData['type']=='textarea')
                                                     <div class="for_textarea field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="textbox">
                                                         <h5 class="mb-3">Text Area</h5>
                                                         <div class="form-group">
                                                             <label>Title</label>
                                                             <input class="form-control textbox_name title" name="textbox_name" type="textbox" value="{{$quesData['title']}}">
                                                         </div>
-                                                    <div class="form-group">
-                                                        <label>Description (Optional)</label>
-                                                        <input class="form-control textbox_desc description" name="textbox_desc" type="textbox" @if(isset($quesData['description']) && !empty($quesData['description'])) value="{{$quesData['description']}}" @endif>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Placeholder (Optional)</label>
-                                                        <input class="form-control textbox_plc placeholder" name="textbox_plc" type="textbox" @if(isset($quesData['placeholder']) && !empty($quesData['placeholder'])) value="{{$quesData['placeholder']}}" @endif>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Minimum Length (Optional)</label>
-                                                        <input class="form-control textbox_min minlen" name="textbox_min" type="textbox" @if(isset($quesData['min']) && !empty($quesData['min'])) value="{{$quesData['min']}}" @endif>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Max Length (Optional)</label>
-                                                        <input class="form-control textbox_max maxlen" name="textbox_max" type="textbox" @if(isset($quesData['max']) && !empty($quesData['max'])) value="{{$quesData['max']}}" @endif>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
-                                                            <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required
-                                                            </label>
+                                                        <div class="form-group">
+                                                            <label>Description (Optional)</label>
+                                                            <input class="form-control textbox_desc description" name="textbox_desc" type="textbox" @if(isset($quesData['description']) && !empty($quesData['description'])) value="{{$quesData['description']}}" @endif>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label>Placeholder (Optional)</label>
+                                                            <input class="form-control textbox_plc placeholder" name="textbox_plc" type="textbox" @if(isset($quesData['placeholder']) && !empty($quesData['placeholder'])) value="{{$quesData['placeholder']}}" @endif>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Minimum Length (Optional)</label>
+                                                            <input class="form-control textbox_min minlen" name="textbox_min" type="textbox" @if(isset($quesData['min']) && !empty($quesData['min'])) value="{{$quesData['min']}}" @endif>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Max Length (Optional)</label>
+                                                            <input class="form-control textbox_max maxlen" name="textbox_max" type="textbox" @if(isset($quesData['max']) && !empty($quesData['max'])) value="{{$quesData['max']}}" @endif>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input is_required" name="isrequired" value="" id="defaultCheck{{$quesData['qid']}}" type="checkbox"   @if(isset($quesData['required']) && !empty($quesData['required'])) checked @endif>
+                                                                <label class="form-check-label " for="defaultCheck{{$quesData['qid']}}">Is This Field Required
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
                                                     </div>
-                                                    <button type="submit" class="btn btn-danger remove-field" onclick="removeOptionsdiv(this);">Remove Div</button>
-                                                </div>
                                                     @elseif($quesData['type']=='dropdown')
                                                     <div class="for_dropdown field_group text-row ui-sortable-handle" id="{{$quesData['qid']}}" data-type="dropdown">
                                                         <h5 class="mb-3">Dropdown</h5>
@@ -322,22 +322,25 @@
                                                             <label>What will be options of dropdown?</label>
                                                             <div class="multi-field-wrapper">
                                                                  @if(isset($quesData['options']) && !empty($quesData['options'])) 
-                                                            @php $options = json_decode($quesData['options']);@endphp
+                                                                @php $options = json_decode($quesData['options']);@endphp
                                                                 @foreach($options as $k=>$option) 
                                                                 <div class="multi-fields">
                                                                     <div class="multi-field">
                                                                         <div class="form-group">
-                                                                            <div class="row"><div class="col-4"><input name="dropdown_name[]" class="form-control dropdown_name" placeholder="Label" type="text" value="{{$option->option_name}}">
-                                                                            </div>
-                                                                            <div class="col-4">
-                                                                                <input name="dropdown_value[]" class="form-control dropdown_value" placeholder="Value" type="text" value="{{$option->option_value}}">
-                                                                            </div>
-                                                                            <div class="col-4">
-                                                                                @if($k==0)
-                                                                                <button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="dropdown_name" data-value="dropdown_value">Add Option</button>
-                                                                                @else
-                                                                                <button type="button" class="btn btn-success add-field" data-label="dropdown_name" data-value="dropdown_value" onclick="removeOptions(this);">Remove Option</button>
-                                                                                @endif
+                                                                            <div class="row">
+                                                                                <div class="col-4">
+                                                                                    <input name="dropdown_name[]" class="form-control dropdown_name" placeholder="Label" type="text" value="{{$option->option_name}}">
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    <input name="dropdown_value[]" class="form-control dropdown_value" placeholder="Value" type="text" value="{{$option->option_value}}">
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    @if($k==0)
+                                                                                    <button type="button" class="btn btn-success add-field" onclick="addMoreOptions(this);" data-label="dropdown_name" data-value="dropdown_value">Add Option</button>
+                                                                                    @else
+                                                                                    <button type="button" class="btn btn-success add-field" data-label="dropdown_name" data-value="dropdown_value" onclick="removeOptions(this);">Remove Option</button>
+                                                                                    @endif
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -346,17 +349,19 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        
-                                                        <div class="form-check">
-                                                            <input class="form-check-input is_required" value="" id="defaultCheckdrp{{$quesData['qid']}}" type="checkbox" @if(isset($quesData['required']) && !empty($quesData['required']) && $quesData['required']==1) checked @endif>
-                                                            <label class="form-check-label " for="defaultCheckdrp{{$quesData['qid']}}">Is This Field Required</label>
+
+                                                        <div class="form-group">
+                                                            
+                                                            <div class="form-check">
+                                                                <input class="form-check-input is_required" value="" id="defaultCheckdrp{{$quesData['qid']}}" type="checkbox" @if(isset($quesData['required']) && !empty($quesData['required']) && $quesData['required']==1) checked @endif>
+                                                                <label class="form-check-label " for="defaultCheckdrp{{$quesData['qid']}}">Is This Field Required</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_{{$quesData['qid']}}" type="checkbox" @if(isset($quesData['filter']) && !empty($quesData['filter']) && $quesData['filter']==1) checked @endif>
+                                                                <label class="form-check-label" for="defaultCheckradiofilterq_{{$quesData['qid']}}">Is Filter</label>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input is_filter" value="" id="defaultCheckradiofilterq_{{$quesData['qid']}}" type="checkbox" @if(isset($quesData['filter']) && !empty($quesData['filter']) && $quesData['filter']==1) checked @endif>
-                                                            <label class="form-check-label" for="defaultCheckradiofilterq_{{$quesData['qid']}}">Is Filter</label></div>
-                                                        </div>
+
                                                         <button type="button" class="btn btn-danger remove-div" onclick="removeOptionsdiv(this);">Remove Div</button>
                                                     </div>
                                                     @endif

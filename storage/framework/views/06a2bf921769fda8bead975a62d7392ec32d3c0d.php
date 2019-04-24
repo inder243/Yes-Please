@@ -742,7 +742,7 @@
   <div class="save_agree"><a href="javascript:;"><input type="submit" id="profile_submit" name="profile_submit" value="Save"></a></div>
 </form>
 </section>
-<div id="openPopUpForQuestion" class="modal fade" role="dialog">
+ <div id="openPopUpForQuestion" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -758,6 +758,11 @@
                   </div>
                   <div class="cat_html_dataa">
                   </div>
+                  <div class="ask_for_quote_section" style="display:none">
+                    <div class="next_btn" onclick="saveCategoryData();"><a href="javascript:;">Save Services</a></div>
+                    <input type="hidden" id="getBuid">
+                    <input type="hidden" id="getcatid">
+                  </div>
               </div>
               
             </div>
@@ -765,4 +770,6 @@
       </div>
     </div>
 <?php $__env->stopSection(); ?>
+
+
 <?php echo $__env->make('layouts.inner_business', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>

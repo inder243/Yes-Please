@@ -590,6 +590,8 @@ class RegisterBusinessUserController extends Controller
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
                   
         YpBusinessUsercategories::where(['business_userid' => $user_incre_id['id'], 'category_id' => $category_increamentid['id']])->delete();
+       YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id']])->delete();
+
         //echo '<pre>';print_r($input); die;
     }
 
@@ -869,13 +871,45 @@ class RegisterBusinessUserController extends Controller
             $category_id = $_POST['category_id'];
             $data = json_decode($_POST['selected']);
 
+            $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
+           
+            $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
+            
             if(!empty($data))
             {
                 foreach($data as $dataall)
                 {
-                    echo "<pre>";
-                    print_r($dataall->type);
-                    print_r($dataall->text);
+                    
+                    $type = $dataall->type;
+                    if($type == 'checkbox')
+                    {
+                        $selected_arr = explode(',',$dataall->text);
+                      foreach($selected_arr AS $selected){
+                        $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
+                        if(count($check) == 0){
+                          YpBusinessSelectedServices::create([
+                              'business_id' => $user_incre_id['id'],
+                              'cat_id' => $category_increamentid['id'],
+                              'service_text' => $selected
+                          ]);
+                        }
+                      }
+
+                    }
+                    else 
+                    {
+                        $selected = $dataall->text;
+                         $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
+                        if(count($check) == 0){
+                          YpBusinessSelectedServices::create([
+                              'business_id' => $user_incre_id['id'],
+                              'cat_id' => $category_increamentid['id'],
+                              'service_text' => $selected
+                          ]);
+                        }
+                      
+                    }
+
                 }
             }
         }
@@ -917,6 +951,7 @@ class RegisterBusinessUserController extends Controller
           }
         }
       }*/
+
     }
     
 
@@ -998,9 +1033,18 @@ class RegisterBusinessUserController extends Controller
                 //make dynamic query
 
                 $getNextQuestion = YpQuesJumps::where('q_id',$qid)->where('value',$value,'"'.$operatorToApply.'"')->where('operator',$operator)->first();
+
+                $getJumpQuestionFilter = YpFormQuestions::where(array('qid'=>$getNextQuestion['jump_to']))
+                ->where('filter',1)
+                ->first();
+
+                if(empty($getJumpQuestionFilter))
+                {
+                    goto nextfilter;
+                }
                 
                 //get jump_to question
-                if(!empty($getNextQuestion))
+                if(!empty($getNextQuestion) && !empty($getJumpQuestionFilter))
                 {
                     $jumpToQuestionId = $getNextQuestion['jump_to'];
 
@@ -1154,6 +1198,7 @@ class RegisterBusinessUserController extends Controller
             }
             else
             {
+                 nextfilter:
                 $getJumpQuestion = DB::select(DB::raw('select * from yp_form_questions where id = (select min(id) from yp_form_questions where id > '.$quesId.' and filter=1) and cat_id='.$catid.''));
 
                 //echo "<pre>";

@@ -719,7 +719,7 @@ a.business_answer {
 .content-fix_header {
     padding-top: 80px;
 }
-.second_tabbar {
+.second_tabbar-fix_header {
    
     position: fixed;
     width: 100%;
@@ -827,4 +827,10 @@ a.business_answer {
 }
 .formcheck p {
     margin: 0;
+}
+.product_img_des{
+    max-width: 450px;
+}
+.product_img_ul li{
+    padding: 10px 0px 10px 0px;
 }

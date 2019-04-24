@@ -2,7 +2,7 @@
 
 @section('content')
 
-<section class="register_step_1 call-section">
+<section class="register_step_1">
 	<div class="breadcrumb register_breadcrumb advertisment_breadcrumb">
 		<div><a href="JavaScript:;">Dashboard</a>/<a href="JavaScript:;">Advertisement Dashboard</a>/ <span class="q_breadcrumb">My products</span></div>
 		<div class="setup_things test-campign">
@@ -26,7 +26,7 @@
 									<th>Name</th>
 									<th> Category</th>
 									<th>Price</th>
-									<th>Cost</th>
+									<th>Photos</th>
 									<th>Actions</th>
 									<th></th>
 									<th></th>
@@ -35,11 +35,20 @@
 							<tbody>
 								@if(!empty($all_products))
 									@foreach($all_products as $key=>$product)
+									<?php 
+									$product_imgs = json_decode($product['product_images'],true);
+
+									if(!empty($product_imgs)){
+										$count_imgs = count($product_imgs['pic']);
+									}else{
+										$count_imgs = 0;
+									}
+									?>
 									<tr class="product_{{$key}}">
 										<td>{{$product['name']}}</td>
 										<td>{{$product['get_cat_name']['category_name']}}</td>
 										<td>{{$product['price']}}</td>
-										<td>{{$product['price_per']}}</td>
+										<td>{{$count_imgs}}</td>
 										<td><a href="javascript:;" class=add-sechdule data-toggle="modal" data-target="#promote-popup">Promote</a></td>
 										<td><a href="javascript:;" class=add-sechdule>Show</a></td>
 										<td>

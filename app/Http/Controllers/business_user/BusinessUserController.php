@@ -17,6 +17,8 @@ use App\Models\YpBusinessUserHashtags;
 use App\Models\YpBusinessUsersQuotes;
 use App\Models\YpFormQuestions;
 use App\Models\YpBusinessSelectedServices;
+use App\Models\YpQuesJumps;
+
 use App\Http\Traits\BusinessUserProSettingsTrait;
 use File;
 use Illuminate\Support\Facades\DB;
@@ -611,6 +613,7 @@ class BusinessUserController extends Controller
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
                   
         YpBusinessUsercategories::where(['business_userid' => $user_incre_id['id'], 'category_id' => $category_increamentid['id']])->delete();
+        YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id']])->delete();
         //echo '<pre>';print_r($input); die;
     }
 
@@ -684,6 +687,7 @@ class BusinessUserController extends Controller
         $category_id = $request->category_id;
 
         $inc_cat_id = $request->inc_cat_id;
+
         $getJumpQuestion = YpFormQuestions::where('cat_id',$inc_cat_id)->where('filter',1)->first();
 
         if(!$getJumpQuestion)
@@ -693,8 +697,10 @@ class BusinessUserController extends Controller
         }
 
         $html='';
+
         if(!empty($getJumpQuestion) && $getJumpQuestion->filter==1)
         {
+
 
             $infoImg= url('/').'/img/info.png';
             $arrowImg= url('/').'/img/custom_arrow.png';
@@ -721,16 +727,16 @@ class BusinessUserController extends Controller
                     }
                 }
                $html.='</ul></div>';
-
                   
                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
                 {
 
                     $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
                 }
+                  //$html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                 //$html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
 
-                $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
-                //$html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                 $html.='<div class="next_btn" onclick="getNextQuesButton('.$inc_cat_id.');"><a href="javascript:;">Next &gt;</a></div>';
                 
                 
             }
@@ -758,8 +764,9 @@ class BusinessUserController extends Controller
                     $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
                 }
                 
-                $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
-                // $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+               // $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                //$html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                $html.='<div class="next_btn" onclick="getNextQuesButton('.$inc_cat_id.');"><a href="javascript:;">Next &gt;</a></div>';
                
             }
             elseif($getJumpQuestion['type']=='checkbox')//check if question is of checkbox type
@@ -784,7 +791,9 @@ class BusinessUserController extends Controller
                     $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
                 }
                 
-               $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+                // $html.='<div class="q_nex_btns"></div><div class="ele_next1" data-id="'.$quesId.'" onclick="saveCategoryData(this);"><a href="javascript:;">Submit &gt;</a></div></div></div></div>';
+               // $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                $html.='<div class="next_btn" onclick="getNextQuesButton('.$inc_cat_id.');"><a href="javascript:;">Next &gt;</a></div>';
                  
             }
 
@@ -803,15 +812,66 @@ class BusinessUserController extends Controller
     /*********
     Add business user selected services
     ***********/
-    function addSelectedService(){
-      if(!empty($_POST)){
+    function addSelectedService()
+    {
+        
+        if(!empty($_POST)){
+            $user_id = $_POST['user_id'];
+            $category_id = $_POST['category_id'];
+            $data = json_decode($_POST['selected']);
+
+            $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
+           
+            $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
+            
+            if(!empty($data))
+            {
+                foreach($data as $dataall)
+                {
+                    
+                    $type = $dataall->type;
+                    if($type == 'checkbox')
+                    {
+                        $selected_arr = explode(',',$dataall->text);
+                      foreach($selected_arr AS $selected){
+                        $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
+                        if(count($check) == 0){
+                          YpBusinessSelectedServices::create([
+                              'business_id' => $user_incre_id['id'],
+                              'cat_id' => $category_increamentid['id'],
+                              'service_text' => $selected
+                          ]);
+                        }
+                      }
+
+                    }
+                    else 
+                    {
+                        $selected = $dataall->text;
+                         $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
+
+                        if(count($check) == 0){
+                          YpBusinessSelectedServices::create([
+                              'business_id' => $user_incre_id['id'],
+                              'cat_id' => $category_increamentid['id'],
+                              'service_text' => $selected
+                          ]);
+                        }
+                      
+                    }
+
+                }
+            }
+        }
+      /*if(!empty($_POST)){
         $user_id = $_POST['user_id'];
         $user_incre_id = YpBusinessUsers::select('id')->where('business_userid',$user_id)->first()->toArray();
         $category_id = $_POST['category_id'];
         $category_increamentid = YpBusinessCategories::select('id')->where('category_id',$category_id)->first()->toArray();
         $selected_arr = $_POST['selected'];
         $type = $_POST['data_type'];
-        if($type == 'checkbox'){
+        if($type == 'checkbox')
+        {
           foreach($selected_arr AS $selected){
             $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id'],'service_text'=>$selected])->get()->toArray();
             if(count($check) == 0){
@@ -823,7 +883,9 @@ class BusinessUserController extends Controller
             }
           }
 
-        }else if($type == 'radio'){
+        }
+        else if($type == 'radio')
+        {
           foreach($selected_arr AS $selected){
             $check = YpBusinessSelectedServices::where(['business_id' => $user_incre_id['id'], 'cat_id' => $category_increamentid['id']])->get()->toArray();
             if(count($check) > 0){
@@ -838,6 +900,376 @@ class BusinessUserController extends Controller
             }
           }
         }
-      }
+      }*/
+
     }
-}
+
+
+    public function getdata(Request $request)
+    {
+        try
+        {
+            $infoImg= url('/').'/img/info.png';
+            $arrowImg= url('/').'/img/custom_arrow.png';
+            $nextId ='';
+            $html='';
+            $quesId = $request->qid;//get question id
+            $qid = $request->qid;//get question id
+            $value = $request->value;//get value 
+            $catid = $request->catid;//get cat id
+
+            //get logic jump of given question
+            $getJumpQuestion = YpQuesJumps::where(array('q_id'=>$quesId))->first();
+
+            if(!empty($getJumpQuestion))
+            {
+                $operator = $getJumpQuestion['operator'];
+
+               
+                //check for = operator
+                if($operator==1)
+                {
+                    $operatorToApply = '=';
+                }
+                //check for != operator
+                else if($operator==2)
+                {
+                    $operatorToApply = '!=';
+                }
+                //check for > operator
+                else if($operator==3)
+                {
+                    $operatorToApply = '>';
+                }
+                //check for< operator
+                else if($operator==4)
+                {
+                    $operatorToApply = '<';
+                }
+
+                //make dynamic query
+
+                $getNextQuestion = YpQuesJumps::where('q_id',$qid)->where('value',$value,'"'.$operatorToApply.'"')->where('operator',$operator)->first();
+
+                $getJumpQuestionFilter = YpFormQuestions::where(array('qid'=>$getNextQuestion['jump_to']))
+                ->where('filter',1)
+                ->first();
+
+                if(empty($getJumpQuestionFilter))
+                {
+                    goto nextfilter;
+                }
+                
+                //get jump_to question
+                if(!empty($getNextQuestion) && !empty($getJumpQuestionFilter))
+                {
+                    $jumpToQuestionId = $getNextQuestion['jump_to'];
+
+                    
+
+                    if($jumpToQuestionId!='')
+                    {
+                        $getJumpQuestion = YpFormQuestions::where(array('qid'=>$jumpToQuestionId))->first();
+
+                        if(!empty($getJumpQuestion))
+                        {
+                            $nextId = $getJumpQuestion['id'];
+                            //check if question is of textbox type
+                            if($getJumpQuestion['type']=='textbox')
+                            {
+                                $html.='<div class="not_all_business form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'>
+                                    <h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$getJumpQuestion['id'].'">'.$getJumpQuestion['title'].'</label><input class="form-control" id="inputEmail'.$getJumpQuestion['id'].'" type="text"></div>';
+
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                                    
+                            }
+                           /* else if($getJumpQuestion['type']=='datepicker')
+                            {
+                                $html.='<div class="not_all_business form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'>
+                                    <h1 class="questitle">'.$getJumpQuestion['title'].'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$getJumpQuestion['id'].'">'.$getJumpQuestion['title'].'</label><input class="form-control dpicker datetimepicker" id="inputEmail'.$getJumpQuestion['id'].'" type="text"></div>';
+
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                                    
+                            }
+                            else if($getJumpQuestion['type']=='timepicker')
+                            {
+                                $html.='<div class="not_all_business form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'>
+                                    <h1 class="questitle">'.$getJumpQuestion['title'].'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$getJumpQuestion['id'].'">'.$getJumpQuestion['title'].'</label><input class="form-control tpicker datetimepicker" id="inputEmail'.$getJumpQuestion['id'].'" type="text"></div>';
+
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                                    
+                            }*/
+                            elseif($getJumpQuestion['type']=='textarea')
+                            {
+
+                             $html.='<div class="describe_work form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1><p>(0/2000 letters minimum 100)</p><div class="describe_work_sec"><div class="des_area"><textarea cols="30" placeholder="Input description"></textarea></div>';
+                               if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']) && $getJumpQuestion['description']!=NULL && $getJumpQuestion['description']!='NULL')
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                $html.='<div class="describe_work_btn"><div class="ele_pre" onclick="getPrevQuesButton('.$quesId.');"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                               
+                            }
+                            elseif($getJumpQuestion['type']=='radio')//check if question is of radio type
+                            {
+                                $options = json_decode($getJumpQuestion['options']); //get options and decode
+
+                                $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1>';
+                               
+                                if(isset($options) && !empty($options))
+                                {
+                                    $html.='<div class="total_quote dynamic_rad"><ul>';
+                                    foreach($options as $option)
+                                    {
+                                        $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+                                    }
+                                }
+                               $html.='</ul></div>';
+                                  
+                               if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                            }
+                            elseif($getJumpQuestion['type']=='dropdown')//check if question is of dropdown type
+                            {
+                                
+                                $options = json_decode($getJumpQuestion['options']); //get options and decode
+
+                                $html.='<div class="quote_recieve form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1>';
+                                if(isset($options) && !empty($options))
+                                {
+                                    $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$getJumpQuestion['title'].'</label><select class="form-control">';
+                                    foreach($options as $option)
+                                    {
+                                        $html.= '<option value='.$option->option_value.'>'.$option->option_name.'</option>';
+                                    }
+                                    $html.='</select><span class="select_arrow1"><img img src="'.$arrowImg.'" class="img-fluid"></span></div>';
+                                }
+                               $html.='</ul></div>';
+                               if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                               
+                            }
+                            elseif($getJumpQuestion['type']=='checkbox')//check if question is of checkbox type
+                            {
+                                $html.='<div class="what_design form-ques dynamicQues_'.$getJumpQuestion['id'].'" data-id='.$getJumpQuestion['id'].' data-type='.$getJumpQuestion['type'].' data-filter='.$getJumpQuestion['filter'].'><h1 class="questitle" style="display:none">'.$getJumpQuestion['title'].'</h1><div class="d_cat">';
+                                $options = json_decode($getJumpQuestion['options']);
+                                if(isset($options) && !empty($options))
+                                {
+                                    $html.='<ul>';
+                                    foreach($options as $option)
+                                    {
+                                        $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="checkbox"><span class="outside checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+                                    }
+                                }
+                               $html.='</ul>';
+                              
+                                if(isset($getJumpQuestion['description']) && !empty($getJumpQuestion['description']))
+                                {
+
+                                    $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$getJumpQuestion['description'].'</p></div>';
+                                }
+                                
+                                $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                            }
+                        }
+                        
+                       
+                    }
+
+                    
+                }
+
+                
+               
+            }
+            else
+            {
+                 nextfilter:
+                $getJumpQuestion = DB::select(DB::raw('select * from yp_form_questions where id = (select min(id) from yp_form_questions where id > '.$quesId.' and filter=1) and cat_id='.$catid.''));
+
+                //echo "<pre>";
+                //print_r($getJumpQuestion);
+                //check if question is of textbox type
+               if(!empty($getJumpQuestion) && isset($getJumpQuestion[0]) && !empty($getJumpQuestion[0]))
+               {
+                    $type = $getJumpQuestion[0]->type;
+                    $id = $getJumpQuestion[0]->id;
+                    $nextId = $getJumpQuestion[0]->id;
+                    $title = $getJumpQuestion[0]->title;
+                    $description = $getJumpQuestion[0]->description;
+                    $options =  $getJumpQuestion[0]->options;
+                    $filter =  $getJumpQuestion[0]->filter;
+
+                    if($type=='textbox')
+                    {
+                        $html.='<div class="not_all_business form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'>
+                            <h1 class="questitle" style="display:none">'.$title.'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$id.'">'.$title.'</label><input class="form-control" id="inputEmail'.$id.'" type="text"></div>';
+
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                      $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                            
+                    }
+                    elseif($type=='textarea')
+                    {
+                        
+                     $html.='<div class="describe_work form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle" style="display:none">'.$title.'</h1><p>(0/2000 letters minimum 100)</p><div class="describe_work_sec"><div class="des_area"><textarea cols="30" placeholder="Input description"></textarea></div>';
+                       if(isset($description) && !empty($description) && $description!=NULL && $description!='NULL')
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="describe_work_btn"><div class="ele_pre" onclick="getPrevQuesButton('.$quesId.');"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }
+                    /*else if($type=='datepicker')
+                    {
+                        
+                        $html.='<div class="not_all_business form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'>
+                            <h1 class="questitle">'.$title.'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$id.'">'.$title.'</label><input class="form-control dpicker datetimepicker" id="inputEmail'.$id.'" type="text"></div>';
+
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }
+                    else if($type=='timepicker')
+                    {
+                        $html.='<div class="not_all_business form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'>
+                            <h1 class="questitle">'.$title.'</h1><div class="ph_detail"><div class="form-group "><label for="inputEmail'.$id.'">'.$title.'</label><input class="form-control tpicker datetimepicker" id="inputEmail'.$id.'" type="text"></div>';
+
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton();"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }*/
+                    elseif($type=='radio')//check if question is of radio type
+                    {
+                        $options = json_decode($options); //get options and decode
+
+                        $html.='<div class="quote_recieve form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle" style="display:none">'.$title.'</h1>';
+                        
+                        if(isset($options) && !empty($options))
+                        {
+                            $html.='<div class="total_quote dynamic_rad"><ul>';
+                            foreach($options as $option)
+                            {
+                                $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+                            }
+                        }
+                       $html.='</ul>';
+                          
+                       if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                      $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                    }
+                    elseif($type=='checkbox')//check if question is of checkbox type
+                    {
+                        $html.='<div class="what_design form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle" style="display:none">'.$title.'</h1><div class="d_cat">';
+                        $options = json_decode($options);
+                        if(isset($options) && !empty($options))
+                        {
+                            $html.='<ul>';
+                            foreach($options as $option)
+                            {
+                                $html.='<li><div class="formcheck forcheckbox langcheck"><label><input class="radio-inline" name=radios'.$id.'[] value='.$option->option_value.' type="checkbox" data-text='.$option->option_name.'><span class="outside outside_checkbox"><span class="inside inside_checkbox"></span></span><p>'.$option->option_name.'</p></label></div></li>';
+
+                            }
+                        }
+                       $html.='</ul>';
+                      
+                        if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                    }
+                    elseif($type=='dropdown')//check if question is of dropdown type
+                    {
+                        
+                        $options = json_decode($options); //get options and decode
+
+                        $html.='<div class="quote_recieve form-ques dynamicQues_'.$id.'" data-id='.$id.' data-type='.$type.' data-filter='.$filter.'><h1 class="questitle" style="display:none">'.$title.'</h1>';
+                        if(isset($options) && !empty($options))
+                        {
+                            $html.='<div class="total_quote"><div class="form-group custom_errow"><label>'.$title.'</label><select class="form-control">';
+                            foreach($options as $option)
+                            {
+                                
+                                $html.= '<option data-text='.$option->option_name.' value='.$option->option_value.'>'.$option->option_name.'</option>';
+
+                            }
+                            $html.='</select><span class="select_arrow1"><img img src="'.$arrowImg.'" class="img-fluid"></span></div>';
+                        }
+                       $html.='</ul></div>';
+                       if(isset($description) && !empty($description))
+                        {
+
+                            $html.='<div class="t_detail"><p><img src="'.$infoImg.'">'.$description.'</p></div>';
+                        }
+                        
+                        $html.='<div class="q_nex_btns"><div onclick="getPrevQuesButton('.$quesId.');" class="ele_pre"><a href="javascript:;">&lt; Previous</a></div><div class="ele_next" onclick="getNextQuesButton('.$catid.');"><a href="javascript:;">Next &gt;</a></div></div></div></div>';
+                       
+                    }
+               }
+               
+               
+                
+            }
+
+            return response()->json(['success'=>1,'data'=>$html,'message'=>'data got successfully','nextid'=>$nextId],200);
+        }
+        catch(Exception $e)
+        {
+            return response()->json(['success'=>0,'message'=>$e->getMessage()],200);
+        }
+        
+        
+    }
+}   
+

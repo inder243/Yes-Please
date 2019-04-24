@@ -87,7 +87,7 @@
                     </ul>
                 </div>
 
-            <section class="second_tabbar">
+            <section class="second_tabbar second_tabbar-fix_header">
                 <div class="second_header">
                     <div class="menu_search">
                         <div class="second_menu">

@@ -232,12 +232,13 @@ class BusinessProductsController extends Controller
 
 
     /*****
-    **get product detail
-    *****/
+    **get product detail edit product
+    *****/ 
     public function getProductDetail(Request $request){
 
         $product_id = $request->product_id;
         $b_id       = Auth::user()->id;
+        $business_user_id   = Auth::user()->business_userid;
 
         $get_product_detail = BusinessProducts::where(['product_id'=>$product_id,'business_id'=>$b_id])->first();
 
@@ -252,6 +253,20 @@ class BusinessProductsController extends Controller
         $product_images = $get_product_detail->product_images;
 
 
+        /*****selected images html****/
+        if(!empty($product_images)){
+            $uploads = json_decode($product_images,true);
+        }
+
+        $selectImgHtml = '';
+        if(!empty($uploads)){
+            foreach($uploads['pic'] as $img){
+                $img_name = explode( '.', $img );
+
+                $selectImgHtml .= '<li class="imguploaded" id="img_'.$img_name[0].'"><div class="image"><img src="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'"></div><div class="input_des product_img_des"><textarea placeholder="Input description"></textarea></div><a href="javascript:;" data-img="'.$img.'" data-product_id="'.$product_id.'" onclick="deleteProductSelectedImg(this);" class="product_imgcross"><img src="'.url('/').'/img/line_cross.png"></a></li>';
+            }
+        }
+        
         $allCategories = YpBusinessCategories::get()->toArray();
 
         /***make html for all category list***/
@@ -267,10 +282,10 @@ class BusinessProductsController extends Controller
                 $cat_html .= '<option data-supercat_id ="'.$cat_value['super_cat_id'].'" data-cat_id = "'.$cat_value['category_id'].'" value="'.$cat_value['id'].'" '.$selected.'>'.$cat_value['category_name'].'</option>';
             }
 
-            return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html,'name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id]);
+            return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html,'name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id,'selectImgHtml'=>$selectImgHtml]);
 
         }else{
-            return response()->json(['success'=>'2','message'=>'No Category Found','name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id]);
+            return response()->json(['success'=>'2','message'=>'No Category Found','name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id,'selectImgHtml'=>$selectImgHtml]);
         }
 
         //echo "<pre>";print_r(->id);die;
@@ -414,4 +429,53 @@ class BusinessProductsController extends Controller
         }
         
     }/***fn ends**/
+
+    /******
+    **Fn to delete selected product images
+    *****/
+    public function removeProductelectedImages(){
+        $business_user_id = Auth::user()->business_userid;
+        $b_id = Auth::user()->id;
+
+        if(isset($_POST)){
+            $filename = $_POST['img_name'];
+            $product_id = $_POST['product_id'];
+            $image_path = public_path().'/images/business_products/'.$business_user_id.'/'.$filename;  // Value is not URL but directory file path
+
+            $check_img_json = BusinessProducts::select('product_images')->where(['business_id'=>$b_id,'product_id'=>$product_id])->get()->toArray();
+            
+            if(!empty($check_img_json)){
+                $img_json = json_decode($check_img_json[0]['product_images'],true);
+                $new_images = array_diff($img_json['pic'], [$filename]);
+
+                if(!empty($new_images)){
+                    foreach($new_images as $key=>$img){
+                        $pic_vid_arr['pic'][] = $img;
+                    }
+                    
+                    $new_json_pics = json_encode($pic_vid_arr);
+                    $update = array(
+                        'product_images'       => $new_json_pics
+                    );
+                    BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+                }else{
+                    $update = array(
+                        'product_images'       => null
+                    );
+                    BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+                }
+                   
+            } /***end if not empty***/ 
+
+            if(File::exists($image_path)) {
+
+                File::delete($image_path);
+
+                return response()->json(['success'=>'1','message'=>'Image deleted successfully']);
+            }else{
+                return response()->json(['success'=>'0','message'=>'Please try again later!']);
+            }
+
+        }/****end of isset****/
+    }/***remove selected product images ends here**/
 }

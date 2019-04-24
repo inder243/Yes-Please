@@ -146,7 +146,7 @@
                     </ul>
                 </div>
 
-    <section class="second_tabbar category_barht ">
+    <section class="second_tabbar category_barht second_tabbar-fix_header">
          <div class="second_header category_bar">
             <div class="menu_search category_bar1">
                <div class="second_menu">
