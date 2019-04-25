@@ -919,8 +919,71 @@
                               </div>
                            </div>
                         </div>
+                        @if(isset($get_products) && !empty($get_products))
+                        @foreach($get_products as $p_key=>$p_value)
                         <div class="article_sec1">
+                          @if($p_key == 0)
                            <h1>Promoted products </h1>
+                           @endif
+                           <div class="most_ask_question_section">
+                              <div class="cat_business_name">
+                                 <h1>{{$p_value['get_business']['business_name']}}</h1>
+                                 <div class="p-name-price">
+                                    <h1>{{$p_value['get_product']['name']}}</h1>
+                                    <div class="p_price">
+                                      @if($p_value['get_product']['price_type'] == 'fix')
+                                       <h1>${{$p_value['get_product']['price']}}</h1>
+                                       @elseif($p_value['get_product']['price_type'] == 'range')
+                                       <h1>${{$p_value['get_product']['price_from']}} - ${{$p_value['get_product']['price_to']}}</h1>
+                                       @php $price_per = $p_value['get_product']['price_per'];@endphp
+                                       @if($price_per == '1')
+                                       <span>/hr</span>
+                                       @elseif($price_per == '2')
+                                       <span>/min</span>
+                                       @endif
+                                       @endif
+                                    </div>
+                                 </div>
+                                 <p>{{$p_value['get_product']['product_description']}}</p>
+                                <?php 
+                                  $uploads = json_decode($p_value['get_product']['product_images'],true);
+                                ?>
+                                 <ul>
+                                  @if(!empty($uploads))
+                                    @foreach($uploads['pic'] as $img)
+                                     <?php $img_name = explode( '.', $img );?>
+                                      <li data-image="{{url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;">
+                                        <img src="{{url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)}}"/>
+                                      </li>
+                                    @endforeach
+                                  @else
+
+                                  @endif
+                                   <!--  <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li>
+                                    <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li>
+                                    <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li>
+                                    <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li>
+                                    <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li>
+                                    <li>
+                                       <img src="{{ asset('img/p_image.png') }}"/>
+                                    </li> -->
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                        @endforeach
+                        @endif
+                       <!--  <div class="article_sec1">
                            <div class="most_ask_question_section">
                               <div class="cat_business_name">
                                  <h1>Business name</h1>
@@ -954,42 +1017,7 @@
                                  </ul>
                               </div>
                            </div>
-                        </div>
-                        <div class="article_sec1">
-                           <div class="most_ask_question_section">
-                              <div class="cat_business_name">
-                                 <h1>Business name</h1>
-                                 <div class="p-name-price">
-                                    <h1>Product name</h1>
-                                    <div class="p_price">
-                                       <h1>$40</h1>
-                                       <span>/hr</span>
-                                    </div>
-                                 </div>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pulvinar neque neque, ut semper nisl venenatis vitae. Mauris quis risus lacus. Sed cursus urna sed nibh pellentesque tincidunt. Quisque pharetra, dui quis aliquam tempor, orci aollicitudin</p>
-                                 <ul>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                    <li>
-                                       <img src="{{ asset('img/p_image.png') }}"/>
-                                    </li>
-                                 </ul>
-                              </div>
-                           </div>
-                        </div>
+                        </div> -->
                      </div>
                   </div>
                </div>

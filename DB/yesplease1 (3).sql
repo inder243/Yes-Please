@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 24, 2019 at 01:23 PM
+-- Generation Time: Apr 25, 2019 at 01:20 PM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.17-0ubuntu0.18.04.1
 
@@ -185,7 +185,10 @@ INSERT INTO `yp_business_categories` (`id`, `category_id`, `super_cat_id`, `cate
 (34, 4856721536598, 1554358590, 'Windows', 1, 40, 20, '2019-04-04 06:21:02', '2019-04-04 06:21:02'),
 (35, 4583355884301, 1554358590, 'Linux', 1, 60, 100, '2019-04-04 06:21:20', '2019-04-04 06:21:20'),
 (36, 4545885938513, 1554358590, 'Android', 1, 200, 50, '2019-04-04 06:21:35', '2019-04-04 06:21:35'),
-(37, 3590541518319, 1554358590, 'IOS', 1, 500, 300, '2019-04-04 06:21:51', '2019-04-04 06:21:51');
+(37, 3590541518319, 1554358590, 'IOS', 1, 500, 300, '2019-04-04 06:21:51', '2019-04-04 06:21:51'),
+(38, 3579054916571, 1556175018, 'I-Phone(50,70)', 1, 50, 70, '2019-04-25 06:51:14', '2019-04-25 06:51:14'),
+(39, 9674511151252, 1556175018, 'Samsung(60,80)', 1, 60, 80, '2019-04-25 06:52:04', '2019-04-25 06:52:04'),
+(40, 5118765147650, 1556175018, 'Xiaomi(30,70)', 1, 30, 70, '2019-04-25 06:52:47', '2019-04-25 06:52:47');
 
 -- --------------------------------------------------------
 
@@ -233,7 +236,7 @@ INSERT INTO `yp_business_details` (`id`, `b_id`, `business_userid`, `website_url
 (14, 17, 1281655939846, 'testing.iapp001@gmail.com', 'testing.iapp001@gmail.com', '{\"available\":\"available\"}', NULL, 'A plumber is a tradesperson who specializes in installing and maintaining systems used for potable (drinking) water, sewage and drainage in plumbing systems. The term dates from ancient times and is related to the Latin word for lead, \"plumbum\".[1][2]A plumber is a tradesperson who specializes in installing and maintaining systems used for potable (drinking) water, sewage and drainage in plumbing systems. The term dates from ancient times and is related to the Latin word for lead, \"plumbum\".[1][2]', '{\"pic\":[\"651552986667.jpeg\"]}', NULL, NULL, NULL, NULL, '2019-03-19 09:10:31', '2019-03-19 09:11:13', 0, 10, 0, 0),
 (15, 18, 6563590248318, '', '', '{\"available\":\"available\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-19 09:34:32', '2019-03-19 09:35:03', 0, 10, 0, 0),
 (16, 20, 7849952251215, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-19 10:53:41', '2019-03-19 10:53:53', 0, 10, 0, 0),
-(17, 21, 7924731922545, '        ', '        ', '{\"available\":\"available\"}', NULL, 'k-wallpaper-afterglow-blur-1236701.jpg, 4k-wallpaper-agriculture-clouds-842711.jpg, 4k-wallpaper-android-wallpaper-art-325044.jpg, 4k-wallpaper-android-wallpaper-astro-1146134.jpg, 4k-wallpaper-architecture-background-1308624.jpg, 4k-wallpaper-audi-audi-r8-1402787.jpg, 4k-wallpaper-background-beautiful-853199.jpg, 4k-wallpaper-blur-bokeh-1213447.jpg, 4k-wallpaper-calm-waters-dark-1252869.jpg, 41trnBjzshL.png, 41wGEmM0S4L.jpg, 5073.jpg, 5075.jpg, 5077.jpg, 5078.jpg, 5079.jpg, 5080.jpg, 5081.jpg, android-wallpaper-city-dark-248159.jpg, computer-dvd-disk-250x250.png, download.jpeg, download.png, Download-HD-Wallpaper-Paris-Eiffel-Tower-Beutiful-Amazing-Monument-City-WallpapersByte-com-1600x1200.jpg, images.jpeg, images (1).jpeg, Scalebound-4K-Wallpaper.jpg, Scalebound-4K-Wallpaper-1.jpg, Scalebound-4K-Wallpaper-2.jpg, sheldon.jpg, superman.png, Water.jpeg, Water1.jpeg, Water2.jpeg, Water3.jpeg, Water4.jpeg,', '{\"pic\":[\"491553248708.jpg\",\"861553248708.jpg\",\"831553248708.jpg\",\"111553248708.jpg\",\"481553248708.jpg\",\"461553248708.jpg\",\"201553248708.jpg\",\"401553248708.jpg\",\"661553248708.jpg\",\"121553248709.png\",\"351553248709.jpg\",\"631553248709.jpg\",\"821553248709.jpg\",\"941553248709.jpg\",\"331553248709.jpg\",\"181553248709.jpg\",\"781553248709.jpg\",\"701553248709.jpg\",\"631553248709.jpg\",\"841553248709.png\"]}', NULL, NULL, NULL, NULL, '2019-03-22 09:49:37', '2019-04-09 14:00:56', 0, 10, 1, 1),
+(17, 21, 7924731922545, '          ', '          ', '{\"available\":\"available\"}', NULL, 'k-wallpaper-afterglow-blur-1236701.jpg, 4k-wallpaper-agriculture-clouds-842711.jpg, 4k-wallpaper-android-wallpaper-art-325044.jpg, 4k-wallpaper-android-wallpaper-astro-1146134.jpg, 4k-wallpaper-architecture-background-1308624.jpg, 4k-wallpaper-audi-audi-r8-1402787.jpg, 4k-wallpaper-background-beautiful-853199.jpg, 4k-wallpaper-blur-bokeh-1213447.jpg, 4k-wallpaper-calm-waters-dark-1252869.jpg, 41trnBjzshL.png, 41wGEmM0S4L.jpg, 5073.jpg, 5075.jpg, 5077.jpg, 5078.jpg, 5079.jpg, 5080.jpg, 5081.jpg, android-wallpaper-city-dark-248159.jpg, computer-dvd-disk-250x250.png, download.jpeg, download.png, Download-HD-Wallpaper-Paris-Eiffel-Tower-Beutiful-Amazing-Monument-City-WallpapersByte-com-1600x1200.jpg, images.jpeg, images (1).jpeg, Scalebound-4K-Wallpaper.jpg, Scalebound-4K-Wallpaper-1.jpg, Scalebound-4K-Wallpaper-2.jpg, sheldon.jpg, superman.png, Water.jpeg, Water1.jpeg, Water2.jpeg, Water3.jpeg, Water4.jpeg,', '{\"pic\":[\"491553248708.jpg\",\"861553248708.jpg\",\"831553248708.jpg\",\"111553248708.jpg\",\"481553248708.jpg\",\"461553248708.jpg\",\"201553248708.jpg\",\"401553248708.jpg\",\"661553248708.jpg\",\"121553248709.png\",\"351553248709.jpg\",\"631553248709.jpg\",\"821553248709.jpg\",\"941553248709.jpg\",\"331553248709.jpg\",\"181553248709.jpg\",\"781553248709.jpg\",\"701553248709.jpg\",\"631553248709.jpg\",\"841553248709.png\"]}', NULL, NULL, NULL, NULL, '2019-03-22 09:49:37', '2019-04-25 08:07:27', 0, 10, 1, 1),
 (18, 22, 5348205618641, '', '', '{\"sunday_from\":\"\",\"sunday_to\":\"\",\"monday_from\":\"15:37\",\"monday_to\":\"15:37\",\"tuesday_from\":\"15:37\",\"tuesday_to\":\"15:37\",\"wednesday_from\":\"\",\"wednesday_to\":\"\",\"thursday_from\":\"\",\"thursday_to\":\"\",\"friday_from\":\"\",\"friday_to\":\"\",\"saturday_from\":\"\",\"saturday_to\":\"\"}', NULL, 'Tell your clients about your business, you can also do it by uploading photos/videosTell your clients about your business, you can also do it by uploading photos/videos', '{\"pic\":[\"351553249220.jpg\",\"771553249220.jpg\"]}', NULL, NULL, NULL, NULL, '2019-03-22 10:04:24', '2019-03-22 10:08:05', 0, 20, 0, 0),
 (19, 23, 7555816243973, '', '', '{\"sunday_from\":\"\",\"sunday_to\":\"\",\"monday_from\":\"\",\"monday_to\":\"\",\"tuesday_from\":\"\",\"tuesday_to\":\"\",\"wednesday_from\":\"15:43\",\"wednesday_to\":\"15:43\",\"thursday_from\":\"15:43\",\"thursday_to\":\"15:43\",\"friday_from\":\"\",\"friday_to\":\"\",\"saturday_from\":\"\",\"saturday_to\":\"\"}', NULL, 'Tell your clients about your business, you can also do it by uploading photos/videosTell your clients about your business, you can also do it by uploading photos/videos', '{\"pic\":[\"901553249570.jpeg\",\"computer-dvd-disk-250x250_1269013934.png\"]}', NULL, NULL, NULL, NULL, '2019-03-22 10:09:34', '2019-03-22 10:15:12', 0, 30, 0, 0),
 (20, 24, 5751285447359, '', '', '{\"available\":\"available\"}', NULL, 'Tell your clients about your business, you can also do it by uploading photos/videos', '{\"pic\":[\"521553250223.jpg\"]}', NULL, NULL, NULL, NULL, '2019-03-22 10:18:44', '2019-03-22 10:23:57', 0, 60, 0, 0),
@@ -258,7 +261,8 @@ INSERT INTO `yp_business_details` (`id`, `b_id`, `business_userid`, `website_url
 (39, 43, 8414535940385, '', '', '{\"available\":\"available\"}', NULL, 'this is description of the business profile.', NULL, NULL, NULL, NULL, NULL, '2019-04-17 09:47:22', '2019-04-19 10:55:33', 0, 10, 0, 0),
 (40, 44, 4685627587315, '', '', '{\"sunday_from\":\"\",\"sunday_to\":\"\",\"monday_from\":\"\",\"monday_to\":\"\",\"tuesday_from\":\"\",\"tuesday_to\":\"\",\"wednesday_from\":\"\",\"wednesday_to\":\"\",\"thursday_from\":\"\",\"thursday_to\":\"\",\"friday_from\":\"\",\"friday_to\":\"19:38\",\"saturday_from\":\"\",\"saturday_to\":\"\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-19 14:01:21', '2019-04-19 14:08:54', 0, 10, 0, 0),
 (41, 45, 390652611153, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-23 09:11:45', '2019-04-23 09:11:45', 0, 0, 0, 0),
-(42, 46, 389159940865, '', '', '{\"available\":\"available\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-24 09:42:44', '2019-04-24 11:03:24', 0, 10, 0, 0);
+(42, 46, 389159940865, '', '', '{\"available\":\"available\"}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-24 09:42:44', '2019-04-24 11:03:24', 0, 10, 0, 0),
+(43, 47, 6595811788501, '', '', '{\"available\":\"available\"}', NULL, NULL, '{\"pic\":[\"771556180358.png\"]}', NULL, NULL, NULL, NULL, '2019-04-25 08:10:28', '2019-04-25 08:19:26', 0, 10, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -310,6 +314,16 @@ CREATE TABLE `yp_business_products_promote` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `yp_business_products_promote`
+--
+
+INSERT INTO `yp_business_products_promote` (`id`, `product_id`, `business_id`, `pay_per_click`, `daily_budget`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 5, 39, 12, 13, '2019-04-30', '2019-04-25 07:48:42', '2019-04-25 07:59:50'),
+(2, 7, 39, 10, 35, '2019-04-30', '2019-04-25 11:14:15', '2019-04-25 11:14:15'),
+(3, 8, 39, 24, 56, '2019-04-30', '2019-04-25 11:26:56', '2019-04-25 11:26:56'),
+(4, 6, 39, 11, 23, '2019-04-29', '2019-04-25 11:35:25', '2019-04-25 11:35:25');
 
 -- --------------------------------------------------------
 
@@ -422,7 +436,6 @@ INSERT INTO `yp_business_selected_services` (`id`, `business_id`, `cat_id`, `ser
 (110, 15, 35, '64X', '2019-04-04 06:41:23', '2019-04-04 06:41:23'),
 (111, 15, 36, '64X', '2019-04-04 06:41:25', '2019-04-04 06:41:25'),
 (112, 15, 37, '64X', '2019-04-04 06:41:29', '2019-04-04 06:41:29'),
-(113, 16, 35, '64X', '2019-04-04 06:44:18', '2019-04-04 06:44:18'),
 (114, 35, 35, '64X', '2019-04-04 12:14:09', '2019-04-04 12:14:09'),
 (115, 36, 35, '84X', '2019-04-04 12:14:27', '2019-04-19 09:27:59'),
 (116, 36, 36, '84X', '2019-04-04 12:14:32', '2019-04-04 12:18:21'),
@@ -482,7 +495,22 @@ INSERT INTO `yp_business_selected_services` (`id`, `business_id`, `cat_id`, `ser
 (186, 46, 35, 'ch3', '2019-04-24 11:56:37', '2019-04-24 11:56:37'),
 (187, 46, 35, 'ch4', '2019-04-24 11:56:37', '2019-04-24 11:56:37'),
 (188, 46, 35, '64X', '2019-04-24 11:56:37', '2019-04-24 11:56:37'),
-(189, 46, 35, '2', '2019-04-24 11:56:37', '2019-04-24 11:56:37');
+(189, 46, 35, '2', '2019-04-24 11:56:37', '2019-04-24 11:56:37'),
+(192, 21, 39, 'Skip', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(193, 21, 39, 'Hexa Core performace', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(194, 21, 39, 'Oled Screen', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(195, 21, 39, 'Type C connector', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(196, 21, 39, 'To Go last step', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(197, 21, 39, 'Check this', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(198, 21, 39, 'Samsung 9', '2019-04-25 08:05:43', '2019-04-25 08:05:43'),
+(207, 47, 39, 'To see type of device', '2019-04-25 08:16:00', '2019-04-25 08:16:00'),
+(208, 47, 39, 'To Go last step', '2019-04-25 08:16:00', '2019-04-25 08:16:00'),
+(209, 47, 39, 'Check this', '2019-04-25 08:16:00', '2019-04-25 08:16:00'),
+(210, 47, 39, 'Samsung 8', '2019-04-25 08:16:00', '2019-04-25 08:16:00'),
+(220, 16, 35, 'bbb', '2019-04-25 11:30:58', '2019-04-25 11:30:58'),
+(221, 16, 35, 'ch4', '2019-04-25 11:30:58', '2019-04-25 11:30:58'),
+(222, 16, 35, '64X', '2019-04-25 11:30:58', '2019-04-25 11:30:58'),
+(223, 16, 35, '2', '2019-04-25 11:30:58', '2019-04-25 11:30:58');
 
 -- --------------------------------------------------------
 
@@ -535,7 +563,8 @@ INSERT INTO `yp_business_super_categories` (`id`, `super_cat_id`, `cat_name`, `c
 (13, 1553003169, 'Mobile', 1, '2019-03-19 13:46:09', '2019-03-19 13:46:09'),
 (14, 1553072858, 'Web dev', 1, '2019-03-20 09:07:38', '2019-03-20 09:07:38'),
 (15, 1553245858, 'Greenland_Properties', 1, '2019-03-22 09:10:58', '2019-03-22 09:10:58'),
-(16, 1554358590, 'WWW', 1, '2019-04-04 06:16:30', '2019-04-04 06:16:30');
+(16, 1554358590, 'WWW', 1, '2019-04-04 06:16:30', '2019-04-04 06:16:30'),
+(17, 1556175018, 'Mobile Vendor', 1, '2019-04-25 06:50:18', '2019-04-25 06:50:18');
 
 -- --------------------------------------------------------
 
@@ -583,12 +612,12 @@ INSERT INTO `yp_business_users` (`id`, `business_userid`, `business_name`, `firs
 (13, 8671279558868, 'Test', 'Man', 'Man', 'logies@gmail.com', '$2y$10$fxy1HAcT4M6aHVpnqMdgk.gRmceLD.E/PwJAv3W6sHeoEtu6ZePdS', '07696633264', 'Morinda, Punjab, India', '76.4996831', '30.7892586', NULL, 'jVVKWiDDVPRtFerzc8n3uUYgwhuqWHxU6fIZQkkJDR2qRTnplhaDCbwvf2KK', '1', 1, NULL, 0, 0, '2019-03-18 05:26:28', '2019-03-18 05:28:10'),
 (14, 6420595715882, 'Tea_Stall', 'Manoj', 'Dogra', 'manoj.k@iapptechnologies.com', '$2y$10$T2/h0VlXtfaUCyu4qQvDM.eaZzNhP8zO1x0eSq3JXsuYNWstopvhK', '07412589630', 'Aroma Chowk Sector 21/22, 22C, Sector 22, Chandigarh', '76.7736749', '30.7301055', '', '4gdKL4tiPHsZzwhgU5DQB5G0kwISKZ3w4E2l1lL8AiiyV1yEBU4oRrXYPPRh', '7', 1, '', 0, 0, '2019-03-19 06:27:22', '2019-03-20 09:30:12'),
 (15, 5199527968526, 'Baby_Sitting', 'MJ', 'DJ', 'redminote5pro4321@gmail.com', '$2y$10$6fcDBc9Ua8GkhAUbHZ3SUOE9HlXZK.gKCHXf/2mUbK3pIj7CryHgC', '7412589630', 'Kurukshetra University Thanesar, Haryana, India', '76.8173138', '29.9564963', '1554360110.jpg', 'PeqDodN50e9sccNANRN5SlQXkQ9EnOYclvx5Okm8M4a4LwaaXo6R0OWvCbqv', '7', 1, '', 1, 0, '2019-03-19 08:09:25', '2019-04-22 13:01:07'),
-(16, 4551559266388, 'Plumber_InCity', 'Under', 'Taker', 'amudasir355@gmx.com', '$2y$10$z8vNDt1Zw3E5SwtqYwteP.b7zIAj8ATjygzdbIbk24nPVky2eMpHq', '1234567809', '9d, Madhya Marg Sector 8C, Sector 9, Chandigarh', '76.7978564', '30.7332665', '', '5kEQBtmQOckzkVfa8KLMtJQLLHfs3mtjlDvoK4YQ3vQfh0Fzr5IJ8rRJXEq8', '7', 1, '', 1, 0, '2019-03-19 09:06:25', '2019-04-10 04:55:30'),
+(16, 4551559266388, 'Plumber_InCity', 'Under', 'Taker', 'amudasir355@gmx.com', '$2y$10$z8vNDt1Zw3E5SwtqYwteP.b7zIAj8ATjygzdbIbk24nPVky2eMpHq', '1234567809', '9d, Madhya Marg Sector 8C, Sector 9, Chandigarh', '76.7978564', '30.7332665', '', 'zWz8zQTllVY2fPQcVm9qW6NuMoEginQmvfg4QIWi5iMFetCwBsp8jwAx1pFt', '7', 1, '', 1, 0, '2019-03-19 09:06:25', '2019-04-25 12:29:29'),
 (17, 1281655939846, 'Electrician_Schenider', 'MJ', 'Dogra', 'testing.iapp001@gmail.com', '$2y$10$6.PY/Wd0hITd/Ik1Lpx.R.yuhd8wSzHCPLwwzHfrM6pi9/u2bEXVu', '07412589630', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'mtOCB76J83ip2dtbre2QJrBHWJsOgAJX9Ga4Z6OzE1eIUPXp818FIEVcEGrT', '7', 1, '', 0, 0, '2019-03-19 09:10:19', '2019-04-09 09:06:48'),
 (18, 6563590248318, 'Cleaner 79', 'MJ', 'Dogra', 'amudasir355@aol.com', '$2y$10$wh20y9z4Vb8DL.rOkd.MWOAg4YHMW795qFY96UKTtAy6r/e3Eqs8i', '07412589630', 'Sector 69, Mohali, Punjab, India', '76.7206652', '30.692499', NULL, 's65nYqCBoGr4p2eZ4ACxYXE3F0SnhFjDH8jgJooxQWP7HyoQ8cVMR3wiq3rI', '7', 1, '', 0, 0, '2019-03-19 09:34:23', '2019-03-19 09:52:44'),
 (19, 3557529799891, 'asdas', 'ad', 'asd', 'asdasd@asdasd.fgh', '$2y$10$8hs84FiltxiYbit2HOrpR.siQqE1PVWDF3pooANdIIWUok694z4tG', '343434343434', 'Mohali Railway Station Road, Sector 62, Sahibzada Ajit Singh Nagar, Punjab, India', '76.72605039999999', '30.6949406', NULL, NULL, '1', 1, NULL, 0, 0, '2019-03-19 09:56:19', '2019-03-19 09:56:19'),
 (20, 7849952251215, 'Cricket', 'Ricky', 'Ponting', 'ricky@gmail.com', '$2y$10$NMlk6QdAqxV7ALn8Cn5f3OIatSf9FimBW2cVzt07mZpWarug/2672', '9896554556', 'Sydney NSW, Australia', '151.2092955', '-33.8688197', NULL, NULL, '4', 1, NULL, 0, 0, '2019-03-19 10:53:32', '2019-03-19 10:53:53'),
-(21, 7924731922545, 'Woodland', 'Sector_79', 'Mohali', 'dev1@iapptechnologies.com', '$2y$10$CMTlAfhvag/kXGaRRYO.zuNxsoQhC/1WIyYQByDrFFHzV.jckH60u', '7412589630', 'Aroma Chowk Sector 21/22, 22C, Sector 22, Chandigarh', '76.7736749', '30.7301055', '1554818456.jpeg', 'aakVXsHyolaS9bwJlwobdKYoBP9ejJrbTGaVhnhL43zrmcN9vXMqru4f8w2o', '7', 1, NULL, 1, 0, '2019-03-22 09:45:47', '2019-04-23 09:10:36'),
+(21, 7924731922545, 'Woodland', 'Sector_79', 'Mohali', 'dev1@iapptechnologies.com', '$2y$10$CMTlAfhvag/kXGaRRYO.zuNxsoQhC/1WIyYQByDrFFHzV.jckH60u', '7412589630', 'Aroma Chowk Sector 21/22, 22C, Sector 22, Chandigarh', '76.7736749', '30.7301055', '', 'bJ9xRm0MrGtnfmoIBQ0EMsI6MbQNbu4QCjQ1o2dqj47qAZYjNruGv3KsDH39', '7', 1, NULL, 1, 0, '2019-03-22 09:45:47', '2019-04-25 11:29:45'),
 (22, 5348205618641, 'Nike', 'Sector_66', 'Mohali', 'dev2@iapptechnologies.com', '$2y$10$mHErXvhMqU07mdi9/YqbDuhLD1kYnv8kr5BlRNXZHp8bIPCnqtrna', '7412589630', 'Sector 8, Chandigarh, India', '76.7985669', '30.7400589', NULL, 'HZaj1a67WHZsnC4anSi4ObmZKR6iCx2HVn0VPpxREA8fhZ5KkX5fnzmRswyp', '7', 1, NULL, 1, 0, '2019-03-22 09:49:24', '2019-04-11 09:30:52'),
 (23, 7555816243973, 'addidas', 'MJ_addidas', 'Dogra', 'dev3@iapptechnologies.com', '$2y$10$ZVhS.HnnrNgeX67Ue/f5rua2zasZyRwyf/FkNfKkFQ3zzmzcTQi1y', '7412589630', 'Bengaluru, Karnataka, India', '77.5945627', '12.9715987', NULL, 'cwQwkapM10iLKXNbancLMKdWMrJBvg4ClFZNaZ28sClwNPIZfwlmqK8qBQSy', '7', 1, NULL, 0, 0, '2019-03-22 10:09:27', '2019-03-28 05:16:25'),
 (24, 5751285447359, 'Caterpiller', 'Sector_66', 'Dogra', 'dev4@iapptechnologies.com', '$2y$10$bCt34uLGkkQ8Y768UL6XTO1pvjCUpeAozj0sUyC97bcTQSEEmnza6', '741258963', 'North Country Mall Road, Sector 117, Sahibzada Ajit Singh Nagar, Punjab, India', '76.6787822', '30.738992', NULL, '6Vy6MLgXF4kPcT1wSf7jnVyNIY3Ko95sLRkTusVxvd58vHTvwq9rQKG1oVny', '7', 1, NULL, 1, 0, '2019-03-22 10:15:58', '2019-04-18 12:26:48'),
@@ -606,14 +635,15 @@ INSERT INTO `yp_business_users` (`id`, `business_userid`, `business_name`, `firs
 (36, 194534501947, 'Samsung4', 'jkl', 'jkl', 'jkl@jkl.jkl', '$2y$10$pIZZN4AI.rrnFjwMALiwxubPVt4ViCz1ACX6jmE6d5ZIVWXmrI9OW', '7412589630', ' HaPalmach St 1, Jerusalem, Israel', '35.2136561', '31.7683417', '', 'AlE2QBqL9eDOAwRso6zQj5IsjVtgwSbc0r8B4sZyXEJKOtXYRsCfgjn7tIOE', '7', 1, NULL, 1, 0, '2019-04-04 12:12:24', '2019-04-22 10:08:53'),
 (37, 3551595594179, 'Samsung5', 'bnm', 'bnm', 'bnm@bnm.bnm', '$2y$10$o68GFWMDjr06Nu6hwEuc3OKZYKBUt0JU/QOG2PNTaCXsA2OB4N6c.', '6666666666', '67, Sector Road, Sector 67, Mohali, Punjab, India', '76.7242425', '30.679043', '1554380639.png', 'r23THBBnYC5J07ODO7BifDnmmYdKcZGqti0AoS7JpinbEVkYGpyn4kHAPrz3', '7', 1, NULL, 1, 0, '2019-04-04 12:13:15', '2019-04-11 14:12:00'),
 (38, 8183013534215, 'samsung7', 'cxz', 'cxz', 'cxz@cxz.cxz', '$2y$10$UQYj.FPKGvLbMmsFM1rdVOHwtuniCKnE9mQ2rj4RUbIiLcTsNJxka', '7894561231', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, NULL, '7', 1, NULL, 1, 0, '2019-04-04 13:08:30', '2019-04-04 13:22:10'),
-(39, 6455933930418, 'samsung6', 'zxc', 'zxc', 'zxc@zxc.zxc', '$2y$10$6xdBAOkmQqk3bRroAoD4X.lfk0vUKY87NN9rfQwAmEazQEfr0Uq8G', '1236547890', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', '', 'wNXAiswZrpsZFmG4Ptk38uby2aP4Q9HKTlkihYNyqxBdZ26JRAtkExGqTHmH', '7', 1, NULL, 1, 0, '2019-04-04 13:09:09', '2019-04-24 11:22:11'),
+(39, 6455933930418, 'samsung6', 'zxc', 'zxc', 'zxc@zxc.zxc', '$2y$10$6xdBAOkmQqk3bRroAoD4X.lfk0vUKY87NN9rfQwAmEazQEfr0Uq8G', '1236547890', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', '', 'mESFaIy9S98DD9BZ9CSH4yVXmq1FGXoaN7YO4CSI4ScL6spBRq9G39WDJxnX', '7', 1, NULL, 1, 0, '2019-04-04 13:09:09', '2019-04-25 10:48:23'),
 (40, 1712755105421, 'DaftPunk_dev8', 'daft', 'Punk', 'dev88@iapptechnologies.com', '$2y$10$0Gl8YSLuRMcmkivxWmWDxOwOR8a.sq3GuKEYEZYRdkIkgW55YxDie', '8558868399', 'Sector 66, Sahibzada Ajit Singh Nagar, Punjab, India', '76.7350951', '30.6742338', '1555051361.png', NULL, '7', 1, NULL, 1, 0, '2019-04-12 05:32:01', '2019-04-12 10:54:11'),
 (41, 9660943561555, 'Daft-Punk', 'Daft', 'Punk', 'dev8@iapptechnologies.com', '$2y$10$wWa3zchrnhWkp2lve6ZtwehmxEBH2FBp4awI7Uk0jqQJ130OZNrq.', '1234567895', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'Gjl0UFA5w7cjFUKxLcGFNudqNdb8BBySHjc7Xuu1Aj7D8GzYm2WQ1oFpOY8M', '7', 1, '', 1, 1, '2019-04-12 10:55:46', '2019-04-12 13:03:35'),
 (42, 8391526033155, 'yes please', 'roei', 'mizrahi', 'roei@yesplease.co.il', '$2y$10$iY8CFQgbzYB5K1fEpD63xOf872ImH1THPvGfQ70aHhVenUPqEBXVy', '0546612262', 'הדר 60, הרצליה, Israel', '34.8486294', '32.174949', '', 'aq90YiYpjE04siedRKS63p3SZTJO6EcoWYbwyTsf6A4eut1kw0456NR2qFha', '7', 1, NULL, 1, 0, '2019-04-15 14:39:22', '2019-04-21 14:11:42'),
 (43, 8414535940385, 'ewq', 'Common', 'BU', 'ewq@ewq.ewq', '$2y$10$xthsfefpMZjDRBWZEyncPO4N.TV9iGwJK4iLRBcM1pmqqGO1nUXKS', '3333666555', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'D76KEYGfz5tMObdXY4seGuBOfbaUFkAxO96duHWeLVYsxvvlUvZsIsn5pozu', '7', 1, NULL, 0, 0, '2019-04-17 09:47:13', '2019-04-19 12:58:51'),
 (44, 4685627587315, 'Clock', 'clo', 'clo', 'clo@clo.clo', '$2y$10$0y4WqKJ5UI5fBbbyq6lm6O4AqKi1Rhu93CQOETvH2dHDdrqHfe6dq', '324232323', 'Sector 67, Sahibzada Ajit Singh Nagar, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, 'JMWImCtQgQCeQJyOAr7TyJ22RvJFggb1BknUnVF4jDWAkYFv8hGcP8le7JdM', '7', 1, NULL, 0, 0, '2019-04-19 14:01:13', '2019-04-22 10:02:02'),
 (45, 390652611153, 'kapoor', 'kp', 'user', 'kapoor@yopmail.com', '$2y$10$hZTtJqXc/k4HzlcIdIcOoOGOvsLO4apcZ2qRTPt/2gg9P8EOok7xu', '62656546465', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, NULL, '2', 1, NULL, 0, 0, '2019-04-23 09:11:33', '2019-04-23 09:11:45'),
-(46, 389159940865, 'textla', 'text', 'ttt', 'text@yopmail.com', '$2y$10$ZAQpIqY6MWhoVvbMp.uv7usb8.K34KRur4Fi1EWINF0ZQ7oCJuRaW', '66464646465', 'Sector 67, Gurugram, Haryana, India', '77.0607637', '28.386048', NULL, 'xi5CnpYJlZ9Lm6uUc4GljQw3rh5ON41aOuePZRKss8UyEBxaVzr0bzeJ8A63', '7', 1, NULL, 0, 0, '2019-04-24 09:42:18', '2019-04-24 13:02:25');
+(46, 389159940865, 'textla', 'text', 'ttt', 'text@yopmail.com', '$2y$10$ZAQpIqY6MWhoVvbMp.uv7usb8.K34KRur4Fi1EWINF0ZQ7oCJuRaW', '66464646465', 'Sector 67, Gurugram, Haryana, India', '77.0607637', '28.386048', NULL, 'xi5CnpYJlZ9Lm6uUc4GljQw3rh5ON41aOuePZRKss8UyEBxaVzr0bzeJ8A63', '7', 1, NULL, 0, 0, '2019-04-24 09:42:18', '2019-04-24 13:02:25'),
+(47, 6595811788501, 'Ballon Services', 'baloon', 'baloon', 'bal@bal.ball', '$2y$10$7ueJB43.Alv75SM41NtywuBsJOimarClyK53XnC5ZBmAgjWb6W/TK', '7412589630', 'Sector 67, Mohali, Punjab, India', '76.72932329999999', '30.67928239999999', NULL, NULL, '7', 1, NULL, 0, 0, '2019-04-25 08:10:18', '2019-04-25 08:19:26');
 
 -- --------------------------------------------------------
 
@@ -1099,7 +1129,6 @@ INSERT INTO `yp_business_user_categories` (`id`, `business_userid`, `category_id
 (119, 15, 35, 30, 30, 0, '2019-04-04 06:41:21', '2019-04-22 13:01:07', NULL),
 (120, 15, 36, 200, 50, 0, '2019-04-04 06:41:24', '2019-04-22 13:01:07', NULL),
 (121, 15, 37, 500, 300, 0, '2019-04-04 06:41:27', '2019-04-22 13:01:07', NULL),
-(122, 16, 35, 12, 9, 0, '2019-04-04 06:44:16', '2019-04-08 10:16:33', NULL),
 (123, 35, 35, 60, 100, 1, '2019-04-04 12:14:05', '2019-04-04 12:22:49', NULL),
 (126, 35, 36, 200, 50, 1, '2019-04-04 12:14:34', '2019-04-04 12:22:49', NULL),
 (127, 35, 37, 500, 300, 1, '2019-04-04 12:15:24', '2019-04-04 12:22:49', NULL),
@@ -1155,7 +1184,14 @@ INSERT INTO `yp_business_user_categories` (`id`, `business_userid`, `category_id
 (198, 39, 8, 0, 0, 0, '2019-04-22 07:08:47', '2019-04-22 07:08:47', NULL),
 (205, 36, 16, 0, 0, 0, '2019-04-22 08:12:28', '2019-04-22 08:12:28', NULL),
 (206, 39, 35, 0, 0, 0, '2019-04-23 06:52:34', '2019-04-23 06:52:34', NULL),
-(294, 46, 35, 0, 0, 0, '2019-04-24 11:56:06', '2019-04-24 11:56:06', NULL);
+(294, 46, 35, 0, 0, 0, '2019-04-24 11:56:06', '2019-04-24 11:56:06', NULL),
+(303, 21, 39, 0, 0, 0, '2019-04-25 07:53:07', '2019-04-25 07:53:07', NULL),
+(311, 47, 39, 0, 0, 0, '2019-04-25 08:15:55', '2019-04-25 08:15:55', NULL),
+(314, 47, 40, 0, 0, 0, '2019-04-25 10:53:10', '2019-04-25 10:53:10', NULL),
+(321, 16, 35, 0, 0, 0, '2019-04-25 11:30:48', '2019-04-25 11:30:48', NULL),
+(322, 47, 22, 0, 0, 0, '2019-04-25 11:58:31', '2019-04-25 11:58:31', NULL),
+(323, 47, 38, 0, 0, 0, '2019-04-25 11:58:33', '2019-04-25 11:58:33', NULL),
+(329, 16, 38, 0, 0, 0, '2019-04-25 12:28:53', '2019-04-25 12:28:53', NULL);
 
 -- --------------------------------------------------------
 
@@ -1224,7 +1260,10 @@ INSERT INTO `yp_business_user_hashtags` (`id`, `business_userid`, `tag_id`) VALU
 (201, 42, 16),
 (209, 39, 14),
 (210, 39, 15),
-(211, 39, 16);
+(211, 39, 16),
+(212, 47, 14),
+(213, 47, 15),
+(214, 47, 16);
 
 -- --------------------------------------------------------
 
@@ -5064,7 +5103,19 @@ INSERT INTO `yp_form_questions` (`id`, `formid`, `cat_id`, `qid`, `type`, `requi
 (146, 'f_1556103320', 35, 'q_105188', 'textbox', 0, 0, NULL, 'Provide details', NULL, NULL, NULL, NULL, '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
 (147, 'f_1556103320', 35, 'q_108974', 'textbox', 1, 0, NULL, 'textbox', 'place holder', 'this is the description', NULL, NULL, '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
 (148, 'f_1556103320', 35, 'q_105295', 'radio', 0, 0, '[{\"option_name\":\"aaa\",\"option_value\":\"1\"},{\"option_name\":\"bbb\",\"option_value\":\"2\"},{\"option_name\":\"ccc\",\"option_value\":\"3\"},{\"option_name\":\"ddd\",\"option_value\":\"4\"}]', 'this is the radiobox title', NULL, NULL, NULL, NULL, '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
-(149, 'f_1556103320', 35, 'q_100905', 'radio', 0, 1, '[{\"option_name\":\"1\",\"option_value\":\"1\"},{\"option_name\":\"2\",\"option_value\":\"2\"}]', 'manual data', NULL, NULL, NULL, NULL, '2019-04-24 10:55:20', '2019-04-24 10:55:20');
+(149, 'f_1556103320', 35, 'q_100905', 'radio', 0, 1, '[{\"option_name\":\"1\",\"option_value\":\"1\"},{\"option_name\":\"2\",\"option_value\":\"2\"}]', 'manual data', NULL, NULL, NULL, NULL, '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
+(170, 'f_1556180283', 40, 'q_106420', 'radio', 1, 1, '[{\"option_name\":\"Continue\",\"option_value\":\"1\"},{\"option_name\":\"Skip\",\"option_value\":\"2\"},{\"option_name\":\"To see type of device\",\"option_value\":\"3\"}]', 'If you want to Skip, Plese skip question', NULL, NULL, NULL, NULL, '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(171, 'f_1556180283', 40, 'q_107532', 'checkbox', 1, 1, '[{\"option_name\":\"Octa Core performance\",\"option_value\":\"1\"},{\"option_name\":\"Amoled screen\",\"option_value\":\"2\"},{\"option_name\":\"Type C connector\",\"option_value\":\"3\"},{\"option_name\":\"To Go last step,Check this\",\"option_value\":\"4\"}]', 'Key Specification', NULL, NULL, NULL, NULL, '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(172, 'f_1556180283', 40, 'q_101072', 'dropdown', 1, 1, '[{\"option_name\":\"Misc1\",\"option_value\":\"1\"},{\"option_name\":\"Misc2\",\"option_value\":\"23\"},{\"option_name\":\"Misc3\",\"option_value\":\"4\"},{\"option_name\":\"Misc4\",\"option_value\":\"3\"}]', 'Select name of device ?', NULL, NULL, NULL, NULL, '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(173, 'f_1556180283', 40, 'q_105370', 'textbox', 0, 0, NULL, 'Enter Recpient name to send instructions ?', NULL, NULL, NULL, NULL, '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(174, 'f_1556180285', 39, 'q_107008', 'radio', 1, 1, '[{\"option_name\":\"Continue\",\"option_value\":\"1\"},{\"option_name\":\"Skip\",\"option_value\":\"2\"},{\"option_name\":\"To see type of device\",\"option_value\":\"3\"}]', 'If you want to Skip, Plese skip question', NULL, NULL, NULL, NULL, '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(175, 'f_1556180285', 39, 'q_108157', 'checkbox', 1, 1, '[{\"option_name\":\"Hexa Core performace\",\"option_value\":\"1\"},{\"option_name\":\"Oled Screen\",\"option_value\":\"2\"},{\"option_name\":\"Type C connector\",\"option_value\":\"3\"},{\"option_name\":\"To Go last step,Check this\",\"option_value\":\"4\"}]', 'Key Specification', NULL, NULL, NULL, NULL, '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(176, 'f_1556180285', 39, 'q_101723', 'dropdown', 1, 1, '[{\"option_name\":\"Samsung 8\",\"option_value\":\"1\"},{\"option_name\":\"Samsung 8+\",\"option_value\":\"2\"},{\"option_name\":\"Samsung 9\",\"option_value\":\"3\"},{\"option_name\":\"Samsung 9+\",\"option_value\":\"4\"}]', 'Select name of device ?', NULL, NULL, NULL, NULL, '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(177, 'f_1556180285', 39, 'q_104275', 'textbox', 0, 0, NULL, 'Enter Recpient name to send instructions ?', NULL, NULL, NULL, NULL, '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(202, 'f_1556193352', 38, 'q_103815', 'radio', 1, 1, '[{\"option_name\":\"Continue\",\"option_value\":\"1\"},{\"option_name\":\"Skip\",\"option_value\":\"2\"},{\"option_name\":\"To see type of device\",\"option_value\":\"3\"}]', 'If you want to Skip, Plese skip question', NULL, NULL, NULL, NULL, '2019-04-25 11:55:52', '2019-04-25 11:55:52'),
+(203, 'f_1556193352', 38, 'q_105032', 'checkbox', 1, 1, '[{\"option_name\":\"Dual Core performace\",\"option_value\":\"1\"},{\"option_name\":\"FHD screen\",\"option_value\":\"2\"},{\"option_name\":\"Type B connector\",\"option_value\":\"3\"},{\"option_name\":\"Type C Connector\",\"option_value\":\"4\"}]', 'Key Specification', NULL, NULL, NULL, NULL, '2019-04-25 11:55:52', '2019-04-25 11:55:52'),
+(204, 'f_1556193352', 38, 'q_104277', 'dropdown', 1, 1, '[{\"option_name\":\"I-Phone x\",\"option_value\":\"1\"},{\"option_name\":\"I-Phone R\",\"option_value\":\"2\"},{\"option_name\":\"I-Phone 8 plus\",\"option_value\":\"3\"},{\"option_name\":\"I-Phone 8\",\"option_value\":\"4\"}]', 'Select name of device ?', NULL, NULL, NULL, NULL, '2019-04-25 11:55:52', '2019-04-25 11:55:52'),
+(205, 'f_1556193352', 38, 'q_105634', 'textbox', 0, 0, NULL, 'Enter Recpient name to send instructions ?', NULL, NULL, NULL, NULL, '2019-04-25 11:55:52', '2019-04-25 11:55:52');
 
 -- --------------------------------------------------------
 
@@ -5444,7 +5495,13 @@ CREATE TABLE `yp_ques_jumps` (
 
 INSERT INTO `yp_ques_jumps` (`id`, `q_id`, `operator`, `value`, `jump_to`, `created_at`, `updated_at`) VALUES
 (7, 145, 1, '1', 'q_105188', '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
-(8, 145, 1, '2', 'q_105295', '2019-04-24 10:55:20', '2019-04-24 10:55:20');
+(8, 145, 1, '2', 'q_105295', '2019-04-24 10:55:20', '2019-04-24 10:55:20'),
+(19, 170, 1, '2', '0', '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(20, 170, 1, '3', 'q_101072', '2019-04-25 08:18:03', '2019-04-25 08:18:03'),
+(21, 174, 1, '2', '0', '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(22, 174, 1, '3', 'q_101723', '2019-04-25 08:18:05', '2019-04-25 08:18:05'),
+(35, 202, 1, '2', '0', '2019-04-25 11:55:52', '2019-04-25 11:55:52'),
+(36, 202, 1, '3', 'q_104277', '2019-04-25 11:55:52', '2019-04-25 11:55:52');
 
 -- --------------------------------------------------------
 
@@ -5842,12 +5899,12 @@ ALTER TABLE `yp_admins`
 -- AUTO_INCREMENT for table `yp_business_categories`
 --
 ALTER TABLE `yp_business_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT for table `yp_business_details`
 --
 ALTER TABLE `yp_business_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `yp_business_products`
 --
@@ -5857,12 +5914,12 @@ ALTER TABLE `yp_business_products`
 -- AUTO_INCREMENT for table `yp_business_products_promote`
 --
 ALTER TABLE `yp_business_products_promote`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `yp_business_selected_services`
 --
 ALTER TABLE `yp_business_selected_services`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
 --
 -- AUTO_INCREMENT for table `yp_business_sub_categories`
 --
@@ -5872,12 +5929,12 @@ ALTER TABLE `yp_business_sub_categories`
 -- AUTO_INCREMENT for table `yp_business_super_categories`
 --
 ALTER TABLE `yp_business_super_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `yp_business_users`
 --
 ALTER TABLE `yp_business_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT for table `yp_business_users_questions`
 --
@@ -5892,7 +5949,7 @@ ALTER TABLE `yp_business_users_quotes`
 -- AUTO_INCREMENT for table `yp_business_user_categories`
 --
 ALTER TABLE `yp_business_user_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=297;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=330;
 --
 -- AUTO_INCREMENT for table `yp_business_user_cc_details`
 --
@@ -5902,7 +5959,7 @@ ALTER TABLE `yp_business_user_cc_details`
 -- AUTO_INCREMENT for table `yp_business_user_hashtags`
 --
 ALTER TABLE `yp_business_user_hashtags`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=215;
 --
 -- AUTO_INCREMENT for table `yp_business_user_quotes_reply`
 --
@@ -5942,7 +5999,7 @@ ALTER TABLE `yp_campaign_impression`
 -- AUTO_INCREMENT for table `yp_form_questions`
 --
 ALTER TABLE `yp_form_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 --
 -- AUTO_INCREMENT for table `yp_general_users`
 --
@@ -5967,7 +6024,7 @@ ALTER TABLE `yp_hashtag`
 -- AUTO_INCREMENT for table `yp_ques_jumps`
 --
 ALTER TABLE `yp_ques_jumps`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `yp_users`
 --

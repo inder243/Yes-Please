@@ -166,7 +166,7 @@
 			if (typeOfField == "textbox" || typeOfField == "textarea" || typeOfField == "number" || typeOfField == "range") {
 				var field = {};
 				//get title of question
-				var title = $(this).find('.title').val();
+				var title = $.trim($(this).find('.title').val());
 				if (title == '') {
 					validate = false;
 					$(this).find('.title').css('border', '1px solid #c00');
@@ -174,11 +174,11 @@
 					$(this).find('.title').removeAttr('style');
 				}
 				//get placeholder
-				var placeholder = $(this).find('.placeholder').val();
+				var placeholder = $.trim($(this).find('.placeholder').val());
 				//get description
-				var description = $(this).find('.description').val();
+				var description = $.trim($(this).find('.description').val());
 				//get min value
-				var min = $(this).find('.minlen').val();
+				var min = $.trim($(this).find('.minlen').val());
 
 				//if(min!='' && !($.isNumeric(min)))
 				if (min.length > 0 && !($.isNumeric(min))) {
@@ -186,7 +186,7 @@
 				}
 
 				//get max value
-				var max = $(this).find('.maxlen').val();
+				var max = $.trim($(this).find('.maxlen').val());
 
 				if (max.length > 0 && !($.isNumeric(max))) {
 					numvalidate = false;
@@ -211,7 +211,7 @@
 			else if (typeOfField == "datepicker" || typeOfField == "timepicker") {
 				var field = {};
 				//get title of question
-				var title = $(this).find('.title').val();
+				var title = $.trim($(this).find('.title').val());
 				if (title == '') {
 					validate = false;
 					$(this).find('.title').css('border', '1px solid #c00');
@@ -240,7 +240,7 @@
 				var is_filter = $(this).find('.is_filter').is(':checked');
 				var field = {};
 				//get title of question
-				var title = $(this).find('.title').val();
+				var title = $.trim($(this).find('.title').val());
 				if (title == '') {
 					validate = false;
 					$(this).find('.title').css('border', '1px solid #c00');
@@ -263,7 +263,7 @@
 				$(this).find('.multi-field').each(function() {
 					var option = {};
 					//get name of each option
-					option['option_name'] = $(this).find('.option_name').val();
+					option['option_name'] = $.trim($(this).find('.option_name').val());
 					if (option['option_name'] == '') {
 						validate = false;
 						$(this).find('.option_name').css('border', '1px solid #c00');
@@ -271,7 +271,7 @@
 						$(this).find('.option_name').removeAttr('style');
 					}
 					//get value of each option
-					option['option_value'] = $(this).find('.option_value').val();
+					option['option_value'] = $.trim($(this).find('.option_value').val());
 					if (option['option_value'] == '') {
 						validate = false;
 						$(this).find('.option_value').css('border', '1px solid #c00');
@@ -293,7 +293,7 @@
 				$(this).find('.logic_jump').each(function() {
 					var cond = {};
 					cond['operator'] = $(this).find('.operator').val();
-					cond['condvalue'] = $(this).find('.condvalue').val();
+					cond['condvalue'] = $.trim($(this).find('.condvalue').val());
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
 					cond['queslist'] = $(this).find('.queslist').val();
 
@@ -347,7 +347,7 @@
 				var is_filter = $(this).find('.is_filter').is(':checked');
 				var field = {};
 				//get title of question
-				var title = $(this).find('.title').val();
+				var title = $.trim($(this).find('.title').val());
 				if (title == '') {
 					validate = false;
 					$(this).find('.title').css('border', '1px solid #c00');
@@ -369,7 +369,7 @@
 				$(this).find('.multi-field').each(function() {
 					var option = {};
 					//get name of each option
-					option['option_name'] = $(this).find('.radio_name').val();
+					option['option_name'] = $.trim($(this).find('.radio_name').val());
 					if (option['option_name'] == '') {
 						validate = false;
 						$(this).find('.radio_name').css('border', '1px solid #c00');
@@ -377,7 +377,7 @@
 						$(this).find('.radio_name').removeAttr('style');
 					}
 					//get value of each option
-					option['option_value'] = $(this).find('.radio_value').val();
+					option['option_value'] = $.trim($(this).find('.radio_value').val());
 					if (option['option_value'] == '') {
 						validate = false;
 						$(this).find('.radio_value').css('border', '1px solid #c00');
@@ -397,7 +397,7 @@
 				$(this).find('.logic_jump').each(function() {
 					var cond = {};
 					cond['operator'] = $(this).find('.operator').val();
-					cond['condvalue'] = $(this).find('.condvalue').val();
+					cond['condvalue'] = $.trim($(this).find('.condvalue').val());
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
 					cond['queslist'] = $(this).find('.queslist').val();
 
@@ -448,7 +448,7 @@
 				var is_filter = $(this).find('.is_filter').is(':checked');
 				var field = {};
 				//get title of question
-				var title = $(this).find('.title').val();
+				var title = $.trim($(this).find('.title').val());
 				if (title == '') {
 					validate = false;
 					$(this).find('.title').css('border', '1px solid #c00');
@@ -469,7 +469,7 @@
 				$(this).find('.multi-field').each(function() {
 					var option = {};
 					//get name of each option
-					option['option_name'] = $(this).find('.dropdown_name').val();
+					option['option_name'] = $.trim($(this).find('.dropdown_name').val());
 					if (option['option_name'] == '') {
 						validate = false;
 						$(this).find('.dropdown_name').css('border', '1px solid #c00');
@@ -477,7 +477,7 @@
 						$(this).find('.dropdown_name').removeAttr('style');
 					}
 					//get name of value option
-					option['option_value'] = $(this).find('.dropdown_value').val();
+					option['option_value'] = $.trim($(this).find('.dropdown_value').val());
 					if (option['option_value'] == '') {
 						validate = false;
 						$(this).find('.dropdown_value').css('border', '1px solid #c00');
@@ -498,7 +498,7 @@
 				$(this).find('.logic_jump').each(function() {
 					var cond = {};
 					cond['operator'] = $(this).find('.operator').val();
-					cond['condvalue'] = $(this).find('.condvalue').val();
+					cond['condvalue'] = $.trim($(this).find('.condvalue').val());
 					cond['finalchoice'] = $(this).find('.finalchoice').val();
 					cond['queslist'] = $(this).find('.queslist').val();
 
@@ -614,3 +614,13 @@ $( function() {
 		connectWith: ".sortable"
 	}).disableSelection();
 } );
+
+$('input').keypress(function( e ) 
+{
+	if($(this).val()=='')
+  {
+  	if(e.which === 32) 
+        return false;
+  }
+    
+});

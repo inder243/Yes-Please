@@ -48,7 +48,7 @@
                   <h2>Budget left</h2>
                   <h1>Budget left</h1>
                 </div>
-                <div class="total_number total_number_budget">
+                <div class="total_number">
                   <h1>NIS @if(isset($monthlyBudget['updated_wallet_amount'])){{$monthlyBudget['updated_wallet_amount']}}@endif</h1>
                 </div>
                 <div class="Qlink"><p>Manage</p></div>
@@ -90,7 +90,7 @@
           </div>
           <div class="col-md-3 col-6 padding_lt">
             <div class="dashboard_box">
-              <a href="javascript:;" class="Events_bg">
+              <a href="{{ url('/business_user/events') }}" class="Events_bg">
                 <div class="box_heading">
                   <h2>Events</h2>
                   <h1>Events</h1>

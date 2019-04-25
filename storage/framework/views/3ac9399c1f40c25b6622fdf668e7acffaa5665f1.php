@@ -17,6 +17,12 @@
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/root_size.css')); ?>" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/swiper.css')); ?>" type="text/css">
+    <?php if (strpos($_SERVER['REQUEST_URI'], "products") !== false){
+        $page_type ='top_products';
+    }?>
+    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'top_products')): ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('css/jquery.ui.css')); ?>" type="text/css">
+    <?php endif; ?>  
    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" />
  -->
 </head>
@@ -410,8 +416,6 @@
                                             <option value="" selected disabled="" title="Choose Price per">Choose</option>
                                             <option value="1">Hour</option>
                                             <option value="2">Minute</option>
-                                            <option value="3">Second</option>
-                                            <option value="4">Day</option>
                                         </select>
                                         <span class="select_arrow-new"><img src="<?php echo e(asset('img/custom_arrow.png')); ?>" class="img-fluid"></span>
                                     </div>
@@ -607,6 +611,57 @@
     </div>
 </form>
 <!------Edit product modal ends here-------->
+
+<!--------Promote product popup--------->
+<div class="modal fade" id="promote-popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header ad_header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ad-header-body">
+                <div class="p-heading promote_heading"><h1>Promote replacing iPhone screen</h1></div>
+                <div class="upper-catergory">
+                    <div class="row">
+                        <div class="col-md-12 col-12">
+                            <div class="form-group">
+                                <label for="inputEmail4">Pay per click bid(NIS)</label>
+                                <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control pay_per_click" name="pay_per_click" id="inputEmail4" value="" onkeyup="removeErrMessge(this);">
+                                <span class="fill_fields pay_per_click_error" role="alert" style="display:none;"></span>
+                                <span class="suggestbid">Suggested bid - 1.3 NIS</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <div class="form-group">
+                                <label for="inputEmail4">Daily budget</label>
+                                <input type="number" onKeyPress="if(this.value.length==7) return false;" onkeydown="javascript: return event.keyCode == 69 ? false : true" class="form-control daily_budget" name="daily_budget" id="inputEmail4" value="" onkeyup="removeErrMessge(this);">
+                                <span class="fill_fields daily_budget_error" role="alert" style="display:none;"></span>
+                                <span class="suggestbid">Miminum - 10 NIS</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <div class="form-group position-relative">
+                                <label for="enddate_promote">End date</label>
+                                <input type="text" class="form-control promote_end_date" name="promote_end_date" id="enddate_promote" value="" onkeyup="removeErrMessge(this);">
+                                <span class="fill_fields end_date_error" role="alert" style="display:none;"></span>
+                                <span class="cal-img img_datepicker"><img src="<?php echo e(asset('img/calendar_img.png')); ?>"/></span>
+                            </div>
+                        </div>
+                        <div class="col-12 promote-product">
+                            <p>Promoting product will reveal your product in relevant categories attaching more users to your product.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="start-btn"><input type="submit" data-product_id="" value="Start" class="promote_product_submit" onclick="savePromoteProduct(this);"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--------Promote product popup ends--------->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -622,6 +677,13 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_question.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_products.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/swiper.js')); ?>" type="text/javascript"></script>
+    <?php if (strpos($_SERVER['REQUEST_URI'], "products") !== false){
+        $page_type ='top_products';
+    }?>
+    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'top_products')): ?>
+    <script src="<?php echo e(URL::asset('js/jquery.ui.js')); ?>"></script>
+    <?php endif; ?>
+    
 
      <script>
          var swiper = new Swiper('.swiper-container', {

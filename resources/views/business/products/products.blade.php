@@ -44,12 +44,13 @@
 										$count_imgs = 0;
 									}
 									?>
+									<!--- data-toggle="modal" data-target="#promote-popup"-->
 									<tr class="product_{{$key}}">
 										<td>{{$product['name']}}</td>
 										<td>{{$product['get_cat_name']['category_name']}}</td>
 										<td>{{$product['price']}}</td>
 										<td>{{$count_imgs}}</td>
-										<td><a href="javascript:;" class=add-sechdule data-toggle="modal" data-target="#promote-popup">Promote</a></td>
+										<td><a href="javascript:;" class="add-sechdule promote_products" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" onclick="openPromoteModal(this);">Promote</a></td>
 										<td><a href="javascript:;" class=add-sechdule>Show</a></td>
 										<td>
 											<div class="diff-icons-del">

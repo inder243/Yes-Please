@@ -206,6 +206,11 @@ Route::prefix('business_user')->group(function() {
     Route::post('/delete_product',
    'business_user\BusinessProductsController@deleteProduct')->name('business_user.deleteProduct');
     Route::post('/removeproductimg', 'business_user\BusinessProductsController@removeProductelectedImages')->name('business_user.removeproductimg');
+    Route::post('/openPromotProduct', 'business_user\BusinessProductsController@openProductelectedImages')->name('business_user.openproductimg');
+    Route::post('/addPromotProduct', 'business_user\BusinessProductsController@addPromoteProducts')->name('business_user.addpromoteproducts');
+
+    /////events/////////
+    Route::get('/events', 'business_user\EventsController@getEvents');
     
   });
 

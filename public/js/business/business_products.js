@@ -69,6 +69,7 @@ function openAddProducts(abc){
 			}
 
 		},/***success ends here**/
+		error:function(){ jQuery('.pre_loader').css('display','none');}
 	});/***ajax ends here**/
 }/***openAddProducts fn ends here***/
 
@@ -164,6 +165,7 @@ function openEditProductModal(data){
 			}
 
 		},/***success ends here**/
+		error:function(){ jQuery('.pre_loader').css('display','none');}
 	});/***ajax ends here**/
 }/****edit product ends***/
 
@@ -387,6 +389,7 @@ function deleteProduct(data){
 			}
 
 		},/***success ends here**/
+		error:function(){ jQuery('.pre_loader').css('display','none');}
 	});/***ajax ends here**/
 }/****delete product ends here****/
 
@@ -395,25 +398,180 @@ function deleteProductSelectedImg(dimg){
 
 	var img_name = $(dimg).attr('data-img');
 	var product_id = $(dimg).attr('data-product_id');
-
+	var home_url = $('#home_url').val();
 	$.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+	jQuery('.pre_loader').css('display','block');
 	$.ajax({
 		url: home_url+'business_user/removeproductimg',
 		type: 'POST',
 		data:{img_name:img_name,product_id:product_id},
 		success:function(response){
-
+			jQuery('.pre_loader').css('display','none');
 			if(response.success == 1){
 
 				var image_name = img_name.split(".");
 				$('.photo_video_list ul').find('#img_'+image_name[0]).remove();
 			}
 			
-		}
+		},
+		error:function(){ jQuery('.pre_loader').css('display','none');}
 	});/**ajax ends here**/	
 }/****delete selected img fn ends here***/
+
+/****modal to open promote products popup****/
+function openPromoteModal(data){
+
+	var myProductId = $(data).attr('data-product_id');
+	var myProductName = $(data).attr('data-product_name');
+
+	var home_url = $('#home_url').val();
+	$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+	jQuery('.pre_loader').css('display','block');
+	$.ajax({
+		url: home_url+'business_user/openPromotProduct',
+		type: 'POST',
+		data:{product_id:myProductId},
+		success:function(response){
+			jQuery('.pre_loader').css('display','none');
+			if(response.success == 1){
+				$('#promote-popup').find(".modal-body").find('.promote_product_submit').attr('data-product_id','' );
+			    $('#promote-popup').find(".modal-body").find('.promote_product_submit').attr('data-product_id',myProductId);
+			    $('#promote-popup').find(".promote_heading h1").text('');
+			    $('#promote-popup').find(".promote_heading h1").text('Promote '+myProductName);
+
+			    $('#promote-popup').find(".modal-body").find('.pay_per_click').val('');
+			    $('#promote-popup').find(".modal-body").find('.pay_per_click').val(response.pay_per_click);
+			    $('#promote-popup').find(".modal-body").find('.daily_budget').val('');
+			    $('#promote-popup').find(".modal-body").find('.daily_budget').val(response.daily_budget);
+			    $('#promote-popup').find(".modal-body").find('.promote_end_date').val('');
+			    $('#promote-popup').find(".modal-body").find('.promote_end_date').val(response.end_date);
+				// it is unnecessary to have to manually call the modal.
+				$('#promote-popup').modal('show');
+			}
+
+			if(response.success == 2){
+				$('#promote-popup').find(".modal-body").find('.promote_product_submit').attr('data-product_id','' );
+			    $('#promote-popup').find(".modal-body").find('.promote_product_submit').attr('data-product_id',myProductId);
+			    $('#promote-popup').find(".promote_heading h1").text('');
+			    $('#promote-popup').find(".promote_heading h1").text('Promote '+myProductName);
+
+			    $('#promote-popup').find(".modal-body").find('.pay_per_click').val('');
+			    $('#promote-popup').find(".modal-body").find('.daily_budget').val('');
+			    $('#promote-popup').find(".modal-body").find('.promote_end_date').val('');
+				// it is unnecessary to have to manually call the modal.
+				$('#promote-popup').modal('show');
+			}
+			
+		},
+		error:function(){ jQuery('.pre_loader').css('display','none');}
+	});/**ajax ends here**/
+
+    
+}/***promote products modal fn ends***/
+
+/****fn to add datepicker on promte products modal***/
+$( function() {
+    $( "#enddate_promote" ).datepicker();//intialize datepicker
+    $( "#enddate_promote" ).datepicker( "option", "dateFormat",'yy-mm-dd');//set format
+    $( "#enddate_promote" ).datepicker( "option",  "minDate", "+1" );//hide past and today date
+
+
+	
+});/****fn to add datepicker ends here***/
+
+
+function savePromoteProduct(data){
+	var product_id 		= $(data).attr('data-product_id');
+	var pay_per_click 	= $('#promote-popup').find('.pay_per_click').val();
+
+	if(pay_per_click == ''){
+		$('#promote-popup').find('.pay_per_click').addClass('error_border');
+		$('#promote-popup').find('.pay_per_click_error').css('display','block');
+		$('#promote-popup').find('.pay_per_click_error').text('');
+		$('#promote-popup').find('.pay_per_click_error').text('Please add pay per click value.');
+		return false;
+	}else if(pay_per_click < 1.3 ){
+		$('#promote-popup').find('.pay_per_click').addClass('error_border');
+		$('#promote-popup').find('.pay_per_click_error').css('display','block');
+		$('#promote-popup').find('.pay_per_click_error').text('');
+		$('#promote-popup').find('.pay_per_click_error').text('Please add min of 1.3 NIS.');
+		return false;
+	}else{
+		$('#promote-popup').find('.pay_per_click').removeClass('error_border');
+		$('#promote-popup').find('.pay_per_click_error').css('display','none');
+		$('#promote-popup').find('.pay_per_click_error').text('');
+	}
+
+	var daily_budget = $('#promote-popup').find('.daily_budget').val();
+
+	if(daily_budget == ''){
+		$('#promote-popup').find('.daily_budget').addClass('error_border');
+		$('#promote-popup').find('.daily_budget_error').css('display','block');
+		$('#promote-popup').find('.daily_budget_error').text('');
+		$('#promote-popup').find('.daily_budget_error').text('Please add daily budget.');
+		return false;
+	}else if(daily_budget < 10){
+		$('#promote-popup').find('.daily_budget').addClass('error_border');
+		$('#promote-popup').find('.daily_budget_error').css('display','block');
+		$('#promote-popup').find('.daily_budget_error').text('');
+		$('#promote-popup').find('.daily_budget_error').text('Please add minimum of 10 NIS value.');
+		return false;
+	}else{
+		$('#promote-popup').find('.daily_budget').removeClass('error_border');
+		$('#promote-popup').find('.daily_budget_error').css('display','none');
+		$('#promote-popup').find('.daily_budget_error').text('');
+	}
+
+	if(pay_per_click > daily_budget){
+		$('#promote-popup').find('.daily_budget').addClass('error_border');
+		$('#promote-popup').find('.daily_budget_error').css('display','block');
+		$('#promote-popup').find('.daily_budget_error').text('');
+		$('#promote-popup').find('.daily_budget_error').text('Daily budget should be greater than pay per click.');
+		return false;
+	}
+
+	var end_date = $('#promote-popup').find('.promote_end_date').val();
+
+	if(end_date == ""){
+		$('#promote-popup').find('.promote_end_date').addClass('error_border');
+		$('#promote-popup').find('.end_date_error').css('display','block');
+		$('#promote-popup').find('.end_date_error').text('');
+		$('#promote-popup').find('.end_date_error').text('Please select end date.');
+		return false;
+	}else{
+		$('#promote-popup').find('.promote_end_date').removeClass('error_border');
+		$('#promote-popup').find('.end_date_error').css('display','none');
+		$('#promote-popup').find('.end_date_error').text('');
+	}
+
+	var home_url = $('#home_url').val();
+	$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+	jQuery('.pre_loader').css('display','block');
+	$.ajax({
+		url: home_url+'business_user/addPromotProduct',
+		type: 'POST',
+		data:{pay_per_click:pay_per_click,daily_budget:daily_budget,end_date:end_date,product_id:product_id},
+		success:function(response){
+			jQuery('.pre_loader').css('display','none');
+			if(response.success == 1){
+				alert(response.message);
+				location.reload(true);
+			}
+			
+		},
+		error:function(){ jQuery('.pre_loader').css('display','none');}
+	});/**ajax ends here**/	
+
+}

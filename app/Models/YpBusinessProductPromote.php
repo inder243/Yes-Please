@@ -15,4 +15,12 @@ class YpBusinessProductPromote extends Authenticatable
     protected $hidden = [
        // 'remember_token',
     ];
+
+    public function get_product(){
+    	return $this->belongsTo('App\Models\BusinessProducts','product_id','id');
+    }
+
+    public function get_business(){
+        return $this->belongsTo('App\Models\YpBusinessUsers','business_id','id');
+    }
 }

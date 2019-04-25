@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\YpBusinessUsers;
 use App\Models\BusinessProducts;
 use App\Models\YpBusinessCategories;
+use App\Models\YpBusinessProductPromote;
+use App\Models\YpBusinessUserCategories;
 use File;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -44,15 +46,16 @@ class BusinessProductsController extends Controller
     **fn to get categories to display on add product popup
     ****/
     public function getCategories(){
-
-        $allCategories = YpBusinessCategories::get()->toArray();
-
+        $b_id            = Auth::user()->id;
+      
+        $allCategories = YpBusinessUserCategories::with('get_category')->where('business_userid',$b_id)->get()->toArray();
+        
         /***make html for all category list***/
         $cat_html = '<option value="" selected disabled>Choose Category</option>';
 
         if(!empty($allCategories)){
             foreach($allCategories as $cat_key=>$cat_value){
-                $cat_html .= '<option data-supercat_id ="'.$cat_value['super_cat_id'].'" data-cat_id = "'.$cat_value['category_id'].'" value="'.$cat_value['id'].'">'.$cat_value['category_name'].'</option>';
+                $cat_html .= '<option data-supercat_id ="'.$cat_value['get_category']['super_cat_id'].'" data-cat_id = "'.$cat_value['get_category']['category_id'].'" value="'.$cat_value['category_id'].'">'.$cat_value['get_category']['category_name'].'</option>';
             }
 
             return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html]);
@@ -478,4 +481,60 @@ class BusinessProductsController extends Controller
 
         }/****end of isset****/
     }/***remove selected product images ends here**/
+
+    /*******
+    ***Open promote products popup
+    ******/
+    public function openProductelectedImages(Request $request){
+        if(isset($_POST)){
+            $b_id           = Auth::user()->id;
+            $product_id     = $request->product_id;
+
+            $check_promoteProductData = YpBusinessProductPromote::where(['product_id'=>$product_id,'business_id'=>$b_id])->first();
+
+            if(!empty($check_promoteProductData)){
+                $pay_per_click  = $check_promoteProductData->pay_per_click;
+                $daily_budget   = $check_promoteProductData->daily_budget;
+                $end_date       = $check_promoteProductData->end_date;
+
+                return response()->json(['success'=>'1','message'=>'Successfully Added','pay_per_click'=>$pay_per_click,'daily_budget'=>$daily_budget,'end_date'=>$end_date]);
+            }else{
+                return response()->json(['success'=>'2','message'=>'No data Found']);
+            }
+
+        }/***if isset ends here***/
+    }/**open promote products ends**/
+
+    /********
+    ***Add promote products
+    ********/
+    public function addPromoteProducts(Request $request){
+        if(isset($_POST)){
+            $b_id           = Auth::user()->id;
+            $pay_per_click  = $request->pay_per_click;
+            $daily_budget   = $request->daily_budget;
+            $end_date       = $request->end_date;
+            $product_id     = $request->product_id;
+            
+            $check_promoteProductData = YpBusinessProductPromote::where(['product_id'=>$product_id,'business_id'=>$b_id])->first();
+
+            if(empty($check_promoteProductData)){
+                $YpBusinessProductPromote = new YpBusinessProductPromote;
+
+                $YpBusinessProductPromote->product_id       = $product_id;
+                $YpBusinessProductPromote->business_id      = $b_id;
+                $YpBusinessProductPromote->pay_per_click    = $pay_per_click;
+                $YpBusinessProductPromote->daily_budget     = $daily_budget;
+                $YpBusinessProductPromote->end_date         = $end_date;
+                $YpBusinessProductPromote->save();
+
+                return response()->json(['success'=>'1','message'=>'Successfully Added']);
+            }else{
+                $update = array('pay_per_click' => $pay_per_click,'daily_budget' => $daily_budget,'end_date'=>$end_date);
+                YpBusinessProductPromote::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+                return response()->json(['success'=>'1','message'=>'Successfully updated']);
+            }
+
+        }/**if isset ends here**/
+    }/****add promote products ends here****/
 }

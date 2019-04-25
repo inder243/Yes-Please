@@ -834,3 +834,17 @@ a.business_answer {
 .product_img_ul li{
     padding: 10px 0px 10px 0px;
 }
+.next_btn a:hover {
+   
+    text-decoration: none;
+}
+
+
+.ele_pre a:hover {
+   
+    text-decoration: none;
+}
+.rdlist li
+{
+    width:100%;
+}

@@ -171,9 +171,8 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <select class="form-control finalchoice" onchange="showqueslist(this);">
-                                                                                    <option value="0">Make a selection</option>
                                                                                     <option value="1" @if($logicjump['jump_to']!='' && $logicjump['jump_to']!="0") selected @endif>GO TO</option>
-                                                                                    <option value="2">Finish</option>
+                                                                                    <option value="2" @if($logicjump['jump_to']=="0") selected @endif>Finish</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="action_button">

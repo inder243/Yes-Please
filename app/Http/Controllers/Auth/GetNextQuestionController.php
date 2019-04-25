@@ -48,13 +48,15 @@ class GetNextQuestionController extends Controller
             $arrowImg= url('/').'/img/custom_arrow.png';
             $nextId ='';
             $html='';
-            $quesId = $request->qid;//get question id
+             $quesId = $request->qid;//get question id
             $qid = $request->qid;//get question id
             $value = $request->value;//get value 
             $catid = $request->catid;//get cat id
 
             //get logic jump of given question
             $getJumpQuestion = YpQuesJumps::where(array('q_id'=>$quesId))->first();
+
+            
 
             if(!empty($getJumpQuestion))
             {
@@ -91,7 +93,7 @@ class GetNextQuestionController extends Controller
                 {
                     $jumpToQuestionId = $getNextQuestion['jump_to'];
 
-                    
+
 
                     if($jumpToQuestionId!='')
                     {
@@ -163,7 +165,7 @@ class GetNextQuestionController extends Controller
                                
                                 if(isset($options) && !empty($options))
                                 {
-                                    $html.='<div class="total_quote dynamic_rad"><ul>';
+                                    $html.='<div class="total_quote dynamic_rad"><ul class="rdlist">';
                                     foreach($options as $option)
                                     {
                                         $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
@@ -232,15 +234,20 @@ class GetNextQuestionController extends Controller
                         
                        
                     }
+                    
 
                     
                 }
-
+                else
+                {
+                    goto nxtques;
+                }
                 
                
             }
             else
             {
+               nxtques:
                 $getJumpQuestion = DB::select(DB::raw('select * from yp_form_questions where id = (select min(id) from yp_form_questions where id > '.$quesId.') and cat_id='.$catid.''));
 
                 //echo "<pre>";
@@ -316,7 +323,7 @@ class GetNextQuestionController extends Controller
                         
                         if(isset($options) && !empty($options))
                         {
-                            $html.='<div class="total_quote dynamic_rad"><ul>';
+                            $html.='<div class="total_quote dynamic_rad"><ul class="rdlist">';
                             foreach($options as $option)
                             {
                                 $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';

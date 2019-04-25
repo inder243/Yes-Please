@@ -21,6 +21,8 @@ use App\Models\YpBusinessUsers;
 use App\Models\YpCampaignImpression;
 use App\Models\YpGeneralUsersQuestions;
 use App\Models\YpBusinessUsersQuestions;
+use App\Models\YpBusinessProductPromote;
+use App\Models\BusinessProducts;
 use DB;
 
 class GeneralUserLoginController extends Controller
@@ -161,7 +163,7 @@ class GeneralUserLoginController extends Controller
                               FROM yp_business_user_transactions where yp_business_user_transactions.transaction_made_on=CURDATE()  and yp_business_user_transactions.b_id='.$buid.' and yp_business_user_transactions.reason_of_deduction=4
                               GROUP BY yp_business_user_transactions.camp_id
                             ) s ON (yp_campaign_detail.id = s.camp_id) 
-                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.')   group by yp_campaign_detail.id order by pay_per_click desc,yp_campaign_detail.id asc'));
+                        where yp_campaign_detail.status=1 and yp_campaign_detail.end_date>=CURDATE() and yp_campaign_detail.b_id='.$buid.' and yp_campaign_detail.pay_per_click<=(select updated_wallet_amount from yp_business_user_cc_details where yp_business_user_cc_details.b_id='.$buid.') and yp_campaign_detail.id in(SELECT camp_id FROM `yp_campaign_category` where  yp_campaign_category.cat_id='.$catid.' and yp_campaign_category.b_id ='.$buid.') group by yp_campaign_detail.id order by pay_per_click desc,yp_campaign_detail.id asc'));
 
                       /* echo "<pre>";
                      print_r($validAds);*/
@@ -169,29 +171,27 @@ class GeneralUserLoginController extends Controller
                         {
                             foreach($validAds as $validAd)
                             {
-                              
-
                                 if($validAd->daily_budget > $validAd->sumofday)
                                 {
-                                    $adsTo['buid'] = $result->id;
-                                    $adsTo['pay_per_click'] = $validAd->pay_per_click;
-                                    $adsTo['campid'] = $validAd->campid;
-                                    $adsTo['camp_name'] = $validAd->name;
-                                    $adsTo['business_name'] = $result->business_name;
-                                    $adsTo['business_userid'] = $result->business_userid;
-                                    $adsTo['image_name'] = $result->image_name;
-                                    $adsTo['phone_number'] = $result->phone_number;
-                                    $adsTo['full_address'] = $result->full_address;
-                                    $adsTo['id'] = $result->id;
-                                    $adsTo['category_name'] = $result->category_name;
-                                    $adsTo['tot_rating'] = $result->tot_rating;
-                                    $adsTo['tot_review'] = $result->tot_review;
-                                    $adsTo['logitude'] = $result->logitude;
-                                    $adsTo['latitude'] = $result->latitude;
-                                    $adsTo['BUkms'] = $result->BUkms;
-                                    $adsTo['cid']= $result->cid;
-                                    $adsTo['distance']= $result->distance;
-                                    $adsToShow[] = $adsTo;
+                                    $adsTo['buid']              = $result->id;
+                                    $adsTo['pay_per_click']     = $validAd->pay_per_click;
+                                    $adsTo['campid']            = $validAd->campid;
+                                    $adsTo['camp_name']         = $validAd->name;
+                                    $adsTo['business_name']     = $result->business_name;
+                                    $adsTo['business_userid']   = $result->business_userid;
+                                    $adsTo['image_name']        = $result->image_name;
+                                    $adsTo['phone_number']      = $result->phone_number;
+                                    $adsTo['full_address']      = $result->full_address;
+                                    $adsTo['id']                = $result->id;
+                                    $adsTo['category_name']     = $result->category_name;
+                                    $adsTo['tot_rating']        = $result->tot_rating;
+                                    $adsTo['tot_review']        = $result->tot_review;
+                                    $adsTo['logitude']          = $result->logitude;
+                                    $adsTo['latitude']          = $result->latitude;
+                                    $adsTo['BUkms']             = $result->BUkms;
+                                    $adsTo['cid']               = $result->cid;
+                                    $adsTo['distance']          = $result->distance;
+                                    $adsToShow[]                = $adsTo;
 
                                     //save impression
                                     /*$YpCampaignImpression = new YpCampaignImpression;
@@ -212,8 +212,15 @@ class GeneralUserLoginController extends Controller
                     }
 
                     $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
+
+
+                    /****Get 2 products which have higher pay per click***/
+                    $get_products = YpBusinessProductPromote::with('get_product','get_business')->whereHas('get_product', function ($query) use($categoryId) {
+                        $query->where('category_id', '=', $categoryId);
+                    })->orderby('pay_per_click','desc')->limit('2')->get()->toArray();
+                    
                 //echo "<pre>";print_r($results);die;
-                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId,'adsToShow'=>$adsToShow));
+                return view('/user/user_dashboard_ajax')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId,'adsToShow'=>$adsToShow,'get_products'=>$get_products));
 
                 }catch(\Exception $e){
                     return response()->json(['success'=>'0','message'=>$e->getMessage()]);  
@@ -389,8 +396,15 @@ class GeneralUserLoginController extends Controller
 
                    
                     $results = DB::select(DB::raw('SELECT user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id INNER JOIN yp_business_users as user ON buc.business_userid = user.id INNER JOIN yp_business_details as detail ON user.business_userid = detail.business_userid WHERE bcat.id= '.$categoryId.' GROUP BY user.business_userid HAVING distance <= '.$radious) );
+
+
+                    /****Get 2 products which have higher pay per click***/
+                    $get_products = YpBusinessProductPromote::with('get_product','get_business')->whereHas('get_product', function ($query) use($categoryId) {
+                        $query->where('category_id', '=', $categoryId);
+                    })->orderby('pay_per_click','desc')->limit('2')->get()->toArray();
+
                 //echo "<pre>";print_r($results);die;
-                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId));
+                return view('/user/user_dashboard')->with(array('categoryId'=>$categoryId,'catName'=>$catName,'data'=>$data,'all_business'=>$results,'address'=>$address,'latitude'=>$latitude,'longitude'=>$longitude,'selected_radious'=>$radious,'success'=>1,'cat_name'=>$catName,'cat_id'=>$categoryId,'get_products'=>$get_products));
                 
             }catch(Exception $e){
                 $errorMsg =  $e->getMessage();

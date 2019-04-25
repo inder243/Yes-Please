@@ -15,11 +15,21 @@
     <!-- <link href="<?php echo e(URL::asset('css/style.css')); ?>" rel="stylesheet"> -->
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/animate.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/root_size.css')); ?>" type="text/css">
-    <?php  if (strpos($_SERVER['REQUEST_URI'], "advertisement_top_ads") !== false){
+    <?php  
+    if (strpos($_SERVER['REQUEST_URI'], "advertisement_top_ads") !== false)
+    {
         $page_type ='top_ads';
-    }?>
+    }
+    else if (strpos($_SERVER['REQUEST_URI'], "events") !== false)
+    {
+        $page_type ='events';
+    }
+    ?>
     <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads')): ?>
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/jquery.ui.css')); ?>" type="text/css">
+    <?php endif; ?>
+    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'events')): ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('css/fullcalendar.min.css')); ?>" type="text/css">
     <?php endif; ?>
   <!--    <link rel="stylesheet" href="<?php echo e(URL::asset('css/bootstrap-datetimepicker.min.css')); ?>" type="text/css"> -->
     
@@ -229,11 +239,24 @@
     if (strpos($_SERVER['REQUEST_URI'], "camp_detail") !== false){
         $page_type ='camp_detail';
     }
+    if (strpos($_SERVER['REQUEST_URI'], "events") !== false){
+        $page_type ='events';
+    }
     ?>
     <?php if(isset($page_type) && ($page_type == 'top_ads' || $page_type == 'camp_detail')): ?>
      <link rel="stylesheet" href="<?php echo e(URL::asset('css/dataTables.min.css')); ?>" type="text/css">
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('js/jquery.ui.js')); ?>"></script>
+   
+    <!-- <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script> -->
+    <?php endif; ?>
+    <?php if(isset($page_type) && ($page_type == 'events' || $page_type == 'events')): ?>
+  
+     <script src="<?php echo e(URL::asset('js/cal_moment.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/fullcalendar.min.js')); ?>"></script> 
+   
+    <script src="<?php echo e(URL::asset('js/event.js')); ?>"></script>
    
     <!-- <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script> -->

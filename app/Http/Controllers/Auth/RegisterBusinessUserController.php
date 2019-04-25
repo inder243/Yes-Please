@@ -646,7 +646,7 @@ class RegisterBusinessUserController extends Controller
                
                 if(isset($options) && !empty($options))
                 {
-                    $html.='<div class="total_quote"><ul class="total_quote1">';
+                    $html.='<div class="total_quote"><ul class="total_quote1 rdlist">';
                     foreach($options as $option)
                     {
                         $html.='<li><div class="formcheck"><label><input class="radio-inline" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
@@ -1120,7 +1120,7 @@ class RegisterBusinessUserController extends Controller
                                
                                 if(isset($options) && !empty($options))
                                 {
-                                    $html.='<div class="total_quote dynamic_rad"><ul>';
+                                    $html.='<div class="total_quote dynamic_rad"><ul class="rdlist">';
                                     foreach($options as $option)
                                     {
                                         $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$getJumpQuestion['id'].'[] value='.$option->option_value.' type="radio"><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';
@@ -1274,7 +1274,7 @@ class RegisterBusinessUserController extends Controller
                         
                         if(isset($options) && !empty($options))
                         {
-                            $html.='<div class="total_quote dynamic_rad"><ul>';
+                            $html.='<div class="total_quote dynamic_rad"><ul class="rdlist">';
                             foreach($options as $option)
                             {
                                 $html.='<li><div class="formcheck"><label><input class="radio-inline dynamicradio_button" name=radios'.$id.'[] value='.$option->option_value.' type="radio" data-text='.$option->option_name.'><span class="outside"><span class="inside"></span></span><p>'.$option->option_name.'</p></label></div></li>';

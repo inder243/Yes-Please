@@ -916,8 +916,71 @@
                               </div>
                            </div>
                         </div>
+                        <?php if(isset($get_products) && !empty($get_products)): ?>
+                        <?php $__currentLoopData = $get_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p_key=>$p_value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="article_sec1">
+                           <?php if($p_key == 0): ?>
                            <h1>Promoted products </h1>
+                           <?php endif; ?>
+                           <div class="most_ask_question_section">
+                              <div class="cat_business_name">
+                                 <h1><?php echo e($p_value['get_business']['business_name']); ?></h1>
+                                 <div class="p-name-price">
+                                    <h1><?php echo e($p_value['get_product']['name']); ?></h1>
+                                    <div class="p_price">
+                                      <?php if($p_value['get_product']['price_type'] == 'fix'): ?>
+                                       <h1>$<?php echo e($p_value['get_product']['price']); ?></h1>
+                                       <?php elseif($p_value['get_product']['price_type'] == 'range'): ?>
+                                       <h1>$<?php echo e($p_value['get_product']['price_from']); ?> - $<?php echo e($p_value['get_product']['price_to']); ?></h1>
+                                       <?php $price_per = $p_value['get_product']['price_per'];?>
+                                       <?php if($price_per == '1'): ?>
+                                       <span>/hr</span>
+                                       <?php elseif($price_per == '2'): ?>
+                                       <span>/min</span>
+                                       <?php endif; ?>
+                                       <?php endif; ?>
+                                    </div>
+                                 </div>
+                                 <p><?php echo e($p_value['get_product']['product_description']); ?></p>
+                                <?php 
+                                  $uploads = json_decode($p_value['get_product']['product_images'],true);
+                                ?>
+                                 <ul>
+                                  <?php if(!empty($uploads)): ?>
+                                    <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                     <?php $img_name = explode( '.', $img );?>
+                                      <li data-image="<?php echo e(url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;">
+                                        <img src="<?php echo e(url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)); ?>"/>
+                                      </li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                  <?php else: ?>
+
+                                  <?php endif; ?>
+                                   <!--  <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li>
+                                    <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li>
+                                    <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li>
+                                    <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li>
+                                    <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li>
+                                    <li>
+                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
+                                    </li> -->
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
+                       <!--  <div class="article_sec1">
                            <div class="most_ask_question_section">
                               <div class="cat_business_name">
                                  <h1>Business name</h1>
@@ -951,42 +1014,7 @@
                                  </ul>
                               </div>
                            </div>
-                        </div>
-                        <div class="article_sec1">
-                           <div class="most_ask_question_section">
-                              <div class="cat_business_name">
-                                 <h1>Business name</h1>
-                                 <div class="p-name-price">
-                                    <h1>Product name</h1>
-                                    <div class="p_price">
-                                       <h1>$40</h1>
-                                       <span>/hr</span>
-                                    </div>
-                                 </div>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pulvinar neque neque, ut semper nisl venenatis vitae. Mauris quis risus lacus. Sed cursus urna sed nibh pellentesque tincidunt. Quisque pharetra, dui quis aliquam tempor, orci aollicitudin</p>
-                                 <ul>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                    <li>
-                                       <img src="<?php echo e(asset('img/p_image.png')); ?>"/>
-                                    </li>
-                                 </ul>
-                              </div>
-                           </div>
-                        </div>
+                        </div> -->
                      </div>
                   </div>
                </div>
