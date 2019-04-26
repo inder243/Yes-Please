@@ -389,7 +389,45 @@
                 <a href="javascript:;"><h1>View products</h1><img src="{{ asset('img/custom_arrow.png') }}"/></a>
               </div>
               <div class="c_pr_sec">
+
+                @if(isset($get_products) && !empty($get_products))
+                @foreach($get_products as $p_key=>$p_value)
                 <div class="p_name_dec">
+                  <div class="name_price">
+                    <h1 class="p-name">{{$p_value['get_product']['name']}}</h1>
+                    <span>
+                      @if($p_value['get_product']['price_type'] == 'fix')
+                      <h1>${{$p_value['get_product']['price']}}</h1>
+                      @elseif($p_value['get_product']['price_type'] == 'range')
+                      <h1>${{$p_value['get_product']['price_from']}} - ${{$p_value['get_product']['price_to']}}</h1>
+                      @php $price_per = $p_value['get_product']['price_per'];@endphp
+                      @if($price_per == '1')
+                      <p>/hr</p>
+                      @elseif($price_per == '2')
+                      <p>/min</p>
+                      @endif
+                      @endif
+                    </span>
+                  </div>
+                  <p>{{$p_value['get_product']['product_description']}}.</p>
+                  <ul>
+                    <?php 
+                      $uploads = json_decode($p_value['get_product']['product_images'],true);
+                    ?>
+
+                    @if(!empty($uploads))
+                      @foreach($uploads['pic'] as $img)
+                      <?php $img_name = explode( '.', $img );?>
+                      <li data-image="{{url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)}}" id="img_{{$img_name[0]}}" onclick="openBigImageUser(this);return false;">
+                        <img src="{{url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)}}"/>
+                      </li>
+                      @endforeach
+                    @endif
+                  </ul>
+                </div>
+                @endforeach
+                @endif
+               <!--  <div class="p_name_dec">
                   <div class="name_price">
                     <h1 class="p-name">Product name</h1>
                     <span><h1>$40</h1><p>/hr</p></span>
@@ -402,21 +440,7 @@
                     <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
                     <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
                   </ul>
-                </div>
-                <div class="p_name_dec">
-                  <div class="name_price">
-                    <h1 class="p-name">Product name</h1>
-                    <span><h1>$40</h1><p>/hr</p></span>
-                  </div>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pulvinar neque neque, ut semper nisl venenatis vitae. Mauris quis risus lacus. Sed cursus urna sed nibh pellentesque tincidunt. Quisque pharetra, dui quis aliquam tempor, orci augue sollicitudin orci, et ornare elit libero eu magna ...</p>
-                  <ul>
-                    <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
-                    <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
-                    <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
-                    <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
-                    <li><img src="{{ asset('img/Untitled-2.png') }}"/></li>
-                  </ul>
-                </div>
+                </div> -->
                 <div class="load_more"><a href="javascript:;">Load more</a></div>
               </div>
             </div>

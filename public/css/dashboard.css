@@ -163,6 +163,7 @@ button:focus {
 	background-color: #fff;
 	position: fixed;
 width: 100%;
+z-index: 1;
 }
 
 .second_header_logo img {
@@ -346,7 +347,7 @@ width: 100%;
 }
 
 .total_number h1 {
-	font-size: 40px;
+	font-size: 42px;
 	color: #000;
 	font-family: 'GOTHICB0';
 }
@@ -2894,11 +2895,7 @@ border-radius:5px;
 max-height: 450px;
 overflow: auto;
 }
-.table_heading th {
-    padding: 20px 15px;
-    font-size: 16px;
-    font-weight: 600;
-}
+
 .table_heading {
     border-bottom: 1px solid #cccccc;
     background-color: #fff !important;
@@ -3163,9 +3160,7 @@ cursor: pointer;
 /*********************************** Top-ad page end *********************************/
 
 /*********************************** My product start *********************************/
-.call-section {
-    padding-top: 80px;
-}
+
 .diff-icons-del img {
     width: 20px;
     margin-right: 10px;
@@ -3305,8 +3300,216 @@ cursor: pointer;
 .product-label {
     padding-top: 8px;
 }
+.clicks_ins_calls {
+    display: flex;
+}
+.total-calls h1 {
+    font-size: 19px;
+    padding-left: 16px;
+}
+.clicks_ins_calls {
+    display: flex;
+    margin-top: 15px;
+}
+.total-duration h1 {
+	font-size: 19px;
 
+}
+.total-cost h1 {
+	font-size: 19px;
+
+}
+.total-duration {
+    padding-left: 23%;
+}
+.total-cost {
+    padding-left: 11%;
+}
+.pr-name {
+    display: flex;
+    justify-content: space-between;
+}
+.p-name h1 {
+    font-size: 17px;
+    font-weight: 600;
+}
+.p_price {
+    display: flex;
+}
+.p_price h1 {
+    font-size: 20px;
+    font-weight: 600;
+}
+.product-lorem-text {
+    margin-top: 20px;
+}
+.product-lorem-text p {
+    font-size: 14px;
+    color: #989898;
+}
+.cat_business_name ul {
+    display: inline-block;
+    padding-top: 15px;
+    width: 100%;
+}
+.cat_business_name ul li {
+    list-style: none;
+    margin-right: 15px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.cat_business_name ul li img {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+}
 /*********************************** Call section end *********************************/
+/*********************************** Member section start *********************************/
+.member-search {
+    max-width: 800px;
+    margin: 35px auto 0;
+}
+.keyboardsearch input {
+	background-color:#ed0c6e;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+	border: none;
+color: #fff;
+border-radius: 3px;
+padding: 7px 0;
+width: 100%;
+cursor: pointer;
+}
+.keyboardsearch {
+    margin-top: 32px;
+}
+.edit-png img {
+    width: 22px;
+    margin-top: -11px;
+}
+.sms-img {
+    margin-left: 5px;
+}
+.edit-png {
+    margin-left: 5px;
+}
+.action-for-select {
+    display: inline-block;
+    margin-top: 12px;
+    width: 100%;
+}
+.selection-delete {
+    display: flex;
+}
+.selection-delete {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.delete-btn a {
+    background-color: #ed0c6e;
+    margin-right: 20px;
+    color: #fff;
+    font-size: 14px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    padding: 6px 20px 6px 20px;
+    border-radius: 3px;
+}
+.delete-btn a:hover{
+	background-color:#cc3333;
+	text-decoration:none;
+}
+
+.group-search{
+	max-width:500px;
+	margin: 35px auto 0;
+}
+.create-tmplate {
+    font-size: 15px;
+    color: #393;
+}
+.edit-tmplate {
+    color: #369;
+    font-size: 15px;
+}
+.action-image img {
+    width: 22px;
+}
+.ad-filed-setup {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+.ad-filed-setup a {
+    background-color: #ed0c6e;
+    color: #fff;
+    padding: 6px 12px 6px 12px;
+    border-radius: 3px;
+}
+.ad-filed-setup a:hover{
+	text-decoration:none;
+	background-color: #cf065e;
+}
+.cancel-update-btn {
+    display: flex;
+    justify-content: space-between;
+}
+.cancel-button a {
+    background-color: #ed0c6e;
+    color: #fff;
+    font-size: 15px;
+    padding: 6px 30px 6px 30px;
+    border-radius: 3px;
+}
+.cancel-button a:hover{
+	text-decoration:none;
+	background-color: #cf065e;
+}
+.addbtns {
+    text-align: center;
+    width: 100%;
+}
+.unchanged {
+    font-size: 12px;
+    color: #9a9a9a;
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+}
+.diff-seprator hr {
+    width: 100%;
+    height: 1px;
+    background-color: #cfcece;
+    border: none;
+}
+.diff-seprator {
+    display: flex;
+}
+.diff-seprator span {
+    margin: 0 19px 0 20px;
+        margin-top: 0px;
+    color: #999;
+    margin-top: 2px;
+}
+.section-check p {
+    color: #b4b4b4;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+.send-resp {
+    font-size: 15px !important;
+    color: #000 !important;
+}
+.cancel-update-btn-send {
+    margin-top: 25px;
+}
+.now-color{
+	color:#000;
+	font-size:16px;
+}
+
+/*********************************** Member section end *********************************/
 /*********************************** Media query start *********************************/
 
 @media (max-width: 1520px) {
@@ -3330,7 +3533,7 @@ cursor: pointer;
 				padding-top: 35px;
 			}
 			.total_number h1 {
-				font-size: 50px;
+				font-size: 40px;
 			}
 		}
 		@media (max-width: 1199px) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 25, 2019 at 01:20 PM
+-- Generation Time: Apr 26, 2019 at 01:28 PM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.17-0ubuntu0.18.04.1
 
@@ -74,7 +74,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (171, '2019_04_05_064959_create_yp_campaign_impression_table', 26),
 (172, '2019_04_05_065017_create_yp_campaign_click_table', 26),
 (173, '2019_04_22_104037_business_products', 27),
-(174, '2019_04_24_130913_yp_business_product_promote', 28);
+(174, '2019_04_24_130913_yp_business_product_promote', 28),
+(175, '2019_04_26_110601_yp_business_user_events_table', 28);
 
 -- --------------------------------------------------------
 
@@ -293,7 +294,7 @@ CREATE TABLE `yp_business_products` (
 
 INSERT INTO `yp_business_products` (`id`, `product_id`, `business_id`, `name`, `category_id`, `price_type`, `price`, `price_from`, `price_to`, `price_per`, `product_description`, `product_images`, `created_at`, `updated_at`) VALUES
 (5, 2597186225510, 39, 'clothe abc', 30, 'fix', '344', '', '', '', 'this is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth description', '{\"pic\":[\"271556081229.jpeg\",\"611556081229.jpg\"]}', '2019-04-24 04:47:09', '2019-04-24 11:35:37'),
-(6, 2501876803165, 39, 'second product is', 10, 'fix', '324', '', '', '', 'this is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth description', '{\"pic\":[\"951556081267.jpeg\"]}', '2019-04-24 04:47:47', '2019-04-24 12:25:35'),
+(6, 2501876803165, 39, 'second product is', 10, 'fix', '324', '', '', '', 'this is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth descriptionthis is cloth description', '{\"pic\":[\"951556081267.jpeg\",\"151556281034.png\"]}', '2019-04-24 04:47:47', '2019-04-26 12:17:14'),
 (7, 8526881041455, 39, 'product three', 13, 'fix', '323', '', '', '', 'second_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_header', '{\"pic\":[\"251556082851.jpeg\",\"541556082851.jpg\"]}', '2019-04-24 05:14:11', '2019-04-24 05:14:11'),
 (8, 1588260553068, 39, 'asdasdasd', 10, 'fix', '3242', '', '', '', 'second_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_headersecond_tabbar-fix_header', NULL, '2019-04-24 05:14:25', '2019-04-24 05:14:25'),
 (10, 8759645370113, 39, 'computer', 33, 'range', '', '100000', '90000', '4', 'second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header second_tabbar-fix_header', '{\"pic\":[\"731556083137.jpg\",\"631556083137.jpg\"]}', '2019-04-24 05:18:57', '2019-04-24 11:19:36');
@@ -1237,6 +1238,35 @@ INSERT INTO `yp_business_user_cc_details` (`id`, `b_id`, `customer_id`, `wallet_
 (23, 41, 1555068782, 2000, 1900, 4444, '10', '22', '2019-04-12', '2019-04-12 11:33:02', '2019-04-12 11:37:38'),
 (24, 42, 1555340182, 500, 334, 4444, '10', '22', '2019-04-15', '2019-04-15 14:56:22', '2019-04-22 11:15:27'),
 (25, 25, 1555413721, 2000, 1929, 4444, '10', '22', '2019-04-16', '2019-04-16 11:22:01', '2019-04-22 07:10:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `yp_business_user_events`
+--
+
+CREATE TABLE `yp_business_user_events` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `from_time` time NOT NULL,
+  `to_time` time NOT NULL,
+  `type` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `b_id` int(10) UNSIGNED NOT NULL,
+  `g_id` int(10) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `yp_business_user_events`
+--
+
+INSERT INTO `yp_business_user_events` (`id`, `title`, `from_date`, `to_date`, `from_time`, `to_time`, `type`, `status`, `b_id`, `g_id`, `created_at`, `updated_at`) VALUES
+(1, 'meeting with john', '2019-04-27', '2019-04-27', '12:00:00', '04:00:00', 2, 0, 16, NULL, '2019-04-26 12:20:08', '2019-04-26 12:20:08'),
+(2, 'meeting with john', '2019-04-30', '2019-04-30', '12:00:00', '04:00:00', 2, 0, 16, NULL, '2019-04-26 12:21:50', '2019-04-26 12:21:50');
 
 -- --------------------------------------------------------
 
@@ -5740,6 +5770,14 @@ ALTER TABLE `yp_business_user_cc_details`
   ADD KEY `yp_business_user_cc_details_b_id_foreign` (`b_id`);
 
 --
+-- Indexes for table `yp_business_user_events`
+--
+ALTER TABLE `yp_business_user_events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `yp_business_user_events_b_id_index` (`b_id`),
+  ADD KEY `yp_business_user_events_g_id_index` (`g_id`);
+
+--
 -- Indexes for table `yp_business_user_hashtags`
 --
 ALTER TABLE `yp_business_user_hashtags`
@@ -5884,7 +5922,7 @@ ALTER TABLE `yp_verfication_business_users`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -5955,6 +5993,11 @@ ALTER TABLE `yp_business_user_categories`
 --
 ALTER TABLE `yp_business_user_cc_details`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+--
+-- AUTO_INCREMENT for table `yp_business_user_events`
+--
+ALTER TABLE `yp_business_user_events`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `yp_business_user_hashtags`
 --
@@ -6111,6 +6154,13 @@ ALTER TABLE `yp_business_user_categories`
 --
 ALTER TABLE `yp_business_user_cc_details`
   ADD CONSTRAINT `yp_business_user_cc_details_b_id_foreign` FOREIGN KEY (`b_id`) REFERENCES `yp_business_users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `yp_business_user_events`
+--
+ALTER TABLE `yp_business_user_events`
+  ADD CONSTRAINT `yp_business_user_events_b_id_foreign` FOREIGN KEY (`b_id`) REFERENCES `yp_business_users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `yp_business_user_events_g_id_foreign` FOREIGN KEY (`g_id`) REFERENCES `yp_general_users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `yp_business_user_hashtags`

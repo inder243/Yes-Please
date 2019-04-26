@@ -51,7 +51,7 @@
 										<td>{{$product['price']}}</td>
 										<td>{{$count_imgs}}</td>
 										<td><a href="javascript:;" class="add-sechdule promote_products" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" onclick="openPromoteModal(this);">Promote</a></td>
-										<td><a href="javascript:;" class=add-sechdule>Show</a></td>
+										<td><a href="javascript:;" data-product_mainid="{{$product['product_id']}}" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" onclick="openShowProductModal(this);" class="add-sechdule show_product">Show</a></td>
 										<td>
 											<div class="diff-icons-del">
 												<a href="javascript:;" data-product_id="{{$product['product_id']}}" onclick="openEditProductModal(this);"><img src="{{ asset('img/edit-green.png') }}"/></a>

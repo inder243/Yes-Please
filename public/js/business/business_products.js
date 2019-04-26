@@ -575,3 +575,41 @@ function savePromoteProduct(data){
 	});/**ajax ends here**/	
 
 }
+
+/*****show product modal fn*****/
+function openShowProductModal(data){
+
+	var myProductId = $(data).attr('data-product_mainid');
+
+	var home_url = $('#home_url').val();
+	$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+	jQuery('.pre_loader').css('display','block');
+	$.ajax({
+		url: home_url+'business_user/showProductData',
+		type: 'POST',
+		data:{product_id:myProductId},
+		success:function(response){
+			jQuery('.pre_loader').css('display','none');
+			if(response.success == 1){
+				// it is unnecessary to have to manually call the modal.
+				$('#show_productmodal').modal('show');
+				$('#show_productmodal').find('.show_product_body').html();
+				$('#show_productmodal').find('.show_product_body').html(response.modal_html);
+			}
+
+			if(response.success == 2){
+				
+				// it is unnecessary to have to manually call the modal.
+				$('#promote-popup').modal('show');
+			}
+			
+		},
+		error:function(){ jQuery('.pre_loader').css('display','none');}
+
+	});/**ajax ends here**/
+
+}/****open show product code ends here****/

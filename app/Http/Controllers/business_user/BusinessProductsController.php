@@ -537,4 +537,66 @@ class BusinessProductsController extends Controller
 
         }/**if isset ends here**/
     }/****add promote products ends here****/
+
+    /*********
+    **Show product data
+    *********/
+    public function showProductData(Request $request){
+        if(isset($_POST)){ 
+            $product_id = $request->product_id;
+            $get_product_detail = BusinessProducts::with('get_business')->where('product_id',$product_id)->first();
+            
+            $product_name           = $get_product_detail->name;
+            $price_type             = $get_product_detail->price_type;
+            $price                  = $get_product_detail->price;
+            $price_from             = $get_product_detail->price_from;
+            $price_to               = $get_product_detail->price_to;
+            $price_per              = $get_product_detail->price_per;
+            $product_description    = $get_product_detail->product_description;
+            $product_images         = $get_product_detail->product_images;
+            $business_name          = $get_product_detail->get_business->business_name;
+            $business_user_id       = $get_product_detail->get_business->business_userid;
+
+            if($price_type == 'fix'){
+                $final_price = '$'.$price;
+                $final_price_per = '';
+            }else if($price_type == 'range'){
+                $final_price = '$'.$price_from.' - $'.$price_to;
+                if($price_per == "1"){
+                    $price_perr = "hr";
+                }else if($price_per == "2"){
+                    $price_perr = 'min';
+                }else if($price_per == "3"){
+                    $price_perr = 'sec';
+                }else{
+                    $price_perr = 'day';
+                }
+
+                $final_price_per = '/'.$price_perr;
+            }
+
+            /*****selected images html****/
+            if(!empty($product_images)){
+                $uploads = json_decode($product_images,true);
+            }
+
+            $selectImgHtml = '';
+            if(!empty($uploads)){
+                foreach($uploads['pic'] as $img){
+                    $img_name = explode( '.', $img );
+
+                    $selectImgHtml .= '<li class="imguploaded" id="img_'.$img_name[0].'"><img src="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'"></li>';
+                }
+            }
+
+
+            $modal_html = '<div class="p-heading"><h1>'.$business_name.'</h1></div><div class="upper-catergory"><div class="row"><div class="col-md-12 col-12"><div class="pr-name"><div class="p-name"><h1>'.$product_name.'</h1></div><div class="p_price"><h1>'.$final_price.'</h1><span>'.$final_price_per.'</span></div></div><div class="product-lorem-text"><p>'.$product_description.'</p></div><div class="cat_business_name"><ul>'.$selectImgHtml.'</ul></div></div></div>
+                </div>';
+
+
+            return response()->json(['success'=>'1','message'=>'success','modal_html'=>$modal_html,'price_type']);
+
+        }/*** isset code ends here ***/
+    }/***show product ends here***/
+
 }

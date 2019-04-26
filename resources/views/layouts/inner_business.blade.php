@@ -661,6 +661,25 @@
     </div>
 </div>
 <!--------Promote product popup ends--------->
+
+<!-----------Show product modal----------->
+<!-- Modal -->
+<div class="modal fade" id="show_productmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header ad_header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ad-header-body show_product_body">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<!-----------Show product modal ends----------->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
