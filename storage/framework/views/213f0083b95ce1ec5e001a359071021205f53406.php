@@ -19,6 +19,17 @@
     <link rel="stylesheet" href="<?php echo e(URL::asset('css/bootstrap-datetimepicker.min.css')); ?>" type="text/css">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
          rel = "stylesheet">
+    <?php  
+    
+   if (strpos($_SERVER['REQUEST_URI'], "public_profile") !== false)
+    {
+        $page_type ='public_profile';
+    }
+       ?>
+    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'public_profile')): ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('css/jquery.ui.css')); ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo e(URL::asset('css/timepicker.css')); ?>" type="text/css">
+    <?php endif; ?>
 
      <!-- <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
      <script>
@@ -1015,7 +1026,19 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/moment.min.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/bootstrap-datetimepicker.min.js')); ?>"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
-    <!-- <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script> -->
+    <?php  if (strpos($_SERVER['REQUEST_URI'], "public_profile") !== false){
+        $page_type ='public_profile';
+    }
+   
+    ?>
+   
+    <?php if(isset($page_type) && ($page_type == 'public_profile')): ?>
+  
+    <script src="<?php echo e(URL::asset('js/general_event.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/jquery.ui.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/timepicker.js')); ?>"></script>
+    <?php endif; ?>
+    
 
 
     

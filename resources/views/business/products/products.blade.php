@@ -4,7 +4,7 @@
 
 <section class="register_step_1">
 	<div class="breadcrumb register_breadcrumb advertisment_breadcrumb">
-		<div><a href="JavaScript:;">Dashboard</a>/<a href="JavaScript:;">Advertisement Dashboard</a>/ <span class="q_breadcrumb">My products</span></div>
+		<div><a href="{{ url('/business_user/business_dashboard') }}">Dashboard</a> / <span class="q_breadcrumb">My products</span></div>
 		<div class="setup_things test-campign">
 			<a href="JavaScript:;" class="adde_btn" onclick="openAddProducts(this);return false;">Add</a>
 		</div>
@@ -48,10 +48,19 @@
 									<tr class="product_{{$key}}">
 										<td>{{$product['name']}}</td>
 										<td>{{$product['get_cat_name']['category_name']}}</td>
-										<td>{{$product['price']}}</td>
+										@if($product['price_type'] == 'fix')
+										<td>${{$product['price']}}</td>
+										@elseif($product['price_type'] == 'range')
+										<td>${{$product['price_from']}} - ${{$product['price_to']}}</td>
+										@endif
 										<td>{{$count_imgs}}</td>
 										<td><a href="javascript:;" class="add-sechdule promote_products" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" onclick="openPromoteModal(this);">Promote</a></td>
 										<td><a href="javascript:;" data-product_mainid="{{$product['product_id']}}" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" onclick="openShowProductModal(this);" class="add-sechdule show_product">Show</a></td>
+										@if($product['status'] == 0)
+										<td><a href="javascript:;" data-product_mainid="{{$product['product_id']}}" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" data-status="0" onclick="stopProduct(this);" class="add-sechdule stop_product">Start</a></td>
+										@elseif($product['status']==1)
+										<td><a href="javascript:;" data-product_mainid="{{$product['product_id']}}" data-product_id="{{$product['id']}}" data-product_name="{{$product['name']}}" data-status="1" onclick="stopProduct(this);" class="add-sechdule stop_product">Stop</a></td>
+										@endif
 										<td>
 											<div class="diff-icons-del">
 												<a href="javascript:;" data-product_id="{{$product['product_id']}}" onclick="openEditProductModal(this);"><img src="{{ asset('img/edit-green.png') }}"/></a>

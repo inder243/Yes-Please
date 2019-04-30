@@ -49,7 +49,7 @@
                   <div class="rating_btns">
                     <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
                     <a href="javascript:;" data-toggle="modal" data-target="#ask_question" data-backdrop="static" data-keyboard="false">Ask question</a>
-                    <a href="javascript:;">Schedule appointment</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#add_appointment" data-backdrop="static" data-keyboard="false">Schedule appointment</a>
                   </div>
                 </span>
               </div>
@@ -499,4 +499,102 @@
           </div>
         </section>
       </div>
+
+        <!-- Modal -->
+<div class="modal fade" id="add_appointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header ad_header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="add_appointment_form" method="POST">
+        <input type="hidden" id="buid" name="b_id" value="{{$user_details['id']}}">
+        <div class="modal-body ad-header-body">
+          <div class="p-heading"><h1>When?</h1></div>
+          <div class="upper-catergory">
+          <div class="row">
+            <div class="col-md-12 col-12">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" name="title" required="" maxlength="50">
+                </div>
+            </div>
+            <div class="col-md-12 col-12">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                      <label>
+                        <input type="radio" class="radio-inline pickup_sch" name="radios" value="1" id="sch_now">
+                        <span class="outside"><span class="inside"></span></span><p class="now-color">Now</p>
+                      </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-12 mt-2">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                  <label>
+                    <input type="radio" class="radio-inline pickup_sch" name="radios"  value="2" id="sch_later">
+                    <span class="outside"><span class="inside"></span></span><p class="now-color">Other time</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 later-grp" style="display:none">
+              <div class="form-group">
+                  <label for="otherdate">Date</label>
+                  <input type="text" class="form-control datepicker" name="gotherdate" id="gotherdate" required=""  readonly>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 later-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="othertime">Time</label>
+                  <input type="text" class="form-control timepicker" name="gothertime" id="gothertime" required="" readonly>
+                </div>
+            </div>
+            <div class="col-md-12 col-12">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                      <label>
+                        <input type="radio" class="radio-inline pickup_sch" name="radios" value="3" id="sch_flex">
+                        <span class="outside"><span class="inside"></span></span><p class="now-color">Flexible hours</p>
+                      </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group">
+                  <label for="datefrom">Date from</label>
+                  <input type="text" class="form-control datepicker" name="gdatefrom" id="gdatefrom" required="" readonly>
+
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="dateto">Date to</label>
+                  <input type="text" class="form-control datepicker" name="gdateto"  id="gdateto" required="" readonly>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group">
+                  <label for="timefrom">Time from</label>
+                  <input type="text" class="form-control timepicker" name="gtimefrom" id="gtimefrom" required="" readonly>
+
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="timeto">Time to</label>
+                  <input type="text" class="form-control timepicker" name="gimeto" id="gimeto" required="" readonly>
+                </div>
+            </div>
+          </div>
+          </div>
+            <div class="start-btn"><input type="button" id="add_appointment_button" value="Add"></div>
+        </div>
+      </form> 
+      </div>
+    </div>
+</div>
 @endsection

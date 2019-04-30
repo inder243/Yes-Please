@@ -24,12 +24,16 @@
     {
         $page_type ='events';
     }
+    else if (strpos($_SERVER['REQUEST_URI'], "events") !== false)
+    
     ?>
-    @if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads'))
+    @if(!isset($page_type) || (isset($page_type) && $page_type == 'top_ads') || (isset($page_type) && $page_type == 'events'))
     <link rel="stylesheet" href="{{ URL::asset('css/jquery.ui.css') }}" type="text/css">
     @endif
     @if(!isset($page_type) || (isset($page_type) && $page_type == 'events'))
     <link rel="stylesheet" href="{{ URL::asset('css/fullcalendar.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ URL::asset('css/timepicker.css') }}" type="text/css">
+
     @endif
   <!--    <link rel="stylesheet" href="{{ URL::asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css"> -->
     
@@ -256,6 +260,8 @@
     <script src="{{ URL::asset('js/fullcalendar.min.js') }}"></script> 
    
     <script src="{{ URL::asset('js/event.js') }}"></script>
+    <script src="{{ URL::asset('js/jquery.ui.js') }}"></script>
+    <script src="{{ URL::asset('js/timepicker.js') }}"></script>
    
     <!-- <script type="text/javascript" src="{{ URL::asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script> -->

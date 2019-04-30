@@ -269,20 +269,20 @@ class BusinessProductsController extends Controller
                 $selectImgHtml .= '<li class="imguploaded" id="img_'.$img_name[0].'"><div class="image"><img src="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'"></div><div class="input_des product_img_des"><textarea placeholder="Input description"></textarea></div><a href="javascript:;" data-img="'.$img.'" data-product_id="'.$product_id.'" onclick="deleteProductSelectedImg(this);" class="product_imgcross"><img src="'.url('/').'/img/line_cross.png"></a></li>';
             }
         }
-        
-        $allCategories = YpBusinessCategories::get()->toArray();
 
+        $allCategories = YpBusinessUserCategories::with('get_category')->where('business_userid',$b_id)->get()->toArray();
+        
         /***make html for all category list***/
         $cat_html = '<option value="" selected disabled>Choose Category</option>';
 
         if(!empty($allCategories)){
             foreach($allCategories as $cat_key=>$cat_value){
-                if($category_id == $cat_value['id']){
+                if($category_id == $cat_value['category_id']){
                     $selected = 'selected';
                 }else{
                     $selected = '';
                 }
-                $cat_html .= '<option data-supercat_id ="'.$cat_value['super_cat_id'].'" data-cat_id = "'.$cat_value['category_id'].'" value="'.$cat_value['id'].'" '.$selected.'>'.$cat_value['category_name'].'</option>';
+                $cat_html .= '<option data-supercat_id ="'.$cat_value['get_category']['super_cat_id'].'" data-cat_id = "'.$cat_value['get_category']['category_id'].'" value="'.$cat_value['category_id'].'" '.$selected.'>'.$cat_value['get_category']['category_name'].'</option>';
             }
 
             return response()->json(['success'=>'1','message'=>'Success','cat_html'=>$cat_html,'name'=>$name,'price_type'=>$price_type,'price'=>$price,'price_from'=>$price_from,'price_to'=>$price_to,'price_per'=>$price_per,'product_description'=>$product_description,'product_id'=>$product_id,'selectImgHtml'=>$selectImgHtml]);
@@ -585,7 +585,7 @@ class BusinessProductsController extends Controller
                 foreach($uploads['pic'] as $img){
                     $img_name = explode( '.', $img );
 
-                    $selectImgHtml .= '<li class="imguploaded" id="img_'.$img_name[0].'"><img src="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'"></li>';
+                    $selectImgHtml .= '<li class="imguploaded" id="img_'.$img_name[0].'" data-image="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'" onclick="openBigImage(this);return false;"><img src="'.url('/').'/images/business_products/'.$business_user_id.'/'.$img.'"></li>';
                 }
             }
 
@@ -598,5 +598,46 @@ class BusinessProductsController extends Controller
 
         }/*** isset code ends here ***/
     }/***show product ends here***/
+
+    /*******
+    **fn to stop product
+    ********/
+    public function stopProduct(Request $request){
+        $product_id         = $request->product_id;
+        $productStatus      = $request->productStatus;
+        $get_product_detail = BusinessProducts::with('get_business')->where('product_id',$product_id)->first();
+        $b_id               = Auth::user()->id;
+
+        if(!empty($get_product_detail)){
+
+            if($productStatus == 1){
+                $update = array('status' => 0);
+
+                $businessProduct_update = BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update);
+
+                if($businessProduct_update){
+                    return response()->json(['success'=>'1','message'=>'successfully updated']); 
+                }else{
+                    return response()->json(['success'=>'0','message'=>'Please try again!']); 
+                }
+                
+            }else if($productStatus == 0){
+                $update1 = array('status' => 1);
+
+                $businessProduct_update1 = BusinessProducts::where(['business_id'=>$b_id,'product_id'=>$product_id])->update($update1);
+
+                if($businessProduct_update1){
+                    return response()->json(['success'=>'3','message'=>'successfully updated']); 
+                }else{
+                    return response()->json(['success'=>'0','message'=>'Please try again!']); 
+                }
+            }
+
+
+        }else{
+            return response()->json(['success'=>'2','message'=>'No user found']); 
+        }
+        
+    }/****fn ends to stop product****/
 
 }

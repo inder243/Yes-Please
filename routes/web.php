@@ -209,13 +209,20 @@ Route::prefix('business_user')->group(function() {
     Route::post('/openPromotProduct', 'business_user\BusinessProductsController@openProductelectedImages')->name('business_user.openproductimg');
     Route::post('/addPromotProduct', 'business_user\BusinessProductsController@addPromoteProducts')->name('business_user.addpromoteproducts');
     Route::post('/showProductData', 'business_user\BusinessProductsController@showProductData')->name('business_user.showProductData');
+    Route::post('/stopProduct', 'business_user\BusinessProductsController@stopProduct')->name('business_user.stopProduct');
 
     /////events/////////
     Route::get('/events', 'business_user\EventsController@getEvents');
     Route::post('/save_event', 'business_user\EventsController@saveEvent');
     Route::get('/listEvents', 'business_user\EventsController@listEvents');
-    
-    
+    Route::post('/edit_event', 'business_user\EventsController@updateEvent');
+
+
+    /*****MEMBERS*****/
+    Route::get('/members', 'business_user\BusinessMembersController@getMembers');
+    Route::post('/save_members', 'business_user\BusinessMembersController@saveMembers');
+    Route::post('/get_edit_members', 'business_user\BusinessMembersController@getEditMembers');
+
   });
 
 Route::prefix('general_user')->group(function() {
@@ -292,6 +299,7 @@ Route::prefix('general_user')->group(function() {
     /*******question ends********/
 
     Route::post('/save_click', 'Auth\GetNextQuestionController@saveClickOnCampaign');
+    Route::post('/save_appointment', 'Auth\GetNextQuestionController@saveAppointment');
     
   });
 

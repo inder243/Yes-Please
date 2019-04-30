@@ -927,7 +927,7 @@
                            <?php endif; ?>
                            <div class="most_ask_question_section">
                               <div class="cat_business_name">
-                                 <h1><?php echo e($p_value['get_business']['business_name']); ?></h1>
+                                 <a href="<?php echo e(url('general_user/public_profile/'.$p_value['get_business']['id'].'/'.$categoryId)); ?>"><h1><?php echo e($p_value['get_business']['business_name']); ?></h1></a>
                                  <div class="p-name-price">
                                     <h1><?php echo e($p_value['get_product']['name']); ?></h1>
                                     <div class="p_price">

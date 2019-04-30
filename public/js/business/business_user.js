@@ -18,10 +18,10 @@ $(document).ready(function(){
 	});
 
 	/*********code for datepicker in profile setting page*********/
-	$('.datetimepicker').datetimepicker({
+	/*$('.datetimepicker').datetimepicker({
 		format: 'HH:mm'
 	});
-
+*/
 
 	$('.select_profile_img').change(function(e){
 		e.preventDefault();

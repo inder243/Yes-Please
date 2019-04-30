@@ -14,6 +14,7 @@ use App\Models\YpCampaignClick;
 use App\Models\YpCampaignDetail;
 use App\Models\YpBusinessUserCcDetails;
 use App\Models\YpCampaignImpression;
+use App\Models\YpBusinessUserEvents;
 
 use App\Models\YpBusinessUserTransactions;
 
@@ -932,6 +933,52 @@ class GetNextQuestionController extends Controller
             return view('/user/ask_quote_inner')->with(array('data'=>$data));
          }
         
+    }
+
+    public function saveAppointment(Request $request)
+    {
+ 
+        $g_id = Auth::guard('general_user')->user()->id;
+        $b_id = $request->b_id;
+        $timeOption = $request->radios;
+        if($timeOption==1)
+        {
+            YpBusinessUserEvents::create([
+            'title' => $request->title,
+            'from_date' => date("Y-m-d"),
+            'from_time' => date("H:i:s"),
+            'type'   => 1,
+            'b_id'     => $b_id,
+            'g_id'     => $g_id,
+            ]);
+        }
+        else if($timeOption==2)
+        {
+            YpBusinessUserEvents::create([
+            'title' => $request->title,
+            'from_date' => $request->gotherdate,
+            'from_time' => $request->gothertime,
+            'type'   => 3,
+            'b_id'     => $b_id,
+            'g_id'     => $g_id,
+            ]);
+        }
+        else if($timeOption==3)
+        {
+            YpBusinessUserEvents::create([
+            'title' => $request->title,
+            'from_date' => $request->gdatefrom,
+            'to_date' => $request->gdateto,
+            'from_time' => $request->gtimefrom,
+            'to_time' => $request->gimeto,
+            'type'   => 2,
+            'b_id'     => $b_id,
+            'g_id'     => $g_id,
+            ]);
+        }
+
+        
+        return response()->json(['success'=>1,'message'=>'data saved'],200);
     }
 
 }

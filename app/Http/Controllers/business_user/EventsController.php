@@ -23,6 +23,7 @@ use App\Models\YpCampaignCategory;
 use App\Models\YpCampaignDetail;
 use App\Models\YpCampaignImpression;
 use App\Models\YpCampaignClick;
+use App\Models\YpBusinessUserEvents;
 use App\Http\Traits\BusinessUserProSettingsTrait;
 
 use File;
@@ -49,12 +50,67 @@ class EventsController extends Controller
      */
 
     use BusinessUserProSettingsTrait;
+
+    public function listEvents(Request $request)
+    {
+       
+       $b_id = Auth::id();
+       $getEvents =  YpBusinessUserEvents::select('id','title','from_date','to_date','from_time','to_time')->where('b_id',$b_id)->get();
+        $eventsJson = array();
+        foreach ($getEvents as $event) {
+            $eventsJson[] = array(
+                'id' => $event->id,
+                'title' => $event->title,
+                'start'=>$event->from_date.' '.$event->from_time,
+                'end' => $event->to_date.' '.$event->to_time,
+            );
+        }
+
+         return response()->json($eventsJson);
+        
+    }
     //function thet will render events 
     public function getEvents(Request $request)
     {
-        //get settings from BusinessUserProSettingsTrait
         return view('/business/event_dashboard');
+    }
+
+    public function saveEvent(Request $request)
+    {
+        //save event
+        $b_id = Auth::id();
+        YpBusinessUserEvents::create([
+            'title' => $request->title,
+            'from_date' => $request->datefrom,
+            'to_date'  => $request->dateto,
+            'from_time' => $request->timefrom,
+            'to_time' => $request->timeto,
+            'type'   => 2,
+            'b_id'     => $b_id,
+                    
+        ]);
+        
+        return redirect('business_user/events');
         
     }
+
+    public function updateEvent(Request $request)
+    {
+        //update event
+
+        $updateDetails = [
+            'title' => $request->title,
+            'from_date' => $request->datefrom,
+            'to_date'  => $request->dateto,
+            'from_time' => $request->timefrom,
+            'to_time' => $request->timeto,
+        ];
+
+        YpBusinessUserEvents::where('id', $request->event_id)
+            ->update($updateDetails);
+        return redirect('business_user/events');
+    }
+
+    
 
 }

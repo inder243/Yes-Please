@@ -848,3 +848,66 @@ a.business_answer {
 {
     width:100%;
 }
+.ui-timepicker, .ui-timepicker-viewport {
+    box-sizing: content-box;
+    height: 205px;
+    display: block;
+    margin: 0;
+    z-index: 99999;
+    background-color: #f5f1f1;
+    position: absolute;
+}
+.ui-timepicker-standard {
+    
+    border: none;
+    
+}
+
+.ad_header {
+    padding-top: 10px;
+    padding-bottom: 0;
+    border: none;
+}
+
+.ad-header-body {
+    padding: 10px 40px 20px 40px;
+}
+
+.p-heading {
+    text-align: center;
+}
+.upper-catergory {
+    padding-top: 25px;
+}
+
+.upper-catergory label {
+    color: #9698a1;
+    font-size: 14px;
+}
+input:invalid {
+    box-shadow: none;
+}
+
+.start-btn {
+    text-align: center;
+    margin-top: 15px;
+    display: inline-block;
+    width: 100%;
+}
+.start-btn input:hover {
+    background-color: #d80762;
+}
+.start-btn input {
+    background-color: #ed0c6e;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    padding: 5px 40px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+.p-heading h1 {
+    font-size: 20px;
+}

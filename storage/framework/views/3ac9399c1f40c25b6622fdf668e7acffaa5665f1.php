@@ -313,23 +313,7 @@
         </div>
     </div>
 
-    <!---modal to open big image --->
-    <div class="modal fade" id="showBigImageModalBusiness" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                         
-                     </div>
-                    
-                    <div class="modal-body">
-                     <img style="width:100%" src=""/>
-                    </div>
-                    
-            </div>
-        </div>
-    </div>  
-    <!---modal to open big image endshere --->
+    
 
 <!-----modal to add products------>
 <form class="dropzone addProductform" id="dropzone_form" data-page="addProductPage" method="POST" action="<?php echo e(route('business_user.saveproducts')); ?>" enctype="multipart/form-data">
@@ -589,7 +573,7 @@
                                 <div class="file_to_upload">
                                     <div class="upload-btn-wrapper">
                                         <button class="btn select_fileUpload_product">Select files to upload</button>
-                                        <input type="file" name="myfile[]" multiple class="select_product_img selectQuotImg" accept="image/x-png,image/gif,image/jpeg">
+                                        <input type="file" name="myfile[]" multiple class="select_product_img selectQuotImg" id="selectProductmg" accept="image/x-png,image/gif,image/jpeg">
                                         <span id="msgs" class="products_img_msg"></span>
                                     </div>
                                 </div>
@@ -603,7 +587,7 @@
                         </div>
                     </div>
 
-                    <div class="start-btn"><input type="button" class="add_product" data-modal_type="editProductform" onclick="ProductValidation(this);" value="Edit"></div>
+                    <div class="start-btn"><input type="button" class="add_product" data-modal_type="editProductform" onclick="ProductValidation(this);" value="Update"></div>
                 </div>
 
             </div>
@@ -662,6 +646,44 @@
     </div>
 </div>
 <!--------Promote product popup ends--------->
+
+<!-----------Show product modal----------->
+<!-- Modal -->
+<div class="modal fade" id="show_productmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header ad_header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ad-header-body show_product_body">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<!-----------Show product modal ends----------->
+
+<!---modal to open big image --->
+    <div class="modal fade" id="showBigImageModalBusiness" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                         
+                     </div>
+                    
+                    <div class="modal-body">
+                     <img style="width:100%" src=""/>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>  
+    <!---modal to open big image endshere --->
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -676,6 +698,12 @@
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_quotes.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_question.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_products.js')); ?>"></script>
+    <?php if (strpos($_SERVER['REQUEST_URI'], "members") !== false){
+        $page_type ='members';
+    }?>
+    <?php if(!isset($page_type) || (isset($page_type) && $page_type == 'members')): ?>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/business/business_members.js')); ?>"></script>
+    <?php endif; ?>    
     <script src="<?php echo e(URL::asset('js/swiper.js')); ?>" type="text/javascript"></script>
     <?php if (strpos($_SERVER['REQUEST_URI'], "products") !== false){
         $page_type ='top_products';

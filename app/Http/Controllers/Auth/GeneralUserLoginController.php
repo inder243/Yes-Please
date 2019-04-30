@@ -142,7 +142,7 @@ class GeneralUserLoginController extends Controller
                     }
 
                    
-                     $resultsads = DB::select(DB::raw('SELECT max(yp_campaign_detail.pay_per_click) as pay_per_click ,user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc 
+                    $resultsads = DB::select(DB::raw('SELECT max(yp_campaign_detail.pay_per_click) as pay_per_click ,user.business_name,user.business_userid,user.image_name,user.phone_number,user.full_address,user.business_userid,user.id,bcat.category_name,(select AVG(yur.rating) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_rating,(select count(yur.review) from yp_user_reviews as yur where user.id = yur.business_id AND yur.user_type="general" ) as tot_review,user.logitude,user.latitude,user.full_address,detail.distance_kms as BUkms, ( 6371 * acos( cos( radians('.$latitude.') ) * cos( radians( user.latitude ) ) * cos( radians( user.logitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin(radians(user.latitude)) ) ) AS distance,bcat.id as cid FROM yp_business_user_categories as buc 
                         INNER JOIN yp_business_categories as bcat ON buc.category_id=bcat.id 
                         INNER JOIN yp_business_users as user ON buc.business_userid = user.id 
                         INNER JOIN yp_campaign_detail  ON user.id = yp_campaign_detail.b_id 
@@ -216,7 +216,7 @@ class GeneralUserLoginController extends Controller
 
                     /****Get 2 products which have higher pay per click***/
                     $get_products = YpBusinessProductPromote::with('get_product','get_business')->whereHas('get_product', function ($query) use($categoryId) {
-                        $query->where('category_id', '=', $categoryId);
+                        $query->where(['category_id'=>$categoryId,'status'=>1]);
                     })->orderby('pay_per_click','desc')->limit('2')->get()->toArray();
                     
                 //echo "<pre>";print_r($results);die;
@@ -400,7 +400,7 @@ class GeneralUserLoginController extends Controller
 
                     /****Get 2 products which have higher pay per click***/
                     $get_products = YpBusinessProductPromote::with('get_product','get_business')->whereHas('get_product', function ($query) use($categoryId) {
-                        $query->where('category_id', '=', $categoryId);
+                        $query->where(['category_id'=>$categoryId,'status'=>1]);
                     })->orderby('pay_per_click','desc')->limit('2')->get()->toArray();
 
                 //echo "<pre>";print_r($results);die;
@@ -749,10 +749,16 @@ class GeneralUserLoginController extends Controller
             $index = 0;
             $tot_review = 0;
         }
-        
+
+
+        /****Get 2 products which have higher pay per click***/
+        $get_products = YpBusinessProductPromote::with('get_product','get_business')->whereHas('get_product', function ($query) use($catId) {
+            $query->where('category_id', '=', $catId);
+        })->where('business_id',$b_id)->orderby('pay_per_click','desc')->limit('2')->get()->toArray();
+       
         //$userCategoryModel = new YpBusinessUserCategories();
         
-        return view('user.public_profile')->with(array('user_details'=>$user_details,'round_rating'=>$round_rating,'total_review'=>$tot_review,'status'=>$status,'b_id'=>$b_id,'cat_name'=>$get_cat_name->category_name,'cat_id'=>$catId));
+        return view('user.public_profile')->with(array('user_details'=>$user_details,'round_rating'=>$round_rating,'total_review'=>$tot_review,'status'=>$status,'b_id'=>$b_id,'cat_name'=>$get_cat_name->category_name,'cat_id'=>$catId,'get_products'=>$get_products));
 
       }/*****check id else ends*****/
         

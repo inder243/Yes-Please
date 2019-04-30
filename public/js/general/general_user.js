@@ -20,8 +20,6 @@ $(document).ready(function(){
           
             $('.content').html(response);
 
-            countImpression();
-            
             // if(response.success == '2'){
             //  alert('hmm');
             // }
@@ -193,7 +191,7 @@ $(document).ready(function(){
 		// return false;
       if (navigator.geolocation) {
 	    navigator.geolocation.getCurrentPosition(showPosition);
-	     countImpression();
+	     
 	  } else { 
 	  	
 	    console.log('naa');
@@ -896,7 +894,7 @@ function showPosition(position) {
 			// if(response.success == '2'){
 			// 	alert('hmm');
 			// }
-			countImpression();
+			
 			/******on select of business users ->change color and give limit******/
 			var listItems = $(".all_bus_by_cat li");
 
@@ -1259,21 +1257,5 @@ function searchFilter() {
 
 }
 /****search functionality code ends here****/
-
-function countImpression()
-{
-	var impressions = [];
-    
-    $('#all_busBy_cat_ads li').each(function(i)
-	{
-		var impression=[];
-	   impression['catid']=$(this).attr('data-cat-id'); 
-	   impression['campid']=$(this).attr('data-camp-id'); 
-	   impressions.push(impression);
-	});
-    alert('dkfnkdfk');
-	console.log(impressions);
-    
-}
 
 

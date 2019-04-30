@@ -47,7 +47,7 @@
                   <div class="rating_btns">
                     <a href="javascript:;" data-toggle="modal" data-target="#work_description" data-backdrop="static" data-keyboard="false">Ask for quote</a>
                     <a href="javascript:;" data-toggle="modal" data-target="#ask_question" data-backdrop="static" data-keyboard="false">Ask question</a>
-                    <a href="javascript:;">Schedule appointment</a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#add_appointment" data-backdrop="static" data-keyboard="false">Schedule appointment</a>
                   </div>
                 </span>
               </div>
@@ -388,7 +388,45 @@
                 <a href="javascript:;"><h1>View products</h1><img src="<?php echo e(asset('img/custom_arrow.png')); ?>"/></a>
               </div>
               <div class="c_pr_sec">
+
+                <?php if(isset($get_products) && !empty($get_products)): ?>
+                <?php $__currentLoopData = $get_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p_key=>$p_value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="p_name_dec">
+                  <div class="name_price">
+                    <h1 class="p-name"><?php echo e($p_value['get_product']['name']); ?></h1>
+                    <span>
+                      <?php if($p_value['get_product']['price_type'] == 'fix'): ?>
+                      <h1>$<?php echo e($p_value['get_product']['price']); ?></h1>
+                      <?php elseif($p_value['get_product']['price_type'] == 'range'): ?>
+                      <h1>$<?php echo e($p_value['get_product']['price_from']); ?> - $<?php echo e($p_value['get_product']['price_to']); ?></h1>
+                      <?php $price_per = $p_value['get_product']['price_per'];?>
+                      <?php if($price_per == '1'): ?>
+                      <p>/hr</p>
+                      <?php elseif($price_per == '2'): ?>
+                      <p>/min</p>
+                      <?php endif; ?>
+                      <?php endif; ?>
+                    </span>
+                  </div>
+                  <p><?php echo e($p_value['get_product']['product_description']); ?>.</p>
+                  <ul>
+                    <?php 
+                      $uploads = json_decode($p_value['get_product']['product_images'],true);
+                    ?>
+
+                    <?php if(!empty($uploads)): ?>
+                      <?php $__currentLoopData = $uploads['pic']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <?php $img_name = explode( '.', $img );?>
+                      <li data-image="<?php echo e(url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)); ?>" id="img_<?php echo e($img_name[0]); ?>" onclick="openBigImageUser(this);return false;">
+                        <img src="<?php echo e(url('/images/business_products/'.$p_value['get_business']['business_userid'].'/'.$img)); ?>"/>
+                      </li>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+                  </ul>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
+               <!--  <div class="p_name_dec">
                   <div class="name_price">
                     <h1 class="p-name">Product name</h1>
                     <span><h1>$40</h1><p>/hr</p></span>
@@ -401,21 +439,7 @@
                     <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
                     <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
                   </ul>
-                </div>
-                <div class="p_name_dec">
-                  <div class="name_price">
-                    <h1 class="p-name">Product name</h1>
-                    <span><h1>$40</h1><p>/hr</p></span>
-                  </div>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pulvinar neque neque, ut semper nisl venenatis vitae. Mauris quis risus lacus. Sed cursus urna sed nibh pellentesque tincidunt. Quisque pharetra, dui quis aliquam tempor, orci augue sollicitudin orci, et ornare elit libero eu magna ...</p>
-                  <ul>
-                    <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
-                    <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
-                    <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
-                    <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
-                    <li><img src="<?php echo e(asset('img/Untitled-2.png')); ?>"/></li>
-                  </ul>
-                </div>
+                </div> -->
                 <div class="load_more"><a href="javascript:;">Load more</a></div>
               </div>
             </div>
@@ -474,5 +498,103 @@
           </div>
         </section>
       </div>
+
+        <!-- Modal -->
+<div class="modal fade" id="add_appointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header ad_header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="add_appointment_form" method="POST">
+        <input type="hidden" id="buid" name="b_id" value="<?php echo e($user_details['id']); ?>">
+        <div class="modal-body ad-header-body">
+          <div class="p-heading"><h1>When?</h1></div>
+          <div class="upper-catergory">
+          <div class="row">
+            <div class="col-md-12 col-12">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" name="title" required="" maxlength="50">
+                </div>
+            </div>
+            <div class="col-md-12 col-12">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                      <label>
+                        <input type="radio" class="radio-inline pickup_sch" name="radios" value="1" id="sch_now">
+                        <span class="outside"><span class="inside"></span></span><p class="now-color">Now</p>
+                      </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-12 mt-2">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                  <label>
+                    <input type="radio" class="radio-inline pickup_sch" name="radios"  value="2" id="sch_later">
+                    <span class="outside"><span class="inside"></span></span><p class="now-color">Other time</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 later-grp" style="display:none">
+              <div class="form-group">
+                  <label for="otherdate">Date</label>
+                  <input type="text" class="form-control datepicker" name="gotherdate" id="gotherdate" required=""  readonly>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 later-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="othertime">Time</label>
+                  <input type="text" class="form-control timepicker" name="gothertime" id="gothertime" required="" readonly>
+                </div>
+            </div>
+            <div class="col-md-12 col-12">
+              <div class="fix-price-range">
+                <div class="formcheck">
+                      <label>
+                        <input type="radio" class="radio-inline pickup_sch" name="radios" value="3" id="sch_flex">
+                        <span class="outside"><span class="inside"></span></span><p class="now-color">Flexible hours</p>
+                      </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group">
+                  <label for="datefrom">Date from</label>
+                  <input type="text" class="form-control datepicker" name="gdatefrom" id="gdatefrom" required="" readonly>
+
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="dateto">Date to</label>
+                  <input type="text" class="form-control datepicker" name="gdateto"  id="gdateto" required="" readonly>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group">
+                  <label for="timefrom">Time from</label>
+                  <input type="text" class="form-control timepicker" name="gtimefrom" id="gtimefrom" required="" readonly>
+
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mt-2 flex-grp" style="display:none">
+              <div class="form-group position-relative">
+                  <label for="timeto">Time to</label>
+                  <input type="text" class="form-control timepicker" name="gimeto" id="gimeto" required="" readonly>
+                </div>
+            </div>
+          </div>
+          </div>
+            <div class="start-btn"><input type="button" id="add_appointment_button" value="Add"></div>
+        </div>
+      </form> 
+      </div>
+    </div>
+</div>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.inner_general', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
